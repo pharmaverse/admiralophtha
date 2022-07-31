@@ -36,7 +36,7 @@
     "homepage": {
       "lvl0": {
         "selector": ".contents h1",
-        "default_value": "admiralext Home page"
+        "default_value": "admiralophtha Home page"
       },
       "lvl1": {
         "selector": ".contents h2"
