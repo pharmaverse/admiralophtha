@@ -1,7 +1,7 @@
 ---
-title: "Admiral Extension for Opthalmology"
+title: "Admiral Extension for Ophthalmology"
 output: md_document
 date: '2022-08-06'
 ---
 
-# Admiral Extension for Opthalmology
+# Admiral Extension for Ophthalmology

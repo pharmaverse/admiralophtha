@@ -4,7 +4,7 @@
 \name{admiralophtha-package}
 \alias{admiralophtha}
 \alias{admiralophtha-package}
-\title{admiralophtha: ADaM in R Asset Library - Extension}
+\title{admiralophtha: ADaM in R Asset Library - Ophthalmology}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 

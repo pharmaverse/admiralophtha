@@ -1,1 +1,1 @@
-# Admiral Extension for Opthalmology
+# Admiral Extension for Ophthalmology
