@@ -40,12 +40,6 @@
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://pharmaverse.github.io/admiralophtha/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/pharmaverse/admiraltemplate" class="external-link">
     <span class="fab fa-github fa-lg"></span>
@@ -70,17 +64,17 @@
     </div>
 
 
-<p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiral/main/articles/development_process.html" class="external-link">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
+<p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiral/articles/development_process.html" class="external-link">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
 <p>Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the <code>devel</code> branch until you have checked off each task.</p>
 <ul><li>
 <input type="checkbox" disabled>Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)</insert_issue_number></li>
 <li>
 <input type="checkbox" disabled>Code is formatted according to the <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>. Run <code><a href="https://styler.r-lib.org/reference/style_file.html" class="external-link">styler::style_file()</a></code> to style R and Rmd files</li>
 <li>
-<input type="checkbox" disabled>Updated relevant unit tests or have written new unit tests - See <a href="https://pharmaverse.github.io/admiral/main/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-" class="external-link">Unit Test Guide</a>
+<input type="checkbox" disabled>Updated relevant unit tests or have written new unit tests - See <a href="https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-" class="external-link">Unit Test Guide</a>
 </li>
 <li>
-<input type="checkbox" disabled>If you removed/replaced any function and/or function parameters, did you fully follow the <a href="https://pharmaverse.github.io/admiral/main/articles/programming_strategy.html#deprecation-1" class="external-link">deprecation guidance</a>?</li>
+<input type="checkbox" disabled>If you removed/replaced any function and/or function parameters, did you fully follow the <a href="https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation-1" class="external-link">deprecation guidance</a>?</li>
 <li>
 <input type="checkbox" disabled>Update to all relevant roxygen headers and examples.</li>
 <li>
@@ -90,7 +84,7 @@
 <li>
 <input type="checkbox" disabled>Update <code>NEWS.md</code> if the changes pertain to a user-facing function (i.e. it has an <code>@export</code> tag) or documentation aimed at users (rather than developers)</li>
 <li>
-<input type="checkbox" disabled>Build admiral site <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> and check that all affected examples are displayed correctly and that all new functions occur on the “<a href="https://pharmaverse.github.io/admiral/main/reference/index.html" class="external-link">Reference</a>” page.</li>
+<input type="checkbox" disabled>Build admiral site <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> and check that all affected examples are displayed correctly and that all new functions occur on the “<a href="https://pharmaverse.github.io/admiral/reference/index.html" class="external-link">Reference</a>” page.</li>
 <li>
 <input type="checkbox" disabled>Address or fix all lintr warnings and errors - <code><a href="https://rdrr.io/pkg/lintr/man/lint_package.html" class="external-link">lintr::lint_package()</a></code>
 </li>
