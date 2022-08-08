@@ -1,18 +1,19 @@
-# History files
-.Rhistory
-.Rapp.history
+#
+History files
+    .Rhistory
+    .Rapp.history
 
 # Session Data files
-.RData
+    .RData
 
-# User-specific files
-.Ruserdata
+# User - specific files
+    .Ruserdata
 
-# Example code in package build process
-*-Ex.R
+# Example code in package build process *
+    -Ex.R
 
 # Output files from R CMD build
-/*.tar.gz
+*.tar.gz
 
 # Output files from R CMD check
 /*.Rcheck/
@@ -41,9 +42,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
-admiralext.Rcheck/
-admiralext*.tar.gz
-admiralext*.tgz
 
 # MacOS
 .DS_Store
+
+# VSCode
+.vscode/

@@ -1,9 +1,9 @@
 Package: admiralophtha
 Type: Package
-Title: ADaM in R Asset Library - Extension
+Title: ADaM in R Asset Library - Ophthalmology
 Version: 0.0.1
 Authors@R: c(
-    person("Open", "Source", email = "admiralext@pharmaverse.com", role = c("aut", "cre")))
+    person("Open", "Source", email = "admiralophtha@pharmaverse.com", role = c("aut", "cre")))
 Description: A toolbox for programming Clinical Data Standards Interchange Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the
@@ -16,7 +16,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Depends: R (>= 3.5)
 Imports:
     admiral,
