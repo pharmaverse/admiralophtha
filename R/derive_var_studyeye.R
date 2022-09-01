@@ -1,0 +1,63 @@
+#' Derive Study Eye
+#'
+#' Derive Study Eye (`STUDYEYE`) in the ADSL dataset
+#'
+#' @param dataset_adsl ADSL input dataset
+#' @param dataset_sc SC input dataset
+#'
+#' @details
+#' Study Eye is derived in ADSL using the "Study Eye selection" records
+#' in the SC SDTM dataset.
+#'
+#' @author Edoardo Mancini
+#'
+#' @return The input ADSL dataset with an additional column named `STUDYEYE`
+#' @keywords adsl derivation ophthalmology
+#' @export
+#'
+#' @examples
+#' adsl <- tibble::tribble(
+#'   ~STUDYID, ~USUBJID,
+#'   "XXX001", "P01",
+#'   "XXX001", "P02",
+#'   "XXX001", "P03",
+#'   "XXX001", "P04",
+#'   "XXX001", "P05"
+#' )
+#'
+#' sc <- tibble::tribble(
+#'  ~STUDYID, ~USUBJID, ~SCTESTCD,~SCSTRESC,
+#'  "XXX001", "P01", "FOCID", "OS",
+#'  "XXX001", "P01", "ACOHORT", "COHORT1",
+#'  "XXX001", "P02", "FOCID", "OD",
+#'  "XXX001", "P02", "ACOHORT", "COHORT3",
+#'  "XXX001", "P04", "FOCID", "OU",
+#'  "XXX001", "P05", "FOCID", "OD"
+#' )
+#'
+#' derive_var_studyeye(adsl, sc)
+
+derive_var_studyeye <- function(dataset_adsl, dataset_sc) {
+
+  seye_cat <- function(seye) {
+    case_when(
+      seye == "OS" ~ "LEFT",
+      seye == "OD" ~ "RIGHT",
+      seye == "OU" ~ "BILATERAL",
+      TRUE ~ ""
+    )
+  }
+
+  admiral::derive_var_merged_cat(
+    dataset_adsl,
+    dataset_add = dataset_sc,
+    by_vars = vars(STUDYID, USUBJID),
+    order = NULL,
+    filter_add = SCTESTCD == "FOCID",
+    new_var = STUDYEYE,
+    source_var = SCSTRESC,
+    cat_fun = seye_cat,
+    mode = NULL
+  )
+
+}
