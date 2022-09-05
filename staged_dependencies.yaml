@@ -1,8 +1,10 @@
 ---
 current_repo:
-  repo: pharmaverse/admiraltemplate
+  repo: pharmaverse/admiralophtha
   host: https://github.com
 upstream_repos:
+  - repo: pharmaverse/admiral.test
+    host: https://github.com
   - repo: pharmaverse/admiral
     host: https://github.com
 downstream_repos:
