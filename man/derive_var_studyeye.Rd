@@ -32,13 +32,13 @@ adsl <- tibble::tribble(
 )
 
 sc <- tibble::tribble(
- ~STUDYID, ~USUBJID, ~SCTESTCD, ~SCSTRESC,
- "XXX001", "P01", "FOCID", "OS",
- "XXX001", "P01", "ACOHORT", "COHORT1",
- "XXX001", "P02", "FOCID", "OD",
- "XXX001", "P02", "ACOHORT", "COHORT3",
- "XXX001", "P04", "FOCID", "OU",
- "XXX001", "P05", "FOCID", "OD"
+  ~STUDYID, ~USUBJID, ~SCTESTCD, ~SCSTRESC,
+  "XXX001", "P01", "FOCID", "OS",
+  "XXX001", "P01", "ACOHORT", "COHORT1",
+  "XXX001", "P02", "FOCID", "OD",
+  "XXX001", "P02", "ACOHORT", "COHORT3",
+  "XXX001", "P04", "FOCID", "OU",
+  "XXX001", "P05", "FOCID", "OD"
 )
 
 derive_var_studyeye(adsl, sc)
