@@ -39,6 +39,7 @@ sc <- tibble::tribble(
  "XXX001", "P02", "ACOHORT", "COHORT3",
  "XXX001", "P04", "FOCID", "OU",
  "XXX001", "P05", "FOCID", "OD"
+)
 
 derive_var_studyeye(adsl, sc)
 }
