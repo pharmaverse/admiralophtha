@@ -16,7 +16,9 @@
 #' @export
 #'
 #' @examples
-#' adsl <- tibble::tribble(
+#' library(tibble)
+#'
+#' adsl <- tribble(
 #'   ~STUDYID, ~USUBJID,
 #'   "XXX001", "P01",
 #'   "XXX001", "P02",
@@ -25,7 +27,7 @@
 #'   "XXX001", "P05"
 #' )
 #'
-#' sc <- tibble::tribble(
+#' sc <- tribble(
 #'   ~STUDYID, ~USUBJID, ~SCTESTCD, ~SCSTRESC,
 #'   "XXX001", "P01", "FOCID", "OS",
 #'   "XXX001", "P01", "ACOHORT", "COHORT1",
@@ -46,7 +48,7 @@ derive_var_studyeye <- function(dataset_adsl, dataset_sc) {
     )
   }
 
-  admiral::derive_var_merged_cat(
+  derive_var_merged_cat(
     dataset_adsl,
     dataset_add = dataset_sc,
     by_vars = vars(STUDYID, USUBJID),
