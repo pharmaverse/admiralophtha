@@ -22,7 +22,9 @@ Study Eye is derived in ADSL using the "Study Eye selection" records
 in the SC SDTM dataset.
 }
 \examples{
-adsl <- tibble::tribble(
+library(tibble)
+
+adsl <- tribble(
   ~STUDYID, ~USUBJID,
   "XXX001", "P01",
   "XXX001", "P02",
@@ -31,7 +33,7 @@ adsl <- tibble::tribble(
   "XXX001", "P05"
 )
 
-sc <- tibble::tribble(
+sc <- tribble(
   ~STUDYID, ~USUBJID, ~SCTESTCD, ~SCSTRESC,
   "XXX001", "P01", "FOCID", "OS",
   "XXX001", "P01", "ACOHORT", "COHORT1",
