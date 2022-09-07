@@ -23,6 +23,7 @@ in the SC SDTM dataset.
 }
 \examples{
 library(tibble)
+library(admiral)
 
 adsl <- tribble(
   ~STUDYID, ~USUBJID,

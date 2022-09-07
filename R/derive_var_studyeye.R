@@ -17,6 +17,7 @@
 #'
 #' @examples
 #' library(tibble)
+#' library(admiral)
 #'
 #' adsl <- tribble(
 #'   ~STUDYID, ~USUBJID,
