@@ -3,6 +3,7 @@
 export(derive_var_studyeye)
 export(hello_admiral)
 importFrom(admiral,derive_vars_dy)
+importFrom(admiral,derive_var_merged_cat)
 importFrom(assertthat,"on_failure<-")
 importFrom(assertthat,assert_that)
 importFrom(assertthat,is.number)
