@@ -1,22 +1,22 @@
 test_that("AFEYE is derived correctly", {
   adsl <- tibble::tribble(
-     ~STUDYID, ~USUBJID, ~STUDYEYE,
-      "XXX001", "P01", "RIGHT",
-      "XXX001", "P02", "LEFT",
-      "XXX001", "P03", "LEFT",
-      "XXX001", "P04", "BILATERAL",
-      "XXX001", "P05", "RIGHT",
-      "XXX002", "P01", "RIGHT"
-     )
+    ~STUDYID, ~USUBJID, ~STUDYEYE,
+    "XXX001", "P01", "RIGHT",
+    "XXX001", "P02", "LEFT",
+    "XXX001", "P03", "LEFT",
+    "XXX001", "P04", "BILATERAL",
+    "XXX001", "P05", "RIGHT",
+    "XXX002", "P01", "RIGHT"
+  )
 
   adae <- tibble::tribble(
-       ~STUDYID, ~USUBJID, ~AELOC, ~AELAT,
-       "XXX001", "P01", "EYE", "LEFT",
-       "XXX001", "P02", "", "",
-       "XXX001", "P04", "EYE", "RIGHT",
-       "XXX001", "P05", "EYE", "RIGHT",
-       "XXX002", "P01", "EYE", "LEFT"
-     )
+    ~STUDYID, ~USUBJID, ~AELOC, ~AELAT,
+    "XXX001", "P01", "EYE", "LEFT",
+    "XXX001", "P02", "", "",
+    "XXX001", "P04", "EYE", "RIGHT",
+    "XXX001", "P05", "EYE", "RIGHT",
+    "XXX002", "P01", "EYE", "LEFT"
+  )
 
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AELOC, ~AELAT, ~STUDYEYE, ~AFEYE,
