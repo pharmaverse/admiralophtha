@@ -30,7 +30,7 @@
 #'   "XXX001", "P05", "RIGHT"
 #' )
 #'
-#'adae <- tribble(
+#' adae <- tribble(
 #'   ~STUDYID, ~USUBJID, ~AELOC, ~AELAT,
 #'   "XXX001", "P01", "EYE", "RIGHT",
 #'   "XXX001", "P01", "EYE", "LEFT",
@@ -41,13 +41,12 @@
 #' )
 #'
 #' derive_var_afeye(adae, adsl, vars(AELOC), vars(AELAT))
-#'
-
-derive_var_afeye <- function(dataset_occ, dataset_adsl,  loc_var, lat_var) {
-
-    dataset_occ %>% derive_vars_merged(
-    dataset_add = dataset_adsl,
-    by_vars = vars(STUDYID, USUBJID)) %>%
+derive_var_afeye <- function(dataset_occ, dataset_adsl, loc_var, lat_var) {
+  dataset_occ %>%
+    derive_vars_merged(
+      dataset_add = dataset_adsl,
+      by_vars = vars(STUDYID, USUBJID)
+    ) %>%
     mutate(AFEYE = case_when(
       !!sym(vars2chr(loc_var)) == "" ~ "",
       toupper(STUDYEYE) == "BILATERAL" ~ "Study Eye",
@@ -55,5 +54,4 @@ derive_var_afeye <- function(dataset_occ, dataset_adsl,  loc_var, lat_var) {
       toupper(!!sym(vars2chr(lat_var))) != toupper(STUDYEYE) ~ "Fellow Eye",
       TRUE ~ ""
     ))
-
 }
