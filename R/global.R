@@ -73,5 +73,9 @@ globalVariables(c(
   "CDISC_VALUE",
   "DOSE_WINDOW",
   "DOSE_COUNT",
-  "CONVERSION_FACTOR"
+  "CONVERSION_FACTOR",
+  "STUDYEYE",
+  "SCTESTCD",
+  "SCSTRESC",
+  "AFEYE"
 ))

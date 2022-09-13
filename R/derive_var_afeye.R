@@ -12,13 +12,16 @@
 #' @author Lucy Palmen
 #'
 #' @return The input ADSL dataset with an additional column named `STUDYEYE`.
-#'         The occurence dataset with laterality variable (xxLAT) and location
+#'         The occurrence dataset with laterality variable (xxLAT) and location
 #'         variable (xxLOC).
 #' @keywords adsl derivation ophthalmology
 #' @export
 #'
 #' @examples
-#' adsl <- tibble::tribble(
+#' library(tibble)
+#' library(admiral)
+#'
+#' adsl <- tribble(
 #'   ~STUDYID, ~USUBJID, ~STUDYEYE,
 #'   "XXX001", "P01", "RIGHT",
 #'   "XXX001", "P02", "LEFT",
@@ -27,7 +30,7 @@
 #'   "XXX001", "P05", "RIGHT"
 #' )
 #'
-#'adae <- tibble::tribble(
+#'adae <- tribble(
 #'   ~STUDYID, ~USUBJID, ~AELOC, ~AELAT,
 #'   "XXX001", "P01", "EYE", "RIGHT",
 #'   "XXX001", "P01", "EYE", "LEFT",
@@ -43,7 +46,7 @@
 derive_var_afeye <- function(dataset_occ, dataset_adsl,  loc_var, lat_var) {
 
 
-   a<- dataset_occ %>% admiral::derive_vars_merged(
+    dataset_occ %>% derive_vars_merged(
     dataset_add = dataset_adsl,
     by_vars = vars(STUDYID,USUBJID) ) %>%
     mutate(AFEYE= case_when(
@@ -54,7 +57,7 @@ derive_var_afeye <- function(dataset_occ, dataset_adsl,  loc_var, lat_var) {
       TRUE ~ ""
     ))
 
-   return(a)
+
 
 }
 
