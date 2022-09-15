@@ -45,6 +45,7 @@ derive_var_afeye <- function(dataset_occ, dataset_adsl, loc_var, lat_var) {
   dataset_occ %>%
     derive_vars_merged(
       dataset_add = dataset_adsl,
+      new_vars = vars(STUDYEYE),
       by_vars = vars(STUDYID, USUBJID)
     ) %>%
     mutate(AFEYE = case_when(
