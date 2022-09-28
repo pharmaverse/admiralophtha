@@ -56,7 +56,6 @@ sc <- sc %>%
   ungroup() %>%
   # sort data
   arrange(STUDYID, USUBJID, SCSEQ) %>%
-
   # add labels
   set_variable_labels(
     STUDYID = "Study Identifier",
