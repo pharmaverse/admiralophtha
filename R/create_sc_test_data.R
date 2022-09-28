@@ -1,5 +1,6 @@
 # Name: create_sc_test_data
 #
+#
 # Label: Create test data for SC domain for study eye info
 #
 # Input: admiral_dm, admiral_sv
@@ -7,10 +8,7 @@
 library(admiral)
 library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
-#library(lubridate)
-#library(stringr)
-#library(labelled)
-# Load input data
+
 data("admiral_dm")
 data("admiral_sv")
 
@@ -59,13 +57,13 @@ sc <- sc %>%
 
 
 
-attr(sc$STUDYID, "label") <-"Study Identifier"
-attr(sc$DOMAIN, "label") <-"Domain Abbreviation"
-attr(sc$USUBJID, "label") <-"Unique Subject Identifier"
-attr(sc$SCSEQ, "label") <-"Sequence Number"
-attr(sc$SCTESTCD, "label") <-"Subject Characteristic Short Name"
-attr(sc$SCTEST, "label") <-"Subject Characteristic"
-attr(sc$SCCAT, "label") <-"Category for Subject Characteristic"
+attr(sc$STUDYID, "label") <- "Study Identifier"
+attr(sc$DOMAIN, "label") <- "Domain Abbreviation"
+attr(sc$USUBJID, "label") <- "Unique Subject Identifier"
+attr(sc$SCSEQ, "label") <- "Sequence Number"
+attr(sc$SCTESTCD, "label") <- "Subject Characteristic Short Name"
+attr(sc$SCTEST, "label") <- "Subject Characteristic"
+attr(sc$SCCAT, "label") <- "Category for Subject Characteristic"
 attr(sc$SCORRES, "label") <- "Result or Finding in Original Units"
 attr(sc$SCSTRESC, "label") <- "Character Result/Finding in Std Format"
 attr(sc$EPOCH, "label") <- "Epoch"
