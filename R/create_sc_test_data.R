@@ -7,9 +7,9 @@
 library(admiral)
 library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
-library(lubridate)
-library(stringr)
-library(labelled)
+#library(lubridate)
+#library(stringr)
+#library(labelled)
 # Load input data
 data("admiral_dm")
 data("admiral_sv")
@@ -55,22 +55,23 @@ sc <- subset(sc, select = c(
 sc <- sc %>%
   ungroup() %>%
   # sort data
-  arrange(STUDYID, USUBJID, SCSEQ) %>%
-  # add labels
-  set_variable_labels(
-    STUDYID = "Study Identifier",
-    DOMAIN = "Domain Abbreviation",
-    USUBJID = "Unique Subject Identifier",
-    SCSEQ = "Sequence Number",
-    SCTESTCD = "Subject Characteristic Short Name",
-    SCTEST = "Subject Characteristic",
-    SCCAT = "Category for Subject Characteristic",
-    SCORRES = "Result or Finding in Original Units",
-    SCSTRESC = "Character Result/Finding in Std Format",
-    EPOCH = "Epoch",
-    SCDTC = "Date/Time of Collection",
-    SCDY = "Study Day of Examination"
-  )
+  arrange(STUDYID, USUBJID, SCSEQ)
+
+
+
+attr(sc$STUDYID, "label") <-"Study Identifier"
+attr(sc$DOMAIN, "label") <-"Domain Abbreviation"
+attr(sc$USUBJID, "label") <-"Unique Subject Identifier"
+attr(sc$SCSEQ, "label") <-"Sequence Number"
+attr(sc$SCTESTCD, "label") <-"Subject Characteristic Short Name"
+attr(sc$SCTEST, "label") <-"Subject Characteristic"
+attr(sc$SCCAT, "label") <-"Category for Subject Characteristic"
+attr(sc$SCORRES, "label") <- "Result or Finding in Original Units"
+attr(sc$SCSTRESC, "label") <- "Character Result/Finding in Std Format"
+attr(sc$EPOCH, "label") <- "Epoch"
+attr(sc$SCDTC, "label") <- "Date/Time of Collection"
+attr(sc$SCDY, "label") <- "Study Day of Examination"
+
 
 # ---- Save output ----
 admiral_sc <- sc
