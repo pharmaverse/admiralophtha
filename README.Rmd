@@ -44,3 +44,26 @@ admiral_homepage <- "https://pharmaverse.github.io/admiral"
 [![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiralophtha/actions/workflows/code-coverage.yml)
 <!-- badges: end -->
 
+## Scope
+
+* Build a toolbox of re-usable functions and utilities to create opthamology-specific ADaM datasets in R in a modular manner.
+* All functions are created based upon the ADaM Implementation Guide and aim to facilitate the programming of ADaM dataset standards.
+
+## Installation
+
+To install the latest development version of the package directly from GitHub use the following code:
+
+```{r, eval = FALSE}
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+remotes::install_github("pharmaverse/admiraloptha", ref = "devel")
+```
+
+## Release Schedule
+
+TBD
+
+
+
+
