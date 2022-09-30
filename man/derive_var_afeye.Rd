@@ -4,53 +4,44 @@
 \alias{derive_var_afeye}
 \title{Derive Affected Eye}
 \usage{
-derive_var_afeye(dataset_occ, dataset_adsl, loc_var, lat_var)
+derive_var_afeye(dataset_occ, loc_var, lat_var)
 }
 \arguments{
-\item{dataset_adsl}{ADSL input dataset}
+\item{dataset_occ}{Input Occurence dataset}
 
-\item{dataset_sc}{SC input dataset}
+\item{loc_var}{Location variable}
+
+\item{lat_var}{Laterality variable}
 }
 \value{
-The input ADSL dataset with an additional column named \code{STUDYEYE}.
-The occurrence dataset with laterality variable (xxLAT) and location
-variable (xxLOC).
+The input occurrence dataset with Affected Eye (AFEYE) added.
 }
 \description{
 Derive Affected Eye (\code{AFEYE}) in occurrence datasets
 }
 \details{
-Study Eye is added to occurrence dataset from ADSL and Affected Eye is
-derived in the occurrence dataset using the laterality and Study Eye.
+Affected Eye is derived in the occurrence dataset using laterality and Study
+Eye. This assumes Study Eye has already been added from ADSL.
 }
 \examples{
 library(tibble)
 library(admiral)
 
-adsl <- tribble(
-  ~STUDYID, ~USUBJID, ~STUDYEYE,
-  "XXX001", "P01", "RIGHT",
-  "XXX001", "P02", "LEFT",
-  "XXX001", "P03", "LEFT",
-  "XXX001", "P04", "BILATERAL",
-  "XXX001", "P05", "RIGHT"
-)
 
 adae <- tribble(
-  ~STUDYID, ~USUBJID, ~AELOC, ~AELAT,
-  "XXX001", "P01", "EYE", "RIGHT",
-  "XXX001", "P01", "EYE", "LEFT",
-  "XXX001", "P02", "", "",
-  "XXX001", "P02", "EYE", "LEFT",
-  "XXX001", "P04", "EYE", "RIGHT",
-  "XXX001", "P05", "EYE", "RIGHT"
+  ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
+  "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
+  "XXX001", "P01", "RIGHT", "EYE", "LEFT",
+  "XXX001", "P02", "LEFT", "", "",
+  "XXX001", "P02", "LEFT", "EYE", "LEFT",
+  "XXX001", "P04", "BILATERAL", "EYE", "RIGHT",
+  "XXX001", "P05", "RIGHT", "EYE", "RIGHT"
 )
 
-derive_var_afeye(adae, adsl, vars(AELOC), vars(AELAT))
+derive_var_afeye(adae, vars(AELOC), vars(AELAT))
 }
 \author{
 Lucy Palmen
 }
-\keyword{adsl}
 \keyword{derivation}
 \keyword{ophthalmology}
