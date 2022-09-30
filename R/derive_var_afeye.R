@@ -33,7 +33,7 @@
 #'
 #' derive_var_afeye(adae, vars(AELOC), vars(AELAT))
 derive_var_afeye <- function(dataset_occ, loc_var, lat_var) {
-  dataset_occ  %>%
+  dataset_occ %>%
     mutate(AFEYE = case_when(
       !!sym(vars2chr(loc_var)) == "" ~ "",
       toupper(STUDYEYE) == "BILATERAL" ~ "Study Eye",
