@@ -8,9 +8,9 @@ search:
   exclude: ['news/index.html']
 repo:
   url:
-    home: https://github.com/pharmaverse/admiralonco
-    source: https://github.com/pharmaverse/admiralonco/blob/test/
-    issue: https://github.com/pharmaverse/admiralonco/issues/
+    home: https://github.com/pharmaverse/admiralophtha
+    source: https://github.com/pharmaverse/admiralophtha/blob/main/
+    issue: https://github.com/pharmaverse/admiralophtha/issues/
     user: https://github.com/
 news:
   cran_dates: false
