@@ -3,7 +3,9 @@
 # this note.  See ?globalVariables for more information.
 
 globalVariables(c(
-  "STUDYEYE",
+  "SCSTRESC",
   "SCTESTCD",
-  "SCSTRESC"
+  "STUDYEYE",
+  "STUDYID",
+  "USUBJID"
 ))
