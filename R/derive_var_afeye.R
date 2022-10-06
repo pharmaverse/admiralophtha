@@ -13,7 +13,7 @@
 #' @author Lucy Palmen
 #'
 #' @return The input occurrence dataset with Affected Eye (AFEYE) added.
-#' @keywords derivation ophthalmology
+#' @keywords der_occds
 #' @export
 #'
 #' @examples

@@ -43,5 +43,4 @@ derive_var_afeye(adae, vars(AELOC), vars(AELAT))
 \author{
 Lucy Palmen
 }
-\keyword{derivation}
-\keyword{ophthalmology}
+\keyword{der_occds}
