@@ -63,17 +63,38 @@ oe32 <- bind_rows(
   "OELOC" = "RETINA",
   "OEMETHOD" = "COLOR FUNDUS PHOTOGRAPH")
 
-oe4 <- bind_rows(oe31,oe32) %>%
+# IOP
+oe33 <- bind_rows(
+  (oe2 %>% mutate("OELAT" = "LEFT")),
+  (oe2 %>% mutate("OELAT" = "RIGHT"))
+) %>% mutate(
+  "OETESTCD" = "IOP",
+  "OETEST" = "Intraocular Pressure",
+  "OECAT" = "INTRAOCULAR PRESSURE",
+  "oestat" = oestat,
+  "OESTRESN" = ifelse(oestat>99,NA,round(runif(n(),min = 5,max = 30))),
+  "OESTRESC" = ifelse(is.na(OESTRESN),"",as.character(OESTRESN)),
+  "OEORRES" = OESTRESC,
+  "OEORRESU" = ifelse(is.na(OESTRESN),"","mmHg"),
+  "OESTRESU" = OEORRESU,
+  "OESTAT" = ifelse(is.na(OESTRESN),"NOT DONE",""),
+  "OELOC" = "EYE",
+  "OEMETHOD" = "APPLANATION TONOMETRY")
+
+oe4 <- bind_rows(oe31,oe32,oe33) %>%
   arrange(STUDYID, USUBJID, VISITNUM, OEDTC, OETESTCD, OELAT) %>%
   group_by(STUDYID, USUBJID) %>%
   mutate(
     "OESEQ" = row_number(),
     "DOMAIN" = "OE",
-    "OEDY" = as.numeric(as.Date(OEDTC)-as.Date(RFSTDTC)) + (as.Date(OEDTC)>=as.Date(RFSTDTC)))
+    "OEDY" = as.numeric(as.Date(OEDTC)-as.Date(RFSTDTC)) + (as.Date(OEDTC)>=as.Date(RFSTDTC)),
+    "OETPT" = "",
+    "OETPTNUM" = NA)
 
 oe <- oe4 %>%
   select(STUDYID,DOMAIN,USUBJID,OESEQ,OECAT,OESCAT,OEDTC,VISIT,VISITNUM,VISITDY,
-         OESTRESN,OESTRESC,OEORRES,OETEST,OETESTCD,OETSTDTL,OELAT,OELOC,OEDY,OEMETHOD) %>%
+         OESTRESN,OESTRESC,OEORRES,OETEST,OETESTCD,OETSTDTL,OELAT,OELOC,OEDY,
+         OEMETHOD,OEORRESU,OESTRESU,OESTAT,OETPT,OETPTNUM) %>%
   set_variable_labels(
     STUDYID = "Study Identifier",
     DOMAIN	= "Domain Abbreviation",
@@ -94,12 +115,17 @@ oe <- oe4 %>%
     VISIT	= "Visit Name",
     VISITNUM	= "Visit Number",
     VISITDY = "Planned Study Day of Visit",
-    OEMETHOD = "Method of Test or Examination"
+    OEMETHOD = "Method of Test or Examination",
+    OEORRESU = "Original Units",
+    OESTRESU = "Standard Units",
+    OESTAT = "Completion Status",
+    OETPT = "Planned Time Point Name",
+    OETPTNUM = "Planned Time Point Number"
   )
 
 
 attr(oe, "label") <- "Ophthalmic Examinations"
 
-admiral_oe <- oe
+admiral_oe <- convert_blanks_to_na(oe)
 
 save(admiral_oe, file = "admiral_oe.rda", compress = "bzip2")
