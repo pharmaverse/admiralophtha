@@ -27,7 +27,6 @@ Eye. This assumes Study Eye has already been added from ADSL.
 library(tibble)
 library(admiral)
 
-
 adae <- tribble(
   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
   "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
@@ -38,10 +37,11 @@ adae <- tribble(
   "XXX001", "P05", "RIGHT", "EYE", "RIGHT"
 )
 
-derive_var_afeye(adae, vars(AELOC), vars(AELAT))
+derive_var_afeye(adae, AELOC, AELAT)
 }
 \author{
 Lucy Palmen
 }
+\keyword{OCCDS-specific}
 \keyword{derivation}
 \keyword{ophthalmology}

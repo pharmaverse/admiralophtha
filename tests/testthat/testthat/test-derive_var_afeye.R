@@ -16,8 +16,8 @@ test_that("AFEYE is derived correctly", {
     "XXX002", "P01", "EYE", "LEFT", "RIGHT", "Fellow Eye"
   )
 
-  admiraldev::expect_dfs_equal(
-    derive_var_afeye(adae, vars(AELOC), vars(AELAT)),
+  expect_dfs_equal(
+    derive_var_afeye(adae, AELOC, AELAT),
     expected_output,
     keys = c("STUDYID", "USUBJID", "AELAT")
   )

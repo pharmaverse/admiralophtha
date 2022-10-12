@@ -13,13 +13,12 @@
 #' @author Lucy Palmen
 #'
 #' @return The input occurrence dataset with Affected Eye (AFEYE) added.
-#' @keywords derivation ophthalmology
+#' @keywords derivation ophthalmology OCCDS-specific
 #' @export
 #'
 #' @examples
 #' library(tibble)
 #' library(admiral)
-#'
 #'
 #' adae <- tribble(
 #'   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
@@ -31,14 +30,18 @@
 #'   "XXX001", "P05", "RIGHT", "EYE", "RIGHT"
 #' )
 #'
-#' derive_var_afeye(adae, vars(AELOC), vars(AELAT))
+#' derive_var_afeye(adae, AELOC, AELAT)
 derive_var_afeye <- function(dataset_occ, loc_var, lat_var) {
+  loc_var <- assert_symbol(enquo(loc_var))
+  lat_var <- assert_symbol(enquo(lat_var))
+  assert_data_frame(dataset_occ, required_vars = quo_c(loc_var, lat_var))
+
   dataset_occ %>%
     mutate(AFEYE = case_when(
-      !!sym(vars2chr(loc_var)) == "" ~ "",
+      !!loc_var == "" ~ "",
       toupper(STUDYEYE) == "BILATERAL" ~ "Study Eye",
-      toupper(!!sym(vars2chr(lat_var))) == toupper(STUDYEYE) ~ "Study Eye",
-      toupper(!!sym(vars2chr(lat_var))) != toupper(STUDYEYE) ~ "Fellow Eye",
+      toupper(!!lat_var) == toupper(STUDYEYE) ~ "Study Eye",
+      toupper(!!lat_var) != toupper(STUDYEYE) ~ "Fellow Eye",
       TRUE ~ ""
     ))
 }
