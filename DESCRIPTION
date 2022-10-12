@@ -3,7 +3,10 @@ Type: Package
 Title: ADaM in R Asset Library - Ophthalmology
 Version: 0.0.1
 Authors@R: c(
-    person("Open", "Source", email = "admiralophtha@pharmaverse.com", role = c("aut", "cre")))
+    person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut", "cre")),
+    person("Edoardo", "Mancini", role = "aut"),
+    person("Lucy", "Palmen", role = "aut")
+    )
 Description: A toolbox for programming Clinical Data Standards Interchange Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the
@@ -11,7 +14,7 @@ Description: A toolbox for programming Clinical Data Standards Interchange Conso
     implemented in accordance with the "Analysis Data Model Implementation Guide"
     (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 License: Apache License (>= 2)
-URL: https://pharmaverse.github.io/admiraltemplate, https://github.com/pharmaverse/admiraltemplate
+URL: https://pharmaverse.github.io/admiralophtha, https://github.com/pharmaverse/admiralophtha
 Encoding: UTF-8
 Language: en-US
 LazyData: true

@@ -2,7 +2,6 @@
 
 export(derive_var_afeye)
 export(derive_var_studyeye)
-export(hello_admiral)
 importFrom(admiral,derive_var_merged_cat)
 importFrom(admiraldev,assert_data_frame)
 importFrom(admiraldev,assert_symbol)

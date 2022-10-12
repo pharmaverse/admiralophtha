@@ -42,6 +42,10 @@ derive_var_afeye(adae, AELOC, AELAT)
 \author{
 Lucy Palmen
 }
+<<<<<<< HEAD
 \keyword{OCCDS-specific}
 \keyword{derivation}
 \keyword{ophthalmology}
+=======
+\keyword{der_occds}
+>>>>>>> 85dbc56e15f30bab7421eb8669f795622959215f
