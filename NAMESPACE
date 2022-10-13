@@ -2,6 +2,7 @@
 
 export(derive_var_studyeye)
 importFrom(admiral,derive_var_merged_cat)
+importFrom(admiraldev,expect_dfs_equal)
 importFrom(assertthat,"on_failure<-")
 importFrom(assertthat,assert_that)
 importFrom(assertthat,is.number)
