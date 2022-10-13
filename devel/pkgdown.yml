@@ -3,7 +3,7 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   adxx: adxx.html
-last_built: 2022-10-05T12:14Z
+last_built: 2022-10-13T14:56Z
 urls:
   reference: https://pharmaverse.github.io/admiraloptha/devel/reference
   article: https://pharmaverse.github.io/admiraloptha/devel/articles
