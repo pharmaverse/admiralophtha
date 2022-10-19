@@ -40,6 +40,9 @@
 #'
 #' derive_var_studyeye(adsl, sc)
 derive_var_studyeye <- function(dataset_adsl, dataset_sc) {
+  assert_data_frame(dataset_sc, required_vars = vars(STUDYID, USUBJID, SCTESTCD, SCSTRESC))
+  assert_data_frame(dataset_adsl, required_vars = vars(STUDYID, USUBJID))
+
   seye_cat <- function(seye) {
     case_when(
       seye == "OS" ~ "LEFT",
