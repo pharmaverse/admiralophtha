@@ -3,6 +3,7 @@
 # this note.  See ?globalVariables for more information.
 
 globalVariables(c(
+  "AFEYE",
   "SCSTRESC",
   "SCTESTCD",
   "STUDYEYE",

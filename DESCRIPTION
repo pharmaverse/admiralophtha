@@ -4,7 +4,7 @@ Title: ADaM in R Asset Library - Ophthalmology
 Version: 0.0.1
 Authors@R: c(
     person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut", "cre")),
-    person("Eduardo", "Mancini", role = "aut"),
+    person("Edoardo", "Mancini", role = "aut"),
     person("Lucy", "Palmen", role = "aut")
     )
 Description: A toolbox for programming Clinical Data Standards Interchange Consortium
