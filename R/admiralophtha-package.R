@@ -24,6 +24,6 @@
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
-#' @importFrom admiral derive_var_merged_cat
+#' @importFrom admiral derive_var_merged_cat assert_data_frame
 #' @importFrom admiraldev expect_dfs_equal
 "_PACKAGE"
