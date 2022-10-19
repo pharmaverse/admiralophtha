@@ -23,7 +23,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Eduardo Mancini
+  \item Edoardo Mancini
   \item Lucy Palmen
 }
 
