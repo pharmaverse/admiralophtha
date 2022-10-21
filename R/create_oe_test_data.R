@@ -128,4 +128,4 @@ attr(oe, "label") <- "Ophthalmic Examinations"
 
 admiral_oe <- convert_blanks_to_na(oe)
 
-save(admiral_oe, file = "admiral_oe.rda", compress = "bzip2")
+save(admiral_oe, file = "/home/bceuser/boy2/admiralophtha/data/admiral_oe.rda", compress = "bzip2")
