@@ -3,7 +3,7 @@ title: "Creating ADXX"
 output: 
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Creating ADSL}
+  %\VignetteIndexEntry{Creating ADXX}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
