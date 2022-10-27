@@ -81,7 +81,26 @@ oe33 <- bind_rows(
   "OELOC" = "EYE",
   "OEMETHOD" = "APPLANATION TONOMETRY")
 
-oe4 <- bind_rows(oe31,oe32,oe33) %>%
+# CST - Central Subfield Thickness
+oe34 <- bind_rows(
+  (oe2 %>% mutate("OELAT" = "LEFT")),
+  (oe2 %>% mutate("OELAT" = "RIGHT"))
+) %>% mutate(
+  "OETESTCD" = "CSUBTH",
+  "OETEST" = "Center Subfield Thickness",
+  "OETSTDTL" = "CENTER SUBFIELD THICKNESS",
+  "OECAT" = "OPHTHALMIC ASSESSMENTS",
+  "OESCAT" = "SD-OCT CST SINGLE FORM",
+  "OESTAT" = "",
+  "OESTRESN" = sample.int(500, n(), replace = TRUE),
+  "OESTRESC" = as.character(OESTRESN),
+  "OEORRES" = OESTRESC,
+  "OEORRESU" = "um",
+  "OESTRESU" = "um",
+  "OELOC" = "RETINA",
+  "OEMETHOD" = "SD-OCT")
+
+oe4 <- bind_rows(oe31,oe32,oe33,oe34) %>%
   arrange(STUDYID, USUBJID, VISITNUM, OEDTC, OETESTCD, OELAT) %>%
   group_by(STUDYID, USUBJID) %>%
   mutate(
