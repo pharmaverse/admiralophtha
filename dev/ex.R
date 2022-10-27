@@ -7,11 +7,9 @@ library(admiral.test)
 
 # Make admiralophtha_ex dataset
 admiralophtha_ex <- admiral_dm %>%
-
   # Start by merging on admiralophtha_dm to use the SUBJID variable
   select(USUBJID, SUBJID) %>%
   right_join(admiral_ex, by = c("USUBJID")) %>%
-
   # Create EXLOC & EXLAT, change EXROUTE & EXDOSFRM to something eye-related
   mutate(
     EXLOC = "EYE",
@@ -20,13 +18,12 @@ admiralophtha_ex <- admiral_dm %>%
     EXLAT = ifelse(as.integer(SUBJID) %% 2 == 0, "LEFT", "RIGHT"),
     EXROUTE = "INTRAVITREAL"
   ) %>%
-
   # Drop SUBJID and reorder variables
   select(
     "USUBJID", "STUDYID", "DOMAIN", "EXSEQ", "EXTRT", "EXDOSE",
     "EXDOSU", "EXDOSFRM", "EXDOSFRQ", "EXROUTE", "EXLOC",
     "EXLAT", "VISITNUM", "VISIT", "VISITDY", "EXSTDTC",
-    "EXENDTC", "EXSTDY",  "EXENDY"
+    "EXENDTC", "EXSTDY", "EXENDY"
   )
 
 # Label new variables
