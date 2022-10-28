@@ -73,4 +73,4 @@ attr(sc$SCDY, "label") <- "Study Day of Examination"
 
 # ---- Save output ----
 admiral_sc <- sc
-save(admiral_sc, file = "./data/admiral_sc.rda", compress = "bzip2")
+saveRDS(admiral_sc, "./data/admiral_sc.RDS")
