@@ -4,10 +4,13 @@ export(derive_var_afeye)
 export(derive_var_studyeye)
 importFrom(admiral,derive_vars_dy)
 importFrom(admiral,derive_var_merged_cat)
+<<<<<<< HEAD
 importFrom(admiraldev,assert_data_frame)
 importFrom(admiraldev,assert_symbol)
 importFrom(admiraldev,expect_dfs_equal)
 importFrom(admiraldev,quo_c)
+=======
+>>>>>>> parent of 86a4ba2... Changes as per reviewer's comments
 importFrom(assertthat,"on_failure<-")
 importFrom(assertthat,assert_that)
 importFrom(assertthat,is.number)
