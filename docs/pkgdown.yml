@@ -3,7 +3,11 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   adxx: adxx.html
+<<<<<<< HEAD
 last_built: 2022-10-06T09:23Z
+=======
+last_built: 2022-09-02T14:19Z
+>>>>>>> parent of 86a4ba2... Changes as per reviewer's comments
 urls:
   reference: https://pharmaverse.github.io/admiraloptha/reference
   article: https://pharmaverse.github.io/admiraloptha/articles
