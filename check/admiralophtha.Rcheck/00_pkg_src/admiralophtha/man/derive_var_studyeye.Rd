@@ -49,4 +49,6 @@ derive_var_studyeye(adsl, sc)
 \author{
 Edoardo Mancini
 }
-\keyword{der_adsl}
+\keyword{adsl}
+\keyword{derivation}
+\keyword{ophthalmology}

@@ -3,10 +3,7 @@ Type: Package
 Title: ADaM in R Asset Library - Ophthalmology
 Version: 0.0.1
 Authors@R: c(
-    person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut", "cre")),
-    person("Edoardo", "Mancini", role = "aut"),
-    person("Lucy", "Palmen", role = "aut")
-    )
+    person("Open", "Source", email = "admiralophtha@pharmaverse.com", role = c("aut", "cre")))
 Description: A toolbox for programming Clinical Data Standards Interchange Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the
@@ -14,43 +11,21 @@ Description: A toolbox for programming Clinical Data Standards Interchange Conso
     implemented in accordance with the "Analysis Data Model Implementation Guide"
     (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 License: Apache License (>= 2)
-URL: https://pharmaverse.github.io/admiralophtha, https://github.com/pharmaverse/admiralophtha
+URL: https://pharmaverse.github.io/admiraltemplate,
+        https://github.com/pharmaverse/admiraltemplate
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends: R (>= 3.5)
-Imports:
-    admiral,
-    admiraldev,
-    assertthat,
-    dplyr,
-    lubridate,
-    magrittr,
-    purrr,
-    rlang,
-    stringr,
-    hms,
-    tidyr,
-    tidyselect,
-    lifecycle
-Suggests:
-    admiral.test,
-    devtools,
-    diffdf,
-    lintr,
-    pkgdown,
-    testthat,
-    knitr,
-    methods,
-    miniUI,
-    rmarkdown,
-    roxygen2,
-    spelling,
-    styler,
-    tibble,
-    usethis,
-    covr,
-    DT
+Imports: admiral, assertthat, dplyr, lubridate, magrittr, purrr, rlang,
+        stringr, hms, tidyr, tidyselect, lifecycle
+Suggests: admiral.test, devtools, diffdf, lintr, pkgdown, testthat,
+        knitr, methods, miniUI, rmarkdown, roxygen2, spelling, styler,
+        tibble, usethis, covr, DT
 VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2022-10-10 09:58:17 UTC; aggarri3
+Author: Open Source [aut, cre]
+Maintainer: Open Source <admiralophtha@pharmaverse.com>

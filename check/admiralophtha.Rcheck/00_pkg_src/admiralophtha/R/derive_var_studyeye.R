@@ -12,7 +12,7 @@
 #' @author Edoardo Mancini
 #'
 #' @return The input ADSL dataset with an additional column named `STUDYEYE`
-#' @keywords der_adsl
+#' @keywords adsl derivation ophthalmology
 #' @export
 #'
 #' @examples
