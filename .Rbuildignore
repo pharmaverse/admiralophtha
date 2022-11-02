@@ -17,4 +17,5 @@
 ^admiralophtha.*\.tar\.gz$
 ^admiralophtha.*\.tgz$
 ^staged_dependencies.yaml$
+^dev$
 ^README.Rmd$
