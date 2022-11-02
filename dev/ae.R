@@ -26,5 +26,5 @@ admiral_ophtha_ae$AELAT = ifelse(admiral_ophtha_ae$AESOC == "EYE DISORDERS",
 
 # Save dataset ----
 admiral_ae = admiral_ophtha_ae
-save(admiral_ae, file = "data/admiral_ae.rda")
+saveRDS(admiral_ae, "data/admiral_ae.RDS")
 
