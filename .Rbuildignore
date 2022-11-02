@@ -28,3 +28,4 @@
 ^admiralext.*\.tgz$
 ^staged_dependencies.yaml$
 ^README.Rmd$
+^dev$
