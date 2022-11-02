@@ -33,7 +33,7 @@ test_that("STUDYEYE is derived correctly", {
     "XXX002", "P01", "LEFT"
   )
 
-  admiral::expect_dfs_equal(
+  expect_dfs_equal(
     derive_var_studyeye(input, sc),
     expected_output,
     keys = c("STUDYID", "USUBJID")
