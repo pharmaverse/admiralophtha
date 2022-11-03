@@ -65,6 +65,13 @@
       "Repository": "CRAN",
       "Hash": "f3ca785924863b0e4c8cb23b6a5c75a1"
     },
+    "admiral": {
+      "Package": "admiral",
+      "Version": "0.8.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "180a0ec397254c96b820906ab287ed5b"
+    },
     "admiral.test": {
       "Package": "admiral.test",
       "Version": "0.2.0",
@@ -76,6 +83,13 @@
       "RemoteRef": "devel",
       "RemoteSha": "4f3bdd59a5a01bd0314a42e1d3ef32ca4d1745fe",
       "Hash": "8378c5762f6be5a61854e880d6a8a223"
+    },
+    "admiraldev": {
+      "Package": "admiraldev",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d4ea0e3868e03819b2d3f8aef44729c0"
     },
     "askpass": {
       "Package": "askpass",
@@ -611,10 +625,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.0.2",
+      "Version": "1.0.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "04884d9a75d778aca22c7154b8333ec9"
+      "Hash": "4ed1f8336c8d52c3e750adcdc57228a7"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
