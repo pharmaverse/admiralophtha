@@ -34,4 +34,4 @@ attr(admiralophtha_ex$EXDOSFRM, "label") <- "Dose Form"
 attr(admiralophtha_ex$EXDOSFRQ, "label") <- "Dose Frequency per Interval"
 
 # Save Dataset
-saveRDS(admiralophtha_ex, "dev/admiralophtha_ex.RDS")
+saveRDS(admiralophtha_ex, "data/admiralophtha_ex.RDS")
