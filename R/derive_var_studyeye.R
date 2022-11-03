@@ -4,7 +4,7 @@
 #'
 #' @param dataset_adsl ADSL input dataset
 #' @param dataset_sc SC input dataset
-#' @param sctestcd_value Value of SCTESTCD that corresponds to Study Eye selection records. Defaults to "FOCID".
+#' @param sctestcd_value SCTESTCD value flagging Study Eye selection records. Default: "FOCID".
 #'
 #' @details
 #' Study Eye is derived in ADSL using the "Study Eye selection" records
