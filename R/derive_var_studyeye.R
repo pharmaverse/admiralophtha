@@ -4,6 +4,7 @@
 #'
 #' @param dataset_adsl ADSL input dataset
 #' @param dataset_sc SC input dataset
+#' @param sctestcd_value SCTESTCD value flagging Study Eye selection records. Default: "FOCID".
 #'
 #' @details
 #' Study Eye is derived in ADSL using the "Study Eye selection" records
@@ -39,7 +40,10 @@
 #' )
 #'
 #' derive_var_studyeye(adsl, sc)
-derive_var_studyeye <- function(dataset_adsl, dataset_sc) {
+derive_var_studyeye <- function(dataset_adsl, dataset_sc, sctestcd_value = "FOCID") {
+  assert_data_frame(dataset_sc, required_vars = vars(STUDYID, USUBJID, SCTESTCD, SCSTRESC))
+  assert_data_frame(dataset_adsl, required_vars = vars(STUDYID, USUBJID))
+
   seye_cat <- function(seye) {
     case_when(
       seye == "OS" ~ "LEFT",
@@ -54,7 +58,7 @@ derive_var_studyeye <- function(dataset_adsl, dataset_sc) {
     dataset_add = dataset_sc,
     by_vars = vars(STUDYID, USUBJID),
     order = NULL,
-    filter_add = SCTESTCD == "FOCID",
+    filter_add = SCTESTCD == sctestcd_value,
     new_var = STUDYEYE,
     source_var = SCSTRESC,
     cat_fun = seye_cat,
