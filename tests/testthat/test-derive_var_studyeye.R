@@ -10,7 +10,7 @@ test_that("STUDYEYE is derived correctly", {
     "XXX002", "P01",
   )
 
-  sc <- tibble::tribble(
+  sc1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SCTESTCD, ~SCSTRESC,
     "XXX001", "P01", "FOCID", "OS",
     "XXX001", "P01", "ACOHORT", "COHORT1",
@@ -20,6 +20,18 @@ test_that("STUDYEYE is derived correctly", {
     "XXX001", "P05", "FOCID", "OD",
     "XXX001", "P06", "FOCID", "OP",
     "XXX002", "P01", "FOCID", "OS"
+  )
+
+  sc2 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SCTESTCD, ~SCSTRESC,
+    "XXX001", "P01", "STDEYE", "OS",
+    "XXX001", "P01", "ACOHORT", "COHORT1",
+    "XXX001", "P02", "STDEYE", "OD",
+    "XXX001", "P02", "ACOHORT", "COHORT3",
+    "XXX001", "P04", "STDEYE", "OU",
+    "XXX001", "P05", "STDEYE", "OD",
+    "XXX001", "P06", "STDEYE", "OP",
+    "XXX002", "P01", "STDEYE", "OS"
   )
 
   expected_output <- tibble::tribble(
@@ -34,7 +46,13 @@ test_that("STUDYEYE is derived correctly", {
   )
 
   expect_dfs_equal(
-    derive_var_studyeye(input, sc),
+    derive_var_studyeye(input, sc1),
+    expected_output,
+    keys = c("STUDYID", "USUBJID")
+  )
+
+  expect_dfs_equal(
+    derive_var_studyeye(input, sc2, "STDEYE"),
     expected_output,
     keys = c("STUDYID", "USUBJID")
   )
