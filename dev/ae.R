@@ -27,4 +27,4 @@ admiral_ophtha_ae$AELAT <- ifelse(admiral_ophtha_ae$AESOC == "EYE DISORDERS",
 
 # Save dataset ----
 admiral_ae <- admiral_ophtha_ae
-saveRDS(admiral_ae, "data/admiral_ae.RDS")
+saveRDS(admiral_ae, "inst/extdata/admiral_ae.RDS")
