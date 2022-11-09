@@ -2,7 +2,8 @@
 
 ## New Features
 
-- You can link the GitHub Issue to Changelog by using (#ISSUE-NUMBER)
+- Added a function to derive the variable STUDYEYE in ADSL (issue #9).
+- Added a function to derive the variable AFEYE in Occurrence datasets (issue #10).
 
 ## Updates of Existing Functions
 
