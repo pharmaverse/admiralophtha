@@ -5,7 +5,8 @@ Version: 0.0.1
 Authors@R: c(
     person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut", "cre")),
     person("Edoardo", "Mancini", role = "aut"),
-    person("Lucy", "Palmen", role = "aut")
+    person("Lucy", "Palmen", role = "aut"),
+    person("Rachel", "Linacre", role = "aut")
     )
 Description: A toolbox for programming Clinical Data Standards Interchange Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
