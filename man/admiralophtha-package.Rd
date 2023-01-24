@@ -25,6 +25,7 @@ Authors:
 \itemize{
   \item Edoardo Mancini
   \item Lucy Palmen
+  \item Rachel Linacre
 }
 
 }
