@@ -10,7 +10,7 @@
 #' @author Rachel Linacre
 #'
 #' @return The input variable converted
-#' @keywords der_adoe der_adbcva
+#' @keywords der_ophtha
 #' @export
 #'
 #' @examples
@@ -28,9 +28,6 @@
 #' )
 #'
 #' adbcva <- adbcva %>% mutate(AVAL = etdrs_to_logmar(AVAL))
-
 etdrs_to_logmar <- function(variable) {
-
   variable <- -0.02 * variable + 1.7
-
 }
