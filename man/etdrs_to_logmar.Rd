@@ -37,5 +37,4 @@ adbcva <- adbcva \%>\% mutate(AVAL = etdrs_to_logmar(AVAL))
 \author{
 Rachel Linacre
 }
-\keyword{der_adbcva}
-\keyword{der_adoe}
+\keyword{der_ophtha}
