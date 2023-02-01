@@ -28,6 +28,6 @@
 #' )
 #'
 #' adbcva <- adbcva %>% mutate(AVAL = calculate_etdrs_to_logmar(AVAL))
-calculate_etdrs_to_logmar <- function(variable) {
-  -0.02 * variable + 1.7
+calculate_etdrs_to_logmar <- function(value) {
+  -0.02 * value + 1.7
 }
