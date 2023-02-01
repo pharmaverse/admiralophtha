@@ -4,7 +4,7 @@
 \alias{calculate_etdrs_to_logmar}
 \title{ETDRS --> LogMAR conversion}
 \usage{
-calculate_etdrs_to_logmar(variable)
+calculate_etdrs_to_logmar(value)
 }
 \arguments{
 \item{variable}{variable containing ETDRS score to convert to logMAR}
