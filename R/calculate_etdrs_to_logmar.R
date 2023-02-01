@@ -27,7 +27,7 @@
 #'   "XXX001", "P05", 25
 #' )
 #'
-#' adbcva <- adbcva %>% mutate(AVAL = etdrs_to_logmar(AVAL))
-etdrs_to_logmar <- function(variable) {
-  variable <- -0.02 * variable + 1.7
+#' adbcva <- adbcva %>% mutate(AVAL = calculate_etdrs_to_logmar(AVAL))
+calculate_etdrs_to_logmar <- function(variable) {
+  -0.02 * variable + 1.7
 }
