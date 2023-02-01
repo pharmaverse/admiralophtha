@@ -2,7 +2,7 @@
 #'
 #' Convert ETDRS --> LogMAR conversion in (`AVAL`)
 #'
-#' @param variable variable containing ETDRS score to convert to logMAR
+#' @param value variable containing ETDRS score to convert to logMAR
 #'
 #' @details
 #' ETDRS is converted by logMAR = -0.02 * ETDRS + 1.7

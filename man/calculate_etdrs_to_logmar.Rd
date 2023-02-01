@@ -7,7 +7,7 @@
 calculate_etdrs_to_logmar(value)
 }
 \arguments{
-\item{variable}{variable containing ETDRS score to convert to logMAR}
+\item{value}{variable containing ETDRS score to convert to logMAR}
 }
 \value{
 The input variable converted
