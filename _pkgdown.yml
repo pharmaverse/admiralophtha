@@ -33,6 +33,10 @@ reference:
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
   - has_keyword("der_occds")
+- subtitle: Ophtha-specific
+  desc: Derivation Functions helpful for building the Ophtha datasets (e.g. adoe, adbcva)
+- contents:
+  - has_keyword("der_ophtha")
 
 
 - title: Utility Functions
