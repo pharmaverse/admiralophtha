@@ -162,20 +162,6 @@
       "Hash": "d9778c960792721e8433daaf3db8f16a",
       "Requirements": []
     },
-    "bit": {
-      "Package": "bit",
-      "Version": "4.0.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f36715f14d94678eea9933af927bc15d"
-    },
-    "bit64": {
-      "Package": "bit64",
-      "Version": "4.0.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "9fe98599ca456d6552421db0d6772d8f"
-    },
     "brew": {
       "Package": "brew",
       "Version": "1.0-6",
@@ -250,13 +236,6 @@
       "Requirements": [
         "MASS"
       ]
-    },
-    "cellranger": {
-      "Package": "cellranger",
-      "Version": "1.1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f61dbaec772ccd2e17705c1e872e9e7c"
     },
     "cli": {
       "Package": "cli",
@@ -529,13 +508,6 @@
       "Hash": "74628ea7a3be5ee8a7b5bb0a8e84882e",
       "Requirements": []
     },
-    "forcats": {
-      "Package": "forcats",
-      "Version": "0.5.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "9d95bc88206321cd1bc98480ecfd74bb"
-    },
     "fs": {
       "Package": "fs",
       "Version": "1.5.2",
@@ -551,13 +523,6 @@
       "Repository": "CRAN",
       "Hash": "4d243a9c10b00589889fe32314ffd902",
       "Requirements": []
-    },
-    "generics": {
-      "Package": "generics",
-      "Version": "0.1.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "15e9634c0fcd294799e9b2e929ed1b86"
     },
     "gert": {
       "Package": "gert",
@@ -611,13 +576,6 @@
       "Repository": "CRAN",
       "Hash": "4f2596dfb05dac67b9dc558e5c6fba2e",
       "Requirements": []
-    },
-    "haven": {
-      "Package": "haven",
-      "Version": "2.5.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "5b45a553fca2217a07b6f9c843304c44"
     },
     "highr": {
       "Package": "highr",
@@ -745,13 +703,6 @@
         "yaml"
       ]
     },
-    "labelled": {
-      "Package": "labelled",
-      "Version": "2.10.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "1c444c7fe66cebddc0e6e3e2a5ca37c1"
-    },
     "later": {
       "Package": "later",
       "Version": "1.1.0.1",
@@ -864,20 +815,6 @@
         "Matrix",
         "nlme"
       ]
-    },
-    "metacore": {
-      "Package": "metacore",
-      "Version": "0.0.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "3e74b534d53d51d3eb4b1f59daae45d1"
-    },
-    "metatools": {
-      "Package": "metatools",
-      "Version": "0.1.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "7b3044d48843da9d7dc2da98f236764a"
     },
     "mime": {
       "Package": "mime",
@@ -1064,13 +1001,6 @@
         "prettyunits"
       ]
     },
-    "progress": {
-      "Package": "progress",
-      "Version": "1.2.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "14dc9f7a3c91ebb14ec5bb9208a07061"
-    },
     "promises": {
       "Package": "promises",
       "Version": "1.2.0.1",
@@ -1164,27 +1094,6 @@
       "Repository": "CRAN",
       "Hash": "c66b930d20bb6d858cd18e1cebcfae5c",
       "Requirements": []
-    },
-    "readr": {
-      "Package": "readr",
-      "Version": "2.1.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "9c59de1357dc209868b5feb5c9f0fe2f"
-    },
-    "readxl": {
-      "Package": "readxl",
-      "Version": "1.4.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "5c1fbc365ac0a3fe7728ac79108b8e64"
-    },
-    "rematch": {
-      "Package": "rematch",
-      "Version": "1.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c66b930d20bb6d858cd18e1cebcfae5c"
     },
     "rematch2": {
       "Package": "rematch2",
@@ -1584,13 +1493,6 @@
       "Requirements": [
         "xfun"
       ]
-    },
-    "tzdb": {
-      "Package": "tzdb",
-      "Version": "0.3.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b2e1cbce7c903eaf23ec05c58e59fb5e"
     },
     "usethis": {
       "Package": "usethis",
