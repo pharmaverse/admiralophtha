@@ -63,7 +63,7 @@ derive_vars_merged_lookup(
   ## Calculate AVAL and AVALC ----
 mutate(
   AVAL = QSSTRESN,
-  AVALC = QSSTRESC
+  AVALC = QSORRES
 )
   ## Derive new parameters based on existing records ----
 
@@ -203,6 +203,8 @@ adqs <- adqs %>%
   mutate(
     AVISIT = case_when(
       str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
+      #If VISIT=DAY 1 then set to Baseline, study specific
+      str_detect(VISIT, "DAY 1") ~ "Baseline",
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
