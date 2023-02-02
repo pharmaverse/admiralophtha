@@ -67,7 +67,7 @@ mutate(
 )
   ## Derive new parameters based on existing records ----
 
-## QR01 Recoded Item 02
+## QR01 Recoded Item 01
 # set to 100 if [ADQS.AVAL] = 1
 # else set to 75 if [ADQS.AVAL] = 2
 # else set to 50 if [ADQS.AVAL] = 3
@@ -78,7 +78,7 @@ adqs <- adqs %>%
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD=="ACITM01" & !is.na(AVAL),
     analysis_var = AVAL,
-    summary_fun = max,
+    summary_fun = identity,
     set_values_to = vars(PARAMCD='QR01')
   ) %>%
   mutate(AVAL= ifelse(PARAMCD=="QR01",
@@ -101,7 +101,7 @@ adqs <- adqs %>%
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD=="ACITM01" & !is.na(AVAL),
     analysis_var = AVAL,
-    summary_fun = max,
+    summary_fun = identity,
     set_values_to = vars(PARAMCD='QR02')
   ) %>%
   mutate(AVAL= ifelse(PARAMCD=="QR02",
@@ -124,7 +124,7 @@ adqs <- adqs %>%
     by_vars = vars(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD=="ACITM03" & !is.na(AVAL),
     analysis_var = AVAL,
-    summary_fun = max,
+    summary_fun = identity,
     set_values_to = vars(PARAMCD='QR03')
   ) %>%
   mutate(AVAL= ifelse(PARAMCD=="QR03",
@@ -147,7 +147,7 @@ adqs <- adqs %>%
     by_vars = vars(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD=="ACITM04" & !is.na(AVAL),
     analysis_var = AVAL,
-    summary_fun = max,
+    summary_fun = identity,
     set_values_to = vars(PARAMCD='QR04')
   ) %>%
   mutate(AVAL= ifelse(PARAMCD=="QR04",
