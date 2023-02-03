@@ -16,7 +16,7 @@
 #' lie below some upper limit).
 #' @param bcva_lowlim Numeric value detailing lowest change in BCVA limit (`bcva_lowlim`
 #' will be called in `critxfl_cond` if the criterion stipulates that change in BCVA
-#' lie below some upper limit).
+#' lie above some lower limit).
 #'
 #' @details
 #' The criterion for change in BCVA in `CRITxFL` can be of three types: (1) value lies
