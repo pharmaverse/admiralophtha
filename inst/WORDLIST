@@ -2,6 +2,8 @@ ADXX
 ADaM
 Biologics
 CDISC
+CRITx
+CRITxFL
 CMD
 Changelog
 dataset
@@ -33,6 +35,7 @@ dev
 github
 https
 onboarding
+paramcds
 pharmaverse
 renv
 repo
@@ -46,3 +49,5 @@ laterality
 afeye
 logMAR
 etdrs
+critxfl
+critx

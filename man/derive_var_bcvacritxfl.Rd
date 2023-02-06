@@ -74,8 +74,8 @@ derive_var_bcvacritxfl(
   dataset_adbcva = adbcva1,
   paramcds = c("SBCVA", "FBCVA"),
   basetype = NULL,
-  bcva_ranges = list(c(0,5), c(-5,-1), c(10,15)),
-  bcva_uplims = list(5,10),
+  bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
+  bcva_uplims = list(5, 10),
   bcva_lowlims = list(8),
   additional_text = ""
 )
@@ -97,10 +97,11 @@ derive_var_bcvacritxfl(
   dataset_adbcva = adbcva2,
   paramcds = c("SBCVA", "FBCVA"),
   basetype = "AVERAGE",
-  bcva_ranges = list(c(0,5), c(-10,0)),
+  bcva_ranges = list(c(0, 5), c(-10, 0)),
   bcva_lowlims = list(5),
   additional_text = " (AVERAGE)"
 )
+
 }
 \author{
 Edoardo Mancini

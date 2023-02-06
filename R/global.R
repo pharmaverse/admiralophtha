@@ -8,5 +8,9 @@ globalVariables(c(
   "SCTESTCD",
   "STUDYEYE",
   "STUDYID",
-  "USUBJID"
+  "USUBJID",
+  "BASETYPE",
+  "CHG",
+  "PARAMCD",
+  "paramcds"
 ))

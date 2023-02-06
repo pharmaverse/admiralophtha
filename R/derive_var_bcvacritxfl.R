@@ -30,15 +30,13 @@
 #' @return The input ADBCVA dataset with additional columns `CRITx`, `CRITxFL`.
 #' @keywords der_ophtha
 
-derive_var_bcvacritxfl_util <- function(
-  dataset,
-  critx_text,
-  critxfl_cond,
-  counter,
-  bcva_range = NULL,
-  bcva_uplim = NULL,
-  bcva_lowlim = NULL) {
-
+derive_var_bcvacritxfl_util <- function(dataset,
+                                        critx_text,
+                                        critxfl_cond,
+                                        counter,
+                                        bcva_range = NULL,
+                                        bcva_uplim = NULL,
+                                        bcva_lowlim = NULL) {
   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
   assert_character_vector(critx_text)
   assert_character_vector(critxfl_cond)
@@ -115,8 +113,8 @@ derive_var_bcvacritxfl_util <- function(
 #'   dataset_adbcva = adbcva1,
 #'   paramcds = c("SBCVA", "FBCVA"),
 #'   basetype = NULL,
-#'   bcva_ranges = list(c(0,5), c(-5,-1), c(10,15)),
-#'   bcva_uplims = list(5,10),
+#'   bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
+#'   bcva_uplims = list(5, 10),
 #'   bcva_lowlims = list(8),
 #'   additional_text = ""
 #' )
@@ -138,21 +136,19 @@ derive_var_bcvacritxfl_util <- function(
 #'   dataset_adbcva = adbcva2,
 #'   paramcds = c("SBCVA", "FBCVA"),
 #'   basetype = "AVERAGE",
-#'   bcva_ranges = list(c(0,5), c(-10,0)),
+#'   bcva_ranges = list(c(0, 5), c(-10, 0)),
 #'   bcva_lowlims = list(5),
 #'   additional_text = " (AVERAGE)"
 #' )
-
-derive_var_bcvacritxfl <- function(
-  dataset_adbcva,
-  paramcds = NULL,
-  basetype = NULL,
-  bcva_ranges = NULL,
-  bcva_uplims = NULL,
-  bcva_lowlims = NULL,
-  additional_text = "",
-  critxfl_index = NULL) {
-
+#'
+derive_var_bcvacritxfl <- function(dataset_adbcva,
+                                   paramcds = NULL,
+                                   basetype = NULL,
+                                   bcva_ranges = NULL,
+                                   bcva_uplims = NULL,
+                                   bcva_lowlims = NULL,
+                                   additional_text = "",
+                                   critxfl_index = NULL) {
   assert_data_frame(dataset_adbcva, required_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
   assert_character_vector(paramcds, optional = TRUE)
   assert_character_vector(basetype, optional = TRUE)
@@ -172,7 +168,6 @@ derive_var_bcvacritxfl <- function(
 
   # Identify first value of x to be used for CRITx/CRITxFL
   if (is.null(critxfl_index)) {
-
     # Find largest index of CRITxFL already present in the dataset
     critxfl_vars <- names(dataset_adbcva)[grepl("^CRIT.*FL$", names(dataset_adbcva))]
 
@@ -181,18 +176,17 @@ derive_var_bcvacritxfl <- function(
         str_extract("[[:digit:]]+") %>%
         as.numeric() %>%
         max()
-    }else{
+    } else {
       max_critxfl_num <- 0
     }
     # Start making CRITx, CRITxFL from next available index
     counter <- max_critxfl_num + 1
-  }else{
+  } else {
     counter <- critxfl_index
   }
 
   # Construct CRITx/CRITxFL pairs
   for (bcva_range in bcva_ranges) {
-
     dataset_adbcva <- restrict_derivation(
       dataset = dataset_adbcva,
       derivation = derive_var_bcvacritxfl_util,
@@ -206,11 +200,9 @@ derive_var_bcvacritxfl <- function(
     )
 
     counter <- counter + 1
-
   }
 
   for (bcva_uplim in bcva_uplims) {
-
     dataset_adbcva <- restrict_derivation(
       dataset = dataset_adbcva,
       derivation = derive_var_bcvacritxfl_util,
@@ -224,11 +216,9 @@ derive_var_bcvacritxfl <- function(
     )
 
     counter <- counter + 1
-
   }
 
   for (bcva_lowlim in bcva_lowlims) {
-
     dataset_adbcva <- restrict_derivation(
       dataset = dataset_adbcva,
       derivation = derive_var_bcvacritxfl_util,
@@ -242,9 +232,7 @@ derive_var_bcvacritxfl <- function(
     )
 
     counter <- counter + 1
-
   }
 
   return(dataset_adbcva)
-
 }
