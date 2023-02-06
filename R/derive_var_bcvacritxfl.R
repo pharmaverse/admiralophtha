@@ -29,9 +29,6 @@
 #'
 #' @return The input ADBCVA dataset with additional columns `CRITx`, `CRITxFL`.
 #' @keywords der_ophtha
-#' @export
-#'
-#' @examples
 
 derive_var_bcvacritxfl_util <- function(
   dataset,
@@ -40,15 +37,15 @@ derive_var_bcvacritxfl_util <- function(
   counter,
   bcva_range = NULL,
   bcva_uplim = NULL,
-  bcva_lowlim = NULL){
+  bcva_lowlim = NULL) {
 
   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
   assert_character_vector(critx_text)
   assert_character_vector(critxfl_cond)
   assert_integer_scalar(counter)
-  if(!is.null(bcva_range)) assert_numeric_vector(bcva_range)
-  if(!is.null(bcva_uplim)) assert_integer_scalar(bcva_uplim)
-  if(!is.null(bcva_lowlim)) assert_integer_scalar(bcva_lowlim)
+  if (!is.null(bcva_range)) assert_numeric_vector(bcva_range)
+  if (!is.null(bcva_uplim)) assert_integer_scalar(bcva_uplim)
+  if (!is.null(bcva_lowlim)) assert_integer_scalar(bcva_lowlim)
 
   critx_name <- paste0("CRIT", counter)
   critxfl_name <- paste0(critx_name, "FL")
@@ -72,6 +69,9 @@ derive_var_bcvacritxfl_util <- function(
 #' @param paramcds Vector of `PARAMCD` values for which to derive `CRITx` and `CRITxFL`.
 #' @param basetype `BASETYPE` value for which to derive `CRITx` and `CRITxFL`.
 #' @param additional_text string containing additional text to append to `CRITx`
+#' @param critxfl_index positive integer detailing the first value of x to use
+#' in "CRITxFL". If not supplied, the function takes the first available value of
+#' x, counting up from x = 1.
 #' @param bcva_ranges List containing one or more numeric vectors of length 2. For each
 #' vector c(a,b) in `bcva_ranges`, a pair of variables `CRITx`, `CRITxFL` is created
 #' with the condition: a <= `CHG` <= b. If criterion flags of that type are not
@@ -123,8 +123,8 @@ derive_var_bcvacritxfl_util <- function(
 #'
 #' adbcva2 <- tribble(
 #'   ~STUDYID, ~USUBJID, ~AVISIT, ~BASETYPE, ~PARAMCD, ~AVAL, ~CHG,
-#'   "XXX001", "P01", "BASELINE" "LAST", "SBCVA", 4, NA,
-#'   "XXX001", "P01", "BASELINE" "LAST", "SBCVA", 6, NA,
+#'   "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 4, NA,
+#'   "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 6, NA,
 #'   "XXX001", "P01", "AVERAGE BASELINE", "AVERAGE", "SBCVA", 5, NA,
 #'   "XXX001", "P01", "WEEK 2", "LAST", "SBCVA", -3, NA,
 #'   "XXX001", "P01", "WEEK 4", "LAST", "SBCVA", -10, NA,
@@ -150,41 +150,48 @@ derive_var_bcvacritxfl <- function(
   bcva_ranges = NULL,
   bcva_uplims = NULL,
   bcva_lowlims = NULL,
-  additional_text = ""){
+  additional_text = "",
+  critxfl_index = NULL) {
 
   assert_data_frame(dataset_adbcva, required_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
-  if(!is.null(paramcds)) assert_character_vector(paramcds)
-  if(!is.null(basetype)) assert_character_vector(basetype)
-  if(!is.null(bcva_ranges)) lapply(bcva_ranges, assert_numeric_vector)
-  if(!is.null(bcva_uplims)) lapply(bcva_uplims, assert_numeric_vector)
-  if(!is.null(bcva_lowlims)) lapply(bcva_lowlims, assert_numeric_vector)
+  assert_character_vector(paramcds, optional = TRUE)
+  assert_character_vector(basetype, optional = TRUE)
   assert_character_scalar(additional_text)
+  assert_integer_scalar(critxfl_index, optional = T)
+  if (!is.null(bcva_ranges)) lapply(bcva_ranges, assert_numeric_vector)
+  if (!is.null(bcva_uplims)) lapply(bcva_uplims, assert_numeric_vector)
+  if (!is.null(bcva_lowlims)) lapply(bcva_lowlims, assert_numeric_vector)
 
   # If user hasn't supplied PARAMCDs/BASETYPE, create criterion flags for all records
-  if(is.null(paramcds)){
+  if (is.null(paramcds)) {
     paramcds <- unique(dataset_adbcva$PARAMCD)
   }
-  if(is.null(basetype)){
+  if (is.null(basetype)) {
     basetype <- unique(dataset_adbcva$BASETYPE)
   }
 
-  # Find largest index of CRITxFL already present in the dataset
-  critxfl_vars <- names(dataset_adbcva)[grepl("^CRIT.*FL$", names(dataset_adbcva))]
+  # Identify first value of x to be used for CRITx/CRITxFL
+  if (is.null(critxfl_index)) {
 
-  if (length(critxfl_vars) > 0){
-    max_critxfl_num <- critxfl_vars %>%
-      str_extract("[[:digit:]]+") %>%
-      as.numeric() %>%
-      max()
+    # Find largest index of CRITxFL already present in the dataset
+    critxfl_vars <- names(dataset_adbcva)[grepl("^CRIT.*FL$", names(dataset_adbcva))]
+
+    if (length(critxfl_vars) > 0) {
+      max_critxfl_num <- critxfl_vars %>%
+        str_extract("[[:digit:]]+") %>%
+        as.numeric() %>%
+        max()
+    }else{
+      max_critxfl_num <- 0
+    }
+    # Start making CRITx, CRITxFL from next available index
+    counter <- max_critxfl_num + 1
   }else{
-    max_critxfl_num <- 0
+    counter <- critxfl_index
   }
 
-  # Start making CRITx, CRITxFL from next available index
-  counter <- max_critxfl_num + 1
-
   # Construct CRITx/CRITxFL pairs
-  for (bcva_range in bcva_ranges){
+  for (bcva_range in bcva_ranges) {
 
     dataset_adbcva <- restrict_derivation(
       dataset = dataset_adbcva,
@@ -202,7 +209,7 @@ derive_var_bcvacritxfl <- function(
 
   }
 
-  for (bcva_uplim in bcva_uplims){
+  for (bcva_uplim in bcva_uplims) {
 
     dataset_adbcva <- restrict_derivation(
       dataset = dataset_adbcva,
@@ -220,7 +227,7 @@ derive_var_bcvacritxfl <- function(
 
   }
 
-  for (bcva_lowlim in bcva_lowlims){
+  for (bcva_lowlim in bcva_lowlims) {
 
     dataset_adbcva <- restrict_derivation(
       dataset = dataset_adbcva,
