@@ -16,12 +16,6 @@ Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/mai
 
 <!-- badges: end -->
 
-Ophthlamology extension package for ADaM in R Asset Library `{admiral}`
-
-## Purpose
-
-To provide a complementary (to `{admiral}`) toolbox that enables users to develop Ophthalmology disease area specifics.
-
 ## Installation
 
 To install the latest development version of the package directly from
@@ -44,12 +38,13 @@ remotes::install_github("pharmaverse/admiraloptha", ref = "devel")
 ## Expectations
 
 `{admiralophtha}` is expected to complement `{admiral}` and provide
-functions to help with the creation of ophthalmology ADaMs and 
-endpoints.
+functions to help with the creation of the endpoints required for
+ophthalmology ADaMs.
 
 ## References and Documentation
 
-* Please refer to the `r dyn_link("{admiral} References and Documentation", admiral_homepage, "index.html#references-and-documentation")`
+* Please refer to the [{admiral} References and
+  Documentation](https://pharmaverse.github.io/admiral/index.html#references-and-documentation).
 
 ## R Versions
 
