@@ -1,6 +1,6 @@
-#' Conversion of logMAR to ETDRS
+#' LogMAR --> ETDRS conversion
 #'
-#' Convert logMAR value of (`OESTRESN`) to ETDRS value
+#' Convert LogMAR score to ETDRS units
 #'
 #' @param variable variable containing logMAR score to convert to ETDRS
 #'
@@ -27,10 +27,11 @@
 #'   "XXX001", "P05", "VACSCORE", "ETDRS EYE CHART", 1
 #' )
 #'
-#' adbcva <- oe %>% filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "LOGMAR EYE CHART") %>% mutate(OESTRESN = calculate_logmar_to_etdrs(OESTRESN))
+#' adbcva <- oe %>% filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "LOGMAR EYE CHART") %>% 
+#'                  mutate(OESTRESN = calculate_logmar_to_etdrs(OESTRESN))
 
 calculate_logmar_to_etdrs <- function(value) {
 
-  -(value - 1.7) / 0.02
+  -( value - 1.7) / 0.02
 
 }
