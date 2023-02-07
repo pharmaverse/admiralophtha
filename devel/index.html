@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="index.html">admiralophtha</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,25 +53,22 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="articles/admiralophtha.html">Get Started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
-    <a class="dropdown-item" href="articles/adxx.html">Creating ADXX</a>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-guides">User Guides</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-guides">
+    <a class="dropdown-item" href="articles/adoe.html">Creating ADOE</a>
+    <a class="dropdown-item" href="articles/adbcva.html">Creating ADBCVA</a>
+    <a class="dropdown-item" href="articles/advfq.html">Creating ADVFQ</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -97,7 +94,13 @@
 </h1>
 </div>
 <!-- badges: start -->
-<!-- badges: end --><div class="section level2">
+<!-- badges: end --><p>Ophthlamology extension package for ADaM in R Asset Library <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></p>
+<div class="section level2">
+<h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
+</h2>
+<p>To provide a complementary (to <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>) toolbox that enables users to develop Ophthalmology disease area specifics.</p>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>To install the latest development version of the package directly from GitHub use the following code:</p>
@@ -117,12 +120,12 @@
 <div class="section level2">
 <h2 id="expectations">Expectations<a class="anchor" aria-label="anchor" href="#expectations"></a>
 </h2>
-<p><a href="https://pharmaverse.github.io/admiralophtha" class="external-link">admiralophtha</a> is expected to complement <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and provide functions to help with the creation of the endpoints required for ophthalmology ADaMs.</p>
+<p><a href="https://pharmaverse.github.io/admiralophtha" class="external-link">admiralophtha</a> is expected to complement <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and provide functions to help with the creation of ophthalmology ADaMs and endpoints.</p>
 </div>
 <div class="section level2">
 <h2 id="references-and-documentation">References and Documentation<a class="anchor" aria-label="anchor" href="#references-and-documentation"></a>
 </h2>
-<ul><li>Please refer to the <a href="https://pharmaverse.github.io/admiral/index.html#references-and-documentation" class="external-link"><code>{admiral}</code> References and Documentation</a>
+<ul><li>Please refer to the <code>r dyn_link("{admiral} References and Documentation", admiral_homepage, "index.html#references-and-documentation")</code>
 </li></ul>
 </div>
 <div class="section level2">
@@ -177,8 +180,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Gordon Miller <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Edoardo Mancini <br><small class="roles"> Author </small>  </li>
+<li>Edoardo Mancini <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Gordon Miller <br><small class="roles"> Author </small>  </li>
 <li>Lucy Palmen <br><small class="roles"> Author </small>  </li>
 <li>Rachel Linacre <br><small class="roles"> Author </small>  </li>
 </ul>
@@ -199,7 +202,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Gordon Miller, Edoardo Mancini, Lucy Palmen, Rachel Linacre.</p>
+<p>Developed by Edoardo Mancini, Gordon Miller, Lucy Palmen, Rachel Linacre.</p>
 </div>
 
 <div class="pkgdown-footer-right">
