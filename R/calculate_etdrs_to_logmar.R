@@ -2,7 +2,7 @@
 #'
 #' Convert ETDRS score to LogMAR units
 #'
-#' @param value value containing ETDRS score to convert to logMAR
+#' @param value containing ETDRS score to convert to logMAR
 #'
 #' @details
 #' ETDRS is converted by logMAR = -0.02 * ETDRS + 1.7
