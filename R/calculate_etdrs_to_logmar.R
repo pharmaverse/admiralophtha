@@ -1,15 +1,15 @@
 #' ETDRS --> LogMAR conversion
 #'
-#' Convert ETDRS --> LogMAR conversion in (`AVAL`)
+#' Convert ETDRS score to LogMAR units
 #'
-#' @param value variable containing ETDRS score to convert to logMAR
+#' @param value containing ETDRS score to convert to logMAR
 #'
 #' @details
 #' ETDRS is converted by logMAR = -0.02 * ETDRS + 1.7
 #'
 #' @author Rachel Linacre
 #'
-#' @return The input variable converted
+#' @return The input value converted
 #' @keywords der_ophtha
 #' @export
 #'
@@ -17,6 +17,7 @@
 #' library(tibble)
 #' library(dplyr)
 #' library(admiral)
+#' library(admiraldev)
 #'
 #' adbcva <- tribble(
 #'   ~STUDYID, ~USUBJID, ~AVAL,
@@ -29,5 +30,6 @@
 #'
 #' adbcva <- adbcva %>% mutate(AVAL = calculate_etdrs_to_logmar(AVAL))
 calculate_etdrs_to_logmar <- function(value) {
+  assert_numeric_vector(value)
   -0.02 * value + 1.7
 }
