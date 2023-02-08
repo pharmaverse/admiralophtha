@@ -88,8 +88,22 @@ reference:
   - has_keyword('tte_source')
 
 
-articles:
-- title: User Guides
-  navbar: User Guides
-  contents:
-  - adxx
+navbar:
+  structure:
+    left: [getstarted, reference, articles, news]
+  components:
+    getstarted:
+      text: Get Started
+      href: articles/admiralophtha.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: User Guides
+      menu:
+      - text: Creating ADOE
+        href: articles/adoe.html
+      - text: Creating ADBCVA
+        href: articles/adbcva.html
+      - text: Creating ADVFQ
+        href: articles/advfq.html
