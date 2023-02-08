@@ -31,7 +31,7 @@
 #'                  mutate(OESTRESN = calculate_logmar_to_etdrs(OESTRESN))
 
 calculate_logmar_to_etdrs <- function(value) {
-
-  -( value - 1.7) / 0.02
+  assert_numeric_vector(value)
+  - (value - 1.7) / 0.02
 
 }
