@@ -24,6 +24,8 @@
 #' value is above some lower limit; b <= CHG. For (1), `bcva_range` must be specified to
 #' this function; for (2), `bcva_uplim`; for (3) `bcva_lowlim`. It is only ever
 #' necessary to supply one of these three arguments.
+#' NOTE: if `CHG` is equal to NA, then the resulting criterion flag is also marked
+#' as NA.
 #'
 #' @author Edoardo Mancini
 #'
@@ -37,7 +39,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
                                         bcva_range = NULL,
                                         bcva_uplim = NULL,
                                         bcva_lowlim = NULL) {
-  assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
+  assert_data_frame(dataset, required_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
   assert_character_vector(critx_text)
   assert_character_vector(critxfl_cond)
   assert_integer_scalar(counter)
@@ -53,6 +55,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
       !!critx_name := critx_text,
       !!critxfl_name := case_when(
         eval(parse(text = critxfl_cond)) ~ "Y",
+        is.na(CHG) ~ NA,
         TRUE ~ "N"
       )
     )
@@ -86,6 +89,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' @details
 #' This function works by calling `derive_var_bcvacritxfl`once for each of the
 #' elements in `bcva_ranges`, `bcva_uplims` and `bcva_lowlims`.
+#' NOTE: if `CHG` is equal to NA, then the resulting criterion flag is also marked
+#' as NA.
 #'
 #' @author Edoardo Mancini
 #'
@@ -96,6 +101,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' @examples
 #' library(tibble)
 #' library(admiral)
+#' library(admiraldev)
 #'
 #' adbcva1 <- tribble(
 #'   ~STUDYID, ~USUBJID, ~BASETYPE, ~PARAMCD, ~CHG,
@@ -149,7 +155,7 @@ derive_var_bcvacritxfl <- function(dataset_adbcva,
                                    bcva_lowlims = NULL,
                                    additional_text = "",
                                    critxfl_index = NULL) {
-  assert_data_frame(dataset_adbcva, required_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
+  assert_data_frame(dataset_adbcva, required_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD, CHG))
   assert_character_vector(paramcds, optional = TRUE)
   assert_character_vector(basetype, optional = TRUE)
   assert_character_scalar(additional_text)
