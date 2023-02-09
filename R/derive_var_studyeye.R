@@ -41,8 +41,8 @@
 #'
 #' derive_var_studyeye(adsl, sc)
 derive_var_studyeye <- function(dataset_adsl, dataset_sc, sctestcd_value = "FOCID") {
-  assert_data_frame(dataset_sc, required_vars = vars(STUDYID, USUBJID, SCTESTCD, SCSTRESC))
-  assert_data_frame(dataset_adsl, required_vars = vars(STUDYID, USUBJID))
+  assert_data_frame(dataset_sc, required_vars = exprs(STUDYID, USUBJID, SCTESTCD, SCSTRESC))
+  assert_data_frame(dataset_adsl, required_vars = exprs(STUDYID, USUBJID))
 
   seye_cat <- function(seye) {
     case_when(
@@ -56,9 +56,9 @@ derive_var_studyeye <- function(dataset_adsl, dataset_sc, sctestcd_value = "FOCI
   derive_var_merged_cat(
     dataset_adsl,
     dataset_add = dataset_sc,
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = exprs(STUDYID, USUBJID),
     order = NULL,
-    filter_add = SCTESTCD == sctestcd_value,
+    filter_add = SCTESTCD == !!sctestcd_value,
     new_var = STUDYEYE,
     source_var = SCSTRESC,
     cat_fun = seye_cat,

@@ -32,9 +32,9 @@
 #'
 #' derive_var_afeye(adae, AELOC, AELAT)
 derive_var_afeye <- function(dataset_occ, loc_var, lat_var) {
-  loc_var <- assert_symbol(enquo(loc_var))
-  lat_var <- assert_symbol(enquo(lat_var))
-  assert_data_frame(dataset_occ, required_vars = quo_c(loc_var, lat_var))
+  loc_var <- assert_symbol(enexpr(loc_var))
+  lat_var <- assert_symbol(enexpr(lat_var))
+  assert_data_frame(dataset_occ, required_vars = expr_c(loc_var, lat_var))
 
   dataset_occ %>%
     mutate(AFEYE = case_when(
