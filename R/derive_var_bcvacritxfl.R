@@ -31,6 +31,7 @@
 #'
 #' @return The input ADBCVA dataset with additional columns `CRITx`, `CRITxFL`.
 #' @keywords der_ophtha
+#' @export
 
 derive_var_bcvacritxfl_util <- function(dataset,
                                         critx_text,
@@ -81,8 +82,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' element a in `bcva_uplims`, a pair of variables `CRITx`, `CRITxFL` is created
 #' with the condition: `CHG` <= a. If criterion flags of that type are not
 #' required, then leave as NULL.
-#' @param bcva_lowlim List containing one or more numeric elements. For each
-#' element b in `bcva_uplims`, a pair of variables `CRITx`, `CRITxFL` is created
+#' @param bcva_lowlims List containing one or more numeric elements. For each
+#' element b in `bcva_lowlims`, a pair of variables `CRITx`, `CRITxFL` is created
 #' with the condition: CHG >= b. If criterion flags of that type are not required,
 #' then leave as NULL.
 #'

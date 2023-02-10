@@ -3,6 +3,7 @@
 export(calculate_etdrs_to_logmar)
 export(derive_var_afeye)
 export(derive_var_bcvacritxfl)
+export(derive_var_bcvacritxfl_util)
 export(derive_var_studyeye)
 importFrom(admiral,derive_var_merged_cat)
 importFrom(admiral,params)

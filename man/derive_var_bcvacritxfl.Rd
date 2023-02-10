@@ -32,16 +32,16 @@ element a in \code{bcva_uplims}, a pair of variables \code{CRITx}, \code{CRITxFL
 with the condition: \code{CHG} <= a. If criterion flags of that type are not
 required, then leave as NULL.}
 
+\item{bcva_lowlims}{List containing one or more numeric elements. For each
+element b in \code{bcva_lowlims}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
+with the condition: CHG >= b. If criterion flags of that type are not required,
+then leave as NULL.}
+
 \item{additional_text}{string containing additional text to append to \code{CRITx}}
 
 \item{critxfl_index}{positive integer detailing the first value of x to use
 in "CRITxFL". If not supplied, the function takes the first available value of
 x, counting up from x = 1.}
-
-\item{bcva_lowlim}{List containing one or more numeric elements. For each
-element b in \code{bcva_uplims}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
-with the condition: CHG >= b. If criterion flags of that type are not required,
-then leave as NULL.}
 }
 \value{
 The input ADBCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.
