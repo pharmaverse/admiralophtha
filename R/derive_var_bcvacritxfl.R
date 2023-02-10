@@ -11,7 +11,7 @@
 #' @param bcva_range Numeric vector of length two detailing lower and upper change in
 #' BCVA limits (`bcva_range` will be called in `critxfl_cond` if the criterion
 #' stipulates that change in BCVA lie inside some range).
-#' @param bcva_uplim Numeric value detailing upper change in BCVA limit (`bcva_uplim`
+#' @param bcva_uplim Numeric value detailing highest change in BCVA limit (`bcva_uplim`
 #' will be called in `critxfl_cond` if the criterion stipulates that change in BCVA
 #' lie below some upper limit).
 #' @param bcva_lowlim Numeric value detailing lowest change in BCVA limit (`bcva_lowlim`
@@ -83,7 +83,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' required, then leave as NULL.
 #' @param bcva_lowlim List containing one or more numeric elements. For each
 #' element b in `bcva_uplims`, a pair of variables `CRITx`, `CRITxFL` is created
-#' with the condition: b <= `CHG`. If criterion flags of that type are not required,
+#' with the condition: CHG >= b. If criterion flags of that type are not required,
 #' then leave as NULL.
 #'
 #' @details
@@ -213,8 +213,8 @@ derive_var_bcvacritxfl <- function(dataset_adbcva,
       dataset = dataset_adbcva,
       derivation = derive_var_bcvacritxfl_util,
       args = params(
-        critx_text = paste0(bcva_uplim, " <= CHG", additional_text),
-        critxfl_cond = "!is.na(CHG) & bcva_uplim[1] <= CHG",
+        critx_text = paste0("CHG <= ", bcva_uplim, additional_text),
+        critxfl_cond = "!is.na(CHG) & CHG <= bcva_uplim[1]",
         counter = counter,
         bcva_uplim = bcva_uplim
       ),
@@ -229,8 +229,8 @@ derive_var_bcvacritxfl <- function(dataset_adbcva,
       dataset = dataset_adbcva,
       derivation = derive_var_bcvacritxfl_util,
       args = params(
-        critx_text = paste0(bcva_lowlim, ">= CHG", additional_text),
-        critxfl_cond = "!is.na(CHG) & bcva_lowlim[1] >= CHG",
+        critx_text = paste0("CHG >= ", bcva_lowlim, additional_text),
+        critxfl_cond = "!is.na(CHG) & CHG >= bcva_lowlim[1]",
         counter = counter,
         bcva_lowlim = bcva_lowlim
       ),
