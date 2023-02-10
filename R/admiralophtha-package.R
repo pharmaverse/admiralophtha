@@ -11,7 +11,7 @@
 #'             is_logical is_quosure is_quosures is_symbol new_formula
 #'             parse_expr parse_exprs quo quo_get_expr quo_is_call
 #'             quo_is_missing quo_is_null quo_is_symbol quos quo_squash quo_text
-#'             set_names sym syms type_of warn quo_set_env quo_get_env
+#'             set_names sym syms type_of warn quo_set_env quo_get_env exprs
 #' @importFrom utils capture.output str
 #' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose
 #'             flatten every modify_at modify_if reduce compose
@@ -26,5 +26,5 @@
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 #' @importFrom admiral derive_var_merged_cat
 #' @importFrom admiraldev assert_symbol assert_data_frame expect_dfs_equal quo_c assert_data_frame
-#'             assert_numeric_vector
+#'             assert_numeric_vector expr_c
 "_PACKAGE"
