@@ -40,7 +40,7 @@ x, counting up from x = 1.}
 
 \item{bcva_lowlim}{List containing one or more numeric elements. For each
 element b in \code{bcva_uplims}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
-with the condition: b <= \code{CHG}. If criterion flags of that type are not required,
+with the condition: CHG >= b. If criterion flags of that type are not required,
 then leave as NULL.}
 }
 \value{

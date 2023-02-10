@@ -28,7 +28,7 @@ for \code{CRITxFL} variable to be equal to "Y".}
 BCVA limits (\code{bcva_range} will be called in \code{critxfl_cond} if the criterion
 stipulates that change in BCVA lie inside some range).}
 
-\item{bcva_uplim}{Numeric value detailing upper change in BCVA limit (\code{bcva_uplim}
+\item{bcva_uplim}{Numeric value detailing highest change in BCVA limit (\code{bcva_uplim}
 will be called in \code{critxfl_cond} if the criterion stipulates that change in BCVA
 lie below some upper limit).}
 
