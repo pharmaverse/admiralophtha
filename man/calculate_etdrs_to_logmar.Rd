@@ -7,16 +7,16 @@
 calculate_etdrs_to_logmar(value)
 }
 \arguments{
-\item{value}{containing ETDRS score to convert to logMAR}
+\item{value}{object containing ETDRS score to convert to logMAR}
 }
 \value{
-The input value converted
+The input value converted converted to logMAR units
 }
 \description{
 Convert ETDRS score to LogMAR units
 }
 \details{
-ETDRS is converted by logMAR = -0.02 * ETDRS + 1.7
+ETDRS value converted to logMAR as logMAR = -0.02 * ETDRS + 1.7
 }
 \examples{
 library(tibble)
