@@ -43,8 +43,8 @@ ophthalmology ADaMs.
 
 ## References and Documentation
 
-* Please refer to the [`{admiral}` References and
-  Documentation](https://pharmaverse.github.io/admiral/index.html#references-and-documentation)
+* Please refer to the [{admiral} References and
+  Documentation](https://pharmaverse.github.io/admiral/index.html#references-and-documentation).
 
 ## R Versions
 

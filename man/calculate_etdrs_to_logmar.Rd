@@ -7,13 +7,13 @@
 calculate_etdrs_to_logmar(value)
 }
 \arguments{
-\item{value}{variable containing ETDRS score to convert to logMAR}
+\item{value}{containing ETDRS score to convert to logMAR}
 }
 \value{
-The input variable converted
+The input value converted
 }
 \description{
-Convert ETDRS --> LogMAR conversion in (\code{AVAL})
+Convert ETDRS score to LogMAR units
 }
 \details{
 ETDRS is converted by logMAR = -0.02 * ETDRS + 1.7
@@ -22,6 +22,7 @@ ETDRS is converted by logMAR = -0.02 * ETDRS + 1.7
 library(tibble)
 library(dplyr)
 library(admiral)
+library(admiraldev)
 
 adbcva <- tribble(
   ~STUDYID, ~USUBJID, ~AVAL,

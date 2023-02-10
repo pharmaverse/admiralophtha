@@ -19,11 +19,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Gordon Miller \email{gordon.miller@roche.com}
+\strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com}
 
 Authors:
 \itemize{
-  \item Edoardo Mancini
+  \item Gordon Miller \email{gordon.miller@roche.com}
   \item Lucy Palmen
   \item Rachel Linacre
 }
