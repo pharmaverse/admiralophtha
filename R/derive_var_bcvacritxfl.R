@@ -202,7 +202,7 @@ derive_var_bcvacritxfl <- function(dataset_adbcva,
         counter = counter,
         bcva_range = bcva_range
       ),
-      filter = PARAMCD %in% paramcds & BASETYPE %in% basetype
+      filter = PARAMCD %in% !!paramcds & BASETYPE %in% !!basetype
     )
 
     counter <- counter + 1
@@ -218,7 +218,7 @@ derive_var_bcvacritxfl <- function(dataset_adbcva,
         counter = counter,
         bcva_uplim = bcva_uplim
       ),
-      filter = PARAMCD %in% paramcds & BASETYPE %in% basetype
+      filter = PARAMCD %in% !!paramcds & BASETYPE %in% !!basetype
     )
 
     counter <- counter + 1
@@ -234,7 +234,7 @@ derive_var_bcvacritxfl <- function(dataset_adbcva,
         counter = counter,
         bcva_lowlim = bcva_lowlim
       ),
-      filter = PARAMCD %in% paramcds & BASETYPE %in% basetype
+      filter = PARAMCD %in% !!paramcds & BASETYPE %in% !!basetype
     )
 
     counter <- counter + 1
