@@ -2,14 +2,14 @@
 #'
 #' Convert ETDRS score to LogMAR units
 #'
-#' @param value containing ETDRS score to convert to logMAR
+#' @param value object containing ETDRS score to convert to logMAR
 #'
 #' @details
-#' ETDRS is converted by logMAR = -0.02 * ETDRS + 1.7
+#' ETDRS value converted to logMAR as logMAR = -0.02 * ETDRS + 1.7
 #'
 #' @author Rachel Linacre
 #'
-#' @return The input value converted
+#' @return The input value converted converted to logMAR units
 #' @keywords der_ophtha
 #' @export
 #'
