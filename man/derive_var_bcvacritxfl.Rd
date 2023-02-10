@@ -53,10 +53,13 @@ ADBCVA dataset.
 \details{
 This function works by calling \code{derive_var_bcvacritxfl}once for each of the
 elements in \code{bcva_ranges}, \code{bcva_uplims} and \code{bcva_lowlims}.
+NOTE: if \code{CHG} is equal to NA, then the resulting criterion flag is also marked
+as NA.
 }
 \examples{
 library(tibble)
 library(admiral)
+library(admiraldev)
 
 adbcva1 <- tribble(
   ~STUDYID, ~USUBJID, ~BASETYPE, ~PARAMCD, ~CHG,

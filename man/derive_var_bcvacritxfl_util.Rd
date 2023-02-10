@@ -49,6 +49,8 @@ within some range; a <= CHG <= b; (2) value is below some upper limit; CHG <= a;
 value is above some lower limit; b <= CHG. For (1), \code{bcva_range} must be specified to
 this function; for (2), \code{bcva_uplim}; for (3) \code{bcva_lowlim}. It is only ever
 necessary to supply one of these three arguments.
+NOTE: if \code{CHG} is equal to NA, then the resulting criterion flag is also marked
+as NA.
 }
 \author{
 Edoardo Mancini
