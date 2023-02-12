@@ -18,7 +18,7 @@ dyn_link <- function(text,
                      base_url,
                      relative_url = "",
                      # Change to TRUE when admiral adopts multiversion docs
-                     is_multiversion = FALSE,
+                     is_multiversion = TRUE,
                      multiversion_default_ref = "main") {
   url <- paste(base_url, relative_url, sep = "/")
   if (is_multiversion) {
