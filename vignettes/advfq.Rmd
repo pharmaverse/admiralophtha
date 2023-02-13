@@ -62,12 +62,11 @@ The examples of this vignette require the following packages.
 library(admiral)
 ```
 
-
- # Programming Workflow
+# Programming Workflow
 
 * [Read in Data](#readdata) 
-* [Define Parameters in lookup table](#parameters) 
 * [Derive Dates (`ADT` `ADY`)](#dates)
+* [Define Parameters in lookup table](#parameters)
 * [Derive Analysis Value for existing questions (`AVAL`)](#aval)
 * [Derive Parameters for recoded items and summary scores](#parameters) 
 * [Derive Analysis Visit (`AVISIT`)](#avisit)
@@ -75,27 +74,53 @@ library(admiral)
 * [Derive Analysis Variables (`ANL01FL` `ASEQ`)](#analysis)
 * [Add ADSL Variables](#adslvars) 
 
-<!-- ## Read in Data {#readdata} -->
+## Read in Data {#readdata}
 
-<!-- To start, all datasets needed for the creation of the time-to-event dataset -->
-<!-- should be read into the environment. This will be a company specific process. -->
+To start, all datasets needed for the creation of the questionnaire dataset
+should be read into the environment. This will be a company specific process.
 
-<!-- For example purpose, the ADaM datasets---which are included -->
-<!-- in `{admiral}` and `{admiralonco}`---are used. An alternative might be to use -->
-<!-- `ADEVENT` as input. -->
+For example purpose, the ADaM datasets---which are included
+in `{admiral}` and `{admiralophtha}`---are used.
 
-<!-- ```{r} -->
-<!-- data("admiral_adsl") -->
-<!-- data("admiral_adrs") -->
-<!-- adsl <- admiral_adsl -->
-<!-- adrs <- admiral_adrs -->
-<!-- ``` -->
+```{r} 
+data("admiral_adsl")
+data("admiral_qs")
+adsl <- admiral_adsl
+qs <- admiral_qs
+ ```
 
-<!-- ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters} -->
+## Derive Dates {#dates}
 
-<!-- To derive the parameter dependent variables like `CNSR`, `ADT`, `STARTDT`, -->
-<!-- `EVNTDESC`, `SRCDOM`, `PARAMCD`, ... the `admiral::derive_param_tte()` function can be -->
-<!-- used. It adds one parameter to the input dataset with one observation per -->
+To derive the date variables `ADT`, `ADY`,
+... the `admiral::derive_vars_dt()` function and the `admiral::derive_vars_dy()` function can be
+used. This function allows the user to impute the date as well.
+
+## Derive Parameters in lookup table {#parameters}
+ 
+Create a parameter look up table which includes `QSTESTCD`, `PARAMCD`, `PARAM`, `PARCAT1` and `PARCAT2`.
+This should include all parameters that will be needed in the final `ADVFQ`. This will be used later to merge Parameter information.
+
+```{r, eval=FALSE} 
+param_lookup <- tibble::tribble(
+  ~QSTESTCD, ~PARAMCD, ~PARAM,~PARCAT1, ~PARCAT2,
+  "ACITM01", "ACITM01", "WORD RECALL", "NEI VFQ 25", "Original Response",
+  "ACITM02", "ACITM02", "NAMING OBJECTS", "NEI VFQ 25", "Original Response",
+  "ACITM03", "ACITM03", "DELAYED WORD RECALL", "NEI VFQ 25", "Original Response",
+  "ACITM04", "ACITM04", "COMMANDS", "NEI VFQ 25", "Original Response",
+  "QR01", "QR01", "Recoded Item - 01", "NEI VFQ 25", "General 01",
+  "QR02", "QR02", "Recoded Item - 02", "NEI VFQ 25", "General 01",
+  "QR03", "QR03", "Recoded Item - 03", "NEI VFQ 25", "General 02",
+  "QR04", "QR04", "Recoded Item - 04", "NEI VFQ 25", "General 02",
+  "QSG01", "QSG01", "General Score 01", "NEI VFQ 25", "Averaged Result",
+  "QSG02", "QSG02", "General Score 02", "NEI VFQ 25", "Averaged Result",
+  "QBCSCORE", "QBCSCORE", "Composite Score", "NEI VFQ 25", "Averaged Result"
+) 
+ ``` 
+## Derive Analysis Value for existing questions {#aval}
+
+To derive the analysis values we use the function `admiral::derive_vars_merged_lookup()` which merges on PARAMCD from the Parameter lookup table.
+
+It adds one parameter to the input dataset with one observation per -->
 <!-- subject. Usually it is called several times. -->
 
 <!-- For each subject it is determined if an event occurred. In the affirmative the -->
