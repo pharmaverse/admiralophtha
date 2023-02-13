@@ -51,25 +51,29 @@ data for ophthalmology endpoints.
 This article is yet to be written. Use as basis the `{admiralonco}` article for `ADRS`
 (commented out in the file for now).
 
-<!-- **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless -->
-<!-- otherwise specified.* -->
+ **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
+ otherwise specified.* 
 
-<!-- ## Required Packages -->
+## Required Packages -->
 
-<!-- The examples of this vignette require the following packages. -->
+The examples of this vignette require the following packages.
 
-<!-- ```{r, warning=FALSE, message=FALSE} -->
-<!-- library(admiral) -->
-<!-- ``` -->
+```{r, warning=FALSE, message=FALSE}
+library(admiral)
+```
 
 
-<!-- # Programming Workflow -->
+ # Programming Workflow
 
-<!-- * [Read in Data](#readdata) -->
-<!-- * [Derive Parameters (`CNSR`, `ADT`, `STARTDT`)](#parameters) -->
-<!-- * [Derive Analysis Value (`AVAL`)](#aval) -->
-<!-- * [Derive Analysis Sequence Number (`ASEQ`)](#aseq) -->
-<!-- * [Add ADSL Variables](#adslvars) -->
+* [Read in Data](#readdata) 
+* [Define Parameters in lookup table](#parameters) 
+* [Derive Dates (`ADT` `ADY`)](#dates)
+* [Derive Analysis Value for existing questions (`AVAL`)](#aval)
+* [Derive Parameters for recoded items and summary scores](#parameters) 
+* [Derive Analysis Visit (`AVISIT`)](#avisit)
+* [Derive Baseline variables (`ABLFL` `BASE` `CHG` `PCHG`)](#baseline)
+* [Derive Analysis Variables (`ANL01FL` `ASEQ`)](#analysis)
+* [Add ADSL Variables](#adslvars) 
 
 <!-- ## Read in Data {#readdata} -->
 
