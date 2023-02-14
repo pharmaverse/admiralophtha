@@ -56,7 +56,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
       !!critx_name := critx_text,
       !!critxfl_name := case_when(
         eval(parse(text = critxfl_cond)) ~ "Y",
-        is.na(CHG) ~ NA,
+        is.na(CHG) ~ NA_character_,
         TRUE ~ "N"
       )
     )
