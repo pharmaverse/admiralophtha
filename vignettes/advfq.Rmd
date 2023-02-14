@@ -83,11 +83,12 @@ For example purpose, the ADaM datasets---which are included
 in `{admiral}` and `{admiralophtha}`---are used.
 
 ```{r} 
+library(admiral.test)
 data("admiral_adsl")
 data("admiral_qs")
 adsl <- admiral_adsl
 qs <- admiral_qs
- ```
+```
 
 ## Derive Dates {#dates}
 
@@ -115,7 +116,7 @@ param_lookup <- tibble::tribble(
   "QSG02", "QSG02", "General Score 02", "NEI VFQ 25", "Averaged Result",
   "QBCSCORE", "QBCSCORE", "Composite Score", "NEI VFQ 25", "Averaged Result"
 ) 
- ``` 
+```
 ## Derive Analysis Value for existing questions {#aval}
 
 To derive the analysis values we use the function `admiral::derive_vars_merged_lookup()` which merges on PARAMCD from the Parameter lookup table.
