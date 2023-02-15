@@ -44,7 +44,7 @@ attr(param_lookup$OETESTCD, "label") <- "Ophthalmology Test Short Name"
 # Get list of ADSL vars required for derivations
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
-adoe <- oe %>%
+adbcva <- oe %>%
   # Keep only BCVA parameters
   filter(
     OETESTCD %in% c("VACSCORE")
@@ -63,7 +63,7 @@ adoe <- oe %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-adoe <- adoe %>%
+adbcva <- adbcva %>%
   # Add PARAM, PARAMCD
   derive_vars_merged(
     dataset_add = param_lookup,
@@ -77,7 +77,7 @@ adoe <- adoe %>%
   )
 
 # Derive visit info - no ATPT and ATPTN yet as SDTM variables not in test data
-adoe <- adoe %>%
+adbcva <- adbcva %>%
   mutate(
     ATPTN = OETPTNUM,
     ATPT = OETPT,
@@ -91,14 +91,14 @@ adoe <- adoe %>%
   )
 
 # Derive DTYPE and BASETYPE
-adoe <- adoe %>%
+adbcva <- adbcva %>%
   mutate(
     DTYPE = NA_character_,
     BASETYPE = "LAST"
   )
 
 # Derive Treatment flags
-adoe <- adoe %>%
+adbcva <- adbcva %>%
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
@@ -111,22 +111,22 @@ adoe <- adoe %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ABLFL,
-      by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-      order = vars(ADT, VISITNUM, OESEQ),
+      by_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      order = exprs(ADT, VISITNUM, OESEQ),
       mode = "last"
     ),
     filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
   )
 
 # Derive visit flags
-adoe <- adoe %>%
+adbcva <- adbcva %>%
   # ANL01FL: Flag last result within a visit and timepoint for baseline and post-baseline records
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = vars(USUBJID, PARAMCD, AVISIT, DTYPE),
-      order = vars(ADT, AVAL),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT, DTYPE),
+      order = exprs(ADT, AVAL),
       mode = "last"
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
@@ -136,8 +136,8 @@ adoe <- adoe %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL02FL,
-      by_vars = vars(USUBJID, PARAMCD, ABLFL),
-      order = vars(ADT),
+      by_vars = exprs(USUBJID, PARAMCD, ABLFL),
+      order = exprs(ADT),
       mode = "last"
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
@@ -147,27 +147,27 @@ adoe <- adoe %>%
     derivation = derive_var_worst_flag,
     args = params(
       new_var = WORS01FL,
-      by_vars = vars(USUBJID, PARAMCD),
-      order = vars(desc(ADT)),
+      by_vars = exprs(USUBJID, PARAMCD),
+      order = exprs(desc(ADT)),
       param_var = PARAMCD,
       analysis_var = AVAL,
-      worst_high =  c("FDRSS", "SDRSS"), # put character(0) if no PARAMCDs here
+      worst_high =  character(0), # put character(0) if no PARAMCDs here
       worst_low = c("FBCVA", "SBCVA")    # put character(0) if no PARAMCDs here
     ),
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
   )
 
 # Derive baseline information
-adoe <- adoe %>%
+adbcva <- adbcva %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
   # Calculate BASEC
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
@@ -177,10 +177,21 @@ adoe <- adoe %>%
   derive_var_pchg()
 
 # Add all ADSL variables
-adoe <- adoe %>%
+adbcva <- adbcva %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+
+# Add criterion flags for BCVA endpoints
+adbcva <- adbcva %>%
+  derive_var_bcvacritxfl(
+    paramcds = c("SBCVA", "FBCVA"),
+    basetype = NULL,
+    bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
+    bcva_uplims = list(-20, 5, 10),
+    bcva_lowlims = list(-15, 15),
+    additional_text = ""
   )
 
 # Final Steps, Select final variables and Add labels
@@ -190,4 +201,4 @@ adoe <- adoe %>%
 # ---- Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adoe, file = file.path(dir, "adoe.rda"), compress = "bzip2")
+save(adbcva, file = file.path(dir, "adbcva.rda"), compress = "bzip2")
