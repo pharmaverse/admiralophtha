@@ -32,8 +32,9 @@ oe <- tribble(
   "XXX001", "P05", "VACSCORE", "ETDRS EYE CHART", 1
 )
 
-adbcva <- oe \%>\% filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "LOGMAR EYE CHART") \%>\%
-                 mutate(OESTRESN = calculate_logmar_to_etdrs(OESTRESN))
+adbcva <- oe \%>\%
+  filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "LOGMAR EYE CHART") \%>\%
+  mutate(OESTRESN = calculate_logmar_to_etdrs(OESTRESN))
 }
 \author{
 Nandini R Thampi
