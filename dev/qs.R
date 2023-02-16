@@ -23,86 +23,95 @@ qs1 <- admiral_qs %>%
   unique()
 
 # create dummy parameters and results ====
-dummy_param = c("Your Overall Health Is",
-                "Eyesight Using Both Eyes Is",
-                "How Often You Worry About Eyesight",
-                "How Much Pain in and Around Eyes",
-                "Difficulty Reading Newspapers",
-                "Difficulty Doing Work/Hobbies",
-                "Difficulty Finding on Crowded Shelf",
-                "Difficulty Reading Street Signs",
-                "Difficulty Going Down Step at Night",
-                "Difficulty Noticing Objects to Side",
-                "Difficulty Seeing How People React",
-                "Difficulty Picking Out Own Clothes",
-                "Difficulty Visiting With People",
-                "Difficulty Going Out to See Movies",
-                "Are You Currently Driving",
-                "Never Driven or Given Up Driving",
-                "Main Reason You Gave Up Driving",
-                "Difficulty Driving During Daytime",
-                "Difficulty Driving at Night",
-                "Driving in Difficult Conditions",
-                "Eye Pain Keep From Doing What Like",
-                "I Stay Home Most of the Time",
-                "I Feel Frustrated a Lot of the Time",
-                "I Need a Lot of Help From Others",
-                "Worry I'll Do Embarrassing Things",
-                "Difficulty Reading Small Print",
-                "Difficulty Figure Out Bill Accuracy",
-                "Difficulty Shaving or Styling Hair",
-                "Difficulty Recognizing People",
-                "Difficulty Taking Part in Sports",
-                "Difficulty Seeing Programs on TV"
+dummy_param <- c(
+  "Your Overall Health Is",
+  "Eyesight Using Both Eyes Is",
+  "How Often You Worry About Eyesight",
+  "How Much Pain in and Around Eyes",
+  "Difficulty Reading Newspapers",
+  "Difficulty Doing Work/Hobbies",
+  "Difficulty Finding on Crowded Shelf",
+  "Difficulty Reading Street Signs",
+  "Difficulty Going Down Step at Night",
+  "Difficulty Noticing Objects to Side",
+  "Difficulty Seeing How People React",
+  "Difficulty Picking Out Own Clothes",
+  "Difficulty Visiting With People",
+  "Difficulty Going Out to See Movies",
+  "Are You Currently Driving",
+  "Never Driven or Given Up Driving",
+  "Main Reason You Gave Up Driving",
+  "Difficulty Driving During Daytime",
+  "Difficulty Driving at Night",
+  "Driving in Difficult Conditions",
+  "Eye Pain Keep From Doing What Like",
+  "I Stay Home Most of the Time",
+  "I Feel Frustrated a Lot of the Time",
+  "I Need a Lot of Help From Others",
+  "Worry I'll Do Embarrassing Things",
+  "Difficulty Reading Small Print",
+  "Difficulty Figure Out Bill Accuracy",
+  "Difficulty Shaving or Styling Hair",
+  "Difficulty Recognizing People",
+  "Difficulty Taking Part in Sports",
+  "Difficulty Seeing Programs on TV"
 )
-dummy_resc = c("GOOD",
-               "FAIR",
-               "RARELY",
-               "NO",
-               "SOME DIFFICULTY",
-               "NO DIFFICULTY",
-               "NO DIFFICULTY",
-               "SOME DIFFICULTY",
-               "SOME DIFFICULTY",
-               "SOME DIFFICULTY",
-               "SOME DIFFICULTY",
-               "NO DIFFICULTY",
-               "NO DIFFICULTY",
-               "SOME DIFFICULTY",
-               "YES",
-               "NO",
-               "NO",
-               "NO",
-               "YES",
-               "YES",
-               "YES",
-               "NO",
-               "SOMETIMES",
-               "SOMETIMES",
-               "YES",
-               "VERY DIFFICULT",
-               "SOME DIFFICULTY",
-               "NO DIFFICULTY",
-               "NO DIFFICULTY",
-               "SOME DIFFICULTY",
-               "NO DIFFICULTY"
+dummy_resc <- c(
+  "GOOD",
+  "FAIR",
+  "RARELY",
+  "NO",
+  "SOME DIFFICULTY",
+  "NO DIFFICULTY",
+  "NO DIFFICULTY",
+  "SOME DIFFICULTY",
+  "SOME DIFFICULTY",
+  "SOME DIFFICULTY",
+  "SOME DIFFICULTY",
+  "NO DIFFICULTY",
+  "NO DIFFICULTY",
+  "SOME DIFFICULTY",
+  "YES",
+  "NO",
+  "NO",
+  "NO",
+  "YES",
+  "YES",
+  "YES",
+  "NO",
+  "SOMETIMES",
+  "SOMETIMES",
+  "YES",
+  "VERY DIFFICULT",
+  "SOME DIFFICULTY",
+  "NO DIFFICULTY",
+  "NO DIFFICULTY",
+  "SOME DIFFICULTY",
+  "NO DIFFICULTY"
 )
 
-dummy_resn = data_frame(QSSTRESC=c("GOOD","FAIR","RARELY","NO",
-                                  "SOME DIFFICULTY","NO DIFFICULTY",
-                                  "YES","VERY DIFFICULT" ),
-                        QSSTRESN=c(1,3,4,3,2,1,1,3))
+dummy_resn <- data_frame(
+  QSSTRESC = c(
+    "GOOD", "FAIR", "RARELY", "NO",
+    "SOME DIFFICULTY", "NO DIFFICULTY",
+    "YES", "VERY DIFFICULT"
+  ),
+  QSSTRESN = c(1, 3, 4, 3, 2, 1, 1, 3)
+)
 
 
-#create dummy qs ====
-dummy_qs = data_frame(QSTEST=dummy_param,
-                      QSSTRESC=dummy_resc) %>%
-           left_join(.,dummy_resn, by="QSSTRESC") %>%
-           mutate(QSORRES=QSSTRESC,
-                  QSTESTCD=paste0("VFQ",row_number()),
-                  QSCAT="NEI VFQ-25",
-                  QSSCAT="Original Response"
-                  )
+# create dummy qs ====
+dummy_qs <- data_frame(
+  QSTEST = dummy_param,
+  QSSTRESC = dummy_resc
+) %>%
+  left_join(., dummy_resn, by = "QSSTRESC") %>%
+  mutate(
+    QSORRES = QSSTRESC,
+    QSTESTCD = paste0("VFQ", row_number()),
+    QSCAT = "NEI VFQ-25",
+    QSSCAT = "Original Response"
+  )
 
 
 
