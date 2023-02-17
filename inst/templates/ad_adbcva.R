@@ -35,7 +35,11 @@ param_lookup <- tibble::tribble(
   "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score", 1,
   "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score", 1,
   "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
-  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
+  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
+  "VACSCORE", "RIGHT", "RIGHT", "SBCVALOG", "Study Eye Visual Acuity LogMAR Score", 3,
+  "VACSCORE", "LEFT", "LEFT", "SBCVALOG", "Study Eye Visual Acuity LogMAR Score", 3,
+  "VACSCORE", "RIGHT", "LEFT", "FBCVALOG", "Fellow Eye Visual Acuity LogMAR Score", 4,
+  "VACSCORE", "LEFT", "RIGHT", "FBCVALOG", "Fellow Eye Visual Acuity LogMAR Score", 4
 )
 attr(param_lookup$OETESTCD, "label") <- "Ophthalmology Test Short Name"
 
@@ -70,10 +74,17 @@ adbcva <- adbcva %>%
     new_vars = exprs(PARAM, PARAMCD),
     by_vars = exprs(OETESTCD, OELAT, STUDYEYE)
   ) %>%
-  # Calculate AVAL and AVALC
+  # Calculate AVAL, AVALU and AVALC
   mutate(
-    AVAL = OESTRESN,
-    AVALC = OESTRESC
+    AVAL = case_when(
+      PARAMCD %in% c("SBCVA", "FBCVA") ~ OESTRESN,
+      PARAMCD %in% c("SBCVALOG", "FBCVALOG") ~ calculate_etdrs_to_logmar(OESTRESN)
+      ),
+    AVALU = case_when(
+      PARAMCD %in% c("SBCVA", "FBCVA") ~ "ETDRS Score (letters)",
+      PARAMCD %in% c("SBCVALOG", "FBCVALOG") ~ "LogMAR"
+    ),
+    AVALC = as.character(OESTRESN)
   )
 
 # Derive visit info - no ATPT and ATPTN yet as SDTM variables not in test data
