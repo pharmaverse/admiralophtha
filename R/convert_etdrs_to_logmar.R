@@ -28,8 +28,8 @@
 #'   "XXX001", "P05", 25
 #' )
 #'
-#' adbcva <- adbcva %>% mutate(AVAL = calculate_etdrs_to_logmar(AVAL))
-calculate_etdrs_to_logmar <- function(value) {
+#' adbcva <- adbcva %>% mutate(AVAL = convert_etdrs_to_logmar(AVAL))
+convert_etdrs_to_logmar <- function(value) {
   assert_numeric_vector(value)
   -0.02 * value + 1.7
 }
