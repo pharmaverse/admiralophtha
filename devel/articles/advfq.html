@@ -59,13 +59,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -102,275 +95,261 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This article describes creating an <code>ADVFQ</code> ADaM with Visual Functioning Questionnaire data for ophthalmology endpoints.</p>
-<p>This article is yet to be written. Use as basis the <code>{admiralonco}</code> article for <code>ADRS</code> (commented out in the file for now).</p>
-<!-- **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless -->
-<!-- otherwise specified.* -->
-<!-- ## Required Packages -->
-<!-- The examples of this vignette require the following packages. -->
-<!-- ```{r, warning=FALSE, message=FALSE} -->
-<!-- library(admiral) -->
-<!-- ``` -->
-<!-- # Programming Workflow -->
-<!-- * [Read in Data](#readdata) -->
-<!-- * [Derive Parameters (`CNSR`, `ADT`, `STARTDT`)](#parameters) -->
-<!-- * [Derive Analysis Value (`AVAL`)](#aval) -->
-<!-- * [Derive Analysis Sequence Number (`ASEQ`)](#aseq) -->
-<!-- * [Add ADSL Variables](#adslvars) -->
-<!-- ## Read in Data {#readdata} -->
-<!-- To start, all datasets needed for the creation of the time-to-event dataset -->
-<!-- should be read into the environment. This will be a company specific process. -->
-<!-- For example purpose, the ADaM datasets---which are included -->
-<!-- in `{admiral}` and `{admiralonco}`---are used. An alternative might be to use -->
-<!-- `ADEVENT` as input. -->
-<!-- ```{r} -->
-<!-- data("admiral_adsl") -->
-<!-- data("admiral_adrs") -->
-<!-- adsl <- admiral_adsl -->
-<!-- adrs <- admiral_adrs -->
-<!-- ``` -->
-<!-- ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters} -->
-<!-- To derive the parameter dependent variables like `CNSR`, `ADT`, `STARTDT`, -->
-<!-- `EVNTDESC`, `SRCDOM`, `PARAMCD`, ... the `admiral::derive_param_tte()` function can be -->
-<!-- used. It adds one parameter to the input dataset with one observation per -->
-<!-- subject. Usually it is called several times. -->
-<!-- For each subject it is determined if an event occurred. In the affirmative the -->
-<!-- analysis date `ADT` is set to the earliest event date. If no event occurred, the -->
-<!-- analysis date is set to the latest censoring date. -->
-<!-- The events and censorings are defined by the `admiral::event_source()` and the -->
-<!-- `admiral::censor_source()` class respectively. It defines -->
-<!-- - which observations (`filter` parameter) of a source dataset (`dataset_name` -->
-<!-- parameter) are potential events or censorings, -->
-<!-- - the value of the `CNSR` variable (`censor` parameter), and -->
-<!-- - which variable provides the date (`date` parameter). -->
-<!-- The date can be provided as date (`--DT` variable), datetime (`--DTM` variable), -->
-<!-- or character ISO-8601 date (`--DTC` variable). -->
-<!-- CDISC strongly recommends `CNSR = 0` for events and positive integers for -->
-<!-- censorings. `{admiral}`/`{admiralonco}` enforce this recommendation. Therefore the `censor` -->
-<!-- parameter is available for `admiral::censor_source()` only. It is defaulted to `1`. -->
-<!-- The `dataset_name` parameter expects a character value which is used as an -->
-<!-- identifier. The actual data which is used for the derivation of the parameter is -->
-<!-- provided via the `source_datasets` parameter of `admiral::derive_param_tte()`. It expects -->
-<!-- a named list of datasets. The names correspond to the identifiers specified for -->
-<!-- the `dataset_name` parameter. This allows to define events and censoring -->
-<!-- independent of the data. -->
-<!-- ### Pre-Defined Time-to-Event Source Objects -->
-<!-- The table below shows all pre-defined `tte_source` objects which should cover the most -->
-<!-- common oncology use cases. -->
-<!-- ```{r echo=FALSE} -->
-<!-- knitr::kable(list_tte_source_objects(package = "admiralonco")) -->
-<!-- ``` -->
-<!-- As mentioned in the introduction, each company would create their own version of this with -->
-<!-- the required filtering conditions and metadata as per your company approach. An example of -->
-<!-- a possible different approach could be as follows, where death is sourced from `ADSL`, -->
-<!-- instead of `ADRS`, and the given `EVNTDESC` is different. -->
-<!-- ```{r, eval=FALSE} -->
-<!-- adsl_death_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   date = DTHDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "STUDY DEATH", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "DTHDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- An optional step at this stage would be required to enable derivation of duration of -->
-<!-- response: If using `ADRS` / `ADEVENT` parameters as input for any response dates -->
-<!-- (instead of a variable in `ADSL`) then you would need to use `admiral::derive_vars_merged()` -->
-<!-- to add the response date as a temporary variable (e.g. `TEMP_RESPDT`) to be able to feed -->
-<!-- into `admiral::derive_param_tte()` as the start date. You would also need to use this -->
-<!-- to filter the input datasets so as to only derive the records for responders. -->
-<!-- This could also be repeated as needed for IRF/BICR and confirmed responses. -->
-<!-- Here is an example of the code needed. -->
-<!-- ```{r} -->
-<!-- adsl <- adsl %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adrs, -->
-<!--     filter_add = PARAMCD == "RSP" & AVALC == "Y" & ANL01FL == "Y", -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     new_vars = vars(TEMP_RESPDT = ADT) -->
-<!--   ) -->
-<!-- adrs <- adrs %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adsl, -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     new_vars = vars(TEMP_RESPDT) -->
-<!--   ) -->
-<!-- ``` -->
-<!-- The pre-defined objects can be passed directly to `admiral::derive_param_tte()` to create -->
-<!-- a new time-to-event parameter. Below shows example calls for Overall Survival (OS), Progression -->
-<!-- Free Survival (PFS), and duration of response (as above, this is only derived for responder -->
-<!-- patients so we have to filter source datasets). Note that the reason for including a -->
-<!-- randomization date censor is to catch those patients that never have a tumor assessment. -->
-<!-- ```{r} -->
-<!-- adtte <- derive_param_tte( -->
-<!--   dataset_adsl = adsl, -->
-<!--   start_date = RANDDT, -->
-<!--   event_conditions = list(death_event), -->
-<!--   censor_conditions = list(lastalive_censor, rand_censor), -->
-<!--   source_datasets = list(adsl = adsl, adrs = adrs), -->
-<!--   set_values_to = vars(PARAMCD = "OS", PARAM = "Overall Survival") -->
-<!-- ) %>% -->
-<!--   derive_param_tte( -->
-<!--     dataset_adsl = adsl, -->
-<!--     start_date = RANDDT, -->
-<!--     event_conditions = list(pd_event, death_event), -->
-<!--     censor_conditions = list(lasta_censor, rand_censor), -->
-<!--     source_datasets = list(adsl = adsl, adrs = adrs), -->
-<!--     set_values_to = vars(PARAMCD = "PFS", PARAM = "Progression Free Survival") -->
-<!--   ) %>% -->
-<!--   derive_param_tte( -->
-<!--     dataset_adsl = adsl, -->
-<!--     start_date = TEMP_RESPDT, -->
-<!--     event_conditions = list(pd_event, death_event), -->
-<!--     censor_conditions = list(lasta_censor), -->
-<!--     source_datasets = list(adsl = filter(adsl, !is.na(TEMP_RESPDT)), adrs = filter(adrs, !is.na(TEMP_RESPDT))), -->
-<!--     set_values_to = vars(PARAMCD = "RSD", PARAM = "Duration of Response") -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte, -->
-<!--   display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ### Creating Your Own Time-to-Event Source Objects -->
-<!-- We advise you consult the `{admiral}` -->
-<!-- [Creating a BDS Time-to-Event ADaM vignette](https://pharmaverse.github.io/admiral/articles/bds_tte.html) -->
-<!-- for further guidance on the different options available and more examples. -->
-<!-- One extra common oncology case we include here is around PFS when censoring -->
-<!-- at new anti-cancer therapy. This could either be controlled using `ANLzzFL` as -->
-<!-- explained in the ADRS vignette, so that records after new anti-cancer therapy -->
-<!-- never contribute to the PD and DEATH parameters. Or alternatively you can control -->
-<!-- this on the ADTTE side by filtering which records are used in -->
-<!-- `admiral::event_source()` and `admiral::censor_source()`, e.g. for PD or death -->
-<!-- event date we can use `filter` argument to exclude events occurring after new -->
-<!-- anti-cancer therapy. -->
-<!-- The censor could be set as whichever date your analysis requires, -->
-<!-- e.g. date of last tumor assessment prior to new anti-cancer therapy or last -->
-<!-- radiological assessment. If you pass multiple censor dates then remember the -->
-<!-- function will choose the latest occurring of these, so be cautious here if -->
-<!-- feeding in say one censor date for last assessment prior to new anti-cancer -->
-<!-- therapy and one for last assessment - as the function would choose the maximum of -->
-<!-- these which in this case would be incorrect. The easiest solution here would be -->
-<!-- to pass in one censor date as the date of last assessment prior to new -->
-<!-- anti-cancer therapy or date of last assessment **if no new anti-cancer therapy**. -->
-<!-- If you wanted to use different censor dates which could have different `CNSDTDSC` -->
-<!-- values, then you'd need to ensure only one is set per patient. -->
-<!-- This case is demonstrated in the below example (where `NACTDT` would be -->
-<!-- pre-derived as first date of new anti-cancer therapy, and `LASTANDT` as the -->
-<!-- single tumor assessment censor date as described above). -->
-<!-- ```{r, eval=FALSE} -->
-<!-- pd_nact_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   filter = PDDT < NACTDT | is.na(NACTDT), -->
-<!--   date = PDDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Disease Progression prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "PDDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- death_nact_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   filter = DTHDT < NACTDT | is.na(NACTDT), -->
-<!--   date = DTHDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Death prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "DTHDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- lasta_nact_censor <- censor_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   date = LASTANDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Last Tumor Assessment prior to NACT", -->
-<!--     CNSDTDSC = "Last Tumor Assessment prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "LASTANDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- adtte <- derive_param_tte( -->
-<!--   dataset_adsl = adsl, -->
-<!--   start_date = RANDDT, -->
-<!--   event_conditions = list(pd_nact_event, death_nact_event), -->
-<!--   censor_conditions = list(lasta_nact_censor, rand_censor), -->
-<!--   source_datasets = list(adsl = adsl), -->
-<!--   set_values_to = vars(PARAMCD = "PFSNACT", PARAM = "Progression Free Survival prior to NACT") -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ## Derive Analysis Value (`AVAL`) {#aval} -->
-<!-- The analysis value (`AVAL`) can be derived by calling `admiral::derive_vars_duration()`. -->
-<!-- This example derives the time to event in days.  -->
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_vars_duration( -->
-<!--     new_var = AVAL, -->
-<!--     start_date = STARTDT, -->
-<!--     end_date = ADT -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte -->
-<!-- ) -->
-<!-- ``` -->
-<!-- Other time units, such as months that we commonly see in oncology analyses, can be requested -->
-<!-- by specifying the `out_unit` parameter. See the example below. Note that because of the underlying -->
-<!-- `lubridate::time_length()` function that is used here this may perform slightly differently to -->
-<!-- your expectations, e.g. both `time_length(ymd("2021-01-01") %--% ymd("2021-02-01"), "month")` -->
-<!-- and `time_length(ymd("2021-02-01") %--% ymd("2021-03-01"), "month")` results in exactly 1 month, -->
-<!-- which is a logical approach but it gives a different result to the convention of assuming every -->
-<!-- month has exactly equal days and just using `/30.4375` here or some other such convention. The -->
-<!-- difference would only be noticed for small durations, but if the user prefers an alternative -->
-<!-- approach they could calculate in the default days and then add extra processing to convert to months -->
-<!-- with their company-specific convention. -->
-<!-- ```{r, eval=FALSE} -->
-<!-- adtte_months <- adtte %>% -->
-<!--   derive_vars_duration( -->
-<!--     new_var = AVAL, -->
-<!--     start_date = STARTDT, -->
-<!--     end_date = ADT, -->
-<!--     out_unit = "months" -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## Derive Analysis Sequence Number (`ASEQ`) {#aseq} -->
-<!-- The `{admiral}` function `admiral::derive_var_obs_number()` can be used to derive `ASEQ`: -->
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_var_obs_number( -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     order = vars(PARAMCD), -->
-<!--     check_type = "error" -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette(adtte) -->
-<!-- ``` -->
-<!-- ## Add ADSL Variables {#adslvars} -->
-<!-- Variables from ADSL which are required for time-to-event analyses, e.g., -->
-<!-- treatment variables or covariates can be added using `admiral::derive_vars_merged()`. -->
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adsl, -->
-<!--     new_vars = vars(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX), -->
-<!--     by_vars = vars(STUDYID, USUBJID) -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte, -->
-<!--   display_vars = vars(USUBJID, PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- # Example Script {#example} -->
-<!-- ADaM | Sample Code -->
-<!-- ---- | -------------- -->
-<!-- ADTTE | [ad_adtte.R](https://github.com/pharmaverse/admiralonco/blob/main/inst/templates/ad_adtte.R) -->
+<p><strong>Note</strong>: <em>All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.</em></p>
+<div class="section level3">
+<h3 id="required-packages">Required Packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
+</h3>
+<p>The examples of this vignette require the following packages.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span></code></pre></div>
 </div>
-  </main>
+</div>
+<div class="section level2">
+<h2 id="programming-workflow">Programming Workflow<a class="anchor" aria-label="anchor" href="#programming-workflow"></a>
+</h2>
+<ul>
+<li><a href="#readdata">Read in Data</a></li>
+<li><a href="#dates">Derive Dates (<code>ADT</code> <code>ADY</code>)</a></li>
+<li><a href="#parameters1">Define Parameters in lookup table</a></li>
+<li><a href="#aval">Derive Analysis Value for existing questions (<code>AVAL</code>)</a></li>
+<li><a href="#parameters">Derive Parameters for recoded items and summary scores</a></li>
+<li><a href="#avisit">Derive Analysis Visit (<code>AVISIT</code>)</a></li>
+<li><a href="#baseline">Derive Baseline variables (<code>ABLFL</code> <code>BASE</code> <code>CHG</code> <code>PCHG</code>)</a></li>
+<li><a href="#analysis">Derive Analysis Variables (<code>ANL01FL</code> <code>ASEQ</code>)</a></li>
+<li><a href="#adslvars">Add ADSL Variables</a></li>
+<li><a href="#example">Example Script</a></li>
+</ul>
+<div class="section level3">
+<h3 id="readdata">Read in Data<a class="anchor" aria-label="anchor" href="#readdata"></a>
+</h3>
+<p>To start, all datasets needed for the creation of the questionnaire dataset should be read into the environment. This will be a company specific process.</p>
+<p>For example purpose, the ADaM datasets—which are included in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and <a href="https://pharmaverse.github.io/admiralophtha" class="external-link">admiralophtha</a>—are used.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_qs"</span><span class="op">)</span></span>
+<span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">admiral_adsl</span></span>
+<span><span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">admiral_qs</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="dates">Derive Dates<a class="anchor" aria-label="anchor" href="#dates"></a>
+</h3>
+<p>To derive the date variables <code>ADT</code>, <code>ADY</code>, … the <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dt.html" class="external-link">admiral::derive_vars_dt()</a></code> function and the <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dy.html" class="external-link">admiral::derive_vars_dy()</a></code> function can be used. This function allows the user to impute the date as well.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adsl_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">TRTSDT</span>, <span class="va">TRTEDT</span>, <span class="va">TRT01A</span>, <span class="va">TRT01P</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span></span>
+<span>  <span class="va">qs</span>,</span>
+<span>  dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span>
+<span>  new_vars <span class="op">=</span> <span class="va">adsl_vars</span>,</span>
+<span>  by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co">## Calculate ADT, ADY ----</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dt.html" class="external-link">derive_vars_dt</a></span><span class="op">(</span></span>
+<span>    new_vars_prefix <span class="op">=</span> <span class="st">"A"</span>,</span>
+<span>    dtc <span class="op">=</span> <span class="va">QSDTC</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dy.html" class="external-link">derive_vars_dy</a></span><span class="op">(</span>reference_date <span class="op">=</span> <span class="va">TRTSDT</span>, source_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">ADT</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="parameters1">Derive Parameters in lookup table<a class="anchor" aria-label="anchor" href="#parameters1"></a>
+</h3>
+<p>Create a parameter lookup table which includes <code>QSTESTCD</code>, <code>PARAMCD</code>, <code>PARAM</code>, <code>PARCAT1</code> and <code>PARCAT2</code>. This should include all parameters that will be needed in the final <code>ADVFQ</code>. This will be used later to merge Parameter information.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">param_lookup</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">QSTESTCD</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">PARCAT1</span>, <span class="op">~</span><span class="va">PARCAT2</span>,</span>
+<span>  <span class="st">"ACITM01"</span>, <span class="st">"ACITM01"</span>, <span class="st">"WORD RECALL"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"Original Response"</span>,</span>
+<span>  <span class="st">"ACITM02"</span>, <span class="st">"ACITM02"</span>, <span class="st">"NAMING OBJECTS"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"Original Response"</span>,</span>
+<span>  <span class="st">"ACITM03"</span>, <span class="st">"ACITM03"</span>, <span class="st">"DELAYED WORD RECALL"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"Original Response"</span>,</span>
+<span>  <span class="st">"ACITM04"</span>, <span class="st">"ACITM04"</span>, <span class="st">"COMMANDS"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"Original Response"</span>,</span>
+<span>  <span class="st">"QR01"</span>, <span class="st">"QR01"</span>, <span class="st">"Recoded Item - 01"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"General 01"</span>,</span>
+<span>  <span class="st">"QR02"</span>, <span class="st">"QR02"</span>, <span class="st">"Recoded Item - 02"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"General 01"</span>,</span>
+<span>  <span class="st">"QR03"</span>, <span class="st">"QR03"</span>, <span class="st">"Recoded Item - 03"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"General 02"</span>,</span>
+<span>  <span class="st">"QR04"</span>, <span class="st">"QR04"</span>, <span class="st">"Recoded Item - 04"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"General 02"</span>,</span>
+<span>  <span class="st">"QSG01"</span>, <span class="st">"QSG01"</span>, <span class="st">"General Score 01"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"Averaged Result"</span>,</span>
+<span>  <span class="st">"QSG02"</span>, <span class="st">"QSG02"</span>, <span class="st">"General Score 02"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"Averaged Result"</span>,</span>
+<span>  <span class="st">"QBCSCORE"</span>, <span class="st">"QBCSCORE"</span>, <span class="st">"Composite Score"</span>, <span class="st">"NEI VFQ 25"</span>, <span class="st">"Averaged Result"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="aval">Derive Analysis Value for existing questions<a class="anchor" aria-label="anchor" href="#aval"></a>
+</h3>
+<p>To derive the analysis values we use the function <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged_lookup.html" class="external-link">admiral::derive_vars_merged_lookup()</a></code> which merges on PARAMCD from the Parameter lookup table.</p>
+<p>This merges on the parameter by QSTESCD and assigns AVAL and AVALC.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co">## Add PARAMCD only - add PARAM etc later ----</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged_lookup.html" class="external-link">derive_vars_merged_lookup</a></span><span class="op">(</span></span>
+<span>    dataset_add <span class="op">=</span> <span class="va">param_lookup</span>,</span>
+<span>    new_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span>,</span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">QSTESTCD</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co">## Calculate AVAL and AVALC ----</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    AVAL <span class="op">=</span> <span class="va">QSSTRESN</span>,</span>
+<span>    AVALC <span class="op">=</span> <span class="va">QSORRES</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="parameters">Derive Parameters for recoded items and summary scores<a class="anchor" aria-label="anchor" href="#parameters"></a>
+</h3>
+<p>Creates new parameters as new records for recoded existing parameters. Run this section of code for every question that you need recoding. This gives an example of recoding one question.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## QR01 Recoded Item 01</span></span>
+<span><span class="co"># set to 100 if [ADQS.AVAL] = 1</span></span>
+<span><span class="co"># else set to 75 if [ADQS.AVAL] = 2</span></span>
+<span><span class="co"># else set to 50 if [ADQS.AVAL] = 3</span></span>
+<span><span class="co"># else set to 25 if [ADQS.AVAL] = 4</span></span>
+<span><span class="co"># else set to 0 if [ADQS.AVAL] = 5</span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_summary_records.html" class="external-link">derive_summary_records</a></span><span class="op">(</span></span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">adsl_vars</span>, <span class="va">PARAMCD</span>, <span class="va">VISITNUM</span>, <span class="va">VISIT</span>, <span class="va">ADT</span>, <span class="va">ADY</span><span class="op">)</span>,</span>
+<span>    filter <span class="op">=</span> <span class="va">QSTESTCD</span> <span class="op">==</span> <span class="st">"ACITM01"</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
+<span>    analysis_var <span class="op">=</span> <span class="va">AVAL</span>,</span>
+<span>    summary_fun <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>    set_values_to <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>PARAMCD <span class="op">=</span> <span class="st">"QR01"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>AVAL <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"QR01"</span>,</span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fl">100</span>,</span>
+<span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="fl">75</span>,</span>
+<span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="fl">50</span>,</span>
+<span>      <span class="va">AVAL</span> <span class="op">==</span> <span class="fl">4</span> <span class="op">~</span> <span class="fl">25</span>,</span>
+<span>      <span class="va">AVAL</span> <span class="op">&gt;=</span> <span class="fl">5</span> <span class="op">~</span> <span class="fl">0</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="va">AVAL</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>To create summary records as average of recoded questions. This example uses two of the recoded questions.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Derive a new record as a summary record  ----</span></span>
+<span><span class="co">## QSG01 General Score 01</span></span>
+<span><span class="co"># Average of QR01 and QR02 records</span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_summary_records.html" class="external-link">derive_summary_records</a></span><span class="op">(</span></span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">adsl_vars</span>, <span class="va">VISITNUM</span>, <span class="va">VISIT</span>, <span class="va">ADT</span>, <span class="va">ADY</span><span class="op">)</span>,</span>
+<span>    filter <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"QR01"</span>, <span class="st">"QR02"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
+<span>    analysis_var <span class="op">=</span> <span class="va">AVAL</span>,</span>
+<span>    summary_fun <span class="op">=</span> <span class="va">mean</span>,</span>
+<span>    set_values_to <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>PARAMCD <span class="op">=</span> <span class="st">"QSG01"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="avisit">Derive Analysis Visit<a class="anchor" aria-label="anchor" href="#avisit"></a>
+</h3>
+<p>Derives AVISIT and AVISITN based on VISIT. See also the <a href="https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits" class="external-link"><code>Visit and Period Variables</code></a> vignette.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Derive Timing</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    AVISIT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="fu">str_detect</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"SCREEN|UNSCHED|RETRIEVAL|AMBUL"</span><span class="op">)</span> <span class="op">~</span> <span class="cn">NA_character_</span>,</span>
+<span>      <span class="co"># If VISIT=DAY 1 then set to Baseline, study specific</span></span>
+<span>      <span class="fu">str_detect</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"DAY 1"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Baseline"</span>,</span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span> <span class="op">~</span> <span class="fu">str_to_title</span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span>,</span>
+<span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    AVISITN <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="va">VISIT</span> <span class="op">==</span> <span class="st">"BASELINE"</span> <span class="op">~</span> <span class="st">"0"</span>,</span>
+<span>      <span class="fu">str_detect</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"WEEK"</span><span class="op">)</span> <span class="op">~</span> <span class="fu">str_trim</span><span class="op">(</span><span class="fu">str_replace</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"WEEK"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
+<span>    <span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="baseline">Derive Baseline variables<a class="anchor" aria-label="anchor" href="#baseline"></a>
+</h3>
+<p>Here we derive ABLFL, BASE, CHG and PCHG variables.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Derive baseline flags ----</span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Calculate ABLFL</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/restrict_derivation.html" class="external-link">restrict_derivation</a></span><span class="op">(</span></span>
+<span>    derivation <span class="op">=</span> <span class="va">derive_var_extreme_flag</span>,</span>
+<span>    args <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/params.html" class="external-link">params</a></span><span class="op">(</span></span>
+<span>      by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">PARAMCD</span><span class="op">)</span>,</span>
+<span>      order <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">ADT</span>, <span class="va">VISITNUM</span>, <span class="va">QSSEQ</span><span class="op">)</span>,</span>
+<span>      new_var <span class="op">=</span> <span class="va">ABLFL</span>,</span>
+<span>      mode <span class="op">=</span> <span class="st">"last"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    filter <span class="op">=</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>      <span class="va">ADT</span> <span class="op">&lt;=</span> <span class="va">TRTSDT</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Derive baseline information ----</span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Calculate BASE</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_base.html" class="external-link">derive_var_base</a></span><span class="op">(</span></span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">PARAMCD</span><span class="op">)</span>,</span>
+<span>    source_var <span class="op">=</span> <span class="va">AVAL</span>,</span>
+<span>    new_var <span class="op">=</span> <span class="va">BASE</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Calculate CHG</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_chg.html" class="external-link">derive_var_chg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Calculate PCHG</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_pchg.html" class="external-link">derive_var_pchg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="analysis">Derive Analysis Variables<a class="anchor" aria-label="anchor" href="#analysis"></a>
+</h3>
+<p>In most finding ADaMs, an analysis flag is derived to identify the appropriate observation(s) to use for a particular analysis when a subject has multiple observations within a particular timing period.</p>
+<p>In this situation, an analysis flag (e.g. <code>ANLxxFL</code>) may be used to choose the appropriate record for analysis.</p>
+<p>This flag may be derived using the <a href="https://pharmaverse.github.io/admiral/" class="external-link"><code>admiral</code></a> function <code><a href="https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html" class="external-link">admiral::derive_var_extreme_flag()</a></code>. For this example, we will assume we would like to choose the latest value by USUBJID, PARAMCD and AVISIT.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## ANL01FL: Flag last result within an AVISIT for post-baseline records ----</span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/restrict_derivation.html" class="external-link">restrict_derivation</a></span><span class="op">(</span></span>
+<span>    derivation <span class="op">=</span> <span class="va">derive_var_extreme_flag</span>,</span>
+<span>    args <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/params.html" class="external-link">params</a></span><span class="op">(</span></span>
+<span>      new_var <span class="op">=</span> <span class="va">ANL01FL</span>,</span>
+<span>      by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">PARAMCD</span>, <span class="va">AVISIT</span><span class="op">)</span>,</span>
+<span>      order <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">ADT</span>, <span class="va">AVAL</span><span class="op">)</span>,</span>
+<span>      mode <span class="op">=</span> <span class="st">"last"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    filter <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ONTRTFL</span> <span class="op">==</span> <span class="st">"Y"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>We then derive ASEQ using <code><a href="https://pharmaverse.github.io/admiral/reference/derive_var_obs_number.html" class="external-link">admiral::derive_var_obs_number()</a></code> based on the observation number within the dataset, additionally merge on <code>PARAM</code>, <code>PARCAT1</code> and <code>PARCAT2</code> using the earlier lookup table.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Get ASEQ and PARAM  ----</span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Calculate ASEQ</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_obs_number.html" class="external-link">derive_var_obs_number</a></span><span class="op">(</span></span>
+<span>    new_var <span class="op">=</span> <span class="va">ASEQ</span>,</span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>,</span>
+<span>    order <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">ADT</span>, <span class="va">AVISITN</span>, <span class="va">VISITNUM</span><span class="op">)</span>,</span>
+<span>    check_type <span class="op">=</span> <span class="st">"error"</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Derive PARAM</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span>dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">param_lookup</span>, <span class="op">-</span><span class="va">QSTESTCD</span><span class="op">)</span>, by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="adslvars">Add ADSL Variables<a class="anchor" aria-label="anchor" href="#adslvars"></a>
+</h3>
+<p>Variables from ADSL which are required.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Add all ADSL variables</span></span>
+<span><span class="va">adqs</span> <span class="op">&lt;-</span> <span class="va">adqs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span></span>
+<span>    dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/negate_vars.html" class="external-link">negate_vars</a></span><span class="op">(</span><span class="va">adsl_vars</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="example">Example Script<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>ADaM</th>
+<th>Sample Code</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>ADVFQ</td>
+<td><a href="https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R" class="external-link">ad_advfq.R</a></td>
+</tr></tbody>
+</table>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
