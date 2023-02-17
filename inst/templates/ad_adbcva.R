@@ -16,8 +16,8 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_oe") # when this exists!
-data("admiral_adsl") # can't use this yet as ADSL needs STUDYEYE
+data("admiral_oe")
+data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
 adsl <- admiral_adsl %>%
@@ -25,9 +25,10 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(admiral_oe) %>% ungroup()
+oe <- convert_blanks_to_na(admiral_oe) %>%
+  ungroup()
 
-# ---- Lookup tables ----
+# ---- Lookup table ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -37,7 +38,6 @@ param_lookup <- tibble::tribble(
   "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
   "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
 )
-attr(param_lookup$OETESTCD, "label") <- "Ophthalmology Test Short Name"
 
 # ---- Derivations ----
 
@@ -63,16 +63,16 @@ adbcva <- oe %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-
 adbcva <- adbcva %>%
-  # Calculate AVAL, AVALU
+  # Calculate AVAL, AVALU and DTYPE
   mutate(
     AVAL = OESTRESN,
-    AVALU = "letters"
+    AVALU = "letters",
+    DTYPE = NA_character_
   )
 
-# Add PARAM, PARAMCD for non log parameters
 adbcva <- adbcva %>%
+  # Add PARAM, PARAMCD for non log parameters
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
@@ -80,8 +80,8 @@ adbcva <- adbcva %>%
     filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
   )
 
-# Add derived log parameters
 adbcva <- adbcva %>%
+  # Add derived log parameters
   derive_param_computed(
     by_vars = exprs(USUBJID, VISIT),
     parameters = c("SBCVA"),
@@ -106,8 +106,8 @@ adbcva <- adbcva %>%
   ) %>%
   mutate(AVALC = as.character(AVAL))
 
-# Derive visit info - no ATPT and ATPTN yet as SDTM variables not in test data
 adbcva <- adbcva %>%
+  # Derive visit info and BASETYPE
   mutate(
     ATPTN = OETPTNUM,
     ATPT = OETPT,
@@ -116,14 +116,7 @@ adbcva <- adbcva %>%
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
-
-    AVISITN = round(VISITNUM, 0)
-  )
-
-# Derive DTYPE and BASETYPE
-adbcva <- adbcva %>%
-  mutate(
-    DTYPE = NA_character_,
+    AVISITN = round(VISITNUM, 0),
     BASETYPE = "LAST"
   )
 
@@ -207,13 +200,13 @@ adbcva <- adbcva %>%
   derive_var_pchg()
 
 # Assign ASEQ
-adbcva <- derive_var_obs_number(
-  adbcva,
-  new_var = ASEQ,
-  by_vars = exprs(STUDYID, USUBJID),
-  order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
-  check_type = "error"
-)
+adbcva <- adbcva %>%
+  derive_var_obs_number(
+    new_var = ASEQ,
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
+    check_type = "error"
+  )
 
 # Add all ADSL variables
 adbcva <- adbcva %>%
@@ -222,8 +215,8 @@ adbcva <- adbcva %>%
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-# Add criterion flags for BCVA endpoints
 adbcva <- adbcva %>%
+  # Add criterion flags for BCVA endpoints
   derive_var_bcvacritxfl(
     paramcds = c("SBCVA", "FBCVA"),
     basetype = NULL,
