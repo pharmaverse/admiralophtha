@@ -70,6 +70,7 @@ library(admiralophtha)
 * [Deriving AVALCATs](#avalcats)
 * [Deriving BCVA Criterion Flags](#critflags)
 * [Additional Notes](#notes)
+* [Example Script](#example)
 
 ## Initial set up of ADBCVA {#setup}
 
@@ -152,7 +153,7 @@ adbcva <- adbcva %>%
   derive_param_computed(
     by_vars = exprs(USUBJID, VISIT),
     parameters = c("SBCVA"),
-    analysis_value = calculate_etdrs_to_logmar(AVAL.SBCVA),
+    analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
     set_values_to = exprs(
       PARAMCD = "SBCVALOG",
       PARAM = "Study Eye Visual Acuity LogMAR Score",
@@ -163,7 +164,7 @@ adbcva <- adbcva %>%
   derive_param_computed(
     by_vars = exprs(USUBJID, VISIT),
     parameters = c("FBCVA"),
-    analysis_value = calculate_etdrs_to_logmar(AVAL.FBCVA),
+    analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
     set_values_to = exprs(
       PARAMCD = "FBCVALOG",
       PARAM = "Fellow Eye Visual Acuity LogMAR Score",
@@ -191,13 +192,13 @@ adbcva <- adbcva %>%
 
 ## Deriving BCVA Criterion Flags {#critflags}
 
-`{admiralophtha}` suggests the use of criterion flags to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between 5 and 10 letters* (relative to baseline or other basetypes). The package provides the function `derive_var_bcvacritxfl` to program these endpoints efficiently and consistently. In terms of the logic to apply to the variable `CHG`, the endpoints fall into three classes, which can be represented by inequalities:
+`{admiralophtha}` suggests the use of criterion flag variable pairs (CRITx/CRITxFL) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between 5 and 10 letters* (relative to baseline or other basetypes). The package provides the function `derive_var_bcvacritxfl` to program these endpoints efficiently and consistently. In terms of the logic to apply to the variable `CHG`, the endpoints fall into three classes, which can be represented by inequalities:
 
-1. `CHG` value lying inside a range, `a <= CHG <= b`.
-2. `CHG` value below an upper limit, `CHG <= a`.
-3. `CHG` value above a lower limit, `CHG => b`.
+* Class 1: `CHG` value lying inside a range, `a <= CHG <= b`.
+* Class 2: `CHG` value below an upper limit, `CHG <= a`.
+* Class 3: `CHG` value above a lower limit, `CHG => b`.
 
-By using `derive_var_bcvacritxfl`, the ADaM programmer can implement all three types of endpoint at once, by feeding the appropriate ranges, upper limits and lower limits to the `bcva_ranges`, `bcva_uplims` and `bcva_lowlims` arguments of the function. For instance, let's suppose that the endpoints of interest are:
+By using `derive_var_bcvacritxfl`, the ADaM programmer can implement all three types of endpoint at once. This is achieved by feeding the appropriate ranges, upper limits and lower limits to the `bcva_ranges`, `bcva_uplims` and `bcva_lowlims` arguments of the function. For instance, let's suppose that the endpoints of interest are:
 
 * *Gain of between 5 and 10 letters relative to baseline* (Class 1: `5 <= CHG <= 10`)
 * *Gain of 25 letters or fewer relative to baseline* (Class 2: `CHG <= 25`)
@@ -205,7 +206,7 @@ By using `derive_var_bcvacritxfl`, the ADaM programmer can implement all three t
 * *Gain of 15 letters or more relative to baseline* (Class 3: `CHG >= 15`)
 * *Loss of 10 letters or fewer relative to baseline* (Class 3: `CHG >= -10`).
 
-These can be implemented using the following call:
+Then, the following call will implement criterion variable/flag pairs for the endpoints above. The CRITx variables will automatically encode the correct inequality.
 
 ```{r}
 adbcva <- adbcva %>% derive_var_bcvacritxfl(
@@ -249,5 +250,11 @@ adbcva <- adbcva %>% derive_var_bcvacritxfl(
 
 ## Additional Notes
 
-* When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be along the lines of `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
+* When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
+
+## Example Script {#example}
+
+ADaM | Sample Code 
+ ---- | -------------- 
+ADBCVA | `r dyn_link("ad_advfq.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adbcva.R", is_multiversion = TRUE)`
 
