@@ -67,13 +67,26 @@ adbcva <- oe %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-adbcva <- adbcva %>%
-  # Add PARAM, PARAMCD
+# Add PARAM, PARAMCD - needs to be done separately for log/nonlog parameters
+adbcva_etdrs <- adbcva %>%
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE)
-  ) %>%
+    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
+    filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
+  )
+
+adbcva_log <- adbcva %>%
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars = exprs(PARAM, PARAMCD),
+    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
+    filter_add = PARAMCD %in% c("SBCVALOG", "FBCVALOG")
+  )
+
+adbcva <- rbind(adbcva_etdrs, adbcva_log)
+
+adbcva <- adbcva %>%
   # Calculate AVAL, AVALU and AVALC
   mutate(
     AVAL = case_when(
