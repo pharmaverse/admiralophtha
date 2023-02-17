@@ -35,11 +35,7 @@ param_lookup <- tibble::tribble(
   "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score", 1,
   "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score", 1,
   "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
-  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
-  "VACSCORE", "RIGHT", "RIGHT", "SBCVALOG", "Study Eye Visual Acuity LogMAR Score", 3,
-  "VACSCORE", "LEFT", "LEFT", "SBCVALOG", "Study Eye Visual Acuity LogMAR Score", 3,
-  "VACSCORE", "RIGHT", "LEFT", "FBCVALOG", "Fellow Eye Visual Acuity LogMAR Score", 4,
-  "VACSCORE", "LEFT", "RIGHT", "FBCVALOG", "Fellow Eye Visual Acuity LogMAR Score", 4
+  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
 )
 attr(param_lookup$OETESTCD, "label") <- "Ophthalmology Test Short Name"
 
@@ -67,8 +63,16 @@ adbcva <- oe %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-# Add PARAM, PARAMCD - needs to be done separately for log/nonlog parameters
-adbcva_etdrs <- adbcva %>%
+
+adbcva <- adbcva %>%
+  # Calculate AVAL, AVALU
+  mutate(
+    AVAL = OESTRESN,
+    AVALU = "letters"
+  )
+
+# Add PARAM, PARAMCD for non log parameters
+adbcva <- adbcva %>%
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
@@ -76,29 +80,31 @@ adbcva_etdrs <- adbcva %>%
     filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
   )
 
-adbcva_log <- adbcva %>%
-  derive_vars_merged(
-    dataset_add = param_lookup,
-    new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
-    filter_add = PARAMCD %in% c("SBCVALOG", "FBCVALOG")
-  )
-
-adbcva <- rbind(adbcva_etdrs, adbcva_log)
-
+# Add derived log parameters
 adbcva <- adbcva %>%
-  # Calculate AVAL, AVALU and AVALC
-  mutate(
-    AVAL = case_when(
-      PARAMCD %in% c("SBCVA", "FBCVA") ~ OESTRESN,
-      PARAMCD %in% c("SBCVALOG", "FBCVALOG") ~ calculate_etdrs_to_logmar(OESTRESN)
-      ),
-    AVALU = case_when(
-      PARAMCD %in% c("SBCVA", "FBCVA") ~ "ETDRS Score (letters)",
-      PARAMCD %in% c("SBCVALOG", "FBCVALOG") ~ "LogMAR"
-    ),
-    AVALC = as.character(OESTRESN)
-  )
+  derive_param_computed(
+    by_vars = exprs(USUBJID, VISIT),
+    parameters = c("SBCVA"),
+    analysis_value = calculate_etdrs_to_logmar(AVAL.SBCVA),
+    set_values_to = exprs(
+      PARAMCD = "SBCVALOG",
+      PARAM = "Study Eye Visual Acuity LogMAR Score",
+      DTYPE = "DERIVED",
+      AVALU = "LogMAR"
+    )
+  ) %>%
+  derive_param_computed(
+    by_vars = exprs(USUBJID, VISIT),
+    parameters = c("FBCVA"),
+    analysis_value = calculate_etdrs_to_logmar(AVAL.FBCVA),
+    set_values_to = exprs(
+      PARAMCD = "FBCVALOG",
+      PARAM = "Fellow Eye Visual Acuity LogMAR Score",
+      DTYPE = "DERIVED",
+      AVALU = "LogMAR"
+    )
+  ) %>%
+  mutate(AVALC = as.character(AVAL))
 
 # Derive visit info - no ATPT and ATPTN yet as SDTM variables not in test data
 adbcva <- adbcva %>%
@@ -199,6 +205,15 @@ adbcva <- adbcva %>%
   derive_var_chg() %>%
   # Calculate PCHG
   derive_var_pchg()
+
+# Assign ASEQ
+adbcva <- derive_var_obs_number(
+  adbcva,
+  new_var = ASEQ,
+  by_vars = exprs(STUDYID, USUBJID),
+  order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
+  check_type = "error"
+)
 
 # Add all ADSL variables
 adbcva <- adbcva %>%
