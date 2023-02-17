@@ -5,4 +5,6 @@
 - Added a function to derive the variable STUDYEYE in ADSL (issue #9).
 - Added a function to derive the variable AFEYE in Occurrence datasets (issue #10).
 - Added a function to derive the criterion flags in ADBCVA (issue #49).
+- Added a function to convert LogMAR to ETDRS (issue #50).
+- Added a function to convert ETDRS to LogMAR (issue #50).
 
