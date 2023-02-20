@@ -127,5 +127,6 @@ qs2 <- merge(qs1, dummy_qs) %>%
     VISIT, VISITDY, QSDTC, QSDY
   )
 
+# NOTE: the QS2 dataset made above should be stacked below the admiral_qs dataset.
 # output admiralophtha_qs.RDS
-saveRDS(qs2, file = "inst/extdata/admiralophtha_qs.RDS")
+# saveRDS(qs2, file = "inst/extdata/admiralophtha_qs.RDS")
