@@ -224,7 +224,7 @@ adbcva <- adbcva %>%
       mode = "last"
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
-  )  %>%
+  ) %>%
   # ANL02FL: Flag last result within a PARAMCD for baseline & post-baseline records
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -235,7 +235,7 @@ adbcva <- adbcva %>%
       mode = "last"
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
-  )  %>%
+  ) %>%
   # WORS01FL: Flag worst result with an
   restrict_derivation(
     derivation = derive_var_worst_flag,
@@ -245,8 +245,8 @@ adbcva <- adbcva %>%
       order = exprs(desc(ADT)),
       param_var = PARAMCD,
       analysis_var = AVAL,
-      worst_high =  character(0), # put character(0) if no PARAMCDs here
-      worst_low = c("FBCVA", "SBCVA")    # put character(0) if no PARAMCDs here
+      worst_high = character(0), # put character(0) if no PARAMCDs here
+      worst_low = c("FBCVA", "SBCVA") # put character(0) if no PARAMCDs here
     ),
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
   )
