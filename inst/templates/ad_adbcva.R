@@ -28,7 +28,7 @@ adsl <- admiral_adsl %>%
 oe <- convert_blanks_to_na(admiral_oe) %>%
   ungroup()
 
-# ---- Lookup table ----
+# ---- Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -38,6 +38,66 @@ param_lookup <- tibble::tribble(
   "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
   "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
 )
+
+# Assign AVALCAT1
+avalcat_lookup <- tibble::tribble(
+  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
+  "SBCVA", 1000, "< 20/800",
+  "SBCVA", 800, "20/800",
+  "SBCVA", 640, "20/640",
+  "SBCVA", 500, "20/500",
+  "SBCVA", 400, "20/400",
+  "SBCVA", 320, "20/320",
+  "SBCVA", 250, "20/250",
+  "SBCVA", 200, "20/200",
+  "SBCVA", 160, "20/160",
+  "SBCVA", 125, "20/125",
+  "SBCVA", 100, "20/100",
+  "SBCVA", 80, "20/80",
+  "SBCVA", 63, "20/63",
+  "SBCVA", 50, "20/50",
+  "SBCVA", 40, "20/40",
+  "SBCVA", 32, "20/32",
+  "SBCVA", 25, "20/25",
+  "SBCVA", 20, "20/20",
+  "SBCVA", 16, "20/16",
+  "SBCVA", 12, "20/12",
+  "SBCVA", 1, "> 20/12",
+)
+
+# add equivalent rows for PARAMCD = "FBCVA"
+avalcat_lookup <- avalcat_lookup %>%
+  mutate(PARAMCD = "FBCVA") %>%
+  rbind(avalcat_lookup)
+
+# ---- Utility functions ----
+
+# Format function for AVALCAT1
+format_avalcat1n <- function(param, aval) {
+  case_when(
+    param %in% c("SBCVA", "FBCVA") & aval >= 0 & aval <= 3 ~ 1000,
+    param %in% c("SBCVA", "FBCVA") & aval >= 4 & aval <= 8 ~ 800,
+    param %in% c("SBCVA", "FBCVA") & aval >= 9 & aval <= 13 ~ 640,
+    param %in% c("SBCVA", "FBCVA") & aval >= 14 & aval <= 18 ~ 500,
+    param %in% c("SBCVA", "FBCVA") & aval >= 19 & aval <= 23 ~ 400,
+    param %in% c("SBCVA", "FBCVA") & aval >= 24 & aval <= 28 ~ 320,
+    param %in% c("SBCVA", "FBCVA") & aval >= 29 & aval <= 33 ~ 250,
+    param %in% c("SBCVA", "FBCVA") & aval >= 34 & aval <= 38 ~ 200,
+    param %in% c("SBCVA", "FBCVA") & aval >= 39 & aval <= 43 ~ 160,
+    param %in% c("SBCVA", "FBCVA") & aval >= 44 & aval <= 48 ~ 125,
+    param %in% c("SBCVA", "FBCVA") & aval >= 49 & aval <= 53 ~ 100,
+    param %in% c("SBCVA", "FBCVA") & aval >= 54 & aval <= 58 ~ 80,
+    param %in% c("SBCVA", "FBCVA") & aval >= 59 & aval <= 63 ~ 63,
+    param %in% c("SBCVA", "FBCVA") & aval >= 64 & aval <= 68 ~ 50,
+    param %in% c("SBCVA", "FBCVA") & aval >= 69 & aval <= 73 ~ 40,
+    param %in% c("SBCVA", "FBCVA") & aval >= 74 & aval <= 78 ~ 32,
+    param %in% c("SBCVA", "FBCVA") & aval >= 79 & aval <= 83 ~ 25,
+    param %in% c("SBCVA", "FBCVA") & aval >= 84 & aval <= 88 ~ 20,
+    param %in% c("SBCVA", "FBCVA") & aval >= 89 & aval <= 93 ~ 16,
+    param %in% c("SBCVA", "FBCVA") & aval >= 94 & aval <= 97 ~ 12,
+    param %in% c("SBCVA", "FBCVA") & aval >= 98 ~ 1
+  )
+}
 
 # ---- Derivations ----
 
@@ -54,14 +114,7 @@ adbcva <- oe %>%
     dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = exprs(STUDYID, USUBJID)
-  ) %>%
-  # Calculate ADT, ADY
-  derive_vars_dt(
-    new_vars_prefix = "A",
-    dtc = OEDTC,
-    flag_imputation = "none"
-  ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
+  )
 
 adbcva <- adbcva %>%
   # Calculate AVAL, AVALU and DTYPE
@@ -82,10 +135,14 @@ adbcva <- adbcva %>%
 
 adbcva <- adbcva %>%
   # Add derived log parameters
+  # Note: temporarily retain some SDTM variables (VISIT, OEDY, OEDTC etc) so
+  # that they can be used to derive ADT, ADY, AVISIT etc for the derived
+  # records. Once these variables are derived, set SDTM variables to missing
+  # for the derived paramters, as per ADaM rules.
   derive_param_computed(
-    by_vars = exprs(USUBJID, VISIT),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC), adsl_vars),
     parameters = c("SBCVA"),
-    analysis_value = calculate_etdrs_to_logmar(AVAL.SBCVA),
+    analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
     set_values_to = exprs(
       PARAMCD = "SBCVALOG",
       PARAM = "Study Eye Visual Acuity LogMAR Score",
@@ -94,9 +151,9 @@ adbcva <- adbcva %>%
     )
   ) %>%
   derive_param_computed(
-    by_vars = exprs(USUBJID, VISIT),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC), adsl_vars),
     parameters = c("FBCVA"),
-    analysis_value = calculate_etdrs_to_logmar(AVAL.FBCVA),
+    analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
     set_values_to = exprs(
       PARAMCD = "FBCVALOG",
       PARAM = "Fellow Eye Visual Acuity LogMAR Score",
@@ -104,7 +161,14 @@ adbcva <- adbcva %>%
       AVALU = "LogMAR"
     )
   ) %>%
-  mutate(AVALC = as.character(AVAL))
+  mutate(AVALC = as.character(AVAL)) %>%
+  # Calculate ADT, ADY
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = OEDTC,
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 adbcva <- adbcva %>%
   # Derive visit info and BASETYPE
@@ -118,6 +182,13 @@ adbcva <- adbcva %>%
     ),
     AVISITN = round(VISITNUM, 0),
     BASETYPE = "LAST"
+  ) %>%
+  # Set SDTM variables back to missing for derived parameters
+  mutate(
+    VISIT = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, VISIT),
+    VISITNUM = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, VISITNUM),
+    OEDY = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, OEDY),
+    OEDTC = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, OEDTC)
   )
 
 # Derive Treatment flags
@@ -224,6 +295,12 @@ adbcva <- adbcva %>%
     bcva_uplims = list(-20, 5, 10),
     bcva_lowlims = list(-15, 15),
     additional_text = ""
+  ) %>%
+  # Add AVALCATx variables
+  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
+  derive_vars_merged(
+    avalcat_lookup,
+    by = exprs(PARAMCD, AVALCA1N)
   )
 
 # Final Steps, Select final variables and Add labels
