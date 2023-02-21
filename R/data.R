@@ -7,4 +7,4 @@
 #' Derived from the `dm` and `ds` datasets using `{admiral`, `{admiralophtha}` and
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R})
 #'
-"admiral_adbcva"
+"adbcva"
