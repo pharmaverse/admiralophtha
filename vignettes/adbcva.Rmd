@@ -198,7 +198,7 @@ The user is invited to consult the article on [creating a BDS dataset from SDTM]
 ```{r}
 data("admiral_adbcva")
 
-adbcva <- adbcva %>% 
+adbcva <- adbcva %>%
   select(-starts_with("CRIT"), -starts_with("AVALCA"))
 ```
 
@@ -281,7 +281,7 @@ dataset_vignette(
   adbcva %>% filter(USUBJID == "01-701-1015"),
   display_vars = exprs(
     USUBJID, PARAMCD, AVAL, AVALCAT1, AVALCA1N
-    )
+  )
 )
 ```
 ## Deriving Criterion Flags for BCVA Change {#critflags}
@@ -304,11 +304,11 @@ Then, the following call will implement criterion variable/flag pairs for the en
 
 ```{r}
 adbcva <- adbcva %>% derive_var_bcvacritxfl(
-   paramcds = c("SBCVA", "FBCVA"),
-   bcva_ranges = list(c(5, 10)),
-   bcva_uplims = list(25, -5),
-   bcva_lowlims = list(15, -10)
- )
+  paramcds = c("SBCVA", "FBCVA"),
+  bcva_ranges = list(c(5, 10)),
+  bcva_uplims = list(25, -5),
+  bcva_lowlims = list(15, -10)
+)
 ```
 
 The resulting output is shown below (limited to the first patient only):
@@ -318,28 +318,29 @@ dataset_vignette(
   adbcva %>% filter(USUBJID == "01-701-1015"),
   display_vars = exprs(
     USUBJID, PARAMCD, AVAL, CHG, CRIT1, CRIT1FL, CRIT2, CRIT2FL, CRIT3, CRIT3FL, CRIT4, CRIT4FL, CRIT5, CRIT5FL
-    )
+  )
 )
 ```
 
 It is also possible to assign significance to the "x" in `CRITxFL`. For instance, one could designate all criterion flags of Class 1 as `CRIT1yFL`, Class 2 as `CRIT2yFL`, and Class 3 as `CRIT3yFL`. The argument `critxfl_index` allows a simple implementation of this in conjunction with three separate calls to `derive_var_bcvacritxfl`:
 
 ```{r}
-adbcva <- adbcva %>% derive_var_bcvacritxfl(
-   paramcds = c("SBCVA", "FBCVA"),
-   bcva_ranges = list(c(5, 10)),
-   critxfl_index = 10
- ) %>% 
+adbcva <- adbcva %>%
   derive_var_bcvacritxfl(
-   paramcds = c("SBCVA", "FBCVA"),
-   bcva_uplims = list(25, -5),
-   critxfl_index = 20
- ) %>% 
+    paramcds = c("SBCVA", "FBCVA"),
+    bcva_ranges = list(c(5, 10)),
+    critxfl_index = 10
+  ) %>%
   derive_var_bcvacritxfl(
-   paramcds = c("SBCVA", "FBCVA"),
-   bcva_lowlims = list(15, -10),
-   critxfl_index = 30
- ) 
+    paramcds = c("SBCVA", "FBCVA"),
+    bcva_uplims = list(25, -5),
+    critxfl_index = 20
+  ) %>%
+  derive_var_bcvacritxfl(
+    paramcds = c("SBCVA", "FBCVA"),
+    bcva_lowlims = list(15, -10),
+    critxfl_index = 30
+  )
 ```
 
 ## Additional Notes
