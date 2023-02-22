@@ -18,7 +18,7 @@ dyn_link <- function(text,
                      base_url,
                      relative_url = "",
                      # Change to TRUE when admiral adopts multiversion docs
-                     is_multiversion = FALSE,
+                     is_multiversion = TRUE,
                      multiversion_default_ref = "main") {
   url <- paste(base_url, relative_url, sep = "/")
   if (is_multiversion) {
@@ -69,7 +69,7 @@ remotes::install_github("pharmaverse/admiraloptha", ref = "devel")
 
 ## References and Documentation
 
-* Please refer to the [`{admiral}` References and Documentation](https://pharmaverse.github.io/admiral/index.html#references-and-documentation)
+* Please refer to the `r dyn_link("{admiral} References and Documentation", admiral_homepage, "index.html#references-and-documentation")`.
 
 ## R Versions
 

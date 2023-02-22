@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiraloptha
+url: https://pharmaverse.github.io/admiralophtha
 
 template:
   bootstrap: 5
@@ -33,6 +33,10 @@ reference:
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
   - has_keyword("der_occds")
+- subtitle: Ophtha-specific
+  desc: Derivation Functions helpful for building the Ophtha datasets (e.g. adoe, adbcva)
+- contents:
+  - has_keyword("der_ophtha")
 
 
 - title: Utility Functions
@@ -84,8 +88,22 @@ reference:
   - has_keyword('tte_source')
 
 
-articles:
-- title: User Guides
-  navbar: User Guides
-  contents:
-  - adxx
+navbar:
+  structure:
+    left: [getstarted, reference, articles, news]
+  components:
+    getstarted:
+      text: Get Started
+      href: articles/admiralophtha.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: User Guides
+      menu:
+      - text: Creating ADOE
+        href: articles/adoe.html
+      - text: Creating ADBCVA
+        href: articles/adbcva.html
+      - text: Creating ADVFQ
+        href: articles/advfq.html

@@ -10,7 +10,7 @@
 
 [<img src="http://pharmaverse.org/shields/admiralophtha.svg">](https://pharmaverse.org)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/admiralophtha)](https://CRAN.R-project.org/package=admiralophtha)
+status]
 [![Test
 Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiralophtha/actions/workflows/code-coverage.yml)
 
@@ -43,8 +43,8 @@ ophthalmology ADaMs.
 
 ## References and Documentation
 
-* Please refer to the [`{admiral}` References and
-  Documentation](https://pharmaverse.github.io/admiral/index.html#references-and-documentation)
+* Please refer to the [{admiral} References and
+  Documentation](https://pharmaverse.github.io/admiral/reference/).
 
 ## R Versions
 
