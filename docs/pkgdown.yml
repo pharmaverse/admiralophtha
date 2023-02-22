@@ -1,5 +1,5 @@
-pandoc: '2.18'
-pkgdown: 2.0.6
+pandoc: 2.11.4
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   adbcva: adbcva.html
@@ -7,8 +7,8 @@ articles:
   adoe: adoe.html
   advfq: advfq.html
   adxx: adxx.html
-last_built: 2023-02-15T13:25Z
+last_built: 2023-02-21T15:41Z
 urls:
-  reference: https://pharmaverse.github.io/admiraloptha/reference
-  article: https://pharmaverse.github.io/admiraloptha/articles
+  reference: https://pharmaverse.github.io/admiralophtha/reference
+  article: https://pharmaverse.github.io/admiralophtha/articles
 
