@@ -253,7 +253,7 @@ adqs <- adqs %>%
   derive_var_pchg()
 
 
-## ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records ----
+## ANL01FL: Flag last result within an AVISIT for post-baseline records ----
 adqs <- adqs %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
