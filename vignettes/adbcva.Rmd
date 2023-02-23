@@ -50,6 +50,10 @@ This article describes creating an ADBCVA ADaM with Best-Corrected Visual Acuity
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
 otherwise specified.*
 
+## Dataset Contents
+
+As the name ADBCVA implies, `{admiralophtha}` suggests to populate ADBCVA solely with BCVA records from the OE SDTM.
+
 ## Required Packages
 
 The examples of this vignette require the following packages.

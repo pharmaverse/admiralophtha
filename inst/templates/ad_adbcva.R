@@ -237,7 +237,7 @@ adbcva <- adbcva %>%
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
   ) %>%
-  # WORS01FL: Flag worst result with an
+  # WORS01FL: Flag worst result within a PARAMCD
   restrict_derivation(
     derivation = derive_var_worst_flag,
     args = params(
