@@ -1,6 +1,6 @@
 # Name: ADOE
 #
-# Label: Ophthalmology Exam Analysis Analysis Dataset
+# Label: Ophthalmology Exam Analysis Dataset
 #
 # Input: adsl, oe
 
@@ -36,8 +36,8 @@ param_lookup <- tibble::tribble(
   ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
   "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
   "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Center Subfield Thickness", 2,
-  "CSUBTH", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Center Subfield Thickness", 2,
+  "CSUBTH", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
+  "CSUBTH", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
   "DRSSR", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
   "DRSSR", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
   "DRSSR", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
@@ -50,7 +50,7 @@ param_lookup <- tibble::tribble(
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
 adoe <- oe %>%
-  # Keep only BCVA parameters
+  # Keep only general OE parameters
   filter(
     OETESTCD %in% c("CSUBTH", "DRSSR")
   ) %>%

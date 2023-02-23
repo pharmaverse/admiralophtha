@@ -45,320 +45,89 @@ library(admiraldev)
 
 # Introduction
 
-This article describes creating an `ADOE` ADaM with common ophthalmology
-endpoint parameters.
+This article describes creating an ADOE ADaM with Ophthalmology Exam Analysis data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADOE are absent, and the user is invited to consult the aforementioned article for guidance.
 
-This article is yet to be written. Use as basis the `{admiralonco}` article for `ADRS`
-(commented out in the file for now).
+As the current release of `{admiralophtha}` does not contain any functionality specific to ADOE, this article only showcases how to map parameters from OE in order to set up the basic structre of ADOE. For the following steps, the user is invited to consult the above-linked article on BDS datasets. This article will be updated for future releases to showcase and explain any `{admiralophtha}`-specific functionality.
 
-<!-- **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless -->
-<!-- otherwise specified.* -->
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
+otherwise specified.*
 
-<!-- ## Required Packages -->
+## Dataset Contents
 
-<!-- The examples of this vignette require the following packages. -->
+`{admiralophtha}` suggests to populate ADOE with all general miscellaneous ophthalmology parameters. Any efficacy endpoint-related parameters (eg. BCVA tests) should be placed in separate datasets (eg. ADBCVA).
 
-<!-- ```{r, warning=FALSE, message=FALSE} -->
-<!-- library(admiral) -->
-<!-- ``` -->
+## Required Packages
 
+The examples of this vignette require the following packages.
 
-<!-- # Programming Workflow -->
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(admiral)
+library(admiral.test)
+library(admiraldev)
+library(admiralophtha)
+```
 
-<!-- * [Read in Data](#readdata) -->
-<!-- * [Derive Parameters (`CNSR`, `ADT`, `STARTDT`)](#parameters) -->
-<!-- * [Derive Analysis Value (`AVAL`)](#aval) -->
-<!-- * [Derive Analysis Sequence Number (`ASEQ`)](#aseq) -->
-<!-- * [Add ADSL Variables](#adslvars) -->
+# Programming Workflow
 
-<!-- ## Read in Data {#readdata} -->
+* [Initial Set Up of ADOE ](#setup)
+* [Further Derivations of Standard BDS Variables](#further)
+* [Example Script](#example)
 
-<!-- To start, all datasets needed for the creation of the time-to-event dataset -->
-<!-- should be read into the environment. This will be a company specific process. -->
+## Initial set up of ADOE {#setup}
 
-<!-- For example purpose, the ADaM datasets---which are included -->
-<!-- in `{admiral}` and `{admiralonco}`---are used. An alternative might be to use -->
-<!-- `ADEVENT` as input. -->
+As with all BDS ADaM datasets, one should start from the OE SDTM, where only the general ophthalmology records are of interest. For the purposes of the next two sections, we shall be using the `{admiral}` OE and ADSL test data. We will also require a lookup table for the mapping of parameter codes.
 
-<!-- ```{r} -->
-<!-- data("admiral_adsl") -->
-<!-- data("admiral_adrs") -->
-<!-- adsl <- admiral_adsl -->
-<!-- adrs <- admiral_adrs -->
-<!-- ``` -->
+**Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye`.
 
-<!-- ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters} -->
+```{r}
+data("admiral_oe")
+data("admiral_adsl")
 
-<!-- To derive the parameter dependent variables like `CNSR`, `ADT`, `STARTDT`, -->
-<!-- `EVNTDESC`, `SRCDOM`, `PARAMCD`, ... the `admiral::derive_param_tte()` function can be -->
-<!-- used. It adds one parameter to the input dataset with one observation per -->
-<!-- subject. Usually it is called several times. -->
+# Add STUDYEYE to ADSL to simulate an ophtha dataset
+adsl <- admiral_adsl %>%
+  as.data.frame() %>%
+  mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
+  convert_blanks_to_na()
 
-<!-- For each subject it is determined if an event occurred. In the affirmative the -->
-<!-- analysis date `ADT` is set to the earliest event date. If no event occurred, the -->
-<!-- analysis date is set to the latest censoring date. -->
+oe <- convert_blanks_to_na(admiral_oe) %>%
+  ungroup()
 
-<!-- The events and censorings are defined by the `admiral::event_source()` and the -->
-<!-- `admiral::censor_source()` class respectively. It defines -->
+# ---- Lookup table ----
 
-<!-- - which observations (`filter` parameter) of a source dataset (`dataset_name` -->
-<!-- parameter) are potential events or censorings, -->
-<!-- - the value of the `CNSR` variable (`censor` parameter), and -->
-<!-- - which variable provides the date (`date` parameter). -->
+# Assign PARAMCD, PARAM, and PARAMN
+param_lookup <- tibble::tribble(
+  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
+  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
+  "CSUBTH", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Center Subfield Thickness", 2,
+  "CSUBTH", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Center Subfield Thickness", 2,
+  "DRSSR", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  "DRSSR", "LEFT", "RIGHT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
+)
+```
 
-<!-- The date can be provided as date (`--DT` variable), datetime (`--DTM` variable), -->
-<!-- or character ISO-8601 date (`--DTC` variable). -->
+Following this setup, the programmer can start constructing ADOE. The first step is to subset OE to the general ophthalmological parameters that don't go in specific datasets (for instance, BCVA records should be reserved for ADBCVA). Then, one can merge the resulting dataset with ADSL. This is required for two reasons: firstly, `STUDYEYE` is crucial in the mapping of `PARAMCD`'s. Secondly, the treatment start date (`TRTSDT`) is also a prerequisite for the derivation of variables such as Analysis Day (`ADY`).
 
-<!-- CDISC strongly recommends `CNSR = 0` for events and positive integers for -->
-<!-- censorings. `{admiral}`/`{admiralonco}` enforce this recommendation. Therefore the `censor` -->
-<!-- parameter is available for `admiral::censor_source()` only. It is defaulted to `1`. -->
+```{r}
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
-<!-- The `dataset_name` parameter expects a character value which is used as an -->
-<!-- identifier. The actual data which is used for the derivation of the parameter is -->
-<!-- provided via the `source_datasets` parameter of `admiral::derive_param_tte()`. It expects -->
-<!-- a named list of datasets. The names correspond to the identifiers specified for -->
-<!-- the `dataset_name` parameter. This allows to define events and censoring -->
-<!-- independent of the data. -->
+adoe <- oe %>%
+  filter(
+    OETESTCD %in% c("CSUBTH", "DRSSR")
+  ) %>%
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+```
 
-<!-- ### Pre-Defined Time-to-Event Source Objects -->
+## Example Script {#example}
 
-<!-- The table below shows all pre-defined `tte_source` objects which should cover the most -->
-<!-- common oncology use cases. -->
+ADaM | Sample Code 
+ ---- | -------------- 
+ADOE | `r dyn_link("ad_adoe.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adoe.R", is_multiversion = TRUE)`
 
-<!-- ```{r echo=FALSE} -->
-<!-- knitr::kable(list_tte_source_objects(package = "admiralonco")) -->
-<!-- ``` -->
-
-<!-- As mentioned in the introduction, each company would create their own version of this with -->
-<!-- the required filtering conditions and metadata as per your company approach. An example of -->
-<!-- a possible different approach could be as follows, where death is sourced from `ADSL`, -->
-<!-- instead of `ADRS`, and the given `EVNTDESC` is different. -->
-
-<!-- ```{r, eval=FALSE} -->
-<!-- adsl_death_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   date = DTHDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "STUDY DEATH", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "DTHDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- ``` -->
-
-<!-- An optional step at this stage would be required to enable derivation of duration of -->
-<!-- response: If using `ADRS` / `ADEVENT` parameters as input for any response dates -->
-<!-- (instead of a variable in `ADSL`) then you would need to use `admiral::derive_vars_merged()` -->
-<!-- to add the response date as a temporary variable (e.g. `TEMP_RESPDT`) to be able to feed -->
-<!-- into `admiral::derive_param_tte()` as the start date. You would also need to use this -->
-<!-- to filter the input datasets so as to only derive the records for responders. -->
-<!-- This could also be repeated as needed for IRF/BICR and confirmed responses. -->
-
-<!-- Here is an example of the code needed. -->
-
-<!-- ```{r} -->
-<!-- adsl <- adsl %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adrs, -->
-<!--     filter_add = PARAMCD == "RSP" & AVALC == "Y" & ANL01FL == "Y", -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     new_vars = vars(TEMP_RESPDT = ADT) -->
-<!--   ) -->
-<!-- adrs <- adrs %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adsl, -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     new_vars = vars(TEMP_RESPDT) -->
-<!--   ) -->
-<!-- ``` -->
-
-<!-- The pre-defined objects can be passed directly to `admiral::derive_param_tte()` to create -->
-<!-- a new time-to-event parameter. Below shows example calls for Overall Survival (OS), Progression -->
-<!-- Free Survival (PFS), and duration of response (as above, this is only derived for responder -->
-<!-- patients so we have to filter source datasets). Note that the reason for including a -->
-<!-- randomization date censor is to catch those patients that never have a tumor assessment. -->
-
-<!-- ```{r} -->
-<!-- adtte <- derive_param_tte( -->
-<!--   dataset_adsl = adsl, -->
-<!--   start_date = RANDDT, -->
-<!--   event_conditions = list(death_event), -->
-<!--   censor_conditions = list(lastalive_censor, rand_censor), -->
-<!--   source_datasets = list(adsl = adsl, adrs = adrs), -->
-<!--   set_values_to = vars(PARAMCD = "OS", PARAM = "Overall Survival") -->
-<!-- ) %>% -->
-<!--   derive_param_tte( -->
-<!--     dataset_adsl = adsl, -->
-<!--     start_date = RANDDT, -->
-<!--     event_conditions = list(pd_event, death_event), -->
-<!--     censor_conditions = list(lasta_censor, rand_censor), -->
-<!--     source_datasets = list(adsl = adsl, adrs = adrs), -->
-<!--     set_values_to = vars(PARAMCD = "PFS", PARAM = "Progression Free Survival") -->
-<!--   ) %>% -->
-<!--   derive_param_tte( -->
-<!--     dataset_adsl = adsl, -->
-<!--     start_date = TEMP_RESPDT, -->
-<!--     event_conditions = list(pd_event, death_event), -->
-<!--     censor_conditions = list(lasta_censor), -->
-<!--     source_datasets = list(adsl = filter(adsl, !is.na(TEMP_RESPDT)), adrs = filter(adrs, !is.na(TEMP_RESPDT))), -->
-<!--     set_values_to = vars(PARAMCD = "RSD", PARAM = "Duration of Response") -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte, -->
-<!--   display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR) -->
-<!-- ) -->
-<!-- ``` -->
-
-<!-- ### Creating Your Own Time-to-Event Source Objects -->
-
-<!-- We advise you consult the `{admiral}` -->
-<!-- `r dyn_link("Creating a BDS Time-to-Event ADaM vignette", admiral_homepage, "articles/bds_tte.html")` -->
-<!-- for further guidance on the different options available and more examples. -->
-
-<!-- One extra common oncology case we include here is around PFS when censoring -->
-<!-- at new anti-cancer therapy. This could either be controlled using `ANLzzFL` as -->
-<!-- explained in the ADRS vignette, so that records after new anti-cancer therapy -->
-<!-- never contribute to the PD and DEATH parameters. Or alternatively you can control -->
-<!-- this on the ADTTE side by filtering which records are used in -->
-<!-- `admiral::event_source()` and `admiral::censor_source()`, e.g. for PD or death -->
-<!-- event date we can use `filter` argument to exclude events occurring after new -->
-<!-- anti-cancer therapy. -->
-
-<!-- The censor could be set as whichever date your analysis requires, -->
-<!-- e.g. date of last tumor assessment prior to new anti-cancer therapy or last -->
-<!-- radiological assessment. If you pass multiple censor dates then remember the -->
-<!-- function will choose the latest occurring of these, so be cautious here if -->
-<!-- feeding in say one censor date for last assessment prior to new anti-cancer -->
-<!-- therapy and one for last assessment - as the function would choose the maximum of -->
-<!-- these which in this case would be incorrect. The easiest solution here would be -->
-<!-- to pass in one censor date as the date of last assessment prior to new -->
-<!-- anti-cancer therapy or date of last assessment **if no new anti-cancer therapy**. -->
-<!-- If you wanted to use different censor dates which could have different `CNSDTDSC` -->
-<!-- values, then you'd need to ensure only one is set per patient. -->
-
-<!-- This case is demonstrated in the below example (where `NACTDT` would be -->
-<!-- pre-derived as first date of new anti-cancer therapy, and `LASTANDT` as the -->
-<!-- single tumor assessment censor date as described above). -->
-
-<!-- ```{r, eval=FALSE} -->
-<!-- pd_nact_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   filter = PDDT < NACTDT | is.na(NACTDT), -->
-<!--   date = PDDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Disease Progression prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "PDDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- death_nact_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   filter = DTHDT < NACTDT | is.na(NACTDT), -->
-<!--   date = DTHDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Death prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "DTHDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- lasta_nact_censor <- censor_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   date = LASTANDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Last Tumor Assessment prior to NACT", -->
-<!--     CNSDTDSC = "Last Tumor Assessment prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "LASTANDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- adtte <- derive_param_tte( -->
-<!--   dataset_adsl = adsl, -->
-<!--   start_date = RANDDT, -->
-<!--   event_conditions = list(pd_nact_event, death_nact_event), -->
-<!--   censor_conditions = list(lasta_nact_censor, rand_censor), -->
-<!--   source_datasets = list(adsl = adsl), -->
-<!--   set_values_to = vars(PARAMCD = "PFSNACT", PARAM = "Progression Free Survival prior to NACT") -->
-<!-- ) -->
-<!-- ``` -->
-
-<!-- ## Derive Analysis Value (`AVAL`) {#aval} -->
-
-<!-- The analysis value (`AVAL`) can be derived by calling `admiral::derive_vars_duration()`. -->
-
-<!-- This example derives the time to event in days.  -->
-
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_vars_duration( -->
-<!--     new_var = AVAL, -->
-<!--     start_date = STARTDT, -->
-<!--     end_date = ADT -->
-<!--   ) -->
-<!-- ``` -->
-
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte -->
-<!-- ) -->
-<!-- ``` -->
-
-<!-- Other time units, such as months that we commonly see in oncology analyses, can be requested -->
-<!-- by specifying the `out_unit` parameter. See the example below. Note that because of the underlying -->
-<!-- `lubridate::time_length()` function that is used here this may perform slightly differently to -->
-<!-- your expectations, e.g. both `time_length(ymd("2021-01-01") %--% ymd("2021-02-01"), "month")` -->
-<!-- and `time_length(ymd("2021-02-01") %--% ymd("2021-03-01"), "month")` results in exactly 1 month, -->
-<!-- which is a logical approach but it gives a different result to the convention of assuming every -->
-<!-- month has exactly equal days and just using `/30.4375` here or some other such convention. The -->
-<!-- difference would only be noticed for small durations, but if the user prefers an alternative -->
-<!-- approach they could calculate in the default days and then add extra processing to convert to months -->
-<!-- with their company-specific convention. -->
-
-<!-- ```{r, eval=FALSE} -->
-<!-- adtte_months <- adtte %>% -->
-<!--   derive_vars_duration( -->
-<!--     new_var = AVAL, -->
-<!--     start_date = STARTDT, -->
-<!--     end_date = ADT, -->
-<!--     out_unit = "months" -->
-<!--   ) -->
-<!-- ``` -->
-
-<!-- ## Derive Analysis Sequence Number (`ASEQ`) {#aseq} -->
-
-<!-- The `{admiral}` function `admiral::derive_var_obs_number()` can be used to derive `ASEQ`: -->
-
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_var_obs_number( -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     order = vars(PARAMCD), -->
-<!--     check_type = "error" -->
-<!--   ) -->
-<!-- ``` -->
-
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette(adtte) -->
-<!-- ``` -->
-
-<!-- ## Add ADSL Variables {#adslvars} -->
-
-<!-- Variables from ADSL which are required for time-to-event analyses, e.g., -->
-<!-- treatment variables or covariates can be added using `admiral::derive_vars_merged()`. -->
-
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adsl, -->
-<!--     new_vars = vars(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX), -->
-<!--     by_vars = vars(STUDYID, USUBJID) -->
-<!--   ) -->
-<!-- ``` -->
-
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte, -->
-<!--   display_vars = vars(USUBJID, PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX) -->
-<!-- ) -->
-<!-- ``` -->
