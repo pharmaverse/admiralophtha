@@ -18,23 +18,23 @@ qs <- admiral_qs
 
 qs <- convert_blanks_to_na(qs)
 
-qs<- qs %>% filter(QSTESTCD %in% c("ACITM01", "ACITM02", "ACITM03", "ACITM04"))
+qs<- qs %>% filter(QSTESTCD %in% c("VFQ1", "VFQ2", "VFQ3", "VFQ4"))
 
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
   ~QSTESTCD, ~PARAMCD, ~PARAM,~PARCAT1, ~PARCAT2,
-  "ACITM01", "ACITM01", "WORD RECALL", "NEI VFQ 25", "Original Response",
-  "ACITM02", "ACITM02", "NAMING OBJECTS", "NEI VFQ 25", "Original Response",
-  "ACITM03", "ACITM03", "DELAYED WORD RECALL", "NEI VFQ 25", "Original Response",
-  "ACITM04", "ACITM04", "COMMANDS", "NEI VFQ 25", "Original Response",
-  "QR01", "QR01", "Recoded Item - 01", "NEI VFQ 25", "General 01",
-  "QR02", "QR02", "Recoded Item - 02", "NEI VFQ 25", "General 01",
-  "QR03", "QR03", "Recoded Item - 03", "NEI VFQ 25", "General 02",
-  "QR04", "QR04", "Recoded Item - 04", "NEI VFQ 25", "General 02",
-  "QSG01", "QSG01", "General Score 01", "NEI VFQ 25", "Averaged Result",
-  "QSG02", "QSG02", "General Score 02", "NEI VFQ 25", "Averaged Result",
-  "QBCSCORE", "QBCSCORE", "Composite Score", "NEI VFQ 25", "Averaged Result"
+  "VFQ1", "VFQ1", "Overall Health", "NEI VFQ-25", "Original Response",
+  "VFQ2", "VFQ2", "Eyesight in Both Eyes", "NEI VFQ-25", "Original Response",
+  "VFQ3", "VFQ3", "Worry About Eyesight", "NEI VFQ-25", "Original Response",
+  "VFQ4", "VFQ4", "Pain in and Around Eyes", "NEI VFQ-25", "Original Response",
+  "QR01", "QR01", "Recoded Item - 01", "NEI VFQ-25", "General 01",
+  "QR02", "QR02", "Recoded Item - 02", "NEI VFQ-25", "General 01",
+  "QR03", "QR03", "Recoded Item - 03", "NEI VFQ-25", "General 02",
+  "QR04", "QR04", "Recoded Item - 04", "NEI VFQ-25", "General 02",
+  "QSG01", "QSG01", "General Score 01", "NEI VFQ-25", "Averaged Result",
+  "QSG02", "QSG02", "General Score 02", "NEI VFQ-25", "Averaged Result",
+  "QBCSCORE", "QBCSCORE", "Composite Score", "NEI VFQ-25", "Averaged Result"
 )
 attr(param_lookup$QSTESTCD, "label") <- "Question Short Name"
 
@@ -76,7 +76,7 @@ mutate(
 adqs <- adqs %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
-    filter = QSTESTCD=="ACITM01" & !is.na(AVAL),
+    filter = QSTESTCD=="VFQ1" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
     set_values_to = vars(PARAMCD='QR01')
@@ -99,7 +99,7 @@ adqs <- adqs %>%
 adqs <- adqs %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
-    filter = QSTESTCD=="ACITM01" & !is.na(AVAL),
+    filter = QSTESTCD=="VFQ2" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
     set_values_to = vars(PARAMCD='QR02')
@@ -114,48 +114,48 @@ adqs <- adqs %>%
                       AVAL))
 
 ## QR03 Recoded Item 03
-# set to 100 if [ADQS.AVAL] = 1
-# else set to 75 if [ADQS.AVAL] = 2
+# set to 100 if [ADQS.AVAL] = 5
+# else set to 75 if [ADQS.AVAL] = 4
 # else set to 50 if [ADQS.AVAL] = 3
-# else set to 25 if [ADQS.AVAL] = 4
-# else set to 0 if [ADQS.AVAL] = 5
+# else set to 25 if [ADQS.AVAL] = 2
+# else set to 0 if [ADQS.AVAL] = 1
 adqs <- adqs %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
-    filter = QSTESTCD=="ACITM03" & !is.na(AVAL),
+    filter = QSTESTCD=="VFQ3" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
     set_values_to = vars(PARAMCD='QR03')
   ) %>%
   mutate(AVAL= ifelse(PARAMCD=="QR03",
-                      case_when(AVAL==1 ~ 100,
-                                AVAL==2 ~ 75,
+                      case_when(AVAL==1 ~ 0,
+                                AVAL==2 ~ 25,
                                 AVAL==3 ~ 50,
-                                AVAL==4 ~ 25,
-                                AVAL>=5 ~ 0),
+                                AVAL==4 ~ 75,
+                                AVAL>=5 ~ 100),
                       AVAL))
 
 
 ## QR04 Recoded Item 04
-# set to 100 if [ADQS.AVAL] = 1
-# else set to 75 if [ADQS.AVAL] = 2
+# set to 100 if [ADQS.AVAL] = 5
+# else set to 75 if [ADQS.AVAL] = 4
 # else set to 50 if [ADQS.AVAL] = 3
-# else set to 25 if [ADQS.AVAL] = 4
-# else set to 0 if [ADQS.AVAL] = 5
+# else set to 25 if [ADQS.AVAL] = 2
+# else set to 0 if [ADQS.AVAL] = 1
 adqs <- adqs %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
-    filter = QSTESTCD=="ACITM04" & !is.na(AVAL),
+    filter = QSTESTCD=="VFQ4" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
     set_values_to = vars(PARAMCD='QR04')
   ) %>%
   mutate(AVAL= ifelse(PARAMCD=="QR04",
-                      case_when(AVAL<=1 ~ 100,
-                                AVAL==2 ~ 75,
+                      case_when(AVAL<=1 ~ 0,
+                                AVAL==2 ~ 25,
                                 AVAL==3 ~ 50,
-                                AVAL==4 ~ 25,
-                                AVAL>=5 ~ 0),
+                                AVAL==4 ~ 75,
+                                AVAL>=5 ~ 100),
                       AVAL))
 
 ## Derive a new record as a summary record  ----
