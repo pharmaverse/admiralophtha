@@ -38,27 +38,27 @@ param_lookup <- tibble::tribble(
 )
 attr(param_lookup$QSTESTCD, "label") <- "Question Short Name"
 
-adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 adqs <- derive_vars_merged(
   qs,
   dataset_add = adsl,
   new_vars = adsl_vars,
-  by_vars = vars(STUDYID, USUBJID)
+  by_vars = exprs(STUDYID, USUBJID)
 ) %>%
   ## Calculate ADT, ADY ----
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = QSDTC
   ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
 adqs <- adqs %>%
   ## Add PARAMCD only - add PARAM etc later ----
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
-    new_vars = vars(PARAMCD),
-    by_vars = vars(QSTESTCD)
+    new_vars = exprs(PARAMCD),
+    by_vars = exprs(QSTESTCD)
   ) %>%
   ## Calculate AVAL and AVALC ----
   mutate(
@@ -75,11 +75,11 @@ adqs <- adqs %>%
 # else set to 0 if [ADQS.AVAL] = 5
 adqs <- adqs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ1" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
-    set_values_to = vars(PARAMCD = "QR01")
+    set_values_to = exprs(PARAMCD = "QR01")
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR01",
     case_when(
@@ -101,11 +101,11 @@ adqs <- adqs %>%
 # else set to 0 if [ADQS.AVAL] = 6
 adqs <- adqs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ2" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
-    set_values_to = vars(PARAMCD = "QR02")
+    set_values_to = exprs(PARAMCD = "QR02")
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR02",
     case_when(
@@ -127,11 +127,11 @@ adqs <- adqs %>%
 # else set to 0 if [ADQS.AVAL] = 1
 adqs <- adqs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ3" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
-    set_values_to = vars(PARAMCD = "QR03")
+    set_values_to = exprs(PARAMCD = "QR03")
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR03",
     case_when(
@@ -153,11 +153,11 @@ adqs <- adqs %>%
 # else set to 0 if [ADQS.AVAL] = 1
 adqs <- adqs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ4" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
-    set_values_to = vars(PARAMCD = "QR04")
+    set_values_to = exprs(PARAMCD = "QR04")
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR04",
     case_when(
@@ -175,11 +175,11 @@ adqs <- adqs %>%
 # Average of QR01 and QR02 records
 adqs <- adqs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = mean,
-    set_values_to = vars(PARAMCD = "QSG01")
+    set_values_to = exprs(PARAMCD = "QSG01")
   )
 
 ## Derive a new record as a summary record  ----
@@ -187,11 +187,11 @@ adqs <- adqs %>%
 # Average of QR03 and QR04 records
 adqs <- adqs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QR03", "QR04") & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = mean,
-    set_values_to = vars(PARAMCD = "QSG02")
+    set_values_to = exprs(PARAMCD = "QSG02")
   )
 
 
@@ -200,11 +200,11 @@ adqs <- adqs %>%
 # Average of QSG01 and QSG02 records
 adqs <- adqs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QSG01", "QSG02") & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = sum,
-    set_values_to = vars(PARAMCD = "QBCSCORE")
+    set_values_to = exprs(PARAMCD = "QBCSCORE")
   )
 
 ## Get visit info ----
@@ -242,8 +242,8 @@ adqs <- adqs %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = vars(STUDYID, USUBJID, PARAMCD),
-      order = vars(ADT, VISITNUM, QSSEQ),
+      by_vars = exprs(STUDYID, USUBJID, PARAMCD),
+      order = exprs(ADT, VISITNUM, QSSEQ),
       new_var = ABLFL,
       mode = "last"
     ),
@@ -255,7 +255,7 @@ adqs <- adqs %>%
 adqs <- adqs %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD),
+    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
     source_var = AVAL,
     new_var = BASE
   ) %>%
@@ -271,8 +271,8 @@ adqs <- adqs %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = vars(USUBJID, PARAMCD, AVISIT),
-      order = vars(ADT, AVAL),
+      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+      order = exprs(ADT, AVAL),
       mode = "last"
     ),
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
@@ -283,17 +283,17 @@ adqs <- adqs %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = vars(STUDYID, USUBJID),
-    order = vars(PARAMCD, ADT, AVISITN, VISITNUM),
+    by_vars = exprs(STUDYID, USUBJID),
+    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM),
     check_type = "error"
   ) %>%
   # Derive PARAM
-  derive_vars_merged(dataset_add = select(param_lookup, -QSTESTCD), by_vars = vars(PARAMCD))
+  derive_vars_merged(dataset_add = select(param_lookup, -QSTESTCD), by_vars = exprs(PARAMCD))
 
 
 # Add all ADSL variables
 adqs <- adqs %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = exprs(STUDYID, USUBJID)
   )
