@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7672 rows and 115 columns.
 }
 \source{
-Derived from the \code{dm} and \code{ds} datasets using \verb{\{admiral}, \code{{admiralophtha}} and
+Derived from the \code{oe} and \code{ADSL} datasets using \verb{\{admiral}, \code{{admiralophtha}} and
 (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R})
 }
 \usage{
@@ -16,6 +16,10 @@ adbcva
 }
 \description{
 An example Best Corrected Visual Acuity (BCVA) analysis dataset
+}
+\seealso{
+Other datasets: 
+\code{\link{adoe}}
 }
 \concept{datasets}
 \keyword{datasets}
