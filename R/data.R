@@ -4,10 +4,11 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `dm` and `ds` datasets using `{admiral`, `{admiralophtha}` and
+#' Derived from the `oe` and `ADSL` datasets using `{admiral`, `{admiralophtha}` and
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R})
 #'
 "adbcva"
+
 #' Visual Function Questionnaire Analysis Dataset
 #'
 #' An example Visual Function Questionnaire (VFQ) analysis dataset
@@ -18,3 +19,14 @@
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R})
 #'
 "advfq"
+
+#' Ophthalmology Exam Analysis Dataset
+#'
+#' An example Ophthalmology Exam Analysis dataset
+#' @keywords datasets
+#' @family datasets
+#' @source
+#' Derived from the `oe` and `ADSL` datasets using `{admiral`, `{admiralophtha}` and
+#' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R})
+#'
+"adoe"
