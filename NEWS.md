@@ -1,23 +1,10 @@
-# admiralophtha 0.0.1
+# admiralophtha 0.1.0
 
 ## New Features
 
-- You can link the GitHub Issue to Changelog by using (#ISSUE-NUMBER)
-
-## Updates of Existing Functions
-
- - Updates that you have made for this version (#ISSUE-NUMBER)
-
-## Breaking Changes
-
- - Deprecated functions. (#ISSUE-NUMBER)
- - Bug Fixes (#ISSUE-NUMBER)
-
-## Documentation
-
- - Stuff that you did (#ISSUE-NUMBER)
-
-## Various
-
- - Stuff that you did (#ISSUE-NUMBER)
+- Added a function to derive the variable STUDYEYE in ADSL (issue #9).
+- Added a function to derive the variable AFEYE in Occurrence datasets (issue #10).
+- Added a function to derive the criterion flags in ADBCVA (issue #49).
+- Added a function to convert LogMAR to ETDRS (issue #50).
+- Added a function to convert ETDRS to LogMAR (issue #50).
 

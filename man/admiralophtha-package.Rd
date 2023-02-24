@@ -13,13 +13,20 @@ A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pharmaverse.github.io/admiraltemplate}
-  \item \url{https://github.com/pharmaverse/admiraltemplate}
+  \item \url{https://pharmaverse.github.io/admiralophtha}
+  \item \url{https://github.com/pharmaverse/admiralophtha}
 }
 
 }
 \author{
-\strong{Maintainer}: Open Source \email{admiralophtha@pharmaverse.com}
+\strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com}
+
+Authors:
+\itemize{
+  \item Gordon Miller \email{gordon.miller@roche.com}
+  \item Lucy Palmen
+  \item Rachel Linacre
+}
 
 }
 \keyword{internal}
