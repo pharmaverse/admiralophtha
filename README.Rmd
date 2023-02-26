@@ -46,6 +46,10 @@ admiral_homepage <- "https://pharmaverse.github.io/admiral/cran-release"
 [![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiralophtha/actions/workflows/code-coverage.yml)
 <!-- badges: end -->
 
+## Purpose
+
+To provide a complementary (to admiral) toolbox that enables users to develop ophthamology disease area specifics.
+
 ## Installation
 
 To install the latest development version of the package directly from GitHub use the following code:
