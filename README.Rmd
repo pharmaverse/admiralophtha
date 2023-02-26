@@ -48,7 +48,7 @@ admiral_homepage <- "https://pharmaverse.github.io/admiral/cran-release"
 
 ## Purpose
 
-To provide a complementary (to admiral) toolbox that enables users to develop ophthamology disease area specifics.
+To provide a complementary (to `{admiral}`) toolbox that enables users to develop ophthamology disease area specifics.
 
 ## Installation
 
@@ -60,7 +60,6 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 }
 remotes::install_github("pharmaverse/admiraloptha", ref = "devel")
 ```
-
 
 ## Scope
 
