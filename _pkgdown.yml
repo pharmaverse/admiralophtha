@@ -101,6 +101,8 @@ navbar:
     articles:
       text: User Guides
       menu:
+      - text: Standards
+        href: articles/standards.html
       - text: Creating ADOE
         href: articles/adoe.html
       - text: Creating ADBCVA
