@@ -16,6 +16,11 @@ Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/mai
 
 <!-- badges: end -->
 
+## Purpose
+
+To provide a complementary (to `{admiral}`) toolbox that enables users
+to develop ophthalmology disease area specifics.
+
 ## Installation
 
 To install the latest development version of the package directly from

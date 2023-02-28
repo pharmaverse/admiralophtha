@@ -18,7 +18,7 @@ admiralophtha_adoe
 An example Ophthalmology Exam Analysis dataset
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{admiralophtha_adbcva}},
 \code{\link{admiralophtha_advfq}},
 \code{\link{admiralophtha_ex}}
