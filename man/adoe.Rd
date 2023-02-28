@@ -19,7 +19,8 @@ An example Ophthalmology Exam Analysis dataset
 }
 \seealso{
 Other datasets: 
-\code{\link{adbcva}}
+\code{\link{adbcva}},
+\code{\link{advfq}}
 }
 \concept{datasets}
 \keyword{datasets}
