@@ -301,7 +301,9 @@ advfq <- advfq %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
+admiralophtha_advfq <- advfq
+
 # ---- Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(advfq, file = file.path(dir, "advfq.rda"), compress = "bzip2")
+save(admiralophtha_advfq, file = file.path(dir, "admiralophtha_advfq.rda"), compress = "bzip2")
