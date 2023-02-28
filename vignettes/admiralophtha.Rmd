@@ -49,21 +49,8 @@ guide. This extension package follows the same main idea and conventions, and re
 functions from `{admiral}`, so it is important to thoroughly understand these to be able to
 use `{admiralophtha}`.
 
-# Starting a Script
-
-For the ophthamology ADaM data structures, an overview of the flow and example function calls
-for the most common steps are provided by the following vignettes:
-
-- [Creating ADVFQ](advfq.html)
-- [Creating ADBCVA](adbcva.html)
-
-# Support
-
-Support is provided via the [admiral Slack
-channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
-
-<!-- This article is in the process of being written. Please use the `{admiralonco}` "Get Started" -->
-<!-- page (commented out at the moment) as a basis. -->
+This article is in the process of being written. Please use the `{admiralonco}` "Get Started" 
+page (commented out at the moment) as a basis.
 
 <!-- # Derivations -->
 
