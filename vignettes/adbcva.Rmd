@@ -200,7 +200,7 @@ The user is invited to consult the article on [creating a BDS dataset from SDTM]
 **Note**: This dataset already comes with some criterion flags and analysis value categorisation variables, so for illustration purposes these are removed.
 
 ```{r}
-data("adbcva")
+data("admiralophtha_adbcva")
 
 adbcva <- adbcva %>%
   select(-starts_with("CRIT"), -starts_with("AVALCA"))

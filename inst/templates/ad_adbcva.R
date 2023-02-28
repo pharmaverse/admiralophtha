@@ -308,7 +308,9 @@ adbcva <- adbcva %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
+admiralophtha_adbcva <- adbcva
+
 # ---- Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adbcva, file = file.path(dir, "adbcva.rda"), compress = "bzip2")
+save(admiralophtha_adbcva, file = file.path(dir, "admiralophtha_adbcva.rda"), compress = "bzip2")
