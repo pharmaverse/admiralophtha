@@ -202,7 +202,7 @@ The user is invited to consult the article on [creating a BDS dataset from SDTM]
 ```{r}
 data("admiralophtha_adbcva")
 
-adbcva <- adbcva %>%
+adbcva <- admiralophtha_adbcva %>%
   select(-starts_with("CRIT"), -starts_with("AVALCA"))
 ```
 
