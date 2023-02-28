@@ -37,16 +37,19 @@
     <loc>https://pharmaverse.github.io/admiralophtha/devel/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/adbcva.html</loc>
-  </url>
-  <url>
     <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/admiralophtha-package.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/adoe.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/admiralophtha_adbcva.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/advfq.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/admiralophtha_adoe.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/admiralophtha_advfq.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/admiralophtha_ex.html</loc>
   </url>
   <url>
     <loc>https://pharmaverse.github.io/admiralophtha/devel/reference/convert_etdrs_to_logmar.html</loc>
