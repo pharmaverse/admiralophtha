@@ -45,326 +45,315 @@ library(admiraldev)
 
 # Introduction
 
-This article describes creating an `ADBCVA` ADaM with Best-Corrected Visual Acuity
-data for ophthalmology endpoints.
+This article describes creating an ADBCVA ADaM with Best-Corrected Visual Acuity (BCVA) data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADBCVA are absent, and the user is invited to consult the aforementioned article for guidance.
 
-This article is yet to be written. Use as basis the `{admiralonco}` article for `ADRS`
-(commented out in the file for now).
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
+otherwise specified.*
 
-<!-- **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless -->
-<!-- otherwise specified.* -->
+## Dataset Contents
 
-<!-- ## Required Packages -->
+As the name ADBCVA implies, `{admiralophtha}` suggests to populate ADBCVA solely with BCVA records from the OE SDTM.
 
-<!-- The examples of this vignette require the following packages. -->
+## Required Packages
 
-<!-- ```{r, warning=FALSE, message=FALSE} -->
-<!-- library(admiral) -->
-<!-- ``` -->
+The examples of this vignette require the following packages.
 
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(admiral)
+library(admiral.test)
+library(admiraldev)
+library(admiralophtha)
+```
 
-<!-- # Programming Workflow -->
+# Programming Workflow
 
-<!-- * [Read in Data](#readdata) -->
-<!-- * [Derive Parameters (`CNSR`, `ADT`, `STARTDT`)](#parameters) -->
-<!-- * [Derive Analysis Value (`AVAL`)](#aval) -->
-<!-- * [Derive Analysis Sequence Number (`ASEQ`)](#aseq) -->
-<!-- * [Add ADSL Variables](#adslvars) -->
+* [Initial Set Up of ADBCVA ](#setup)
+* [Deriving LogMAR score parameters](#logmar)
+* [Further Derivations of Standard BDS Variables](#further)
+* [Deriving Analysis Value Categories for Snellen Scores](#avalcats)
+* [Deriving Criterion Flags for BCVA Change](#critflags)
+* [Additional Notes](#notes)
+* [Example Script](#example)
 
-<!-- ## Read in Data {#readdata} -->
+## Initial set up of ADBCVA {#setup}
 
-<!-- To start, all datasets needed for the creation of the time-to-event dataset -->
-<!-- should be read into the environment. This will be a company specific process. -->
+As with all BDS ADaM datasets, one should start from the OE SDTM, where only the BCVA records are of interest. For the purposes of the next two sections, we shall be using the `{admiral}` OE and ADSL test data. We will also require a lookup table for the mapping of parameter codes.
 
-<!-- For example purpose, the ADaM datasets---which are included -->
-<!-- in `{admiral}` and `{admiralonco}`---are used. An alternative might be to use -->
-<!-- `ADEVENT` as input. -->
+**Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye`.
 
-<!-- ```{r} -->
-<!-- data("admiral_adsl") -->
-<!-- data("admiral_adrs") -->
-<!-- adsl <- admiral_adsl -->
-<!-- adrs <- admiral_adrs -->
-<!-- ``` -->
+```{r}
+data("admiral_oe")
+data("admiral_adsl")
 
-<!-- ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters} -->
+# Add STUDYEYE to ADSL to simulate an ophtha dataset
+adsl <- admiral_adsl %>%
+  as.data.frame() %>%
+  mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
+  convert_blanks_to_na()
 
-<!-- To derive the parameter dependent variables like `CNSR`, `ADT`, `STARTDT`, -->
-<!-- `EVNTDESC`, `SRCDOM`, `PARAMCD`, ... the `admiral::derive_param_tte()` function can be -->
-<!-- used. It adds one parameter to the input dataset with one observation per -->
-<!-- subject. Usually it is called several times. -->
+oe <- convert_blanks_to_na(admiral_oe) %>%
+  ungroup()
 
-<!-- For each subject it is determined if an event occurred. In the affirmative the -->
-<!-- analysis date `ADT` is set to the earliest event date. If no event occurred, the -->
-<!-- analysis date is set to the latest censoring date. -->
+# ---- Lookup table ----
+param_lookup <- tibble::tribble(
+  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score", 1,
+  "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score", 1,
+  "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
+  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
+)
+```
 
-<!-- The events and censorings are defined by the `admiral::event_source()` and the -->
-<!-- `admiral::censor_source()` class respectively. It defines -->
+Following this setup, the programmer can start constructing ADBCVA. The first step is to subset OE to only BCVA parameters and merge with ADSL. This is required for two reasons: firstly, `STUDYEYE` is crucial in the mapping of `PARAMCD`'s. Secondly, the treatment start date (`TRTSDT`) is also a prerequisite for the derivation of variables such as Analysis Day (`ADY`).
 
-<!-- - which observations (`filter` parameter) of a source dataset (`dataset_name` -->
-<!-- parameter) are potential events or censorings, -->
-<!-- - the value of the `CNSR` variable (`censor` parameter), and -->
-<!-- - which variable provides the date (`date` parameter). -->
+```{r}
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
-<!-- The date can be provided as date (`--DT` variable), datetime (`--DTM` variable), -->
-<!-- or character ISO-8601 date (`--DTC` variable). -->
+adbcva <- oe %>%
+  filter(
+    OETESTCD %in% c("VACSCORE")
+  ) %>%
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+```
 
-<!-- CDISC strongly recommends `CNSR = 0` for events and positive integers for -->
-<!-- censorings. `{admiral}`/`{admiralonco}` enforce this recommendation. Therefore the `censor` -->
-<!-- parameter is available for `admiral::censor_source()` only. It is defaulted to `1`. -->
+The next item of business is to derive `AVAL`, `AVALU`, and `DTYPE`. In this example, due to the small number of parameters their derivation is trivial.
 
-<!-- The `dataset_name` parameter expects a character value which is used as an -->
-<!-- identifier. The actual data which is used for the derivation of the parameter is -->
-<!-- provided via the `source_datasets` parameter of `admiral::derive_param_tte()`. It expects -->
-<!-- a named list of datasets. The names correspond to the identifiers specified for -->
-<!-- the `dataset_name` parameter. This allows to define events and censoring -->
-<!-- independent of the data. -->
+```{r}
+adbcva <- adbcva %>%
+  mutate(
+    AVAL = OESTRESN,
+    AVALU = "letters",
+    DTYPE = NA_character_
+  )
+```
 
-<!-- ### Pre-Defined Time-to-Event Source Objects -->
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged` from `{admiral}` and the lookup table `param_lookup` generated above.
 
-<!-- The table below shows all pre-defined `tte_source` objects which should cover the most -->
-<!-- common oncology use cases. -->
+```{r}
+adbcva <- adbcva %>%
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars = exprs(PARAM, PARAMCD),
+    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
+    filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
+  )
+```
 
-<!-- ```{r echo=FALSE} -->
-<!-- knitr::kable(list_tte_source_objects(package = "admiralonco")) -->
-<!-- ``` -->
+## Deriving LogMAR score parameters {#logmar}
 
-<!-- As mentioned in the introduction, each company would create their own version of this with -->
-<!-- the required filtering conditions and metadata as per your company approach. An example of -->
-<!-- a possible different approach could be as follows, where death is sourced from `ADSL`, -->
-<!-- instead of `ADRS`, and the given `EVNTDESC` is different. -->
+Often ADBCVA datasets contain derived records for BCVA in LogMAR units. This can easily be achieved as follows using `derive_param_computed`. The conversion of units is done using `convert_etdrs_to_logmar`. Two separate calls are required due to the parameters being split by study and fellow eye. Once these extra parameters are added, all the records that will be in the end dataset are now present, so `AVALC` and day/date variables such as `ADY` and `ADT` can be derived.
 
-<!-- ```{r, eval=FALSE} -->
-<!-- adsl_death_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   date = DTHDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "STUDY DEATH", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "DTHDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- ``` -->
+```{r}
+adbcva <- adbcva %>%
+  derive_param_computed(
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC), adsl_vars),
+    parameters = c("SBCVA"),
+    analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
+    set_values_to = exprs(
+      PARAMCD = "SBCVALOG",
+      PARAM = "Study Eye Visual Acuity LogMAR Score",
+      DTYPE = "DERIVED",
+      AVALU = "LogMAR"
+    )
+  ) %>%
+  derive_param_computed(
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC), adsl_vars),
+    parameters = c("FBCVA"),
+    analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
+    set_values_to = exprs(
+      PARAMCD = "FBCVALOG",
+      PARAM = "Fellow Eye Visual Acuity LogMAR Score",
+      DTYPE = "DERIVED",
+      AVALU = "LogMAR"
+    )
+  ) %>%
+  mutate(AVALC = as.character(AVAL)) %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = OEDTC,
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
+```
 
-<!-- An optional step at this stage would be required to enable derivation of duration of -->
-<!-- response: If using `ADRS` / `ADEVENT` parameters as input for any response dates -->
-<!-- (instead of a variable in `ADSL`) then you would need to use `admiral::derive_vars_merged()` -->
-<!-- to add the response date as a temporary variable (e.g. `TEMP_RESPDT`) to be able to feed -->
-<!-- into `admiral::derive_param_tte()` as the start date. You would also need to use this -->
-<!-- to filter the input datasets so as to only derive the records for responders. -->
-<!-- This could also be repeated as needed for IRF/BICR and confirmed responses. -->
+Importantly, the above calls to `derive_param_computed` list the SDTM variables `VISIT`, `VISITNUM`, `OEDY` and `OEDTC` as `by_vars` for the function. This is because they will be necessary to derive ADaM variables such as `AVISIT` and `ADY` in successive steps. Once all the ADaM variables which require them are derived, the SDTM variables should be set to missing for the derived records, as per ADaM standards:
 
-<!-- Here is an example of the code needed. -->
+```{r}
+adbcva <- adbcva %>%
+  mutate(
+    VISIT = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, VISIT),
+    VISITNUM = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, VISITNUM),
+    OEDY = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, OEDY),
+    OEDTC = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, OEDTC)
+  )
+```
 
-<!-- ```{r} -->
-<!-- adsl <- adsl %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adrs, -->
-<!--     filter_add = PARAMCD == "RSP" & AVALC == "Y" & ANL01FL == "Y", -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     new_vars = vars(TEMP_RESPDT = ADT) -->
-<!--   ) -->
-<!-- adrs <- adrs %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adsl, -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     new_vars = vars(TEMP_RESPDT) -->
-<!--   ) -->
-<!-- ``` -->
+## Further Derivations of Standard BDS Variables {#further}
 
-<!-- The pre-defined objects can be passed directly to `admiral::derive_param_tte()` to create -->
-<!-- a new time-to-event parameter. Below shows example calls for Overall Survival (OS), Progression -->
-<!-- Free Survival (PFS), and duration of response (as above, this is only derived for responder -->
-<!-- patients so we have to filter source datasets). Note that the reason for including a -->
-<!-- randomization date censor is to catch those patients that never have a tumor assessment. -->
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADBCVA. Henceforth, for the purposes of this article, the following sections use the ADBCVA dataset generated by the corresponding `{admiralophtha}` template program as a starting point.
 
-<!-- ```{r} -->
-<!-- adtte <- derive_param_tte( -->
-<!--   dataset_adsl = adsl, -->
-<!--   start_date = RANDDT, -->
-<!--   event_conditions = list(death_event), -->
-<!--   censor_conditions = list(lastalive_censor, rand_censor), -->
-<!--   source_datasets = list(adsl = adsl, adrs = adrs), -->
-<!--   set_values_to = vars(PARAMCD = "OS", PARAM = "Overall Survival") -->
-<!-- ) %>% -->
-<!--   derive_param_tte( -->
-<!--     dataset_adsl = adsl, -->
-<!--     start_date = RANDDT, -->
-<!--     event_conditions = list(pd_event, death_event), -->
-<!--     censor_conditions = list(lasta_censor, rand_censor), -->
-<!--     source_datasets = list(adsl = adsl, adrs = adrs), -->
-<!--     set_values_to = vars(PARAMCD = "PFS", PARAM = "Progression Free Survival") -->
-<!--   ) %>% -->
-<!--   derive_param_tte( -->
-<!--     dataset_adsl = adsl, -->
-<!--     start_date = TEMP_RESPDT, -->
-<!--     event_conditions = list(pd_event, death_event), -->
-<!--     censor_conditions = list(lasta_censor), -->
-<!--     source_datasets = list(adsl = filter(adsl, !is.na(TEMP_RESPDT)), adrs = filter(adrs, !is.na(TEMP_RESPDT))), -->
-<!--     set_values_to = vars(PARAMCD = "RSD", PARAM = "Duration of Response") -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte, -->
-<!--   display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR) -->
-<!-- ) -->
-<!-- ``` -->
+**Note**: This dataset already comes with some criterion flags and analysis value categorisation variables, so for illustration purposes these are removed.
 
-<!-- ### Creating Your Own Time-to-Event Source Objects -->
+```{r}
+data("adbcva")
 
-<!-- We advise you consult the `{admiral}` -->
-<!-- `r dyn_link("Creating a BDS Time-to-Event ADaM vignette", admiral_homepage, "articles/bds_tte.html")` -->
-<!-- for further guidance on the different options available and more examples. -->
+adbcva <- adbcva %>%
+  select(-starts_with("CRIT"), -starts_with("AVALCA"))
+```
 
-<!-- One extra common oncology case we include here is around PFS when censoring -->
-<!-- at new anti-cancer therapy. This could either be controlled using `ANLzzFL` as -->
-<!-- explained in the ADRS vignette, so that records after new anti-cancer therapy -->
-<!-- never contribute to the PD and DEATH parameters. Or alternatively you can control -->
-<!-- this on the ADTTE side by filtering which records are used in -->
-<!-- `admiral::event_source()` and `admiral::censor_source()`, e.g. for PD or death -->
-<!-- event date we can use `filter` argument to exclude events occurring after new -->
-<!-- anti-cancer therapy. -->
+## Deriving Analysis Value Categories for Snellen Scores] {#avalcats}
+Some opthalmology studies may desire to subdivide BCVA records according to which Snellen category they fall into (eg, 20/320, 20/100, 20/20 etc). This is best done through the use of `AVALCATx`/`AVALCAxN` variable pairs. Currently, `{admiralophtha}` does not provide specific functionality to create `AVALCATx`/`AVALCAxN` pairs, although this may be included in future releases of the package. With the current toolset, the suggested approach to derive such variables is to:
 
-<!-- The censor could be set as whichever date your analysis requires, -->
-<!-- e.g. date of last tumor assessment prior to new anti-cancer therapy or last -->
-<!-- radiological assessment. If you pass multiple censor dates then remember the -->
-<!-- function will choose the latest occurring of these, so be cautious here if -->
-<!-- feeding in say one censor date for last assessment prior to new anti-cancer -->
-<!-- therapy and one for last assessment - as the function would choose the maximum of -->
-<!-- these which in this case would be incorrect. The easiest solution here would be -->
-<!-- to pass in one censor date as the date of last assessment prior to new -->
-<!-- anti-cancer therapy or date of last assessment **if no new anti-cancer therapy**. -->
-<!-- If you wanted to use different censor dates which could have different `CNSDTDSC` -->
-<!-- values, then you'd need to ensure only one is set per patient. -->
+* Create a lookup table which assigns numeric equivalents (i.e. `AVALCAxN`) to Snellen categories.
+* Create a format function to map each `AVAL` to a numeric category.
+* Add `AVALCAxN` through a mutate statement using the format function.
+* Add `AVALCATx` using derive_vars_merged in combination with the lookup table.
 
-<!-- This case is demonstrated in the below example (where `NACTDT` would be -->
-<!-- pre-derived as first date of new anti-cancer therapy, and `LASTANDT` as the -->
-<!-- single tumor assessment censor date as described above). -->
+```{r}
+avalcat_lookup <- tibble::tribble(
+  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
+  "SBCVA", 1000, "< 20/800",
+  "SBCVA", 800, "20/800",
+  "SBCVA", 640, "20/640",
+  "SBCVA", 500, "20/500",
+  "SBCVA", 400, "20/400",
+  "SBCVA", 320, "20/320",
+  "SBCVA", 250, "20/250",
+  "SBCVA", 200, "20/200",
+  "SBCVA", 160, "20/160",
+  "SBCVA", 125, "20/125",
+  "SBCVA", 100, "20/100",
+  "SBCVA", 80, "20/80",
+  "SBCVA", 63, "20/63",
+  "SBCVA", 50, "20/50",
+  "SBCVA", 40, "20/40",
+  "SBCVA", 32, "20/32",
+  "SBCVA", 25, "20/25",
+  "SBCVA", 20, "20/20",
+  "SBCVA", 16, "20/16",
+  "SBCVA", 12, "20/12",
+  "SBCVA", 1, "> 20/12",
+)
 
-<!-- ```{r, eval=FALSE} -->
-<!-- pd_nact_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   filter = PDDT < NACTDT | is.na(NACTDT), -->
-<!--   date = PDDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Disease Progression prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "PDDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- death_nact_event <- event_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   filter = DTHDT < NACTDT | is.na(NACTDT), -->
-<!--   date = DTHDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Death prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "DTHDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- lasta_nact_censor <- censor_source( -->
-<!--   dataset_name = "adsl", -->
-<!--   date = LASTANDT, -->
-<!--   set_values_to = vars( -->
-<!--     EVNTDESC = "Last Tumor Assessment prior to NACT", -->
-<!--     CNSDTDSC = "Last Tumor Assessment prior to NACT", -->
-<!--     SRCDOM = "ADSL", -->
-<!--     SRCVAR = "LASTANDT" -->
-<!--   ) -->
-<!-- ) -->
-<!-- adtte <- derive_param_tte( -->
-<!--   dataset_adsl = adsl, -->
-<!--   start_date = RANDDT, -->
-<!--   event_conditions = list(pd_nact_event, death_nact_event), -->
-<!--   censor_conditions = list(lasta_nact_censor, rand_censor), -->
-<!--   source_datasets = list(adsl = adsl), -->
-<!--   set_values_to = vars(PARAMCD = "PFSNACT", PARAM = "Progression Free Survival prior to NACT") -->
-<!-- ) -->
-<!-- ``` -->
+avalcat_lookup <- avalcat_lookup %>%
+  mutate(PARAMCD = "FBCVA") %>%
+  rbind(avalcat_lookup)
 
-<!-- ## Derive Analysis Value (`AVAL`) {#aval} -->
+format_avalcat1n <- function(param, aval) {
+  case_when(
+    param %in% c("SBCVA", "FBCVA") & aval >= 0 & aval <= 3 ~ 1000,
+    param %in% c("SBCVA", "FBCVA") & aval >= 4 & aval <= 8 ~ 800,
+    param %in% c("SBCVA", "FBCVA") & aval >= 9 & aval <= 13 ~ 640,
+    param %in% c("SBCVA", "FBCVA") & aval >= 14 & aval <= 18 ~ 500,
+    param %in% c("SBCVA", "FBCVA") & aval >= 19 & aval <= 23 ~ 400,
+    param %in% c("SBCVA", "FBCVA") & aval >= 24 & aval <= 28 ~ 320,
+    param %in% c("SBCVA", "FBCVA") & aval >= 29 & aval <= 33 ~ 250,
+    param %in% c("SBCVA", "FBCVA") & aval >= 34 & aval <= 38 ~ 200,
+    param %in% c("SBCVA", "FBCVA") & aval >= 39 & aval <= 43 ~ 160,
+    param %in% c("SBCVA", "FBCVA") & aval >= 44 & aval <= 48 ~ 125,
+    param %in% c("SBCVA", "FBCVA") & aval >= 49 & aval <= 53 ~ 100,
+    param %in% c("SBCVA", "FBCVA") & aval >= 54 & aval <= 58 ~ 80,
+    param %in% c("SBCVA", "FBCVA") & aval >= 59 & aval <= 63 ~ 63,
+    param %in% c("SBCVA", "FBCVA") & aval >= 64 & aval <= 68 ~ 50,
+    param %in% c("SBCVA", "FBCVA") & aval >= 69 & aval <= 73 ~ 40,
+    param %in% c("SBCVA", "FBCVA") & aval >= 74 & aval <= 78 ~ 32,
+    param %in% c("SBCVA", "FBCVA") & aval >= 79 & aval <= 83 ~ 25,
+    param %in% c("SBCVA", "FBCVA") & aval >= 84 & aval <= 88 ~ 20,
+    param %in% c("SBCVA", "FBCVA") & aval >= 89 & aval <= 93 ~ 16,
+    param %in% c("SBCVA", "FBCVA") & aval >= 94 & aval <= 97 ~ 12,
+    param %in% c("SBCVA", "FBCVA") & aval >= 98 ~ 1
+  )
+}
 
-<!-- The analysis value (`AVAL`) can be derived by calling `admiral::derive_vars_duration()`. -->
+adbcva <- adbcva %>%
+  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
+  derive_vars_merged(
+    avalcat_lookup,
+    by = exprs(PARAMCD, AVALCA1N)
+  )
+```
 
-<!-- This example derives the time to event in days.  -->
+The resulting output is shown below (limited to the first patient only):
 
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_vars_duration( -->
-<!--     new_var = AVAL, -->
-<!--     start_date = STARTDT, -->
-<!--     end_date = ADT -->
-<!--   ) -->
-<!-- ``` -->
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adbcva %>% filter(USUBJID == "01-701-1015"),
+  display_vars = exprs(
+    USUBJID, PARAMCD, AVAL, AVALCAT1, AVALCA1N
+  )
+)
+```
+## Deriving Criterion Flags for BCVA Change {#critflags}
 
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte -->
-<!-- ) -->
-<!-- ``` -->
+`{admiralophtha}` suggests the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between x and y letters* (relative to baseline or other basetypes). The package provides the function `derive_var_bcvacritxfl` to program these endpoints efficiently and consistently. In terms of the logic to apply to the variable `CHG`, the endpoints fall into three classes, which can be represented by inequalities:
 
-<!-- Other time units, such as months that we commonly see in oncology analyses, can be requested -->
-<!-- by specifying the `out_unit` parameter. See the example below. Note that because of the underlying -->
-<!-- `lubridate::time_length()` function that is used here this may perform slightly differently to -->
-<!-- your expectations, e.g. both `time_length(ymd("2021-01-01") %--% ymd("2021-02-01"), "month")` -->
-<!-- and `time_length(ymd("2021-02-01") %--% ymd("2021-03-01"), "month")` results in exactly 1 month, -->
-<!-- which is a logical approach but it gives a different result to the convention of assuming every -->
-<!-- month has exactly equal days and just using `/30.4375` here or some other such convention. The -->
-<!-- difference would only be noticed for small durations, but if the user prefers an alternative -->
-<!-- approach they could calculate in the default days and then add extra processing to convert to months -->
-<!-- with their company-specific convention. -->
+* Class 1: `CHG` value lying inside a range, `a <= CHG <= b`.
+* Class 2: `CHG` value below an upper limit, `CHG <= a`.
+* Class 3: `CHG` value above a lower limit, `CHG => b`.
 
-<!-- ```{r, eval=FALSE} -->
-<!-- adtte_months <- adtte %>% -->
-<!--   derive_vars_duration( -->
-<!--     new_var = AVAL, -->
-<!--     start_date = STARTDT, -->
-<!--     end_date = ADT, -->
-<!--     out_unit = "months" -->
-<!--   ) -->
-<!-- ``` -->
+By using `derive_var_bcvacritxfl`, the ADaM programmer can implement all three types of endpoint at once. This is achieved by feeding the appropriate ranges, upper limits and lower limits to the `bcva_ranges`, `bcva_uplims` and `bcva_lowlims` arguments of the function. For instance, let's suppose that the endpoints of interest are:
 
-<!-- ## Derive Analysis Sequence Number (`ASEQ`) {#aseq} -->
+* *Gain of between 5 and 10 letters relative to baseline* (Class 1: `5 <= CHG <= 10`)
+* *Gain of 25 letters or fewer relative to baseline* (Class 2: `CHG <= 25`)
+* *Loss of 5 letters or more relative to baseline* (Class 2: `CHG <= -5`)
+* *Gain of 15 letters or more relative to baseline* (Class 3: `CHG >= 15`)
+* *Loss of 10 letters or fewer relative to baseline* (Class 3: `CHG >= -10`).
 
-<!-- The `{admiral}` function `admiral::derive_var_obs_number()` can be used to derive `ASEQ`: -->
+Then, the following call will implement criterion variable/flag pairs for the endpoints above. The `CRITx` variables will automatically encode the correct inequality.
 
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_var_obs_number( -->
-<!--     by_vars = vars(STUDYID, USUBJID), -->
-<!--     order = vars(PARAMCD), -->
-<!--     check_type = "error" -->
-<!--   ) -->
-<!-- ``` -->
+```{r}
+adbcva <- adbcva %>% derive_var_bcvacritxfl(
+  paramcds = c("SBCVA", "FBCVA"),
+  bcva_ranges = list(c(5, 10)),
+  bcva_uplims = list(25, -5),
+  bcva_lowlims = list(15, -10)
+)
+```
 
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette(adtte) -->
-<!-- ``` -->
+The resulting output is shown below (limited to the first patient only):
 
-<!-- ## Add ADSL Variables {#adslvars} -->
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adbcva %>% filter(USUBJID == "01-701-1015"),
+  display_vars = exprs(
+    USUBJID, PARAMCD, AVAL, CHG, CRIT1, CRIT1FL, CRIT2, CRIT2FL, CRIT3, CRIT3FL, CRIT4, CRIT4FL, CRIT5, CRIT5FL
+  )
+)
+```
 
-<!-- Variables from ADSL which are required for time-to-event analyses, e.g., -->
-<!-- treatment variables or covariates can be added using `admiral::derive_vars_merged()`. -->
+It is also possible to assign significance to the "x" in `CRITxFL`. For instance, one could designate all criterion flags of Class 1 as `CRIT1yFL`, Class 2 as `CRIT2yFL`, and Class 3 as `CRIT3yFL`. The argument `critxfl_index` allows a simple implementation of this in conjunction with three separate calls to `derive_var_bcvacritxfl`:
 
-<!-- ```{r eval=TRUE} -->
-<!-- adtte <- adtte %>% -->
-<!--   derive_vars_merged( -->
-<!--     dataset_add = adsl, -->
-<!--     new_vars = vars(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX), -->
-<!--     by_vars = vars(STUDYID, USUBJID) -->
-<!--   ) -->
-<!-- ``` -->
+```{r}
+adbcva <- adbcva %>%
+  derive_var_bcvacritxfl(
+    paramcds = c("SBCVA", "FBCVA"),
+    bcva_ranges = list(c(5, 10)),
+    critxfl_index = 10
+  ) %>%
+  derive_var_bcvacritxfl(
+    paramcds = c("SBCVA", "FBCVA"),
+    bcva_uplims = list(25, -5),
+    critxfl_index = 20
+  ) %>%
+  derive_var_bcvacritxfl(
+    paramcds = c("SBCVA", "FBCVA"),
+    bcva_lowlims = list(15, -10),
+    critxfl_index = 30
+  )
+```
 
-<!-- ```{r, echo=FALSE} -->
-<!-- dataset_vignette( -->
-<!--   adtte, -->
-<!--   display_vars = vars(USUBJID, PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX) -->
-<!-- ) -->
-<!-- ``` -->
+## Additional Notes
 
-<!-- # Example Script {#example} -->
+* When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
 
-<!-- ADaM | Sample Code -->
-<!-- ---- | -------------- -->
-<!-- ADTTE | `r dyn_link("ad_adtte.R", "https://github.com/pharmaverse/admiralonco/blob", "inst/templates/ad_adtte.R", is_multiversion = TRUE)` -->
+## Example Script {#example}
+
+ADaM | Sample Code 
+ ---- | -------------- 
+ADBCVA | `r dyn_link("ad_adbcva.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adbcva.R", is_multiversion = TRUE)`
+
