@@ -16,7 +16,7 @@ Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/mai
 ## Purpose
 
 To provide a complementary (to `{admiral}`) toolbox that enables users
-to develop ophthalmology disease area data sets and endpoints.
+to develop ophthalmology disease area datasets and endpoints.
 
 ## Installation
 
@@ -26,7 +26,7 @@ GitHub use the following code:
     if (!requireNamespace("remotes", quietly = TRUE)) {
       install.packages("remotes")
     }
-    remotes::install_github("pharmaverse/admiraloptha", ref = "devel")
+    remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
 
 ## Scope
 
@@ -67,5 +67,5 @@ developer community:
 
 ## Release Schedule
 
--   The first release of V0.1.0 is on 2023 March 13th.
+-   The first release (v. 0.1.0) came out on 13th March 2023.
 -   The second release will be in Q3 of 2023.
