@@ -9,7 +9,7 @@ library(admiral.test)
 admiralophtha_ex <- admiral_dm %>%
   # Start by merging on admiralophtha_dm to use the SUBJID variable
   select(USUBJID, SUBJID) %>%
-  right_join(admiral_ex, by = c("USUBJID")) %>%
+  right_join(admiral_ex, by = c("USUBJID"), multiple = "all") %>%
   # Create EXLOC & EXLAT, change EXROUTE & EXDOSFRM to something eye-related
   mutate(
     EXLOC = "EYE",
@@ -34,4 +34,4 @@ attr(admiralophtha_ex$EXDOSFRM, "label") <- "Dose Form"
 attr(admiralophtha_ex$EXDOSFRQ, "label") <- "Dose Frequency per Interval"
 
 # Save Dataset
-saveRDS(admiralophtha_ex, "inst/extdata/admiralophtha_ex.RDS")
+save(admiralophtha_ex, file = file.path("data", "admiralophtha_ex.rda"), compress = "bzip2")
