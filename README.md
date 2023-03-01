@@ -16,7 +16,7 @@ Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/mai
 ## Purpose
 
 To provide a complementary (to `{admiral}`) toolbox that enables users
-to develop ophthalmology disease area specifics.
+to develop ophthalmology disease area data sets and endpoints.
 
 ## Installation
 
@@ -34,12 +34,6 @@ GitHub use the following code:
     Ophthalmology-specific ADaM datasets in R in a modular manner.
 -   All functions are created based upon the ADaM Implementation Guide
     and aim to facilitate the programming of ADaM dataset standards.
-
-## Expectations
-
-`{admiralophtha}` is expected to complement `{admiral}` and provide
-functions to help with the creation of the endpoints required for
-ophthalmology ADaMs.
 
 ## References and Documentation
 
@@ -73,4 +67,5 @@ developer community:
 
 ## Release Schedule
 
-To be decided
+-   The first release of V0.1.0 is on 2023 March 13th.
+-   The second release will be in Q3 of 2023.
