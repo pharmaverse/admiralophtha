@@ -16,6 +16,11 @@ Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/mai
 
 <!-- badges: end -->
 
+## Purpose
+
+To provide a complementary (to `{admiral}`) toolbox that enables users
+to develop ophthalmology disease area datasets and endpoints.
+
 ## Installation
 
 To install the latest development version of the package directly from
@@ -25,7 +30,7 @@ GitHub use the following code:
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
-remotes::install_github("pharmaverse/admiraloptha", ref = "devel")
+remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
 ```
 
 ## Scope
@@ -34,12 +39,6 @@ remotes::install_github("pharmaverse/admiraloptha", ref = "devel")
   Ophthalmology-specific ADaM datasets in R in a modular manner.
 * All functions are created based upon the ADaM Implementation Guide
   and aim to facilitate the programming of ADaM dataset standards.
-
-## Expectations
-
-`{admiralophtha}` is expected to complement `{admiral}` and provide
-functions to help with the creation of the endpoints required for
-ophthalmology ADaMs.
 
 ## References and Documentation
 
@@ -73,4 +72,5 @@ developer community:
 
 ## Release Schedule
 
-To be decided
+* The first release (v. 0.1.0) came out on 13th March 2023.
+* The second release will be in Q3 of 2023.

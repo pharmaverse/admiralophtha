@@ -198,7 +198,9 @@ adoe <- adoe %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
+admiralophtha_adoe <- adoe
+
 # ---- Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adoe, file = file.path(dir, "adoe.rda"), compress = "bzip2")
+save(admiralophtha_adoe, file = file.path(dir, "admiralophtha_adoe.rda"), compress = "bzip2")
