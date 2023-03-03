@@ -46,10 +46,14 @@ library(admiraldev)
 # Introduction
 
 This article describes creating an `ADVFQ` ADaM with Visual Functioning Questionnaire
-data for ophthalmology endpoints.
+data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are absent, and the user is invited to consult the aforementioned article for guidance.
 
  **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
  otherwise specified.* 
+
+## Dataset Contents
+
+`{admiralophtha}` suggests to populate ADVFQ solely with VFQ records from the QS SDTM. Any other questionnaire data should be placed in separate datasets (e.g. ADQS).
 
 ## Required Packages
 
@@ -62,61 +66,28 @@ library(admiral.test)
 
 # Programming Workflow
 
-* [Read in Data](#readdata) 
-* [Derive Dates (`ADT` `ADY`)](#dates)
-* [Define Parameters in lookup table](#parameters1)
+* [Initial set up of ADVFQ](#setup) 
 * [Derive Analysis Value for existing questions (`AVAL`)](#aval)
 * [Derive Parameters for recoded items and summary scores](#parameters) 
-* [Derive Analysis Visit (`AVISIT`)](#avisit)
-* [Derive Baseline variables (`ABLFL` `BASE` `CHG` `PCHG`)](#baseline)
 * [Derive Analysis Variables (`ANL01FL` `ASEQ`)](#analysis)
 * [Add ADSL Variables](#adslvars) 
 * [Example Script](#example) 
 
-## Read in Data {#readdata}
+## Initial set up of ADVFQ {#setup}
 
 To start, all datasets needed for the creation of the questionnaire dataset
-should be read into the environment. This will be a company specific process.
-
-For example purpose, the ADaM datasets---which are included
-in `{admiral}` and `{admiralophtha}`---are used.
+should be read into the environment. For the purpose of demonstration we shall use the `{admiral}` QS and ADSL test data.
+The QS dataset is filtered to the VFQ parameters of interest.
 
 ```{r} 
 data("admiral_adsl")
 data("admiral_qs")
 adsl <- admiral_adsl
 qs <- admiral_qs
-```
 
-## Derive Dates {#dates}
-
-To derive the date variables `ADT`, `ADY`,
-... the `admiral::derive_vars_dt()` function and the `admiral::derive_vars_dy()` function can be
-used. This function allows the user to impute the date as well.
-
-```{r, eval=FALSE} 
 qs <- qs %>% filter(QSTESTCD %in% c("VFQ1", "VFQ2", "VFQ3", "VFQ4"))
-
-adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
-
-advfq <- derive_vars_merged(
-  qs,
-  dataset_add = adsl,
-  new_vars = adsl_vars,
-  by_vars = exprs(STUDYID, USUBJID)
-) %>%
-  ## Calculate ADT, ADY ----
-  derive_vars_dt(
-    new_vars_prefix = "A",
-    dtc = QSDTC
-  ) %>%
-  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 ```
-
-## Derive Parameters in lookup table {#parameters1}
- 
-Create a parameter lookup table which includes `QSTESTCD`, `PARAMCD`, `PARAM`, `PARCAT1` and `PARCAT2`.
-This should include all parameters that will be needed in the final `ADVFQ`. This will be used later to merge Parameter information.
+Next, the programmer should create a parameter lookup table which includes `QSTESTCD`, `PARAMCD`, `PARAM`, `PARCAT1` and `PARCAT2` variables. This should include all parameters that will be needed in the final `ADVFQ` and will be used later to merge parameter information.
 
 ```{r, eval=FALSE} 
 param_lookup <- tibble::tribble(
@@ -134,11 +105,22 @@ param_lookup <- tibble::tribble(
   "QBCSCORE", "QBCSCORE", "Composite Score", "NEI VFQ-25", "Averaged Result"
 )
 ```
-## Derive Analysis Value for existing questions {#aval}
+Now the ADVFQ dataset can be constructed, merging the filtered QS dataset with ADSL. This is necessary because treatment start date `TRTSDT` is a prerequisite for the derivation of variables such as Analysis Day `ADY` which can be programmed by following the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html).
+```{r, eval=FALSE}
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
-To derive the analysis values we use the function `admiral::derive_vars_merged_lookup()` which merges on PARAMCD from the Parameter lookup table.
+advfq <- derive_vars_merged(
+  qs,
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by_vars = exprs(STUDYID, USUBJID)
+)
+```
 
-This merges on the parameter by QSTESCD and assigns AVAL and AVALC.
+## Derive Analysis Value for Existing Questions {#aval}
+
+To derive the analysis values we use the function `admiral::derive_vars_merged_lookup()` which merges on `PARAMCD` from the parameter lookup table.
+This merges on the parameter by `QSTESTCD` and assigns `AVAL` and `AVALC`.
 
 ```{r, eval=FALSE}
 advfq <- advfq %>%
@@ -155,9 +137,9 @@ advfq <- advfq %>%
   )
 ```
 
-## Derive Parameters for recoded items and summary scores {#parameters}
+## Derive Parameters for Recoded Items and Summary Scores {#parameters}
 
-Creates new parameters as new records for recoded existing parameters. 
+Once we have included the initial records from QS, the programmer should next program new records for parameters which recode the original questions. 
 Run this section of code for every question that you need recoding. This gives an example of recoding one question.
 
 ```{r, eval=FALSE}
@@ -169,7 +151,7 @@ Run this section of code for every question that you need recoding. This gives a
 # else set to 0 if [advfq.AVAL] = 5
 advfq <- advfq %>%
   derive_summary_records(
-    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
+    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT),
     filter = QSTESTCD == "VFQ1" & !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = identity,
@@ -187,7 +169,7 @@ advfq <- advfq %>%
   ))
 ```
 
-To create summary records as average of recoded questions. This example uses two of the recoded questions.
+Next, the programmer should create summary records as average of recoded questions using `admiral::derive_summary_records`. This example uses two of the recoded questions to create an average record.
 
 ```{r, eval=FALSE}
 ## Derive a new record as a summary record  ----
@@ -203,63 +185,6 @@ advfq <- advfq %>%
   )
 ```
 
-## Derive Analysis Visit {#avisit}
-
-Derives AVISIT and AVISITN based on VISIT. See also the [`Visit and Period Variables`](https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits) vignette. 
-
-
-```{r, eval=FALSE}
-advfq <- advfq %>%
-  # Derive Timing
-  mutate(
-    AVISIT = case_when(
-      str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
-      # If VISIT=DAY 1 then set to Baseline, study specific
-      str_detect(VISIT, "DAY 1") ~ "Baseline",
-      !is.na(VISIT) ~ str_to_title(VISIT),
-      TRUE ~ NA_character_
-    ),
-    AVISITN = as.numeric(case_when(
-      VISIT == "BASELINE" ~ "0",
-      str_detect(VISIT, "WEEK") ~ str_trim(str_replace(VISIT, "WEEK", "")),
-      TRUE ~ NA_character_
-    ))
-  )
-```
-
-## Derive Baseline variables {#baseline}
-
-Here we derive ABLFL, BASE, CHG and PCHG variables.
-
-```{r, eval=FALSE}
-## Derive baseline flags ----
-advfq <- advfq %>%
-  # Calculate ABLFL
-  restrict_derivation(
-    derivation = derive_var_extreme_flag,
-    args = params(
-      by_vars = exprs(STUDYID, USUBJID, PARAMCD),
-      order = exprs(ADT, VISITNUM, QSSEQ),
-      new_var = ABLFL,
-      mode = "last"
-    ),
-    filter = (!is.na(AVAL) &
-      ADT <= TRTSDT)
-  )
-
-## Derive baseline information ----
-advfq <- advfq %>%
-  # Calculate BASE
-  derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD),
-    source_var = AVAL,
-    new_var = BASE
-  ) %>%
-  # Calculate CHG
-  derive_var_chg() %>%
-  # Calculate PCHG
-  derive_var_pchg()
-```
 ## Derive Analysis Variables {#analysis}
 
 In most finding ADaMs, an analysis flag is derived to identify the appropriate observation(s) to use for a particular analysis when a subject has multiple observations within a particular timing period.
@@ -283,7 +208,7 @@ advfq <- advfq %>%
   )
 ```
 
-We then derive ASEQ using `admiral::derive_var_obs_number()` based on the observation number within the dataset, additionally merge on `PARAM`, `PARCAT1` and `PARCAT2` using the earlier lookup table.
+We then derive `ASEQ` using `admiral::derive_var_obs_number()` based on the observation number within the dataset, additionally merge on `PARAM`, `PARCAT1` and `PARCAT2` using the earlier lookup table.
 
 ```{r, eval=FALSE}
 ## Get ASEQ and PARAM  ----
@@ -300,7 +225,7 @@ advfq <- advfq %>%
 ```
 ## Add ADSL Variables {#adslvars} 
 
-Variables from ADSL which are required.
+Once analysis variables have been programmed, variables from ADSL which are required should be merged on to the dataset using `admiral::derive_vars_merged`.
 
 ```{r, eval=FALSE}
 # Add all ADSL variables
