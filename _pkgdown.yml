@@ -8,7 +8,7 @@ search:
   exclude: ['news/index.html']
 repo:
   url:
-    home: https://github.com/pharmaverse/admiralophtha
+    home: https://github.com/pharmaverse/admiralophtha/main
     source: https://github.com/pharmaverse/admiralophtha/blob/main/
     issue: https://github.com/pharmaverse/admiralophtha/issues/
     user: https://github.com/
