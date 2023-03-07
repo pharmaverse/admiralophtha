@@ -40,7 +40,6 @@ dyn_link <- function(text,
 }
 # Other variables
 admiral_homepage <- "https://pharmaverse.github.io/admiral"
-library(admiraldev)
 ```
 
 # Introduction
@@ -60,8 +59,11 @@ data for ophthalmology endpoints. It is to be used in conjunction with the artic
 The examples of this vignette require the following packages.
 
 ```{r, warning=FALSE, message=FALSE}
+library(dplyr)
 library(admiral)
 library(admiral.test)
+library(admiraldev)
+library(admiralophtha)
 ```
 
 # Programming Workflow
