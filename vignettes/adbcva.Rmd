@@ -69,7 +69,7 @@ library(admiralophtha)
 # Programming Workflow
 
 * [Initial Set Up of ADBCVA ](#setup)
-* [Deriving LogMAR score parameters](#logmar)
+* [Deriving LogMAR Score Parameters](#logmar)
 * [Further Derivations of Standard BDS Variables](#further)
 * [Deriving Analysis Value Categories for Snellen Scores](#avalcats)
 * [Deriving Criterion Flags for BCVA Change](#critflags)
@@ -144,7 +144,7 @@ adbcva <- adbcva %>%
   )
 ```
 
-## Deriving LogMAR score parameters {#logmar}
+## Deriving LogMAR Score Parameters {#logmar}
 
 Often ADBCVA datasets contain derived records for BCVA in LogMAR units. This can easily be achieved as follows using `derive_param_computed`. The conversion of units is done using `convert_etdrs_to_logmar`. Two separate calls are required due to the parameters being split by study and fellow eye. Once these extra parameters are added, all the records that will be in the end dataset are now present, so `AVALC` and day/date variables such as `ADY` and `ADT` can be derived.
 
@@ -206,7 +206,7 @@ adbcva <- admiralophtha_adbcva %>%
   select(-starts_with("CRIT"), -starts_with("AVALCA"))
 ```
 
-## Deriving Analysis Value Categories for Snellen Scores] {#avalcats}
+## Deriving Analysis Value Categories for Snellen Scores {#avalcats}
 Some ophthalmology studies may desire to subdivide BCVA records according to which Snellen category they fall into (eg, 20/320, 20/100, 20/20 etc). This is best done through the use of `AVALCATx`/`AVALCAxN` variable pairs. Currently, `{admiralophtha}` does not provide specific functionality to create `AVALCATx`/`AVALCAxN` pairs, although this may be included in future releases of the package. With the current toolset, the suggested approach to derive such variables is to:
 
 * Create a lookup table which assigns numeric equivalents (i.e. `AVALCAxN`) to Snellen categories.

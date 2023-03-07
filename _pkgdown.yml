@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiralophtha
+url: https://pharmaverse.github.io/admiralophtha/main
 
 template:
   bootstrap: 5
@@ -8,7 +8,7 @@ search:
   exclude: ['news/index.html']
 repo:
   url:
-    home: https://github.com/pharmaverse/admiralophtha
+    home: https://github.com/pharmaverse/admiralophtha/main
     source: https://github.com/pharmaverse/admiralophtha/blob/main/
     issue: https://github.com/pharmaverse/admiralophtha/issues/
     user: https://github.com/
@@ -101,6 +101,8 @@ navbar:
     articles:
       text: User Guides
       menu:
+      - text: Ophthalomology Standards
+        href: articles/standards.html
       - text: Creating ADOE
         href: articles/adoe.html
       - text: Creating ADBCVA
