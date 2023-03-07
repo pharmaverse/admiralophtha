@@ -74,7 +74,7 @@ Nandini
 Occurence
 PARAMCD
 PCHG
-QSTESCD
+QSTESTCD
 SCTESTCD
 SDTM
 STUDYEYE
@@ -96,3 +96,4 @@ EXLAT
 EXLOC
 Snellen
 toolset
+lookup
