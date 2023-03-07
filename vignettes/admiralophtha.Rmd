@@ -49,8 +49,28 @@ guide. This extension package follows the same main idea and conventions, and re
 functions from `{admiral}`, so it is important to thoroughly understand these to be able to
 use `{admiralophtha}`.
 
-This article is in the process of being written. Please use the `{admiralonco}` "Get Started" 
-page (commented out at the moment) as a basis.
+# Derivations
+
+The most important functions in `{admiralophtha}` are the
+[derivations](../reference/index.html). Again these follow the same
+conventions as `{admiral}` but are focused to ophthalmology-specific needs.
+
+# Starting a Script
+
+For the ophthalmology ADaM data structures, an overview of the flow and example function calls
+for the most common steps are provided by the following vignettes:
+
+- [Creating ADBCVA](adbcva.html)
+- [Creating ADOE](adoe.html)
+- [Creating ADVFQ](advfq.html)
+
+# Support
+
+Support is provided via the [admiral Slack
+channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
+
+<!-- This article is in the process of being written. Please use the `{admiralonco}` "Get Started"  -->
+<!-- page (commented out at the moment) as a basis. -->
 
 <!-- # Derivations -->
 
