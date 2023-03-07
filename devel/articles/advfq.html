@@ -60,13 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -102,70 +95,49 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This article describes creating an <code>ADVFQ</code> ADaM with Visual Functioning Questionnaire data for ophthalmology endpoints.</p>
+<p>This article describes creating an <code>ADVFQ</code> ADaM with Visual Functioning Questionnaire data for ophthalmology endpoints. It is to be used in conjunction with the article on <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html" class="external-link">creating a BDS dataset from SDTM</a>. As such, derivations and processes that are not specific to ADVFQ are absent, and the user is invited to consult the aforementioned article for guidance.</p>
 <p><strong>Note</strong>: <em>All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.</em></p>
+<div class="section level3">
+<h3 id="dataset-contents">Dataset Contents<a class="anchor" aria-label="anchor" href="#dataset-contents"></a>
+</h3>
+<p><a href="https://pharmaverse.github.io/admiralophtha" class="external-link">admiralophtha</a> suggests to populate ADVFQ solely with VFQ records from the QS SDTM. Any other questionnaire data should be placed in separate datasets (e.g. ADQS).</p>
+</div>
 <div class="section level3">
 <h3 id="required-packages">Required Packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
 </h3>
 <p>The examples of this vignette require the following packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">admiraldev</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiralophtha" class="external-link">admiralophtha</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="programming-workflow">Programming Workflow<a class="anchor" aria-label="anchor" href="#programming-workflow"></a>
 </h2>
 <ul>
-<li><a href="#readdata">Read in Data</a></li>
-<li><a href="#dates">Derive Dates (<code>ADT</code> <code>ADY</code>)</a></li>
-<li><a href="#parameters1">Define Parameters in lookup table</a></li>
+<li><a href="#setup">Initial set up of ADVFQ</a></li>
 <li><a href="#aval">Derive Analysis Value for existing questions (<code>AVAL</code>)</a></li>
 <li><a href="#parameters">Derive Parameters for recoded items and summary scores</a></li>
-<li><a href="#avisit">Derive Analysis Visit (<code>AVISIT</code>)</a></li>
-<li><a href="#baseline">Derive Baseline variables (<code>ABLFL</code> <code>BASE</code> <code>CHG</code> <code>PCHG</code>)</a></li>
 <li><a href="#analysis">Derive Analysis Variables (<code>ANL01FL</code> <code>ASEQ</code>)</a></li>
 <li><a href="#adslvars">Add ADSL Variables</a></li>
 <li><a href="#example">Example Script</a></li>
 </ul>
 <div class="section level3">
-<h3 id="readdata">Read in Data<a class="anchor" aria-label="anchor" href="#readdata"></a>
+<h3 id="setup">Initial set up of ADVFQ<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h3>
-<p>To start, all datasets needed for the creation of the questionnaire dataset should be read into the environment. This will be a company specific process.</p>
-<p>For example purpose, the ADaM datasets—which are included in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and <a href="https://pharmaverse.github.io/admiralophtha" class="external-link">admiralophtha</a>—are used.</p>
+<p>To start, all datasets needed for the creation of the questionnaire dataset should be read into the environment. For the purpose of demonstration we shall use the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> QS and ADSL test data. The QS dataset is filtered to the VFQ parameters of interest.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_qs"</span><span class="op">)</span></span>
 <span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">admiral_adsl</span></span>
-<span><span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">admiral_qs</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="dates">Derive Dates<a class="anchor" aria-label="anchor" href="#dates"></a>
-</h3>
-<p>To derive the date variables <code>ADT</code>, <code>ADY</code>, … the <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dt.html" class="external-link">admiral::derive_vars_dt()</a></code> function and the <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dy.html" class="external-link">admiral::derive_vars_dy()</a></code> function can be used. This function allows the user to impute the date as well.</p>
+<span><span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">admiral_qs</span></span>
+<span></span>
+<span><span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">qs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">QSTESTCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VFQ1"</span>, <span class="st">"VFQ2"</span>, <span class="st">"VFQ3"</span>, <span class="st">"VFQ4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Next, the programmer should create a parameter lookup table which includes <code>QSTESTCD</code>, <code>PARAMCD</code>, <code>PARAM</code>, <code>PARCAT1</code> and <code>PARCAT2</code> variables. This should include all parameters that will be needed in the final <code>ADVFQ</code> and will be used later to merge parameter information.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">qs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">QSTESTCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VFQ1"</span>, <span class="st">"VFQ2"</span>, <span class="st">"VFQ3"</span>, <span class="st">"VFQ4"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">adsl_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span>, <span class="va">TRTEDT</span>, <span class="va">TRT01A</span>, <span class="va">TRT01P</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span></span>
-<span>  <span class="va">qs</span>,</span>
-<span>  dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span>
-<span>  new_vars <span class="op">=</span> <span class="va">adsl_vars</span>,</span>
-<span>  by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="co">## Calculate ADT, ADY ----</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dt.html" class="external-link">derive_vars_dt</a></span><span class="op">(</span></span>
-<span>    new_vars_prefix <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>    dtc <span class="op">=</span> <span class="va">QSDTC</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_dy.html" class="external-link">derive_vars_dy</a></span><span class="op">(</span>reference_date <span class="op">=</span> <span class="va">TRTSDT</span>, source_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">ADT</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="parameters1">Derive Parameters in lookup table<a class="anchor" aria-label="anchor" href="#parameters1"></a>
-</h3>
-<p>Create a parameter lookup table which includes <code>QSTESTCD</code>, <code>PARAMCD</code>, <code>PARAM</code>, <code>PARCAT1</code> and <code>PARCAT2</code>. This should include all parameters that will be needed in the final <code>ADVFQ</code>. This will be used later to merge Parameter information.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">param_lookup</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">QSTESTCD</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">PARCAT1</span>, <span class="op">~</span><span class="va">PARCAT2</span>,</span>
 <span>  <span class="st">"VFQ1"</span>, <span class="st">"VFQ1"</span>, <span class="st">"Overall Health"</span>, <span class="st">"NEI VFQ-25"</span>, <span class="st">"Original Response"</span>,</span>
@@ -180,12 +152,21 @@
 <span>  <span class="st">"QSG02"</span>, <span class="st">"QSG02"</span>, <span class="st">"General Score 02"</span>, <span class="st">"NEI VFQ-25"</span>, <span class="st">"Averaged Result"</span>,</span>
 <span>  <span class="st">"QBCSCORE"</span>, <span class="st">"QBCSCORE"</span>, <span class="st">"Composite Score"</span>, <span class="st">"NEI VFQ-25"</span>, <span class="st">"Averaged Result"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Now the ADVFQ dataset can be constructed, merging the filtered QS dataset with ADSL. This is necessary because treatment start date <code>TRTSDT</code> is a prerequisite for the derivation of variables such as Analysis Day <code>ADY</code> which can be programmed by following the article on <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html" class="external-link">creating a BDS dataset from SDTM</a>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adsl_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span>, <span class="va">TRTEDT</span>, <span class="va">TRT01A</span>, <span class="va">TRT01P</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span></span>
+<span>  <span class="va">qs</span>,</span>
+<span>  dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span>
+<span>  new_vars <span class="op">=</span> <span class="va">adsl_vars</span>,</span>
+<span>  by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="aval">Derive Analysis Value for existing questions<a class="anchor" aria-label="anchor" href="#aval"></a>
+<h3 id="aval">Derive Analysis Value for Existing Questions<a class="anchor" aria-label="anchor" href="#aval"></a>
 </h3>
-<p>To derive the analysis values we use the function <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged_lookup.html" class="external-link">admiral::derive_vars_merged_lookup()</a></code> which merges on PARAMCD from the Parameter lookup table.</p>
-<p>This merges on the parameter by QSTESCD and assigns AVAL and AVALC.</p>
+<p>To derive the analysis values we use the function <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged_lookup.html" class="external-link">admiral::derive_vars_merged_lookup()</a></code> which merges on <code>PARAMCD</code> from the parameter lookup table. This merges on the parameter by <code>QSTESTCD</code> and assigns <code>AVAL</code> and <code>AVALC</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co">## Add PARAMCD only - add PARAM etc later ----</span></span>
@@ -201,9 +182,9 @@
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="parameters">Derive Parameters for recoded items and summary scores<a class="anchor" aria-label="anchor" href="#parameters"></a>
+<h3 id="parameters">Derive Parameters for Recoded Items and Summary Scores<a class="anchor" aria-label="anchor" href="#parameters"></a>
 </h3>
-<p>Creates new parameters as new records for recoded existing parameters. Run this section of code for every question that you need recoding. This gives an example of recoding one question.</p>
+<p>Once we have included the initial records from QS, the programmer should next program new records for parameters which recode the original questions. Run this section of code for every question that you need recoding. This gives an example of recoding one question.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## QR01 Recoded Item 01</span></span>
 <span><span class="co"># set to 100 if [advfq.AVAL] = 1</span></span>
@@ -213,7 +194,7 @@
 <span><span class="co"># else set to 0 if [advfq.AVAL] = 5</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_summary_records.html" class="external-link">derive_summary_records</a></span><span class="op">(</span></span>
-<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">adsl_vars</span>, <span class="va">PARAMCD</span>, <span class="va">VISITNUM</span>, <span class="va">VISIT</span>, <span class="va">ADT</span>, <span class="va">ADY</span><span class="op">)</span>,</span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">adsl_vars</span>, <span class="va">PARAMCD</span>, <span class="va">VISITNUM</span>, <span class="va">VISIT</span><span class="op">)</span>,</span>
 <span>    filter <span class="op">=</span> <span class="va">QSTESTCD</span> <span class="op">==</span> <span class="st">"VFQ1"</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
 <span>    analysis_var <span class="op">=</span> <span class="va">AVAL</span>,</span>
 <span>    summary_fun <span class="op">=</span> <span class="va">identity</span>,</span>
@@ -229,7 +210,7 @@
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="va">AVAL</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>To create summary records as average of recoded questions. This example uses two of the recoded questions.</p>
+<p>Next, the programmer should create summary records as average of recoded questions using <code><a href="https://pharmaverse.github.io/admiral/reference/derive_summary_records.html" class="external-link">admiral::derive_summary_records</a></code>. This example uses two of the recoded questions to create an average record.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Derive a new record as a summary record  ----</span></span>
 <span><span class="co">## QSG01 General Score 01</span></span>
@@ -244,67 +225,12 @@
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="avisit">Derive Analysis Visit<a class="anchor" aria-label="anchor" href="#avisit"></a>
-</h3>
-<p>Derives AVISIT and AVISITN based on VISIT. See also the <a href="https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits" class="external-link"><code>Visit and Period Variables</code></a> vignette.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="co"># Derive Timing</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    AVISIT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span>      <span class="fu">str_detect</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"SCREEN|UNSCHED|RETRIEVAL|AMBUL"</span><span class="op">)</span> <span class="op">~</span> <span class="cn">NA_character_</span>,</span>
-<span>      <span class="co"># If VISIT=DAY 1 then set to Baseline, study specific</span></span>
-<span>      <span class="fu">str_detect</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"DAY 1"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Baseline"</span>,</span>
-<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span> <span class="op">~</span> <span class="fu">str_to_title</span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span>,</span>
-<span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    AVISITN <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span>      <span class="va">VISIT</span> <span class="op">==</span> <span class="st">"BASELINE"</span> <span class="op">~</span> <span class="st">"0"</span>,</span>
-<span>      <span class="fu">str_detect</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"WEEK"</span><span class="op">)</span> <span class="op">~</span> <span class="fu">str_trim</span><span class="op">(</span><span class="fu">str_replace</span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"WEEK"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
-<span>    <span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="baseline">Derive Baseline variables<a class="anchor" aria-label="anchor" href="#baseline"></a>
-</h3>
-<p>Here we derive ABLFL, BASE, CHG and PCHG variables.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Derive baseline flags ----</span></span>
-<span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="co"># Calculate ABLFL</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/restrict_derivation.html" class="external-link">restrict_derivation</a></span><span class="op">(</span></span>
-<span>    derivation <span class="op">=</span> <span class="va">derive_var_extreme_flag</span>,</span>
-<span>    args <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/params.html" class="external-link">params</a></span><span class="op">(</span></span>
-<span>      by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">PARAMCD</span><span class="op">)</span>,</span>
-<span>      order <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">ADT</span>, <span class="va">VISITNUM</span>, <span class="va">QSSEQ</span><span class="op">)</span>,</span>
-<span>      new_var <span class="op">=</span> <span class="va">ABLFL</span>,</span>
-<span>      mode <span class="op">=</span> <span class="st">"last"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    filter <span class="op">=</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span>      <span class="va">ADT</span> <span class="op">&lt;=</span> <span class="va">TRTSDT</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co">## Derive baseline information ----</span></span>
-<span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="co"># Calculate BASE</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_base.html" class="external-link">derive_var_base</a></span><span class="op">(</span></span>
-<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span>, <span class="va">PARAMCD</span><span class="op">)</span>,</span>
-<span>    source_var <span class="op">=</span> <span class="va">AVAL</span>,</span>
-<span>    new_var <span class="op">=</span> <span class="va">BASE</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="co"># Calculate CHG</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_chg.html" class="external-link">derive_var_chg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="co"># Calculate PCHG</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_pchg.html" class="external-link">derive_var_pchg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
 <h3 id="analysis">Derive Analysis Variables<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h3>
 <p>In most finding ADaMs, an analysis flag is derived to identify the appropriate observation(s) to use for a particular analysis when a subject has multiple observations within a particular timing period.</p>
 <p>In this situation, an analysis flag (e.g. <code>ANLxxFL</code>) may be used to choose the appropriate record for analysis.</p>
 <p>This flag may be derived using the <a href="https://pharmaverse.github.io/admiral/" class="external-link"><code>admiral</code></a> function <code><a href="https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html" class="external-link">admiral::derive_var_extreme_flag()</a></code>. For this example, we will assume we would like to choose the latest value by USUBJID, PARAMCD and AVISIT.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## ANL01FL: Flag last result within an AVISIT for post-baseline records ----</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/restrict_derivation.html" class="external-link">restrict_derivation</a></span><span class="op">(</span></span>
@@ -317,8 +243,8 @@
 <span>    <span class="op">)</span>,</span>
 <span>    filter <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ONTRTFL</span> <span class="op">==</span> <span class="st">"Y"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p>We then derive ASEQ using <code><a href="https://pharmaverse.github.io/admiral/reference/derive_var_obs_number.html" class="external-link">admiral::derive_var_obs_number()</a></code> based on the observation number within the dataset, additionally merge on <code>PARAM</code>, <code>PARCAT1</code> and <code>PARCAT2</code> using the earlier lookup table.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p>We then derive <code>ASEQ</code> using <code><a href="https://pharmaverse.github.io/admiral/reference/derive_var_obs_number.html" class="external-link">admiral::derive_var_obs_number()</a></code> based on the observation number within the dataset, additionally merge on <code>PARAM</code>, <code>PARCAT1</code> and <code>PARCAT2</code> using the earlier lookup table.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get ASEQ and PARAM  ----</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># Calculate ASEQ</span></span>
@@ -334,8 +260,8 @@
 <div class="section level3">
 <h3 id="adslvars">Add ADSL Variables<a class="anchor" aria-label="anchor" href="#adslvars"></a>
 </h3>
-<p>Variables from ADSL which are required.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>Once analysis variables have been programmed, variables from ADSL which are required should be merged on to the dataset using <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">admiral::derive_vars_merged</a></code>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add all ADSL variables</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span></span>
