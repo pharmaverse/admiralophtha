@@ -10,7 +10,7 @@
 #' @author Nandini R Thampi
 #'
 #' @return The input value converted to ETDRS units
-#' @keywords der_ophtha
+#' @keywords utils_fmt
 #' @export
 #'
 #' @examples
