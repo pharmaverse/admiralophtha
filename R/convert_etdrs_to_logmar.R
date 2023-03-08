@@ -10,7 +10,7 @@
 #' @author Rachel Linacre
 #'
 #' @return The input value converted converted to logMAR units
-#' @keywords der_ophtha
+#' @keywords utils_fmt
 #' @export
 #'
 #' @examples
