@@ -16,19 +16,19 @@ news:
   cran_dates: false
 reference:
 
-- title: Derivations for Adding Variables
-- subtitle: All ADaMs
-- contents:
-  - has_keyword("der_gen")
+#- title: Derivations for Adding Variables
+#- subtitle: All ADaMs
+#- contents:
+#  - has_keyword("der_gen")
 - subtitle: ADSL-specific
   desc: Derivation Functions helpful for building the ADSL dataset
 - contents:
   - has_keyword("der_adsl")
-- subtitle: BDS-specific
-  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
-- contents:
-  - has_keyword("der_bds_gen")
-  - has_keyword("der_bds_findings")
+#- subtitle: BDS-specific
+#  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
+#- contents:
+#  - has_keyword("der_bds_gen")
+#  - has_keyword("der_bds_findings")
 - subtitle: OCCDS-specific
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
@@ -42,28 +42,28 @@ reference:
 - title: Utility Functions
 - subtitle: Utilities for Formatting Observations
 - contents:
-  - has_keyword('utils_fmt')
-- subtitle: Utilities for Dataset Checking
-- contents:
-  - has_keyword('utils_ds_chk')
-- subtitle: Utilities used within Derivation Functions
-- contents:
-  - has_keyword('utils_help')
-- subtitle: Utilities for Filtering Observations
-- contents:
-  - has_keyword('utils_fil')
-- subtitle: Utilities used for Date Imputation
-- contents:
-  - has_keyword('utils_impute')
-- subtitle: Utilities used for Examples and Template Scripts
-- contents:
-  - has_keyword('utils_examples')
+  - has_keyword("utils_fmt")
+#- subtitle: Utilities for Dataset Checking
+#- contents:
+#  - has_keyword('utils_ds_chk')
+#- subtitle: Utilities used within Derivation Functions
+#- contents:
+#  - has_keyword('utils_help')
+#- subtitle: Utilities for Filtering Observations
+#- contents:
+#  - has_keyword('utils_fil')
+#- subtitle: Utilities used for Date Imputation
+#- contents:
+#  - has_keyword('utils_impute')
+#- subtitle: Utilities used for Examples and Template Scripts
+#- contents:
+#  - has_keyword('utils_examples')
 
 
-- title: Computations
-  desc: Computations expect vectors as input and return a vector
-  contents:
-  - has_keyword('computation')
+#- title: Computations
+#  desc: Computations expect vectors as input and return a vector
+#  contents:
+#  - has_keyword('computation')
 
 
 - title: Example Datasets
@@ -71,21 +71,21 @@ reference:
   contents:
   - has_keyword('datasets')
 
-- title: Other Keywords
-- subtitle: Timing
-  desc: Function related to timing, e.g., deriving dates, imputing dates, converting dates, deriving duration, ...
-  contents:
-  - has_keyword('timing')
+#- title: Other Keywords
+#- subtitle: Timing
+#  desc: Function related to timing, e.g., deriving dates, imputing dates, converting dates, deriving duration, ...
+#  contents:
+#  - has_keyword('timing')
 
-- subtitle: Source Specifications
-  desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
-  contents:
-  - has_keyword('source_specifications')
+#- subtitle: Source Specifications
+#  desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
+#  contents:
+#  - has_keyword('source_specifications')
 
-- subtitle: Pre-Defined Time-to-Event Sources
-  desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
-  contents:
-  - has_keyword('tte_source')
+#- subtitle: Pre-Defined Time-to-Event Sources
+#  desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
+#  contents:
+#  - has_keyword('tte_source')
 
 
 navbar:

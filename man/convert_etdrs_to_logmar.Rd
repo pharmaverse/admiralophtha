@@ -38,4 +38,4 @@ adbcva <- adbcva \%>\% mutate(AVAL = convert_etdrs_to_logmar(AVAL))
 \author{
 Rachel Linacre
 }
-\keyword{der_ophtha}
+\keyword{utils_fmt}
