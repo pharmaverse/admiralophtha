@@ -1,0 +1,74 @@
+---
+title: "Ophthalmology Standards"
+output:
+  rmarkdown::html_vignette:
+vignette: >
+  %\VignetteIndexEntry{Ophthalmology Standards}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+link <- function(text, url) {
+  return(
+    paste0(
+      "[", text, "]",
+      "(", url, ")"
+    )
+  )
+}
+dyn_link <- function(text,
+                     base_url,
+                     relative_url = "",
+                     # Change to TRUE when admiral adopts multiversion docs
+                     is_multiversion = FALSE,
+                     multiversion_default_ref = "main") {
+  url <- paste(base_url, relative_url, sep = "/")
+  if (is_multiversion) {
+    url <- paste(
+      base_url,
+      Sys.getenv("BRANCH_NAME", multiversion_default_ref),
+      relative_url,
+      sep = "/"
+    )
+  }
+  return(link(text, url))
+}
+# Other variables
+admiral_homepage <- "https://pharmaverse.github.io/admiral"
+library(admiraldev)
+```
+
+# Introduction
+
+Ophthalmology is a hugely diverse therapeutic area, where endpoints and conventions can differ from study to study - let alone across companies. Notwithstanding this, there exist cases where alignment is possible; this page indexes the occurrences in which `{admiralophtha}` suggests the adoption of a certain standard way of doing things.
+
+Applying the standards below is by no means mandatory, but will help in leveraging the tools (templates, functions, etc.) provided by `{admiralophtha}` as well as lower the barrier of entry for programming in your study. Additionally, this page can function as guidance for programmers starting to dip their feet in ophthalmology ADaM programming.
+
+
+## Dataset Subdivision
+
+Due to the aforementioned high complexity and diversity of ophthalmology data, it is discouraged to funnel *all* records from the `OE` SDTM dataset into a single `ADOE` dataset, as this will result in an overly complicated program/dataset pair. `{admiralophtha}` instead suggests the following partition:
+
+* `ADOE` for general miscellaneous ophthalmology tests not used for efficacy programming.
+* `ADBCVA` for BCVA data only - these will almost always constitute a primary or secondary endpoint and so will require endpoint-related programming such as criterion flags.
+* Any other endpoints for which specific efficacy programming may be required should have their own ADaM dataset (e.g. for intraocular pressure data, `ADIOP`).
+* `ADVFQ` for Visual Functioning Questionnaire data.
+
+Subdividing the ADaM datasets in a study as above will ensure that wherever custom efficacy programming is required, this will automatically be limited to the data of interest. For instance, if a study has various  endpoints of the form *Gain of between x and y letters relative to baseline* (or similar) then each will likely require a criterion variable/flag pair (see the [Criterion Flag](#criterion) section for more detail). If the BCVA data were stored in `ADOE`, then these criterion variable/flag pairs would be blank and irrelevant for most of the data in the dataset, save for the BCVA records. Conversely, collecting the BCVA data in `ADBCVA` ensures the criterion variable/flag pairs are more relevant, and the resulting dataset is more readable.
+
+## Criterion Flags {#criterion}
+`{admiralophtha}` suggests the use of criterion variable/flag pairs `CRITx/CRITxFL` where possible for endpoint programming. If implemented correctly, this is a very transparent approach as the condition for `CRITxFL` can be clearly encoded in `CRITx`, without having to view any documentation. When appropriate, the condition in `CRITx` should be represented programmatically rather than in words to reduce possibility of confusion. For instance, for an endpoint such as *Gain of between x and y letters relative to baseline*, one would set `CRIT1 = "x <= CHG <= y"`.
+
+**Note**: Though allowable according to ADaM standards, it is generally discouraged to use the same criterion flag/variable pair for more than one criterion across multiple parameters in an ADaM dataset, as this renders the dataset confusing to scrutinise.
+
+For BCVA change endpoints, provides the function `derive_var_bcvacritxfl` to add them en masse. Additionally, the function automatically populates `CRITx` in the programmatic manner described above.
+
+
+
+
+
