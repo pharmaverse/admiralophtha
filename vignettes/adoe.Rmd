@@ -1,0 +1,137 @@
+---
+title: "Creating ADOE"
+output:
+  rmarkdown::html_vignette:
+vignette: >
+  %\VignetteIndexEntry{Creating ADOE}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+link <- function(text, url) {
+  return(
+    paste0(
+      "[", text, "]",
+      "(", url, ")"
+    )
+  )
+}
+dyn_link <- function(text,
+                     base_url,
+                     relative_url = "",
+                     # Change to TRUE when admiral adopts multiversion docs
+                     is_multiversion = FALSE,
+                     multiversion_default_ref = "main") {
+  url <- paste(base_url, relative_url, sep = "/")
+  if (is_multiversion) {
+    url <- paste(
+      base_url,
+      Sys.getenv("BRANCH_NAME", multiversion_default_ref),
+      relative_url,
+      sep = "/"
+    )
+  }
+  return(link(text, url))
+}
+# Other variables
+admiral_homepage <- "https://pharmaverse.github.io/admiral"
+library(admiraldev)
+```
+
+# Introduction
+
+This article describes creating an ADOE ADaM with Ophthalmology Exam Analysis data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADOE are absent, and the user is invited to consult the aforementioned article for guidance.
+
+As the current release of `{admiralophtha}` does not contain any functionality specific to ADOE, this article only showcases how to map parameters from OE in order to set up the basic structure of ADOE. For the following steps, the user is invited to consult the above-linked article on BDS datasets. This article will be updated for future releases to showcase and explain any `{admiralophtha}`-specific functionality.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
+otherwise specified.*
+
+## Dataset Contents
+
+`{admiralophtha}` suggests to populate ADOE with general miscellaneous ophthalmology parameters. Any efficacy endpoint-related parameters (eg. BCVA tests) should be placed in separate datasets (eg. ADBCVA).
+
+## Required Packages
+
+The examples of this vignette require the following packages.
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(admiral)
+library(admiral.test)
+library(admiraldev)
+library(admiralophtha)
+```
+
+# Programming Workflow
+
+* [Initial Set Up of ADOE ](#setup)
+* [Further Derivations of Standard BDS Variables](#further)
+* [Example Script](#example)
+
+## Initial set up of ADOE {#setup}
+
+As with all BDS ADaM datasets, one should start from the OE SDTM, where only the general ophthalmology records are of interest. For the purposes of the next two sections, we shall be using the `{admiral}` OE and ADSL test data. We will also require a lookup table for the mapping of parameter codes.
+
+**Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye`.
+
+```{r}
+data("admiral_oe")
+data("admiral_adsl")
+
+# Add STUDYEYE to ADSL to simulate an ophtha dataset
+adsl <- admiral_adsl %>%
+  as.data.frame() %>%
+  mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
+  convert_blanks_to_na()
+
+oe <- convert_blanks_to_na(admiral_oe) %>%
+  ungroup()
+
+# ---- Lookup table ----
+
+# Assign PARAMCD, PARAM, and PARAMN
+param_lookup <- tibble::tribble(
+  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
+  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
+  "CSUBTH", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Center Subfield Thickness", 2,
+  "CSUBTH", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Center Subfield Thickness", 2,
+  "DRSSR", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  "DRSSR", "LEFT", "RIGHT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
+)
+```
+
+Following this setup, the programmer can start constructing ADOE. The first step is to subset OE to only general ophthalmology parameters. Then, one can merge the resulting dataset with ADSL. This is required for two reasons: firstly, `STUDYEYE` is crucial in the mapping of `PARAMCD`'s. Secondly, the treatment start date (`TRTSDT`) is also a prerequisite for the derivation of variables such as Analysis Day (`ADY`).
+
+```{r}
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
+
+adoe <- oe %>%
+  filter(
+    OETESTCD %in% c("CSUBTH", "DRSSR")
+  ) %>%
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = exprs(STUDYID, USUBJID)
+  )
+```
+
+## Further Derivations of Standard BDS Variables {#further}
+
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
+
+## Example Script {#example}
+
+ADaM | Sample Code 
+ ---- | -------------- 
+ADOE | `r dyn_link("ad_adoe.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adoe.R", is_multiversion = TRUE)`
+
