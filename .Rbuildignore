@@ -20,3 +20,5 @@
 ^dev$
 ^README.Rmd$
 ^dev$
+^CRAN-RELEASE$
+^cran-comments\.md$
