@@ -20,11 +20,12 @@ dyn_link <- function(text,
                      # Change to TRUE when admiral adopts multiversion docs
                      is_multiversion = TRUE,
                      multiversion_default_ref = "main") {
-  url <- paste(base_url, relative_url, sep = "/")
+  url <- paste(base_url, relative_url, "", sep = "/")
   if (is_multiversion) {
     url <- paste(
       base_url,
       Sys.getenv("BRANCH_NAME", multiversion_default_ref),
+      "",
       sep = "/"
     )
   }
@@ -82,7 +83,6 @@ We use the following for support and communications between user and developer c
 
 * [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) - for informal discussions, Q&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace
 * [GitHub Issues](https://github.com/pharmaverse/admiralophtha/issues) - for direct feedback, enhancement requests or raising bugs
-
 
 ## Release Schedule
 
