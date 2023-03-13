@@ -160,7 +160,7 @@ derive_var_bcvacritxfl <- function(dataset_adbcva,
   assert_character_vector(paramcds, optional = TRUE)
   assert_character_vector(basetype, optional = TRUE)
   assert_character_scalar(additional_text)
-  assert_integer_scalar(critxfl_index, optional = T)
+  assert_integer_scalar(critxfl_index, optional = TRUE)
   if (!is.null(bcva_ranges)) lapply(bcva_ranges, assert_numeric_vector)
   if (!is.null(bcva_uplims)) lapply(bcva_uplims, assert_numeric_vector)
   if (!is.null(bcva_lowlims)) lapply(bcva_lowlims, assert_numeric_vector)
