@@ -1,36 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/404.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/404.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/LICENSE.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/articles/adxx.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/articles/adbcva.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/articles/index.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/articles/admiralophtha.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/authors.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/articles/adoe.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/index.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/articles/advfq.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/news/index.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/pull_request_template.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/articles/standards.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/reference/admiralophtha-package.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/authors.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/reference/hello_admiral.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/index.html</loc>
   </url>
   <url>
-    <loc>https://pharmaverse.github.io/admiraltemplate/main/reference/index.html</loc>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/pull_request_template.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/admiralophtha-package.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/admiralophtha_adbcva.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/admiralophtha_adoe.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/admiralophtha_advfq.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/admiralophtha_ex.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/convert_etdrs_to_logmar.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/convert_logmar_to_etdrs.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/derive_var_afeye.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/derive_var_bcvacritxfl.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/derive_var_bcvacritxfl_util.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/derive_var_studyeye.html</loc>
+  </url>
+  <url>
+    <loc>https://pharmaverse.github.io/admiralophtha/main/main/reference/index.html</loc>
   </url>
 </urlset>
