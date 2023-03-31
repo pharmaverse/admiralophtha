@@ -10,7 +10,8 @@ Authors@R: c(
     person("William", "Holmes", role = "aut", email = "william.holmes@roche.com"),
     person("Rachel", "Linacre", role = "aut", email = "rachel.linacre@roche.com"),
     person("Lucy", "Palmen", role = "aut", email = "lucy.palmen@roche.com"),
-    person("Nandini", "R Thampi", role = "aut", email = "nandini.rajendhiran@novartis.com")
+    person("Nandini", "R Thampi", role = "aut", email = "nandini.rajendhiran@novartis.com"),
+    person("Yuki", "Matsunaga", role = "aut", email = "yuki.matsunaga@novartis.com")
     )
 Description: Aids the programming of Clinical Data Standards Interchange Consortium
     (CDISC) compliant Ophthalmology Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
