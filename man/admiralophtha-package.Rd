@@ -30,6 +30,7 @@ Authors:
   \item Rachel Linacre \email{rachel.linacre@roche.com}
   \item Lucy Palmen \email{lucy.palmen@roche.com}
   \item Nandini R Thampi \email{nandini.rajendhiran@novartis.com}
+  \item Yuki Matsunaga \email{yuki.matsunaga@novartis.com}
 }
 
 }
