@@ -60,14 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -89,7 +81,8 @@
 
 
 
-<script src="standards_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Ophthalmology Standards</h1>
             
@@ -103,29 +96,74 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Ophthalmology is a hugely diverse therapeutic area, where endpoints and conventions can differ from study to study - let alone across companies. Notwithstanding this, there exist cases where alignment is possible; this page indexes the occurrences in which <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> suggests the adoption of a certain standard way of doing things.</p>
-<p>Applying the standards below is by no means mandatory, but will help in leveraging the tools (templates, functions, etc.) provided by <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> as well as lower the barrier of entry for programming in your study. Additionally, this page can function as guidance for programmers starting to dip their feet in ophthalmology ADaM programming.</p>
+<p>Ophthalmology is a hugely diverse therapeutic area, where endpoints
+and conventions can differ from study to study - let alone across
+companies. Notwithstanding this, there exist cases where alignment is
+possible; this page indexes the occurrences in which
+<a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> suggests the adoption of a certain standard
+way of doing things.</p>
+<p>Applying the standards below is by no means mandatory, but will help
+in leveraging the tools (templates, functions, etc.) provided by
+<a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> as well as lower the barrier of entry for
+programming in your study. Additionally, this page can function as
+guidance for programmers starting to dip their feet in ophthalmology
+ADaM programming.</p>
 <div class="section level3">
 <h3 id="dataset-subdivision">Dataset Subdivision<a class="anchor" aria-label="anchor" href="#dataset-subdivision"></a>
 </h3>
-<p>Due to the aforementioned high complexity and diversity of ophthalmology data, it is discouraged to funnel <em>all</em> records from the <code>OE</code> SDTM dataset into a single <code>ADOE</code> dataset, as this will result in an overly complicated program/dataset pair. <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> instead suggests the following partition:</p>
+<p>Due to the aforementioned high complexity and diversity of
+ophthalmology data, it is discouraged to funnel <em>all</em> records
+from the <code>OE</code> SDTM dataset into a single <code>ADOE</code>
+dataset, as this will result in an overly complicated program/dataset
+pair. <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> instead suggests the following
+partition:</p>
 <ul>
 <li>
-<code>ADOE</code> for general miscellaneous ophthalmology tests not used for efficacy programming.</li>
+<code>ADOE</code> for general miscellaneous ophthalmology tests not
+used for efficacy programming.</li>
 <li>
-<code>ADBCVA</code> for BCVA data only - these will almost always constitute a primary or secondary endpoint and so will require endpoint-related programming such as criterion flags.</li>
-<li>Any other endpoints for which specific efficacy programming may be required should have their own ADaM dataset (e.g. for intraocular pressure data, <code>ADIOP</code>).</li>
+<code>ADBCVA</code> for BCVA data only - these will almost always
+constitute a primary or secondary endpoint and so will require
+endpoint-related programming such as criterion flags.</li>
+<li>Any other endpoints for which specific efficacy programming may be
+required should have their own ADaM dataset (e.g. for intraocular
+pressure data, <code>ADIOP</code>).</li>
 <li>
 <code>ADVFQ</code> for Visual Functioning Questionnaire data.</li>
 </ul>
-<p>Subdividing the ADaM datasets in a study as above will ensure that wherever custom efficacy programming is required, this will automatically be limited to the data of interest. For instance, if a study has various endpoints of the form <em>Gain of between x and y letters relative to baseline</em> (or similar) then each will likely require a criterion variable/flag pair (see the <a href="#criterion">Criterion Flag</a> section for more detail). If the BCVA data were stored in <code>ADOE</code>, then these criterion variable/flag pairs would be blank and irrelevant for most of the data in the dataset, save for the BCVA records. Conversely, collecting the BCVA data in <code>ADBCVA</code> ensures the criterion variable/flag pairs are more relevant, and the resulting dataset is more readable.</p>
+<p>Subdividing the ADaM datasets in a study as above will ensure that
+wherever custom efficacy programming is required, this will
+automatically be limited to the data of interest. For instance, if a
+study has various endpoints of the form <em>Gain of between x and y
+letters relative to baseline</em> (or similar) then each will likely
+require a criterion variable/flag pair (see the <a href="#criterion">Criterion Flag</a> section for more detail). If the
+BCVA data were stored in <code>ADOE</code>, then these criterion
+variable/flag pairs would be blank and irrelevant for most of the data
+in the dataset, save for the BCVA records. Conversely, collecting the
+BCVA data in <code>ADBCVA</code> ensures the criterion variable/flag
+pairs are more relevant, and the resulting dataset is more readable.</p>
 </div>
 <div class="section level3">
 <h3 id="criterion">Criterion Flags<a class="anchor" aria-label="anchor" href="#criterion"></a>
 </h3>
-<p><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> suggests the use of criterion variable/flag pairs <code>CRITx/CRITxFL</code> where possible for endpoint programming. If implemented correctly, this is a very transparent approach as the condition for <code>CRITxFL</code> can be clearly encoded in <code>CRITx</code>, without having to view any documentation. When appropriate, the condition in <code>CRITx</code> should be represented programmatically rather than in words to reduce possibility of confusion. For instance, for an endpoint such as <em>Gain of between x and y letters relative to baseline</em>, one would set <code>CRIT1 = "x &lt;= CHG &lt;= y"</code>.</p>
-<p><strong>Note</strong>: Though allowable according to ADaM standards, it is generally discouraged to use the same criterion flag/variable pair for more than one criterion across multiple parameters in an ADaM dataset, as this renders the dataset confusing to scrutinise.</p>
-<p>For BCVA change endpoints, provides the function <code>derive_var_bcvacritxfl</code> to add them en masse. Additionally, the function automatically populates <code>CRITx</code> in the programmatic manner described above.</p>
+<p><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> suggests the use of criterion
+variable/flag pairs <code>CRITx/CRITxFL</code> where possible for
+endpoint programming. If implemented correctly, this is a very
+transparent approach as the condition for <code>CRITxFL</code> can be
+clearly encoded in <code>CRITx</code>, without having to view any
+documentation. When appropriate, the condition in <code>CRITx</code>
+should be represented programmatically rather than in words to reduce
+possibility of confusion. For instance, for an endpoint such as <em>Gain
+of between x and y letters relative to baseline</em>, one would set
+<code>CRIT1 = "x &lt;= CHG &lt;= y"</code>.</p>
+<p><strong>Note</strong>: Though allowable according to ADaM standards,
+it is generally discouraged to use the same criterion flag/variable pair
+for more than one criterion across multiple parameters in an ADaM
+dataset, as this renders the dataset confusing to scrutinise.</p>
+<p>For BCVA change endpoints, provides the function
+<code>derive_var_bcvacritxfl</code> to add them en masse. Additionally,
+the function automatically populates <code>CRITx</code> in the
+programmatic manner described above.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
