@@ -144,19 +144,17 @@ adoe <- adoe %>%
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
   ) %>%
-  # WORS01FL: Flag worst result with an
+  # WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records
+  # If worst result is lowest result, change mode to "first"
   restrict_derivation(
-    derivation = derive_var_worst_flag,
+    derivation = derive_var_extreme_flag,
     args = params(
-      new_var = WORS01FL,
       by_vars = exprs(USUBJID, PARAMCD),
-      order = exprs(desc(ADT)),
-      param_var = PARAMCD,
-      analysis_var = AVAL,
-      worst_high = c("FDRSSR", "SDRSSR"), # put character(0) if no PARAMCDs here
-      worst_low = character(0) # put character(0) if no PARAMCDs here
+      order = exprs(AVAL, ADT),
+      new_var = WORS01FL,
+      mode = "last"
     ),
-    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & PARAMCD %in% c("FDRSSR", "SDRSSR")
   )
 
 # Derive baseline information
