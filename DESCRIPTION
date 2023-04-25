@@ -29,7 +29,6 @@ Depends: R (>= 3.5)
 Imports:
     admiral,
     admiraldev,
-    assertthat,
     dplyr,
     lubridate,
     magrittr,
