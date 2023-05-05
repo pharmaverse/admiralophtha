@@ -66,7 +66,7 @@ adoe <- adoe %>%
   mutate(
     AVAL = OESTRESN,
     AVALC = OESTRESC,
-    AVALU = "letters",
+    AVALU = OESTRESU,
     DTYPE = NA_character_
   )
 
