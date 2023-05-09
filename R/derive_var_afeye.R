@@ -24,13 +24,20 @@
 #'   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
 #'   "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
 #'   "XXX001", "P01", "RIGHT", "EYE", "LEFT",
+#'   "XXX001", "P01", "RIGHT", "EYE", "",
+#'   "XXX001", "P01", "RIGHT", "", "RIGHT",
 #'   "XXX001", "P02", "LEFT", "", "",
 #'   "XXX001", "P02", "LEFT", "EYE", "LEFT",
 #'   "XXX001", "P04", "BILATERAL", "EYE", "RIGHT",
-#'   "XXX001", "P05", "RIGHT", "EYE", "RIGHT"
+#'   "XXX001", "P05", "RIGHT", "EYE", "RIGHT",
+#'   "XXX001", "P05", "RIGHT", "EYE", "BILATERAL",
+#'   "XXX001", "P06", "BILATERAL", "", "",
+#'   "XXX001", "P06", "BILATERAL", "", "RIGHT",
+#'   "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL",
+#'   "XXX001", "P08", "", "EYE", "BILATERAL",
 #' )
 #'
-#' derive_var_afeye(adae, AELOC, AELAT)
+#' adae1<- derive_var_afeye(adae, AELOC, AELAT)
 derive_var_afeye <- function(dataset_occ, loc_var, lat_var) {
   loc_var <- assert_symbol(enexpr(loc_var))
   lat_var <- assert_symbol(enexpr(lat_var))
@@ -38,10 +45,11 @@ derive_var_afeye <- function(dataset_occ, loc_var, lat_var) {
 
   dataset_occ %>%
     mutate(AFEYE = case_when(
+      STUDYEYE != "" & !!lat_var=="BILATERAL" ~ "Both Eyes",
+      toupper(STUDYEYE) == "BILATERAL" & !!lat_var != "" & !!loc_var=="EYE" ~ "Study Eye",
+      toupper(!!lat_var) == toupper(STUDYEYE) & !!lat_var != "" & !!loc_var=="EYE" ~ "Study Eye",
+      toupper(!!lat_var) != toupper(STUDYEYE) & !!loc_var=="EYE" & STUDYEYE != "" & !!lat_var != ""  ~ "Fellow Eye",
       !!loc_var == "" ~ "",
-      toupper(STUDYEYE) == "BILATERAL" ~ "Study Eye",
-      toupper(!!lat_var) == toupper(STUDYEYE) ~ "Study Eye",
-      toupper(!!lat_var) != toupper(STUDYEYE) ~ "Fellow Eye",
       TRUE ~ ""
     ))
 }
