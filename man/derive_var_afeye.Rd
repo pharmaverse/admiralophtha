@@ -44,7 +44,7 @@ adae <- tribble(
   "XXX001", "P08", "", "EYE", "BILATERAL",
 )
 
-adae1 <- derive_var_afeye(adae, AELOC, AELAT)
+adae <- derive_var_afeye(adae, AELOC, AELAT)
 }
 \author{
 Lucy Palmen
