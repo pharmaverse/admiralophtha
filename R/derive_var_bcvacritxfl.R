@@ -31,7 +31,6 @@
 #'
 #' @return The input ADBCVA dataset with additional columns `CRITx`, `CRITxFL`.
 #' @keywords der_ophtha
-#' @export
 
 derive_var_bcvacritxfl_util <- function(dataset,
                                         critx_text,
