@@ -47,8 +47,10 @@ derive_var_afeye <- function(dataset_occ, loc_var, lat_var) {
     mutate(AFEYE = case_when(
       STUDYEYE != "" & !!lat_var == "BILATERAL" & !!loc_var == "EYE" ~ "Both Eyes",
       toupper(STUDYEYE) == "BILATERAL" & !!lat_var != "" & !!loc_var == "EYE" ~ "Study Eye",
-      toupper(!!lat_var) == toupper(STUDYEYE) & STUDYEYE != "" & !!lat_var != "" & !!loc_var == "EYE" ~ "Study Eye",
-      toupper(!!lat_var) != toupper(STUDYEYE) & STUDYEYE != "" & !!lat_var != "" & !!loc_var == "EYE" ~ "Fellow Eye",
+      toupper(!!lat_var) == toupper(STUDYEYE) & STUDYEYE != "" & !!lat_var != "" &
+        !!loc_var == "EYE" ~ "Study Eye",
+      toupper(!!lat_var) != toupper(STUDYEYE) & STUDYEYE != "" & !!lat_var != "" &
+        !!loc_var == "EYE" ~ "Fellow Eye",
       TRUE ~ NA_character_
     ))
 }
