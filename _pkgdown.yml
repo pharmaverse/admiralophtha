@@ -101,7 +101,7 @@ navbar:
     articles:
       text: User Guides
       menu:
-      - text: Ophthalomology Standards
+      - text: Ophthalmology Standards
         href: articles/standards.html
       - text: Creating ADOE
         href: articles/adoe.html
