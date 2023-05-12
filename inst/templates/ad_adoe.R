@@ -34,10 +34,10 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
   ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
-  "CSUBTH", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
+  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "CSUBTH", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
   "DRSSR", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
   "DRSSR", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
   "DRSSR", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
