@@ -64,66 +64,77 @@ dummy_param <- data.frame(QSTEST = c(
 # dummy answers
 
 # difficulty in performing tasks
-difficulty_res = c("SOME DIFFICULTY",
-                   "NO DIFFICULTY",
-                   "VERY DIFFICULT")
-difficulty_resn = c(1:3)
-difficulty = setNames(difficulty_res, difficulty_resn)
+difficulty_res <- c(
+  "SOME DIFFICULTY",
+  "NO DIFFICULTY",
+  "VERY DIFFICULT"
+)
+difficulty_resn <- c(1:3)
+difficulty <- setNames(difficulty_res, difficulty_resn)
 
 # frequency answers
-freq_res = c("SOMETIMES", "FREQUENTLY", "RARELY", "NEVER")
-freq_resn = c(1:4)
-frequency = setNames(freq_res, freq_resn)
+freq_res <- c("SOMETIMES", "FREQUENTLY", "RARELY", "NEVER")
+freq_resn <- c(1:4)
+frequency <- setNames(freq_res, freq_resn)
 
 # quality answers
-qual_res = c("VERY GOOD", "GOOD", "FAIR", "POOR", "VERY POOR")
-qual_resn = c(1:5)
-quality = setNames(qual_res, qual_resn)
+qual_res <- c("VERY GOOD", "GOOD", "FAIR", "POOR", "VERY POOR")
+qual_resn <- c(1:5)
+quality <- setNames(qual_res, qual_resn)
 
-#yesno answers
-yn_res = c("YES", "NO")
-yn_resn = c(1:2)
-yesno = setNames(yn_res, yn_resn)
+# yesno answers
+yn_res <- c("YES", "NO")
+yn_resn <- c(1:2)
+yesno <- setNames(yn_res, yn_resn)
 
+answers <- c(difficulty_res, freq_res, qual_res, yn_res)
+answersn <- c(difficulty_resn, freq_resn, qual_resn, yn_resn)
 
 # assign answers to questions randomly for each subjects
 
 # take unique subjects
-subjects = qs1 %>%
-           ungroup() %>%
-           select(USUBJID) %>%
-           distinct()
+subjects <- qs1 %>%
+  ungroup() %>%
+  select(USUBJID) %>%
+  distinct()
 
-dummy_param_res_by_subj = merge(subjects, dummy_param) %>%
-                  mutate(QSORRES = case_when(str_detect(QSTEST, "Difficult") ~ sample(difficulty, size=nrow(.), replace = T),
-                              str_detect(QSTEST, "How") ~ sample(frequency, size=nrow(.), replace = T),
-                              str_detect(QSTEST, "Are You") ~ sample(yesno, size=nrow(.), replace = T),
-                              str_detect(QSTEST, "Overall Health") ~ sample(quality, size=nrow(.), replace = T),
-                              str_detect(QSTEST, "Eyesight") ~ sample(quality, size=nrow(.), replace = T),
-                              TRUE ~ sample(frequency, size=nrow(.), replace = T)
-                              )) %>%
-                  mutate(QSSTRESC = QSORRES,
-                         QSORRESU = '',
-                         QSSTRESN = '',
-                         QSSTRESU = '',
-                         QSDRVFL = '')
-
-
-
+dummy_param_res_by_subj <- merge(subjects, dummy_param) %>%
+  mutate(QSORRES = case_when(
+    str_detect(QSTEST, "Difficult") ~ sample(difficulty, size = nrow(.), replace = T),
+    str_detect(QSTEST, "How") ~ sample(frequency, size = nrow(.), replace = T),
+    str_detect(QSTEST, "Are You") ~ sample(yesno, size = nrow(.), replace = T),
+    str_detect(QSTEST, "Overall Health") ~ sample(quality, size = nrow(.), replace = T),
+    str_detect(QSTEST, "Eyesight") ~ sample(quality, size = nrow(.), replace = T),
+    TRUE ~ sample(frequency, size = nrow(.), replace = T)
+  )) %>%
+  mutate(
+    QSSTRESC = QSORRES,
+    QSORRESU = "",
+    QSSTRESU = "",
+    QSDRVFL = ""
+  )
 
 # merge standard QS with parameters and result variables from temp QS data
 
-qs2 <- merge(qs1, dummy_param_res_by_subj, by="USUBJID" ) %>%
-    group_by(USUBJID) %>%
+qs2 <- merge(qs1, dummy_param_res_by_subj, by = "USUBJID") %>%
+  group_by(USUBJID) %>%
   # create QSSEQ based on VFQ QS parameters
   mutate(QSSEQ = row_number()) %>%
-  arrange(USUBJID, QSSEQ) %>%
-  select(STUDYID, DOMAIN, USUBJID, QSSEQ, QSTESTCD, QSTEST, QSCAT, QSSCAT, QSORRES, QSORRESU, QSSTRESC, QSSTRESN, QSSTRESU,
-         QSBLFL, QSDRVFL, VISITNUM, VISIT, VISITDY, QSDTC, QSDY)
+  arrange(USUBJID, QSSEQ)
+
+qs3 <- qs2 %>%
+      group_by(QSTEST) %>%
+      # create numeric var for std result
+      mutate(QSSTRESN = as.numeric(factor(QSSTRESC)))  %>%
+      select(STUDYID, DOMAIN, USUBJID, QSSEQ, QSTESTCD, QSTEST, QSCAT, QSSCAT, QSORRES, QSORRESU, QSSTRESC, QSSTRESN, QSSTRESU,
+      QSBLFL, QSDRVFL, VISITNUM, VISIT, VISITDY, QSDTC, QSDY) %>%
+      ungroup()
+
+
 
 # NOTE: the QS2 dataset made above should be stacked below the admiral_qs dataset.
 # output admiralophtha_qs.RDS
 
-admiralophtha_qs = rbind(admiral_qs, qs2)
+admiralophtha_qs <- rbind(admiral_qs, q3)
 
-#saveRDS(admiralophtha_qs, file = "inst/extdata/admiralophtha_qs.RDS")
+# saveRDS(admiralophtha_qs, file = "inst/extdata/admiralophtha_qs.RDS")
