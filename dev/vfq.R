@@ -10,6 +10,7 @@
 library(admiral)
 library(admiral.test) # contains test datasets from previous ADMIRAL project
 library(dplyr)
+library(stringr)
 
 # take qs test data from previous ADMIRAL project ====
 admiral_qs <- admiral.test::admiral_qs
@@ -23,11 +24,11 @@ qs1 <- admiral_qs %>%
   unique()
 
 # create dummy parameters and results ====
-dummy_param <- c(
+dummy_param <- data.frame(QSTEST = c(
   "Your Overall Health Is",
   "Eyesight Using Both Eyes Is",
   "How Often You Worry About Eyesight",
-  "How Much Pain in and Around Eyes",
+  "How Often Pain in and Around Eyes",
   "Difficulty Reading Newspapers",
   "Difficulty Doing Work/Hobbies",
   "Difficulty Finding on Crowded Shelf",
@@ -39,12 +40,10 @@ dummy_param <- c(
   "Difficulty Visiting With People",
   "Difficulty Going Out to See Movies",
   "Are You Currently Driving",
-  "Never Driven or Given Up Driving",
-  "Main Reason You Gave Up Driving",
   "Difficulty Driving During Daytime",
   "Difficulty Driving at Night",
   "Driving in Difficult Conditions",
-  "Eye Pain Keep From Doing What Like",
+  "Eye Pain Keep You From Doing What You Like",
   "I Stay Home Most of the Time",
   "I Feel Frustrated a Lot of the Time",
   "I Need a Lot of Help From Others",
@@ -55,78 +54,76 @@ dummy_param <- c(
   "Difficulty Recognizing People",
   "Difficulty Taking Part in Sports",
   "Difficulty Seeing Programs on TV"
-)
-dummy_resc <- c(
-  "GOOD",
-  "FAIR",
-  "RARELY",
-  "NO",
-  "SOME DIFFICULTY",
-  "NO DIFFICULTY",
-  "NO DIFFICULTY",
-  "SOME DIFFICULTY",
-  "SOME DIFFICULTY",
-  "SOME DIFFICULTY",
-  "SOME DIFFICULTY",
-  "NO DIFFICULTY",
-  "NO DIFFICULTY",
-  "SOME DIFFICULTY",
-  "YES",
-  "NO",
-  "NO",
-  "NO",
-  "YES",
-  "YES",
-  "YES",
-  "NO",
-  "SOMETIMES",
-  "SOMETIMES",
-  "YES",
-  "VERY DIFFICULT",
-  "SOME DIFFICULTY",
-  "NO DIFFICULTY",
-  "NO DIFFICULTY",
-  "SOME DIFFICULTY",
-  "NO DIFFICULTY"
-)
-
-dummy_resn <- data.frame(
-  QSSTRESC = c(
-    "GOOD", "FAIR", "RARELY", "NO",
-    "SOME DIFFICULTY", "NO DIFFICULTY",
-    "YES", "VERY DIFFICULT"
-  ),
-  QSSTRESN = c(1, 3, 4, 3, 2, 1, 1, 3)
-)
-
-
-# create dummy qs ====
-dummy_qs <- data_frame(
-  QSTEST = dummy_param,
-  QSSTRESC = dummy_resc
-) %>%
-  left_join(., dummy_resn, by = "QSSTRESC") %>%
+)) %>%
   mutate(
-    QSORRES = QSSTRESC,
     QSTESTCD = paste0("VFQ", row_number()),
     QSCAT = "NEI VFQ-25",
     QSSCAT = "Original Response"
   )
 
+# dummy answers
+
+# difficulty in performing tasks
+difficulty_res = c("SOME DIFFICULTY",
+                   "NO DIFFICULTY",
+                   "VERY DIFFICULT")
+difficulty_resn = c(1:3)
+difficulty = setNames(difficulty_res, difficulty_resn)
+
+# frequency answers
+freq_res = c("SOMETIMES", "FREQUENTLY", "RARELY", "NEVER")
+freq_resn = c(1:4)
+frequency = setNames(freq_res, freq_resn)
+
+# quality answers
+qual_res = c("VERY GOOD", "GOOD", "FAIR", "POOR", "VERY POOR")
+qual_resn = c(1:5)
+quality = setNames(qual_res, qual_resn)
+
+#yesno answers
+yn_res = c("YES", "NO")
+yn_resn = c(1:2)
+yesno = setNames(yn_res, yn_resn)
+
+
+# assign answers to questions randomly for each subjects
+
+# take unique subjects
+subjects = qs1 %>%
+           ungroup() %>%
+           select(USUBJID) %>%
+           distinct()
+
+dummy_param_res_by_subj = merge(subjects, dummy_param) %>%
+                  mutate(QSORRES = case_when(str_detect(QSTEST, "Difficult") ~ sample(difficulty, size=nrow(.), replace = T),
+                              str_detect(QSTEST, "How") ~ sample(frequency, size=nrow(.), replace = T),
+                              str_detect(QSTEST, "Are You") ~ sample(yesno, size=nrow(.), replace = T),
+                              str_detect(QSTEST, "Overall Health") ~ sample(quality, size=nrow(.), replace = T),
+                              str_detect(QSTEST, "Eyesight") ~ sample(quality, size=nrow(.), replace = T),
+                              TRUE ~ sample(frequency, size=nrow(.), replace = T)
+                              )) %>%
+                  mutate(QSSTRESC = QSORRES,
+                         QSORRESU = '',
+                         QSSTRESN = '',
+                         QSSTRESU = '',
+                         QSDRVFL = '')
+
+
 
 
 # merge standard QS with parameters and result variables from temp QS data
-qs2 <- merge(qs1, dummy_qs) %>%
-  group_by(USUBJID) %>%
+
+qs2 <- merge(qs1, dummy_param_res_by_subj, by="USUBJID" ) %>%
+    group_by(USUBJID) %>%
   # create QSSEQ based on VFQ QS parameters
   mutate(QSSEQ = row_number()) %>%
   arrange(USUBJID, QSSEQ) %>%
-  select(
-    STUDYID, DOMAIN, USUBJID, QSSEQ, QSTESTCD, QSTEST, QSCAT, QSSCAT,
-    QSORRES, QSSTRESC, QSSTRESN, QSBLFL, VISITNUM,
-    VISIT, VISITDY, QSDTC, QSDY
-  )
+  select(STUDYID, DOMAIN, USUBJID, QSSEQ, QSTESTCD, QSTEST, QSCAT, QSSCAT, QSORRES, QSORRESU, QSSTRESC, QSSTRESN, QSSTRESU,
+         QSBLFL, QSDRVFL, VISITNUM, VISIT, VISITDY, QSDTC, QSDY)
 
 # NOTE: the QS2 dataset made above should be stacked below the admiral_qs dataset.
 # output admiralophtha_qs.RDS
-# saveRDS(qs2, file = "inst/extdata/admiralophtha_qs.RDS")
+
+admiralophtha_qs = rbind(admiral_qs, qs2)
+
+#saveRDS(admiralophtha_qs, file = "inst/extdata/admiralophtha_qs.RDS")
