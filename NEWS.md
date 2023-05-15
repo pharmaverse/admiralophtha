@@ -1,3 +1,8 @@
+# admiralophtha 0.2.0
+
+- Updated `ADOE` to refer to `OE.OESTRESU` for `AVALU` creation (issue #139).
+- Updated `ADOE` and `ADBCVA` `PARAM` mapping to include units where applicable (issue #139).
+
 # admiralophtha 0.1.0
 
 ## New Features

@@ -1,7 +1,7 @@
 Package: admiralophtha
 Type: Package
 Title: ADaM in R Asset Library - Ophthalmology
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Edoardo", "Mancini", email = "edoardo.mancini@roche.com", role = c("aut", "cre")),
     person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut")),
