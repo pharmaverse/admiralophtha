@@ -49,7 +49,7 @@ param_lookup <- tibble::tribble(
 # Get list of ADSL vars required for derivations
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
-adoe <- oe %>%
+adoe_adslvar <- oe %>%
   # Keep only general OE parameters
   filter(
     OETESTCD %in% c("CSUBTH", "DRSSR")
@@ -61,7 +61,7 @@ adoe <- oe %>%
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-adoe <- adoe %>%
+adoe_aval <- adoe_adslvar %>%
   # Calculate AVAL, AVALC, AVALU and DTYPE
   mutate(
     AVAL = OESTRESN,
@@ -70,7 +70,7 @@ adoe <- adoe %>%
     DTYPE = NA_character_
   )
 
-adoe <- adoe %>%
+adoe_param <- adoe_aval %>%
   # Add PARAM, PARAMCD
   derive_vars_merged(
     dataset_add = param_lookup,
@@ -85,7 +85,7 @@ adoe <- adoe %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-adoe <- adoe %>%
+adoe_visit <- adoe_param %>%
   # Derive visit info and BASETYPE
   mutate(
     ATPTN = OETPTNUM,
@@ -100,7 +100,7 @@ adoe <- adoe %>%
   )
 
 # Derive Treatment flags
-adoe <- adoe %>%
+adoe_trtflag <- adoe_visit %>%
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
@@ -121,7 +121,7 @@ adoe <- adoe %>%
   )
 
 # Derive visit flags
-adoe <- adoe %>%
+adoe_vstflag <- adoe_trtflag %>%
   # ANL01FL: Flag last result within a visit and timepoint for baseline and post-baseline records
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -160,7 +160,7 @@ adoe <- adoe %>%
   )
 
 # Derive baseline information
-adoe <- adoe %>%
+adoe_change <- adoe_vstflag %>%
   # Calculate BASE
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
@@ -179,7 +179,7 @@ adoe <- adoe %>%
   derive_var_pchg()
 
 # Assign ASEQ
-adoe <- adoe %>%
+adoe_aseq <- adoe_change %>%
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -188,7 +188,7 @@ adoe <- adoe %>%
   )
 
 # Add all ADSL variables
-adoe <- adoe %>%
+adoe_adsl <- adoe_aseq %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)
@@ -198,7 +198,7 @@ adoe <- adoe %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-admiralophtha_adoe <- adoe
+admiralophtha_adoe <- adoe_adsl
 
 # ---- Save output ----
 
