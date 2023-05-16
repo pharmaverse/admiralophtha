@@ -34,10 +34,10 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
   ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
-  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
+  "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
+  "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
+  "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2,
+  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2
 )
 
 # Assign AVALCAT1
@@ -237,19 +237,17 @@ adbcva_vstflag <- adbcva_trtflag %>%
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
   ) %>%
-  # WORS01FL: Flag worst result within a PARAMCD
+  # WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records.
+  # If worst result is highest result, change mode to "last"
   restrict_derivation(
-    derivation = derive_var_worst_flag,
+    derivation = derive_var_extreme_flag,
     args = params(
-      new_var = WORS01FL,
       by_vars = exprs(USUBJID, PARAMCD),
-      order = exprs(desc(ADT)),
-      param_var = PARAMCD,
-      analysis_var = AVAL,
-      worst_high = character(0), # put character(0) if no PARAMCDs here
-      worst_low = c("FBCVA", "SBCVA") # put character(0) if no PARAMCDs here
+      order = exprs(AVAL, ADT),
+      new_var = WORS01FL,
+      mode = "first"
     ),
-    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & PARAMCD %in% c("FBCVA", "SBCVA")
   )
 
 # Derive baseline information

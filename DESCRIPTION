@@ -1,7 +1,7 @@
 Package: admiralophtha
 Type: Package
 Title: ADaM in R Asset Library - Ophthalmology
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Edoardo", "Mancini", email = "edoardo.mancini@roche.com", role = c("aut", "cre")),
     person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut")),
@@ -10,7 +10,8 @@ Authors@R: c(
     person("William", "Holmes", role = "aut", email = "william.holmes@roche.com"),
     person("Rachel", "Linacre", role = "aut", email = "rachel.linacre@roche.com"),
     person("Lucy", "Palmen", role = "aut", email = "lucy.palmen@roche.com"),
-    person("Nandini", "R Thampi", role = "aut", email = "nandini.rajendhiran@novartis.com")
+    person("Nandini", "R Thampi", role = "aut", email = "nandini.rajendhiran@novartis.com"),
+    person("Yuki", "Matsunaga", role = "aut", email = "yuki.matsunaga@novartis.com")
     )
 Description: Aids the programming of Clinical Data Standards Interchange Consortium
     (CDISC) compliant Ophthalmology Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
@@ -24,12 +25,11 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Depends: R (>= 3.5)
 Imports:
     admiral,
     admiraldev,
-    assertthat,
     dplyr,
     lubridate,
     magrittr,

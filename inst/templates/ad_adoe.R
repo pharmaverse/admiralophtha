@@ -34,10 +34,10 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
   ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
-  "CSUBTH", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
+  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "CSUBTH", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
   "DRSSR", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
   "DRSSR", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
   "DRSSR", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
@@ -66,7 +66,7 @@ adoe_aval <- adoe_adslvar %>%
   mutate(
     AVAL = OESTRESN,
     AVALC = OESTRESC,
-    AVALU = "letters",
+    AVALU = OESTRESU,
     DTYPE = NA_character_
   )
 
@@ -144,19 +144,17 @@ adoe_vstflag <- adoe_trtflag %>%
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
   ) %>%
-  # WORS01FL: Flag worst result with an
+  # WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records
+  # If worst result is lowest result, change mode to "first"
   restrict_derivation(
-    derivation = derive_var_worst_flag,
+    derivation = derive_var_extreme_flag,
     args = params(
-      new_var = WORS01FL,
       by_vars = exprs(USUBJID, PARAMCD),
-      order = exprs(desc(ADT)),
-      param_var = PARAMCD,
-      analysis_var = AVAL,
-      worst_high = c("FDRSSR", "SDRSSR"), # put character(0) if no PARAMCDs here
-      worst_low = character(0) # put character(0) if no PARAMCDs here
+      order = exprs(AVAL, ADT),
+      new_var = WORS01FL,
+      mode = "last"
     ),
-    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & PARAMCD %in% c("FDRSSR", "SDRSSR")
   )
 
 # Derive baseline information
