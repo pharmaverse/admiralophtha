@@ -136,10 +136,6 @@ adbcva_nlogparam <- adbcva_aval %>%
 
 adbcva_logparam <- adbcva_nlogparam %>%
   # Add derived log parameters
-  # Note: temporarily retain some SDTM variables (VISIT, OEDY, OEDTC etc) so
-  # that they can be used to derive ADT, ADY, AVISIT etc for the derived
-  # records. Once these variables are derived, set SDTM variables to missing
-  # for the derived paramters, as per ADaM rules.
   derive_param_computed(
     by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC), adsl_vars),
     parameters = c("SBCVA"),
@@ -147,7 +143,7 @@ adbcva_logparam <- adbcva_nlogparam %>%
     set_values_to = exprs(
       PARAMCD = "SBCVALOG",
       PARAM = "Study Eye Visual Acuity LogMAR Score",
-      DTYPE = "DERIVED",
+      DTYPE = NA_character_,
       AVALU = "LogMAR"
     )
   ) %>%
@@ -158,7 +154,7 @@ adbcva_logparam <- adbcva_nlogparam %>%
     set_values_to = exprs(
       PARAMCD = "FBCVALOG",
       PARAM = "Fellow Eye Visual Acuity LogMAR Score",
-      DTYPE = "DERIVED",
+      DTYPE = NA_character_,
       AVALU = "LogMAR"
     )
   ) %>%
@@ -183,13 +179,6 @@ adbcva_visit <- adbcva_logparam %>%
     ),
     AVISITN = round(VISITNUM, 0),
     BASETYPE = "LAST"
-  ) %>%
-  # Set SDTM variables back to missing for derived parameters
-  mutate(
-    VISIT = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, VISIT),
-    VISITNUM = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, VISITNUM),
-    OEDY = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, OEDY),
-    OEDTC = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, OEDTC)
   )
 
 # Derive Treatment flags
