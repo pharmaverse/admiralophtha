@@ -9,7 +9,7 @@
 ## Updates to Site
 
 - Added a "Report a bug" link to `{admiralophtha}` website (issue #127).
-- Fixed bug where the searchbar didn't work for some searches (issue #141).
+- Fixed bug where the search bar didn't work for some searches (issue #141).
 
 # admiralophtha 0.1.0
 
