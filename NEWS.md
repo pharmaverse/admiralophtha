@@ -3,6 +3,7 @@
 - Updated `ADOE` to refer to `OE.OESTRESU` for `AVALU` creation (issue #139).
 - Updated `ADOE` and `ADBCVA` `PARAM` mapping to include units where applicable (issue #139).
 - Added a "Report a bug" link to `{admiralophtha}` website (issue #127).
+- Updated `ADOE`, `ADVFQ` and `ADBCVA` for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in `ADVFQ`. (issue #128) 
 
 # admiralophtha 0.1.0
 
