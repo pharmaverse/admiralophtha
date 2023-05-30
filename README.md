@@ -70,5 +70,7 @@ developer community:
 
 ## Release Schedule
 
-* The first release (v. 0.1.0) came out on 13th March 2023.
-* The second release will be in Q3 of 2023.
+* The first release (v0.1.0) came out on the 13th March 2023.
+* The second release (v0.2.0) will come on the 12th June 2023.
+* The third release (v0.3.0) will come out in Q3 of 2023.
+
