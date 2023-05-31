@@ -33,11 +33,9 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
-  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
+  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score", 1,
+  "VACSCORE", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
 )
 
 # Assign AVALCAT1
@@ -110,7 +108,7 @@ adbcva <- oe %>%
   filter(
     OETESTCD %in% c("VACSCORE")
   ) %>%
-  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY and PARAMCD derivation)
+  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
@@ -123,14 +121,16 @@ adbcva <- adbcva %>%
     AVAL = OESTRESN,
     AVALU = "letters",
     DTYPE = NA_character_
-  )
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(OELOC, OELAT)
 
 adbcva <- adbcva %>%
   # Add PARAM, PARAMCD for non log parameters
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
+    by_vars = exprs(OETESTCD, AFEYE),
     filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
   )
 
@@ -141,7 +141,7 @@ adbcva <- adbcva %>%
   # records. Once these variables are derived, set SDTM variables to missing
   # for the derived paramters, as per ADaM rules.
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("SBCVA"),
     analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
     set_values_to = exprs(
@@ -152,7 +152,7 @@ adbcva <- adbcva %>%
     )
   ) %>%
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("FBCVA"),
     analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
     set_values_to = exprs(

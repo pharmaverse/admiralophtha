@@ -33,15 +33,11 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
-  "CSUBTH", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
-  "DRSSR", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
-  "DRSSR", "LEFT", "RIGHT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
+  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
+  "CSUBTH", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
+  "DRSSR", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
 )
 
 # ---- Derivations ----
@@ -54,7 +50,7 @@ adoe <- oe %>%
   filter(
     OETESTCD %in% c("CSUBTH", "DRSSR")
   ) %>%
-  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY and PARAMCD derivation)
+  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
@@ -68,14 +64,16 @@ adoe <- adoe %>%
     AVALC = OESTRESC,
     AVALU = "letters",
     DTYPE = NA_character_
-  )
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(OELOC, OELAT)
 
 adoe <- adoe %>%
   # Add PARAM, PARAMCD
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE)
+    by_vars = exprs(OETESTCD, AFEYE)
   ) %>%
   # Calculate ADT, ADY
   derive_vars_dt(
