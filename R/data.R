@@ -14,7 +14,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `oe` and  `ADSL` datasets using `{admiral`, `{admiralophtha}` and
+#' Derived from the `oe` and `ADSL` datasets using `{admiral`, `{admiralophtha}` and
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R})
 #'
 "admiralophtha_adbcva"
