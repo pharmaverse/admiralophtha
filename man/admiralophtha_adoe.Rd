@@ -5,7 +5,7 @@
 \alias{admiralophtha_adoe}
 \title{Ophthalmology Exam Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7672 rows and 97 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7672 rows and 98 columns.
 }
 \source{
 Derived from the \code{oe} and \code{ADSL} datasets using \verb{\{admiral}, \code{{admiralophtha}} and
