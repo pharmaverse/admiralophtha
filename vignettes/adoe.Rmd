@@ -105,7 +105,7 @@ param_lookup <- tibble::tribble(
 )
 ```
 
-Following this setup, the programmer can start constructing ADOE. The first step is to subset OE to only general ophthalmology parameters. Then, one can merge the resulting dataset with ADSL. This is required for two reasons: firstly, `STUDYEYE` is crucial in the mapping of `AFEYE` and PARAMCD`'s. Secondly, the treatment start date (`TRTSDT`) is also a prerequisite for the derivation of variables such as Analysis Day (`ADY`).
+Following this setup, the programmer can start constructing ADOE. The first step is to subset OE to only general ophthalmology parameters. Then, one can merge the resulting dataset with ADSL. This is required for two reasons: firstly, `STUDYEYE` is crucial in the mapping of `AFEYE` and `PARAMCD`'s. Secondly, the treatment start date (`TRTSDT`) is also a prerequisite for the derivation of variables such as Analysis Day (`ADY`).
 
 ```{r}
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
