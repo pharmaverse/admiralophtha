@@ -45,7 +45,7 @@ library(admiraldev)
 
 # Introduction
 
-This article describes creating an ADOE ADaM with Ophthalmology Exam Analysis data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADOE are absent, and the user is invited to consult the aforementioned article for guidance.
+This article describes creating an ADOE ADaM with Ophthalmology Exam Analysis data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html). As such, derivations and processes that are not specific to ADOE are absent, and the user is invited to consult the aforementioned article for guidance.
 
 As the current release of `{admiralophtha}` does not contain any functionality specific to ADOE, this article only showcases how to map parameters from OE in order to set up the basic structure of ADOE. For the following steps, the user is invited to consult the above-linked article on BDS datasets. This article will be updated for future releases to showcase and explain any `{admiralophtha}`-specific functionality.
 
@@ -98,8 +98,8 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
   ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
+  "CSUBTH", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
   "DRSSR", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
   "DRSSR", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
 )
@@ -123,7 +123,7 @@ adoe <- oe %>%
 
 ## Further Derivations of Standard BDS Variables {#further}
 
-The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
 
 ## Example Script {#example}
 
