@@ -134,7 +134,9 @@ qs3 <- qs2 %>%
 
 # NOTE: the QS2 dataset made above should be stacked below the admiral_qs dataset.
 # output admiralophtha_qs.RDS
+# remove the original vfq part from admiral_qs
+admiral_qs_novfq <- admiral_qs %>% filter(QSCAT !="NEI VFQ-25")
 
-admiralophtha_qs <- rbind(admiral_qs, q3)
+admiralophtha_qs <- rbind(admiral_qs_novfq, qs3)
 
 # saveRDS(admiralophtha_qs, file = "inst/extdata/admiralophtha_qs.RDS")
