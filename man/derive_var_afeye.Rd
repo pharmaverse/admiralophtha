@@ -31,13 +31,20 @@ adae <- tribble(
   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
   "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
   "XXX001", "P01", "RIGHT", "EYE", "LEFT",
+  "XXX001", "P01", "RIGHT", "EYE", "",
+  "XXX001", "P01", "RIGHT", "", "RIGHT",
   "XXX001", "P02", "LEFT", "", "",
   "XXX001", "P02", "LEFT", "EYE", "LEFT",
   "XXX001", "P04", "BILATERAL", "EYE", "RIGHT",
-  "XXX001", "P05", "RIGHT", "EYE", "RIGHT"
+  "XXX001", "P05", "RIGHT", "EYE", "RIGHT",
+  "XXX001", "P05", "RIGHT", "EYE", "BILATERAL",
+  "XXX001", "P06", "BILATERAL", "", "",
+  "XXX001", "P06", "BILATERAL", "", "RIGHT",
+  "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL",
+  "XXX001", "P08", "", "EYE", "BILATERAL",
 )
 
-derive_var_afeye(adae, AELOC, AELAT)
+adae <- derive_var_afeye(adae, AELOC, AELAT)
 }
 \author{
 Lucy Palmen
