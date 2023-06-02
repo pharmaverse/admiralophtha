@@ -4,7 +4,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Constructed using `ex` from the `{admiral` package
+#' Constructed using `ex` from the `{admiral}` package
 #'
 "admiralophtha_ex"
 
