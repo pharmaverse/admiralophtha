@@ -125,9 +125,11 @@ qs2 <- merge(qs1, dummy_param_res_by_subj, by = "USUBJID") %>%
 qs3 <- qs2 %>%
   group_by(QSTEST) %>%
   # create numeric var for std result
-  mutate(QSSTRESN = as.numeric(factor(QSSTRESC)))  %>%
-  select(STUDYID, DOMAIN, USUBJID, QSSEQ, QSTESTCD, QSTEST, QSCAT, QSSCAT, QSORRES, QSORRESU, QSSTRESC, QSSTRESN, QSSTRESU,
-         QSBLFL, QSDRVFL, VISITNUM, VISIT, VISITDY, QSDTC, QSDY) %>%
+  mutate(QSSTRESN = as.numeric(factor(QSSTRESC))) %>%
+  select(
+    STUDYID, DOMAIN, USUBJID, QSSEQ, QSTESTCD, QSTEST, QSCAT, QSSCAT, QSORRES, QSORRESU, QSSTRESC, QSSTRESN, QSSTRESU,
+    QSBLFL, QSDRVFL, VISITNUM, VISIT, VISITDY, QSDTC, QSDY
+  ) %>%
   ungroup()
 
 
@@ -135,7 +137,7 @@ qs3 <- qs2 %>%
 # NOTE: the QS2 dataset made above should be stacked below the admiral_qs dataset.
 # output admiralophtha_qs.RDS
 # remove the original vfq part from admiral_qs
-admiral_qs_novfq <- admiral_qs %>% filter(QSCAT !="NEI VFQ-25")
+admiral_qs_novfq <- admiral_qs %>% filter(QSCAT != "NEI VFQ-25")
 
 admiralophtha_qs <- rbind(admiral_qs_novfq, qs3)
 

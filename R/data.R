@@ -50,4 +50,3 @@
 #' Constructed using `qs` from the `{admiral` package
 #'
 "admiralophtha_qs"
-
