@@ -20,7 +20,8 @@ An example Exposure SDTM dataset with ophthalmology-specific variables such as E
 Other datasets: 
 \code{\link{admiralophtha_adbcva}},
 \code{\link{admiralophtha_adoe}},
-\code{\link{admiralophtha_advfq}}
+\code{\link{admiralophtha_advfq}},
+\code{\link{admiralophtha_qs}}
 }
 \concept{datasets}
 \keyword{datasets}

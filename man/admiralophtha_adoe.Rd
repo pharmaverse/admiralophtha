@@ -21,7 +21,8 @@ An example Ophthalmology Exam Analysis dataset
 Other datasets: 
 \code{\link{admiralophtha_adbcva}},
 \code{\link{admiralophtha_advfq}},
-\code{\link{admiralophtha_ex}}
+\code{\link{admiralophtha_ex}},
+\code{\link{admiralophtha_qs}}
 }
 \concept{datasets}
 \keyword{datasets}
