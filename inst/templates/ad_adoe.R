@@ -36,6 +36,8 @@ param_lookup <- tibble::tribble(
   ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
   "CSUBTH", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
   "CSUBTH", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
 )
 
 # ---- Derivations ----
