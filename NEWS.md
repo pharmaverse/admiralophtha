@@ -2,13 +2,14 @@
 
 ## Updates to Functions
 
+- Added new parameter `loc_vals` to function `derive_var_afeye()` to allow users to specify values of `xxLOC` for which `AFEYE` is derived (issue #163).
 - Updated function `derive_var_afeye()` to resolve bug when `STUDYEYE` is 'Bilateral' (issue #134).
 
 ## Updates to Templates
 
 - Updated `ADOE` to refer to `OESTRESU` for `AVALU` creation (issue #139).
 - Updated `ADOE` and `ADBCVA` `PARAM` mapping to include units where applicable (issue #139).
-- Updated `ADOE`, `ADVFQ` and `ADBCVA` for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in `ADVFQ`. (issue #128) 
+- Updated `ADOE`, `ADVFQ` and `ADBCVA` for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in `ADVFQ` (issue #128). 
 - Corrected values of `DTYPE`, `VISIT`, `VISITNUM`, `OEDY`, `OEDTC` for derived parameters in `ADBCVA` template (issue #137).
 
 ## Updates to Site
