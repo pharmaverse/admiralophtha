@@ -127,7 +127,7 @@ adbcva <- adbcva %>%
     AVAL = OESTRESN,
     AVALU = "letters",
     DTYPE = NA_character_
-  ) %>% 
+  ) %>%
   derive_var_afeye(OELOC, OELAT)
 ```
 
