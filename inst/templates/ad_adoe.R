@@ -66,7 +66,7 @@ adoe_aval <- adoe_adslvar %>%
     DTYPE = NA_character_
   ) %>%
   # Derive AFEYE needed for PARAMCD derivation
-  derive_var_afeye(OELOC, OELAT)
+  derive_var_afeye(OELOC, OELAT, loc_vals = c("EYE", "RETINA"))
 
 adoe_param <- adoe_aval %>%
   # Add PARAM, PARAMCD

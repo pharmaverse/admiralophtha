@@ -2,6 +2,7 @@
 
 ## Updates to Functions
 
+- Added new parameter `loc_vals` to function `derive_var_afeye()` to allow users to specify values of `xxLOC` for which `AFEYE` is derived (issue #163).
 - Updated function `derive_var_afeye()` to resolve bug when `STUDYEYE` is 'Bilateral' (issue #134).
 
 ## Updates to Templates
