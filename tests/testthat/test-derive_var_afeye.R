@@ -1,5 +1,5 @@
 test_that("AFEYE is derived correctly", {
-  adae <- tibble::tribble(
+  adae1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
     "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
     "XXX001", "P01", "RIGHT", "EYE", "LEFT",
@@ -15,26 +15,45 @@ test_that("AFEYE is derived correctly", {
     "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL",
     "XXX001", "P08", "", "EYE", "BILATERAL",
   )
-  expected_output <- tibble::tribble(
+  expected_output1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
     "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
     "XXX001", "P01", "RIGHT", "EYE", "LEFT", "Fellow Eye",
-    "XXX001", "P01", "RIGHT", "EYE", "", NA,
-    "XXX001", "P01", "RIGHT", "", "RIGHT", NA,
-    "XXX001", "P02", "LEFT", "", "", NA,
+    "XXX001", "P01", "RIGHT", "EYE", "", NA_character_,
+    "XXX001", "P01", "RIGHT", "", "RIGHT", NA_character_,
+    "XXX001", "P02", "LEFT", "", "", NA_character_,
     "XXX001", "P02", "LEFT", "EYE", "LEFT", "Study Eye",
     "XXX001", "P04", "BILATERAL", "EYE", "RIGHT", "Study Eye",
     "XXX001", "P05", "RIGHT", "EYE", "RIGHT", "Study Eye",
     "XXX001", "P05", "RIGHT", "EYE", "BILATERAL", "Both Eyes",
-    "XXX001", "P06", "BILATERAL", "", "", NA,
-    "XXX001", "P06", "BILATERAL", "", "RIGHT", NA,
+    "XXX001", "P06", "BILATERAL", "", "", NA_character_,
+    "XXX001", "P06", "BILATERAL", "", "RIGHT", NA_character_,
     "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL", "Both Eyes",
-    "XXX001", "P08", "", "EYE", "BILATERAL", NA,
+    "XXX001", "P08", "", "EYE", "BILATERAL", NA_character_,
   )
 
   expect_dfs_equal(
-    derive_var_afeye(adae, AELOC, AELAT),
-    expected_output,
+    derive_var_afeye(adae1, AELOC, AELAT),
+    expected_output1,
+    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
+  )
+
+  adae2 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
+    "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
+    "XXX001", "P01", "RIGHT", "RETINA", "LEFT",
+    "XXX001", "P01", "RIGHT", "", "",
+  )
+  expected_output2 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
+    "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
+    "XXX001", "P01", "RIGHT", "RETINA", "LEFT", "Fellow Eye",
+    "XXX001", "P01", "RIGHT", "", "", NA_character_,
+  )
+
+  expect_dfs_equal(
+    derive_var_afeye(adae2, AELOC, AELAT, loc_vals = c("EYE", "RETINA")),
+    expected_output2,
     keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
   )
 })
