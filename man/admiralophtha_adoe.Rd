@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7672 rows and 97 columns.
 }
 \source{
-Derived from the \code{oe} and \code{ADSL} datasets using \verb{\{admiral}, \code{{admiralophtha}} and
+Derived from the \code{oe} and \code{ADSL} datasets using \code{{admiral}}, \code{{admiralophtha}} and
 (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R})
 }
 \usage{
@@ -21,7 +21,8 @@ An example Ophthalmology Exam Analysis dataset
 Other datasets: 
 \code{\link{admiralophtha_adbcva}},
 \code{\link{admiralophtha_advfq}},
-\code{\link{admiralophtha_ex}}
+\code{\link{admiralophtha_ex}},
+\code{\link{admiralophtha_qs}}
 }
 \concept{datasets}
 \keyword{datasets}
