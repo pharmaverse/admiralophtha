@@ -319,8 +319,8 @@ The resulting output is shown below (limited to the first patient only):
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  adbcva %>% 
-    filter(USUBJID == "01-701-1015") %>% 
+  adbcva %>%
+    filter(USUBJID == "01-701-1015") %>%
     select(USUBJID, PARAMCD, AVAL, CHG, starts_with("CRIT"))
 )
 ```
