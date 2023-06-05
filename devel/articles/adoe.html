@@ -60,14 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -159,7 +151,7 @@ lookup table for the mapping of parameter codes.</p>
 <p><strong>Note</strong>: to simulate an ophthalmology study, we add a
 randomly generated <code>STUDYEYE</code> variable to ADSL, but in
 practice <code>STUDYEYE</code> will already have been derived using
-<code>derive_var_studyeye</code>.</p>
+<code><a href="../reference/derive_var_studyeye.html">derive_var_studyeye()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_oe"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span>
@@ -177,23 +169,19 @@ practice <code>STUDYEYE</code> will already have been derived using
 
 <span class="co"># Assign PARAMCD, PARAM, and PARAMN</span>
 <span class="va">param_lookup</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
-  <span class="op">~</span><span class="va">OETESTCD</span>, <span class="op">~</span><span class="va">OELAT</span>, <span class="op">~</span><span class="va">STUDYEYE</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">PARAMN</span>,
-  <span class="st">"CSUBTH"</span>, <span class="st">"RIGHT"</span>, <span class="st">"RIGHT"</span>, <span class="st">"SCSUBTH"</span>, <span class="st">"Study Eye Center Subfield Thickness (um)"</span>, <span class="fl">1</span>,
-  <span class="st">"CSUBTH"</span>, <span class="st">"LEFT"</span>, <span class="st">"LEFT"</span>, <span class="st">"SCSUBTH"</span>, <span class="st">"Study Eye Center Subfield Thickness (um)"</span>, <span class="fl">1</span>,
-  <span class="st">"CSUBTH"</span>, <span class="st">"RIGHT"</span>, <span class="st">"LEFT"</span>, <span class="st">"FBCVA"</span>, <span class="st">"Fellow Eye Center Subfield Thickness (um)"</span>, <span class="fl">2</span>,
-  <span class="st">"CSUBTH"</span>, <span class="st">"LEFT"</span>, <span class="st">"RIGHT"</span>, <span class="st">"FBCVA"</span>, <span class="st">"Fellow Eye Center Subfield Thickness (um)"</span>, <span class="fl">2</span>,
-  <span class="st">"DRSSR"</span>, <span class="st">"RIGHT"</span>, <span class="st">"RIGHT"</span>, <span class="st">"SDRSSR"</span>, <span class="st">"Study Eye Diabetic Retinopathy Severity"</span>, <span class="fl">3</span>,
-  <span class="st">"DRSSR"</span>, <span class="st">"LEFT"</span>, <span class="st">"LEFT"</span>, <span class="st">"SDRSSR"</span>, <span class="st">"Study Eye Diabetic Retinopathy Severity"</span>, <span class="fl">3</span>,
-  <span class="st">"DRSSR"</span>, <span class="st">"RIGHT"</span>, <span class="st">"LEFT"</span>, <span class="st">"FDRSSR"</span>, <span class="st">"Fellow Eye Diabetic Retinopathy Severity"</span>, <span class="fl">4</span>,
-  <span class="st">"DRSSR"</span>, <span class="st">"LEFT"</span>, <span class="st">"RIGHT"</span>, <span class="st">"FDRSSR"</span>, <span class="st">"Fellow Eye Diabetic Retinopathy Severity"</span>, <span class="fl">4</span>
+  <span class="op">~</span><span class="va">OETESTCD</span>, <span class="op">~</span><span class="va">AFEYE</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">PARAMN</span>,
+  <span class="st">"CSUBTH"</span>, <span class="st">"Study Eye"</span>, <span class="st">"SCSUBTH"</span>, <span class="st">"Study Eye Center Subfield Thickness (um)"</span>, <span class="fl">1</span>,
+  <span class="st">"CSUBTH"</span>, <span class="st">"Fellow Eye"</span>, <span class="st">"FCSUBTH"</span>, <span class="st">"Fellow Eye Center Subfield Thickness (um)"</span>, <span class="fl">2</span>,
+  <span class="st">"DRSSR"</span>, <span class="st">"Study Eye"</span>, <span class="st">"SDRSSR"</span>, <span class="st">"Study Eye Diabetic Retinopathy Severity"</span>, <span class="fl">3</span>,
+  <span class="st">"DRSSR"</span>, <span class="st">"Fellow Eye"</span>, <span class="st">"FDRSSR"</span>, <span class="st">"Fellow Eye Diabetic Retinopathy Severity"</span>, <span class="fl">4</span>,
 <span class="op">)</span></code></pre></div>
 <p>Following this setup, the programmer can start constructing ADOE. The
 first step is to subset OE to only general ophthalmology parameters.
 Then, one can merge the resulting dataset with ADSL. This is required
 for two reasons: firstly, <code>STUDYEYE</code> is crucial in the
-mapping of <code>PARAMCD</code>’s. Secondly, the treatment start date
-(<code>TRTSDT</code>) is also a prerequisite for the derivation of
-variables such as Analysis Day (<code>ADY</code>).</p>
+mapping of <code>AFEYE</code> and <code>PARAMCD</code>’s. Secondly, the
+treatment start date (<code>TRTSDT</code>) is also a prerequisite for
+the derivation of variables such as Analysis Day (<code>ADY</code>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adsl_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/admiral/man/reexport-exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span>, <span class="va">TRTEDT</span>, <span class="va">TRT01A</span>, <span class="va">TRT01P</span>, <span class="va">STUDYEYE</span><span class="op">)</span>
 
