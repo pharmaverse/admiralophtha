@@ -9,8 +9,9 @@
 
 - Updated `ADOE` to refer to `OESTRESU` for `AVALU` creation (issue #139).
 - Updated `ADOE` and `ADBCVA` `PARAM` mapping to include units where applicable (issue #139).
-- Updated `ADOE`, `ADVFQ` and `ADBCVA` for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in `ADVFQ` (issue #128). 
+- Updated `ADOE`, `ADVFQ` and `ADBCVA` for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in `ADVFQ` (issue #128).
 - Corrected values of `DTYPE`, `VISIT`, `VISITNUM`, `OEDY`, `OEDTC` for derived parameters in `ADBCVA` template (issue #137).
+- Updated `ADBCVA` and `ADOE` templates to include `AFEYE` (issue #133).
 
 ## Updates to Site
 
