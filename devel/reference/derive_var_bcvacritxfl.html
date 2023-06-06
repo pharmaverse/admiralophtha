@@ -38,14 +38,6 @@ ADBCVA dataset."><meta property="og:image" content="https://pharmaverse.github.i
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -187,8 +179,8 @@ as NA.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> XXX001  P03     LAST     FBCVA       17 0 &lt;= CHG … N       -5 &lt;… N       10 &lt;…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> XXX001  P01     LAST     SBCVALOG    -<span style="color: #BB0000;">7</span> <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> XXX001  P02     LAST     SBCVALOG    12 <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 7 more variables: CRIT3FL &lt;chr&gt;, CRIT4 &lt;chr&gt;, CRIT4FL &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   CRIT5 &lt;chr&gt;, CRIT5FL &lt;chr&gt;, CRIT6 &lt;chr&gt;, CRIT6FL &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: CRIT3FL &lt;chr&gt;, CRIT4 &lt;chr&gt;, CRIT4FL &lt;chr&gt;, CRIT5 &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   CRIT5FL &lt;chr&gt;, CRIT6 &lt;chr&gt;, CRIT6FL &lt;chr&gt;</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">adbcva2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">STUDYID</span>, <span class="op">~</span><span class="va">USUBJID</span>, <span class="op">~</span><span class="va">AVISIT</span>, <span class="op">~</span><span class="va">BASETYPE</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">AVAL</span>, <span class="op">~</span><span class="va">CHG</span>,</span>
@@ -223,7 +215,7 @@ as NA.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> XXX001  P01     WEEK 2        LAST     SBCVA      -<span style="color: #BB0000;">3</span>    <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> XXX001  P01     WEEK 4        LAST     SBCVA     -<span style="color: #BB0000;">10</span>    <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> XXX001  P01     WEEK 6        LAST     SBCVA      12    <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 3 more variables: CRIT2FL &lt;chr&gt;, CRIT3 &lt;chr&gt;, CRIT3FL &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: CRIT2FL &lt;chr&gt;, CRIT3 &lt;chr&gt;, CRIT3FL &lt;chr&gt;</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
