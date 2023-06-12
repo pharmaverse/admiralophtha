@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 591 rows and 19 columns.
 }
 \source{
-Constructed using \code{ex} from the \verb{\{admiral} package
+Constructed using \code{ex} from the \code{{admiral}} package
 }
 \usage{
 admiralophtha_ex
@@ -20,7 +20,8 @@ An example Exposure SDTM dataset with ophthalmology-specific variables such as E
 Other datasets: 
 \code{\link{admiralophtha_adbcva}},
 \code{\link{admiralophtha_adoe}},
-\code{\link{admiralophtha_advfq}}
+\code{\link{admiralophtha_advfq}},
+\code{\link{admiralophtha_qs}}
 }
 \concept{datasets}
 \keyword{datasets}

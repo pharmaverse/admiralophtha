@@ -45,7 +45,7 @@ library(admiraldev)
 
 # Introduction
 
-This article describes creating an ADBCVA ADaM with Best-Corrected Visual Acuity (BCVA) data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADBCVA are absent, and the user is invited to consult the aforementioned article for guidance.
+This article describes creating an ADBCVA ADaM with Best-Corrected Visual Acuity (BCVA) data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html). As such, derivations and processes that are not specific to ADBCVA are absent, and the user is invited to consult the aforementioned article for guidance.
 
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
 otherwise specified.*
@@ -80,7 +80,7 @@ library(admiralophtha)
 
 As with all BDS ADaM datasets, one should start from the OE SDTM, where only the BCVA records are of interest. For the purposes of the next two sections, we shall be using the `{admiral}` OE and ADSL test data. We will also require a lookup table for the mapping of parameter codes.
 
-**Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye`.
+**Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye()`.
 
 ```{r}
 data("admiral_oe")
@@ -97,15 +97,13 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 
 # ---- Lookup table ----
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
-  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
+  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
+  "VACSCORE", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2,
 )
 ```
 
-Following this setup, the programmer can start constructing ADBCVA. The first step is to subset OE to only BCVA parameters and merge with ADSL. This is required for two reasons: firstly, `STUDYEYE` is crucial in the mapping of `PARAMCD`'s. Secondly, the treatment start date (`TRTSDT`) is also a prerequisite for the derivation of variables such as Analysis Day (`ADY`).
+Following this setup, the programmer can start constructing ADBCVA. The first step is to subset OE to only BCVA parameters and merge with ADSL. This is required for two reasons: firstly, `STUDYEYE` is crucial in the mapping of `AFEYE` and `PARAMCD`'s. Secondly, the treatment start date (`TRTSDT`) is also a prerequisite for the derivation of variables such as Analysis Day (`ADY`).
 
 ```{r}
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
@@ -121,7 +119,7 @@ adbcva <- oe %>%
   )
 ```
 
-The next item of business is to derive `AVAL`, `AVALU`, and `DTYPE`. In this example, due to the small number of parameters their derivation is trivial.
+The next item of business is to derive `AVAL`, `AVALU`, and `DTYPE`. In this example, due to the small number of parameters their derivation is trivial. `AFEYE` is also created in this step using the function `derive_var_afeye()`.
 
 ```{r}
 adbcva <- adbcva %>%
@@ -129,24 +127,25 @@ adbcva <- adbcva %>%
     AVAL = OESTRESN,
     AVALU = "letters",
     DTYPE = NA_character_
-  )
+  ) %>%
+  derive_var_afeye(OELOC, OELAT)
 ```
 
-Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged` from `{admiral}` and the lookup table `param_lookup` generated above.
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above.
 
 ```{r}
 adbcva <- adbcva %>%
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
+    by_vars = exprs(OETESTCD, AFEYE),
     filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
   )
 ```
 
 ## Deriving LogMAR Score Parameters {#logmar}
 
-Often ADBCVA datasets contain derived records for BCVA in LogMAR units. This can easily be achieved as follows using `derive_param_computed`. The conversion of units is done using `convert_etdrs_to_logmar`. Two separate calls are required due to the parameters being split by study and fellow eye. Once these extra parameters are added, all the records that will be in the end dataset are now present, so `AVALC` and day/date variables such as `ADY` and `ADT` can be derived.
+Often ADBCVA datasets contain derived records for BCVA in LogMAR units. This can easily be achieved as follows using `derive_param_computed()`. The conversion of units is done using `convert_etdrs_to_logmar()`. Two separate calls are required due to the parameters being split by study and fellow eye. Once these extra parameters are added, all the records that will be in the end dataset are now present, so `AVALC` and day/date variables such as `ADY` and `ADT` can be derived.
 
 ```{r}
 adbcva <- adbcva %>%
@@ -181,7 +180,7 @@ adbcva <- adbcva %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 ```
 
-Importantly, the above calls to `derive_param_computed` list the SDTM variables `VISIT`, `VISITNUM`, `OEDY` and `OEDTC` as `by_vars` for the function. This is because they will be necessary to derive ADaM variables such as `AVISIT` and `ADY` in successive steps. Once all the ADaM variables which require them are derived, the SDTM variables should be set to missing for the derived records, as per ADaM standards:
+Importantly, the above calls to `derive_param_computed()` list the SDTM variables `VISIT`, `VISITNUM`, `OEDY` and `OEDTC` as `by_vars` for the function. This is because they will be necessary to derive ADaM variables such as `AVISIT` and `ADY` in successive steps. Once all the ADaM variables which require them are derived, the SDTM variables should be set to missing for the derived records, as per ADaM standards:
 
 ```{r}
 adbcva <- adbcva %>%
@@ -195,7 +194,7 @@ adbcva <- adbcva %>%
 
 ## Further Derivations of Standard BDS Variables {#further}
 
-The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADBCVA. Henceforth, for the purposes of this article, the following sections use the ADBCVA dataset generated by the corresponding `{admiralophtha}` template program as a starting point.
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADBCVA. Henceforth, for the purposes of this article, the following sections use the ADBCVA dataset generated by the corresponding `{admiralophtha}` template program as a starting point.
 
 **Note**: This dataset already comes with some criterion flags and analysis value categorisation variables, so for illustration purposes these are removed.
 
@@ -290,13 +289,13 @@ dataset_vignette(
 ```
 ## Deriving Criterion Flags for BCVA Change {#critflags}
 
-`{admiralophtha}` suggests the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between x and y letters* (relative to baseline or other basetypes). The package provides the function `derive_var_bcvacritxfl` to program these endpoints efficiently and consistently. In terms of the logic to apply to the variable `CHG`, the endpoints fall into three classes, which can be represented by inequalities:
+`{admiralophtha}` suggests the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between x and y letters* (relative to baseline or other basetypes). The package provides the function `derive_var_bcvacritxfl()` to program these endpoints efficiently and consistently. In terms of the logic to apply to the variable `CHG`, the endpoints fall into three classes, which can be represented by inequalities:
 
 * Class 1: `CHG` value lying inside a range, `a <= CHG <= b`.
 * Class 2: `CHG` value below an upper limit, `CHG <= a`.
 * Class 3: `CHG` value above a lower limit, `CHG => b`.
 
-By using `derive_var_bcvacritxfl`, the ADaM programmer can implement all three types of endpoint at once. This is achieved by feeding the appropriate ranges, upper limits and lower limits to the `bcva_ranges`, `bcva_uplims` and `bcva_lowlims` arguments of the function. For instance, let's suppose that the endpoints of interest are:
+By using `derive_var_bcvacritxfl()`, the ADaM programmer can implement all three types of endpoint at once. This is achieved by feeding the appropriate ranges, upper limits and lower limits to the `bcva_ranges`, `bcva_uplims` and `bcva_lowlims` arguments of the function. For instance, let's suppose that the endpoints of interest are:
 
 * *Gain of between 5 and 10 letters relative to baseline* (Class 1: `5 <= CHG <= 10`)
 * *Gain of 25 letters or fewer relative to baseline* (Class 2: `CHG <= 25`)
@@ -319,14 +318,13 @@ The resulting output is shown below (limited to the first patient only):
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  adbcva %>% filter(USUBJID == "01-701-1015"),
-  display_vars = exprs(
-    USUBJID, PARAMCD, AVAL, CHG, CRIT1, CRIT1FL, CRIT2, CRIT2FL, CRIT3, CRIT3FL, CRIT4, CRIT4FL, CRIT5, CRIT5FL
-  )
+  adbcva %>%
+    filter(USUBJID == "01-701-1015") %>%
+    select(USUBJID, PARAMCD, AVAL, CHG, starts_with("CRIT"))
 )
 ```
 
-It is also possible to assign significance to the "x" in `CRITxFL`. For instance, one could designate all criterion flags of Class 1 as `CRIT1yFL`, Class 2 as `CRIT2yFL`, and Class 3 as `CRIT3yFL`. The argument `critxfl_index` allows a simple implementation of this in conjunction with three separate calls to `derive_var_bcvacritxfl`:
+It is also possible to assign significance to the "x" in `CRITxFL`. For instance, one could designate all criterion flags of Class 1 as `CRIT1yFL`, Class 2 as `CRIT2yFL`, and Class 3 as `CRIT3yFL`. The argument `critxfl_index` allows a simple implementation of this in conjunction with three separate calls to `derive_var_bcvacritxfl()`:
 
 ```{r}
 adbcva <- adbcva %>%
@@ -349,7 +347,7 @@ adbcva <- adbcva %>%
 
 ## Additional Notes
 
-* When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
+* When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl()`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl()` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
 
 ## Example Script {#example}
 

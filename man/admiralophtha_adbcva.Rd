@@ -5,10 +5,10 @@
 \alias{admiralophtha_adbcva}
 \title{Best Corrected Visual Acuity Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7672 rows and 115 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7672 rows and 116 columns.
 }
 \source{
-Derived from the \code{oe} and \code{ADSL} datasets using \verb{\{admiral}, \code{{admiralophtha}} and
+Derived from the \code{oe} and \code{ADSL} datasets using \code{{admiral}}, \code{{admiralophtha}} and
 (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R})
 }
 \usage{
@@ -21,7 +21,8 @@ An example Best Corrected Visual Acuity (BCVA) analysis dataset
 Other datasets: 
 \code{\link{admiralophtha_adoe}},
 \code{\link{admiralophtha_advfq}},
-\code{\link{admiralophtha_ex}}
+\code{\link{admiralophtha_ex}},
+\code{\link{admiralophtha_qs}}
 }
 \concept{datasets}
 \keyword{datasets}

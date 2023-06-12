@@ -33,15 +33,11 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness", 1,
-  "CSUBTH", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
-  "CSUBTH", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness", 2,
-  "DRSSR", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
-  "DRSSR", "LEFT", "RIGHT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
+  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
 )
 
 # ---- Derivations ----
@@ -49,33 +45,35 @@ param_lookup <- tibble::tribble(
 # Get list of ADSL vars required for derivations
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
-adoe <- oe %>%
+adoe_adslvar <- oe %>%
   # Keep only general OE parameters
   filter(
     OETESTCD %in% c("CSUBTH", "DRSSR")
   ) %>%
-  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY and PARAMCD derivation)
+  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-adoe <- adoe %>%
+adoe_aval <- adoe_adslvar %>%
   # Calculate AVAL, AVALC, AVALU and DTYPE
   mutate(
     AVAL = OESTRESN,
     AVALC = OESTRESC,
-    AVALU = "letters",
+    AVALU = OESTRESU,
     DTYPE = NA_character_
-  )
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(OELOC, OELAT, loc_vals = c("EYE", "RETINA"))
 
-adoe <- adoe %>%
+adoe_param <- adoe_aval %>%
   # Add PARAM, PARAMCD
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE)
+    by_vars = exprs(OETESTCD, AFEYE)
   ) %>%
   # Calculate ADT, ADY
   derive_vars_dt(
@@ -85,7 +83,7 @@ adoe <- adoe %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-adoe <- adoe %>%
+adoe_visit <- adoe_param %>%
   # Derive visit info and BASETYPE
   mutate(
     ATPTN = OETPTNUM,
@@ -100,7 +98,7 @@ adoe <- adoe %>%
   )
 
 # Derive Treatment flags
-adoe <- adoe %>%
+adoe_trtflag <- adoe_visit %>%
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
@@ -121,7 +119,7 @@ adoe <- adoe %>%
   )
 
 # Derive visit flags
-adoe <- adoe %>%
+adoe_vstflag <- adoe_trtflag %>%
   # ANL01FL: Flag last result within a visit and timepoint for baseline and post-baseline records
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -144,23 +142,21 @@ adoe <- adoe %>%
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
   ) %>%
-  # WORS01FL: Flag worst result with an
+  # WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records
+  # If worst result is lowest result, change mode to "first"
   restrict_derivation(
-    derivation = derive_var_worst_flag,
+    derivation = derive_var_extreme_flag,
     args = params(
-      new_var = WORS01FL,
       by_vars = exprs(USUBJID, PARAMCD),
-      order = exprs(desc(ADT)),
-      param_var = PARAMCD,
-      analysis_var = AVAL,
-      worst_high = c("FDRSSR", "SDRSSR"), # put character(0) if no PARAMCDs here
-      worst_low = character(0) # put character(0) if no PARAMCDs here
+      order = exprs(AVAL, ADT),
+      new_var = WORS01FL,
+      mode = "last"
     ),
-    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & PARAMCD %in% c("FDRSSR", "SDRSSR")
   )
 
 # Derive baseline information
-adoe <- adoe %>%
+adoe_change <- adoe_vstflag %>%
   # Calculate BASE
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
@@ -179,7 +175,7 @@ adoe <- adoe %>%
   derive_var_pchg()
 
 # Assign ASEQ
-adoe <- adoe %>%
+adoe_aseq <- adoe_change %>%
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -188,7 +184,7 @@ adoe <- adoe %>%
   )
 
 # Add all ADSL variables
-adoe <- adoe %>%
+adoe_adsl <- adoe_aseq %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)
@@ -198,7 +194,7 @@ adoe <- adoe %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-admiralophtha_adoe <- adoe
+admiralophtha_adoe <- adoe_adsl
 
 # ---- Save output ----
 

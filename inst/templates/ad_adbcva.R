@@ -33,11 +33,9 @@ oe <- convert_blanks_to_na(admiral_oe) %>%
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "VACSCORE", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score", 1,
-  "VACSCORE", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score", 2,
-  "VACSCORE", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score", 2
+  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
+  "VACSCORE", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2,
 )
 
 # Assign AVALCAT1
@@ -105,60 +103,58 @@ format_avalcat1n <- function(param, aval) {
 # Get list of ADSL vars required for derivations
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
-adbcva <- oe %>%
+adbcva_adslvar <- oe %>%
   # Keep only BCVA parameters
   filter(
     OETESTCD %in% c("VACSCORE")
   ) %>%
-  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY and PARAMCD derivation)
+  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-adbcva <- adbcva %>%
+adbcva_aval <- adbcva_adslvar %>%
   # Calculate AVAL, AVALU and DTYPE
   mutate(
     AVAL = OESTRESN,
     AVALU = "letters",
     DTYPE = NA_character_
-  )
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(OELOC, OELAT)
 
-adbcva <- adbcva %>%
+adbcva_nlogparam <- adbcva_aval %>%
   # Add PARAM, PARAMCD for non log parameters
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
+    by_vars = exprs(OETESTCD, AFEYE),
     filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
   )
 
-adbcva <- adbcva %>%
+adbcva_logparam <- adbcva_nlogparam %>%
   # Add derived log parameters
-  # Note: temporarily retain some SDTM variables (VISIT, OEDY, OEDTC etc) so
-  # that they can be used to derive ADT, ADY, AVISIT etc for the derived
-  # records. Once these variables are derived, set SDTM variables to missing
-  # for the derived paramters, as per ADaM rules.
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("SBCVA"),
     analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
     set_values_to = exprs(
       PARAMCD = "SBCVALOG",
       PARAM = "Study Eye Visual Acuity LogMAR Score",
-      DTYPE = "DERIVED",
+      DTYPE = NA_character_,
       AVALU = "LogMAR"
     )
   ) %>%
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("FBCVA"),
     analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
     set_values_to = exprs(
       PARAMCD = "FBCVALOG",
       PARAM = "Fellow Eye Visual Acuity LogMAR Score",
-      DTYPE = "DERIVED",
+      DTYPE = NA_character_,
       AVALU = "LogMAR"
     )
   ) %>%
@@ -171,7 +167,7 @@ adbcva <- adbcva %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-adbcva <- adbcva %>%
+adbcva_visit <- adbcva_logparam %>%
   # Derive visit info and BASETYPE
   mutate(
     ATPTN = OETPTNUM,
@@ -183,17 +179,10 @@ adbcva <- adbcva %>%
     ),
     AVISITN = round(VISITNUM, 0),
     BASETYPE = "LAST"
-  ) %>%
-  # Set SDTM variables back to missing for derived parameters
-  mutate(
-    VISIT = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, VISIT),
-    VISITNUM = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, VISITNUM),
-    OEDY = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, OEDY),
-    OEDTC = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, OEDTC)
   )
 
 # Derive Treatment flags
-adbcva <- adbcva %>%
+adbcva_trtflag <- adbcva_visit %>%
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
@@ -214,7 +203,7 @@ adbcva <- adbcva %>%
   )
 
 # Derive visit flags
-adbcva <- adbcva %>%
+adbcva_vstflag <- adbcva_trtflag %>%
   # ANL01FL: Flag last result within a visit and timepoint for baseline and post-baseline records
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -237,23 +226,21 @@ adbcva <- adbcva %>%
     ),
     filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y")
   ) %>%
-  # WORS01FL: Flag worst result within a PARAMCD
+  # WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records.
+  # If worst result is highest result, change mode to "last"
   restrict_derivation(
-    derivation = derive_var_worst_flag,
+    derivation = derive_var_extreme_flag,
     args = params(
-      new_var = WORS01FL,
       by_vars = exprs(USUBJID, PARAMCD),
-      order = exprs(desc(ADT)),
-      param_var = PARAMCD,
-      analysis_var = AVAL,
-      worst_high = character(0), # put character(0) if no PARAMCDs here
-      worst_low = c("FBCVA", "SBCVA") # put character(0) if no PARAMCDs here
+      order = exprs(AVAL, ADT),
+      new_var = WORS01FL,
+      mode = "first"
     ),
-    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & PARAMCD %in% c("FBCVA", "SBCVA")
   )
 
 # Derive baseline information
-adbcva <- adbcva %>%
+adbcva_change <- adbcva_vstflag %>%
   # Calculate BASE
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
@@ -272,7 +259,7 @@ adbcva <- adbcva %>%
   derive_var_pchg()
 
 # Assign ASEQ
-adbcva <- adbcva %>%
+adbcva_aseq <- adbcva_change %>%
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = exprs(STUDYID, USUBJID),
@@ -281,13 +268,13 @@ adbcva <- adbcva %>%
   )
 
 # Add all ADSL variables
-adbcva <- adbcva %>%
+adbcva_adsl <- adbcva_aseq %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)
   )
 
-adbcva <- adbcva %>%
+adbcva_crtflag <- adbcva_adsl %>%
   # Add criterion flags for BCVA endpoints
   derive_var_bcvacritxfl(
     paramcds = c("SBCVA", "FBCVA"),
@@ -308,7 +295,7 @@ adbcva <- adbcva %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-admiralophtha_adbcva <- adbcva
+admiralophtha_adbcva <- adbcva_crtflag
 
 # ---- Save output ----
 
