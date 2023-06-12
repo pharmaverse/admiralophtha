@@ -1,16 +1,20 @@
 Package: admiralophtha
 Type: Package
 Title: ADaM in R Asset Library - Ophthalmology
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Edoardo", "Mancini", email = "edoardo.mancini@roche.com", role = c("aut", "cre")),
+    person("Ritika", "Aggarwal", email = "ritika.aggarwal@novartis.com", role = c("aut")),
+    person("Jane", "Gao", email = "jane.gao@roche.com",role = c("aut")),
+    person("William", "Holmes", email = "william.holmes@roche.com", role = c("aut")),
+    person("Josie", "Jackson", email = "josie.jackson@roche.com", role = c("aut")),
+    person("Sonali", "Jain", email = "sonali.jain@novartis.com", role = c("aut")),
+    person("Yuki", "Matsunaga", email = "yuki.matsunaga@novartis.com", role = c("aut")),
     person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut")),
-    person("Ritika", "Aggarwal", role = "aut", email = "ritika.aggarwal@novartis.com"),
-    person("Jane", "Gao", role = "aut", email = "jane.gao@roche.com"),
-    person("William", "Holmes", role = "aut", email = "william.holmes@roche.com"),
-    person("Rachel", "Linacre", role = "aut", email = "rachel.linacre@roche.com"),
-    person("Lucy", "Palmen", role = "aut", email = "lucy.palmen@roche.com"),
-    person("Nandini", "R Thampi", role = "aut", email = "nandini.rajendhiran@novartis.com")
+    person("Rachel", "Linacre", email = "rachel.linacre@roche.com", role = c("aut")),
+    person("Lucy", "Palmen", email = "lucy.palmen@roche.com", role = c("aut")),
+    person("Nandini", "R Thampi", email = "nandini.rajendhiran@novartis.com", role = c("aut")),
+    person("Aldrich", "Salva", email = "salva.aldrich@gene.com", role = c("aut"))
     )
 Description: Aids the programming of Clinical Data Standards Interchange Consortium
     (CDISC) compliant Ophthalmology Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
@@ -19,17 +23,17 @@ Description: Aids the programming of Clinical Data Standards Interchange Consort
     implemented in accordance with the "Analysis Data Model Implementation Guide"
     (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 License: Apache License (>= 2)
+BugReports: https://github.com/pharmaverse/admiralophtha/issues
 URL: https://pharmaverse.github.io/admiralophtha/, https://github.com/pharmaverse/admiralophtha/
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Depends: R (>= 3.5)
 Imports:
     admiral,
     admiraldev,
-    assertthat,
     dplyr,
     lubridate,
     magrittr,
@@ -53,7 +57,6 @@ Suggests:
     rmarkdown,
     roxygen2,
     spelling,
-    styler,
     tibble,
     usethis,
     covr,

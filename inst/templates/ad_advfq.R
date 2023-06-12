@@ -39,7 +39,7 @@ attr(param_lookup$QSTESTCD, "label") <- "Question Short Name"
 
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
-advfq <- derive_vars_merged(
+advfq_dtdy <- derive_vars_merged(
   ungroup(qs),
   dataset_add = adsl,
   new_vars = adsl_vars,
@@ -52,7 +52,7 @@ advfq <- derive_vars_merged(
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 
-advfq <- advfq %>%
+advfq_aval <- advfq_dtdy %>%
   ## Add PARAMCD only - add PARAM etc later ----
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
@@ -64,6 +64,7 @@ advfq <- advfq %>%
     AVAL = QSSTRESN,
     AVALC = QSORRES
   )
+
 ## Derive new parameters based on existing records ----
 
 ## QR01 Recoded Item 01
@@ -72,7 +73,7 @@ advfq <- advfq %>%
 # else set to 50 if [advfq.AVAL] = 3
 # else set to 25 if [advfq.AVAL] = 4
 # else set to 0 if [advfq.AVAL] = 5
-advfq <- advfq %>%
+advfq_qr01 <- advfq_aval %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ1" & !is.na(AVAL),
@@ -98,7 +99,7 @@ advfq <- advfq %>%
 # else set to 40 if [advfq.AVAL] = 4
 # else set to 20 if [advfq.AVAL] = 5
 # else set to 0 if [advfq.AVAL] = 6
-advfq <- advfq %>%
+advfq_qr02 <- advfq_qr01 %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ2" & !is.na(AVAL),
@@ -124,7 +125,7 @@ advfq <- advfq %>%
 # else set to 50 if [advfq.AVAL] = 3
 # else set to 25 if [advfq.AVAL] = 2
 # else set to 0 if [advfq.AVAL] = 1
-advfq <- advfq %>%
+advfq_qr03 <- advfq_qr02 %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ3" & !is.na(AVAL),
@@ -150,7 +151,7 @@ advfq <- advfq %>%
 # else set to 50 if [advfq.AVAL] = 3
 # else set to 25 if [advfq.AVAL] = 2
 # else set to 0 if [advfq.AVAL] = 1
-advfq <- advfq %>%
+advfq_qr04 <- advfq_qr03 %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ4" & !is.na(AVAL),
@@ -172,7 +173,7 @@ advfq <- advfq %>%
 ## Derive a new record as a summary record  ----
 ## QSG01 General Score 01
 # Average of QR01 and QR02 records
-advfq <- advfq %>%
+advfq_qsg01 <- advfq_qr04 %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
@@ -184,7 +185,7 @@ advfq <- advfq %>%
 ## Derive a new record as a summary record  ----
 ## QSG02 General Score 02
 # Average of QR03 and QR04 records
-advfq <- advfq %>%
+advfq_qsg02 <- advfq_qsg01 %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QR03", "QR04") & !is.na(AVAL),
@@ -197,7 +198,7 @@ advfq <- advfq %>%
 ## Derive a new record as a summary record  ----
 ## QBCSCORE Composite Score
 # Average of QSG01 and QSG02 records
-advfq <- advfq %>%
+advfq_qbcs <- advfq_qsg02 %>%
   derive_summary_records(
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QSG01", "QSG02") & !is.na(AVAL),
@@ -208,8 +209,8 @@ advfq <- advfq %>%
 
 ## Get visit info ----
 # See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/articles/visits_periods.html#visits)
-advfq <- advfq %>%
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html)
+advfq_visit <- advfq_qbcs %>%
   # Derive Timing
   mutate(
     AVISIT = case_when(
@@ -226,7 +227,7 @@ advfq <- advfq %>%
     ))
   )
 
-advfq <- advfq %>%
+advfq_ontrt <- advfq_visit %>%
   ## Calculate ONTRTFL ----
   derive_var_ontrtfl(
     start_date = ADT,
@@ -236,7 +237,7 @@ advfq <- advfq %>%
   )
 
 ## Derive baseline flags ----
-advfq <- advfq %>%
+advfq_blfl <- advfq_ontrt %>%
   # Calculate ABLFL
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -251,7 +252,7 @@ advfq <- advfq %>%
   )
 
 ## Derive baseline information ----
-advfq <- advfq %>%
+advfq_change <- advfq_blfl %>%
   # Calculate BASE
   derive_var_base(
     by_vars = exprs(STUDYID, USUBJID, PARAMCD),
@@ -265,7 +266,7 @@ advfq <- advfq %>%
 
 
 ## ANL01FL: Flag last result within an AVISIT for post-baseline records ----
-advfq <- advfq %>%
+advfq_anlflag <- advfq_change %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -278,7 +279,7 @@ advfq <- advfq %>%
   )
 
 ## Get ASEQ and PARAM  ----
-advfq <- advfq %>%
+advfq_aseq <- advfq_anlflag %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
@@ -291,7 +292,7 @@ advfq <- advfq %>%
 
 
 # Add all ADSL variables
-advfq <- advfq %>%
+advfq_adsl <- advfq_aseq %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = exprs(STUDYID, USUBJID)
@@ -301,7 +302,7 @@ advfq <- advfq %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-admiralophtha_advfq <- advfq
+admiralophtha_advfq <- advfq_adsl
 
 # ---- Save output ----
 

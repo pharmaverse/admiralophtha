@@ -4,7 +4,7 @@
 \alias{derive_var_afeye}
 \title{Derive Affected Eye}
 \usage{
-derive_var_afeye(dataset_occ, loc_var, lat_var)
+derive_var_afeye(dataset_occ, loc_var, lat_var, loc_vals = "EYE")
 }
 \arguments{
 \item{dataset_occ}{Input Occurence dataset}
@@ -12,6 +12,8 @@ derive_var_afeye(dataset_occ, loc_var, lat_var)
 \item{loc_var}{Location variable}
 
 \item{lat_var}{Laterality variable}
+
+\item{loc_vals}{\code{xxLOC}values for which \code{AFEYE} is derived}
 }
 \value{
 The input occurrence dataset with Affected Eye (AFEYE) added.
@@ -31,13 +33,20 @@ adae <- tribble(
   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
   "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
   "XXX001", "P01", "RIGHT", "EYE", "LEFT",
+  "XXX001", "P01", "RIGHT", "EYE", "",
+  "XXX001", "P01", "RIGHT", "", "RIGHT",
   "XXX001", "P02", "LEFT", "", "",
   "XXX001", "P02", "LEFT", "EYE", "LEFT",
   "XXX001", "P04", "BILATERAL", "EYE", "RIGHT",
-  "XXX001", "P05", "RIGHT", "EYE", "RIGHT"
+  "XXX001", "P05", "RIGHT", "EYE", "RIGHT",
+  "XXX001", "P05", "RIGHT", "EYE", "BILATERAL",
+  "XXX001", "P06", "BILATERAL", "", "",
+  "XXX001", "P06", "BILATERAL", "", "RIGHT",
+  "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL",
+  "XXX001", "P08", "", "EYE", "BILATERAL",
 )
 
-derive_var_afeye(adae, AELOC, AELAT)
+adae <- derive_var_afeye(adae, AELOC, AELAT)
 }
 \author{
 Lucy Palmen

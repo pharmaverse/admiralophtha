@@ -30,8 +30,7 @@
 #' @author Edoardo Mancini
 #'
 #' @return The input ADBCVA dataset with additional columns `CRITx`, `CRITxFL`.
-#' @keywords der_ophtha
-#' @export
+#' @keywords internal
 
 derive_var_bcvacritxfl_util <- function(dataset,
                                         critx_text,
