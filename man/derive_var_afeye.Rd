@@ -4,7 +4,13 @@
 \alias{derive_var_afeye}
 \title{Derive Affected Eye}
 \usage{
-derive_var_afeye(dataset_occ, loc_var, lat_var, loc_vals = "EYE")
+derive_var_afeye(
+  dataset_occ,
+  loc_var,
+  lat_var,
+  loc_vals = "EYE",
+  lat_vals = c("LEFT", "RIGHT", "BILATERAL")
+)
 }
 \arguments{
 \item{dataset_occ}{Input Occurence dataset}
@@ -44,6 +50,10 @@ adae <- tribble(
   "XXX001", "P06", "BILATERAL", "", "RIGHT",
   "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL",
   "XXX001", "P08", "", "EYE", "BILATERAL",
+  "XXX001", "P09", "NONSENSE", "EYE", "BILATERAL",
+  "XXX001", "P09", "BILATERAL", "EYE", "NONSENSE",
+  "XXX001", "P09", "BILATERAL", "NONSENSE", "BILATERAL",
+  "XXX001", "P10", "RIGHT", "EYE", "BOTH"
 )
 
 adae <- derive_var_afeye(adae, AELOC, AELAT)
