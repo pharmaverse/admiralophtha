@@ -14,6 +14,10 @@ test_that("AFEYE is derived correctly", {
     "XXX001", "P06", "BILATERAL", "", "RIGHT",
     "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL",
     "XXX001", "P08", "", "EYE", "BILATERAL",
+    "XXX001", "P09", "NONSENSE", "EYE", "BILATERAL",
+    "XXX001", "P09", "BILATERAL", "EYE", "NONSENSE",
+    "XXX001", "P09", "BILATERAL", "NONSENSE", "BILATERAL",
+    "XXX001", "P10", "RIGHT", "EYE", "BOTH"
   )
   expected_output1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
@@ -30,6 +34,10 @@ test_that("AFEYE is derived correctly", {
     "XXX001", "P06", "BILATERAL", "", "RIGHT", NA_character_,
     "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL", "Both Eyes",
     "XXX001", "P08", "", "EYE", "BILATERAL", NA_character_,
+    "XXX001", "P09", "NONSENSE", "EYE", "BILATERAL", NA_character_,
+    "XXX001", "P09", "BILATERAL", "EYE", "NONSENSE", NA_character_,
+    "XXX001", "P09", "BILATERAL", "NONSENSE", "BILATERAL", NA_character_,
+    "XXX001", "P10", "RIGHT", "EYE", "BOTH", NA_character_
   )
 
   expect_dfs_equal(
