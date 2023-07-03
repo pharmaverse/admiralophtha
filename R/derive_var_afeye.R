@@ -21,7 +21,7 @@
 #' library(tibble)
 #' library(admiral)
 #'
-#'   adae <- tribble(
+#' adae <- tribble(
 #'   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
 #'   "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
 #'   "XXX001", "P01", "RIGHT", "EYE", "LEFT",
@@ -43,8 +43,8 @@
 #' )
 #'
 #' adae <- derive_var_afeye(adae, AELOC, AELAT)
-derive_var_afeye <- function(dataset_occ, loc_var, lat_var, loc_vals = "EYE", lat_vals = c("LEFT","RIGHT","BILATERAL")) {
-  seye_vals=c("LEFT","RIGHT","BILATERAL")
+derive_var_afeye <- function(dataset_occ, loc_var, lat_var, loc_vals = "EYE", lat_vals = c("LEFT", "RIGHT", "BILATERAL")) {
+  seye_vals <- c("LEFT", "RIGHT", "BILATERAL")
   loc_var <- assert_symbol(enexpr(loc_var))
   lat_var <- assert_symbol(enexpr(lat_var))
   assert_character_vector(loc_vals)
@@ -52,9 +52,9 @@ derive_var_afeye <- function(dataset_occ, loc_var, lat_var, loc_vals = "EYE", la
   assert_character_vector(lat_vals)
   assert_data_frame(dataset_occ, required_vars = expr_c(loc_var, lat_var, exprs(STUDYEYE)))
 
-  if ( !all(unique(dataset_occ[[lat_var]]) %in% lat_vals) ) warning("Warning: value not in lat_vals")
-  if ( !all(unique(dataset_occ[[loc_var]]) %in% loc_vals) ) warning("Warning: value not in loc_vals")
-  if ( !all(unique(dataset_occ$STUDYEYE) %in% seye_vals) ) warning("Warning: STUDYEYE is expected to be 'LEFT', 'RIGHT' or 'BILATERAL'")
+  if (!all(unique(dataset_occ[[lat_var]]) %in% lat_vals)) warning("Warning: value not in lat_vals")
+  if (!all(unique(dataset_occ[[loc_var]]) %in% loc_vals)) warning("Warning: value not in loc_vals")
+  if (!all(unique(dataset_occ$STUDYEYE) %in% seye_vals)) warning("Warning: STUDYEYE is expected to be 'LEFT', 'RIGHT' or 'BILATERAL'")
 
   dataset_occ %>%
     mutate(AFEYE = case_when(
@@ -64,5 +64,4 @@ derive_var_afeye <- function(dataset_occ, loc_var, lat_var, loc_vals = "EYE", la
       toupper(!!lat_var) != toupper(STUDYEYE) & toupper(STUDYEYE) %in% seye_vals & !!lat_var %in% lat_vals & !!loc_var %in% loc_vals ~ "Fellow Eye",
       TRUE ~ NA_character_
     ))
-
 }
