@@ -69,6 +69,12 @@ Subdividing the ADaM datasets in a study as above will ensure that wherever cust
 For BCVA change endpoints, provides the function `derive_var_bcvacritxfl` to add them en masse. Additionally, the function automatically populates `CRITx` in the programmatic manner described above.
 
 
+## Affected Eye Derivation
+`{admiralophtha}` function `derive_var_afeye` follows the standard derivation:
+Set to "BOTH EYES" when Study Eye Selection [ADSL.STUDYEYE] is not missing, and Laterality [xxLAT] is equal to "BILATERAL".
+Else set to "STUDY EYE" when Study Eye Selection [ADSL.STUDYEYE] is either "RIGHT" or "LEFT", and matches Laterality [xxLAT] for the observation record.
+Else set to "STUDY EYE" when Study Eye Selection [ADSL.STUDYEYE] is "BILATERAL", and Laterality [xxLAT] is not missing for the observation record.
+Else set to "FELLOW EYE" when Study Eye Selection [ADSL.STUDYEYE] is either "RIGHT" or "LEFT", and [xxLAT] is not missing and does not match Laterality [xxLAT] for the observation record.
+Else set to null.
 
-
-
+If the standard values of Location [xxLOC] = "EYE" and Laterality [xxLAT] = "LEFT", "RIGHT", "BILATERAL" are not the same for your study this can be updated as inputs in the function, otherwise this is also expected for `AFEYE` to be derived, and a warning will be returned if any other values are found.
