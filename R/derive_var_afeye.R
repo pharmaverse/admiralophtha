@@ -6,6 +6,7 @@
 #' @param loc_var Location variable
 #' @param lat_var Laterality variable
 #' @param loc_vals `xxLOC`values for which `AFEYE` is derived
+#' @param lat_vals `xxLAT`values for which `AFEYE` is derived
 #'
 #' @details
 #' Affected Eye is derived in the occurrence dataset using laterality and Study

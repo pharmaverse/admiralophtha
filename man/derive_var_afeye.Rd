@@ -20,6 +20,8 @@ derive_var_afeye(
 \item{lat_var}{Laterality variable}
 
 \item{loc_vals}{\code{xxLOC}values for which \code{AFEYE} is derived}
+
+\item{lat_vals}{\code{xxLAT}values for which \code{AFEYE} is derived}
 }
 \value{
 The input occurrence dataset with Affected Eye (AFEYE) added.
