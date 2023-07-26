@@ -1,3 +1,13 @@
+# admiralophtha 0.3.0
+
+## Updates to Functions
+
+- Added a new parameter `crit_var` to `derive_var_bcvacritxfl()` so that criterion flags can be derived with respect to any variable. Also removed arguments `paramcds` and `basetype` as their function can be achieved using `restrict_derivation()` from `{admiral}` (#119).
+
+## Updates to Templates
+
+- Updated `ADBCVA` template's calls to use `restrict_derivation()` in calls to `derive_var_bcvacritxfl()` and also to showcase use of `crit_var` argument of `derive_var_bcvacritxfl()` (#119).
+
 # admiralophtha 0.2.0
 
 ## Updates to Functions
@@ -13,6 +23,7 @@
 - Updated `ADOE`, `ADVFQ` and `ADBCVA` for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in `ADVFQ` (issue #128).
 - Corrected values of `DTYPE`, `VISIT`, `VISITNUM`, `OEDY`, `OEDTC` for derived parameters in `ADBCVA` template (issue #137).
 - Updated `ADBCVA` and `ADOE` templates to include `AFEYE` (issue #133).
+- Updat
 
 ## Updates to Site
 
