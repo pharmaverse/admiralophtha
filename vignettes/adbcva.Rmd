@@ -361,13 +361,13 @@ adbcva <- adbcva %>%
   )
 ```
   
-  ## Additional Notes
+## Additional Notes
   
   * When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl()`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl()` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
   
   * This vignette extensively showcases the use of `derive_var_bcvacritxfl()` applied to the variable `CHG`, but through the argument `crit_var` the function can also be used to create criterion flag relative to other variables (e.g. `crit_var = exprs(AVAL)` for `AVAL`).
   
-  ## Example Script {#example}
+## Example Script {#example}
   
   ADaM | Sample Code 
   ---- | -------------- 
