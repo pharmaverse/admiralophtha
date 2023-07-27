@@ -1,3 +1,11 @@
+# admiralophtha 0.3.0
+
+## Updates to Functions
+
+- Switched out `derive_var_merged_cat()` for `derive_vars_merged()` in the function `derive_var_Studyeye()` due to deprecation of the former in favor of the latter in `{admiral }`(#119).
+
+## Updates to Templates
+
 # admiralophtha 0.2.0
 
 ## Updates to Functions
