@@ -340,7 +340,7 @@ adbcva <- adbcva %>%
       critxfl_index = 10
     ),
     filter = PARAMCD %in% c("SBCVA", "FBCVA")
-  ) %>% 
+  ) %>%
   restrict_derivation(
     derivation = derive_var_bcvacritxfl,
     args = params(
@@ -349,7 +349,7 @@ adbcva <- adbcva %>%
       critxfl_index = 20
     ),
     filter = PARAMCD %in% c("SBCVA", "FBCVA")
-  ) %>% 
+  ) %>%
   restrict_derivation(
     derivation = derive_var_bcvacritxfl,
     args = params(

@@ -23,7 +23,6 @@
 - Updated `ADOE`, `ADVFQ` and `ADBCVA` for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in `ADVFQ` (issue #128).
 - Corrected values of `DTYPE`, `VISIT`, `VISITNUM`, `OEDY`, `OEDTC` for derived parameters in `ADBCVA` template (issue #137).
 - Updated `ADBCVA` and `ADOE` templates to include `AFEYE` (issue #133).
-- Updat
 
 ## Updates to Site
 

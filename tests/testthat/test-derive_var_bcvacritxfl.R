@@ -1,5 +1,4 @@
 test_that("Criterion flags derived correctly", {
-
   expected_output1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~CHG, ~CRIT1, ~CRIT1FL, ~CRIT2,
     ~CRIT2FL, ~CRIT3, ~CRIT3FL, ~CRIT4, ~CRIT4FL,
@@ -52,5 +51,4 @@ test_that("Criterion flags derived correctly", {
     actual_output2,
     expected_output2,
   )
-
 })
