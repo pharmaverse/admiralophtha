@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_bcvacritxfl.R
 \name{derive_var_bcvacritxfl_util}
 \alias{derive_var_bcvacritxfl_util}
-\title{Add \code{CRITx}/\code{CRITxFL} pair to ADBCVA dataset}
+\title{Add \code{CRITx}/\code{CRITxFL} pair to BCVA dataset}
 \usage{
 derive_var_bcvacritxfl_util(
   dataset,
@@ -16,7 +16,7 @@ derive_var_bcvacritxfl_util(
 )
 }
 \arguments{
-\item{dataset}{Input dataset (ADBCVA).}
+\item{dataset}{Input dataset (usually ADBCVA).}
 
 \item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
 (usually \code{CHG} or \code{AVAL}).}
@@ -41,11 +41,11 @@ will be called in \code{critxfl_cond} if the criterion stipulates that change in
 lie above some lower limit).}
 }
 \value{
-The input ADBCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.
+The input BCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.
 }
 \description{
-Helper function for \code{derive_var_bcvacritxfl} that adds a criterion variable \code{CRITx} and
-its corresponding flag \code{CRITxFL} to an ADBCVA dataset.
+Helper function for \code{derive_var_bcvacritxfl()} that adds a criterion variable \code{CRITx} and
+its corresponding flag \code{CRITxFL} to a dataset containing BCVA records
 }
 \details{
 The criterion for change in BCVA in \code{CRITxFL} can be of three types: (1) value lies

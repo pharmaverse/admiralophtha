@@ -1,9 +1,9 @@
-#' Add `CRITx`/`CRITxFL` pair to ADBCVA dataset
+#' Add `CRITx`/`CRITxFL` pair to BCVA dataset
 #'
-#' Helper function for `derive_var_bcvacritxfl` that adds a criterion variable `CRITx` and
-#' its corresponding flag `CRITxFL` to an ADBCVA dataset.
+#' Helper function for `derive_var_bcvacritxfl()` that adds a criterion variable `CRITx` and
+#' its corresponding flag `CRITxFL` to a dataset containing BCVA records
 #'
-#' @param dataset Input dataset (ADBCVA).
+#' @param dataset Input dataset (usually ADBCVA).
 #' @param crit_var Variable with respect to which `CRITx`/`CRITxFL` are derived
 #' (usually `CHG` or `AVAL`).
 #' @param critx_text String containing the text for `CRITx` variable.
@@ -31,7 +31,7 @@
 #'
 #' @author Edoardo Mancini
 #'
-#' @return The input ADBCVA dataset with additional columns `CRITx`, `CRITxFL`.
+#' @return The input BCVA dataset with additional columns `CRITx`, `CRITxFL`.
 #' @keywords internal
 
 derive_var_bcvacritxfl_util <- function(dataset,
@@ -66,12 +66,12 @@ derive_var_bcvacritxfl_util <- function(dataset,
     )
 }
 
-#' Adds `CRITx`/`CRITxFL` pairs to `ADBCVA` dataset
+#' Adds `CRITx`/`CRITxFL` pairs to BCVA dataset
 #'
-#' Adds a criterion variables `CRITx` and their corresponding flags `CRITxFL` to an
-#' ADBCVA dataset.
+#' Adds a criterion variables `CRITx` and their corresponding flags `CRITxFL` to a
+#' dataset containing BCVA records
 #'
-#' @param dataset Input dataset containing BCVA data (usually `ADBCVA`).
+#' @param dataset Input dataset containing BCVA data (usually ADBCVA).
 #' @param crit_var Variable with respect to which `CRITx`/`CRITxFL` are derived
 #' (usually `CHG` or `AVAL`).
 #' @param additional_text string containing additional text to append to `CRITx`
@@ -92,14 +92,14 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' then leave as NULL.
 #'
 #' @details
-#' This function works by calling `derive_var_bcvacritxfl`once for each of the
+#' This function works by calling `derive_var_bcvacritxfl()` once for each of the
 #' elements in `bcva_ranges`, `bcva_uplims` and `bcva_lowlims`.
 #' NOTE: if `crit_var` is equal to `NA`, then the resulting criterion flag is also marked
 #' as `NA`.
 #'
 #' @author Edoardo Mancini
 #'
-#' @return The input ADBCVA dataset with additional column pairs`CRITx`, `CRITxFL`.
+#' @return The input BCVA dataset with additional column pairs`CRITx`, `CRITxFL`.
 #' @keywords der_ophtha
 #' @export
 #'

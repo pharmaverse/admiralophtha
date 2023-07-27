@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_bcvacritxfl.R
 \name{derive_var_bcvacritxfl}
 \alias{derive_var_bcvacritxfl}
-\title{Adds \code{CRITx}/\code{CRITxFL} pairs to \code{ADBCVA} dataset}
+\title{Adds \code{CRITx}/\code{CRITxFL} pairs to BCVA dataset}
 \usage{
 derive_var_bcvacritxfl(
   dataset,
@@ -15,7 +15,7 @@ derive_var_bcvacritxfl(
 )
 }
 \arguments{
-\item{dataset}{Input dataset containing BCVA data (usually \code{ADBCVA}).}
+\item{dataset}{Input dataset containing BCVA data (usually ADBCVA).}
 
 \item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
 (usually \code{CHG} or \code{AVAL}).}
@@ -42,14 +42,14 @@ in "CRITxFL". If not supplied, the function takes the first available value of
 x, counting up from x = 1.}
 }
 \value{
-The input ADBCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.
+The input BCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.
 }
 \description{
-Adds a criterion variables \code{CRITx} and their corresponding flags \code{CRITxFL} to an
-ADBCVA dataset.
+Adds a criterion variables \code{CRITx} and their corresponding flags \code{CRITxFL} to a
+dataset containing BCVA records
 }
 \details{
-This function works by calling \code{derive_var_bcvacritxfl}once for each of the
+This function works by calling \code{derive_var_bcvacritxfl()} once for each of the
 elements in \code{bcva_ranges}, \code{bcva_uplims} and \code{bcva_lowlims}.
 NOTE: if \code{crit_var} is equal to \code{NA}, then the resulting criterion flag is also marked
 as \code{NA}.
