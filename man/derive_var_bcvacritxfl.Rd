@@ -15,7 +15,9 @@ derive_var_bcvacritxfl(
 )
 }
 \arguments{
-\item{dataset}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
+\item{dataset}{Input dataset containing BCVA data (usually \code{ADBCVA}).}
+
+\item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
 (usually \code{CHG} or \code{AVAL}).}
 
 \item{bcva_ranges}{List containing one or more numeric vectors of length 2. For each
@@ -38,10 +40,6 @@ then leave as NULL.}
 \item{critxfl_index}{positive integer detailing the first value of x to use
 in "CRITxFL". If not supplied, the function takes the first available value of
 x, counting up from x = 1.}
-
-\item{paramcds}{Vector of \code{PARAMCD} values for which to derive \code{CRITx} and \code{CRITxFL}.}
-
-\item{basetype}{\code{BASETYPE} value for which to derive \code{CRITx} and \code{CRITxFL}.}
 }
 \value{
 The input ADBCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.

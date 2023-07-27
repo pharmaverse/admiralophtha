@@ -4,7 +4,7 @@
 #' its corresponding flag `CRITxFL` to an ADBCVA dataset.
 #'
 #' @param dataset Input dataset (ADBCVA).
-#' @param dataset Variable with respect to which `CRITx`/`CRITxFL` are derived
+#' @param crit_var Variable with respect to which `CRITx`/`CRITxFL` are derived
 #' (usually `CHG` or `AVAL`).
 #' @param critx_text String containing the text for `CRITx` variable.
 #' @param critxfl_cond String containing R code detailing the criterion to be satisfied
@@ -72,10 +72,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' ADBCVA dataset.
 #'
 #' @param dataset Input dataset containing BCVA data (usually `ADBCVA`).
-#' @param dataset Variable with respect to which `CRITx`/`CRITxFL` are derived
+#' @param crit_var Variable with respect to which `CRITx`/`CRITxFL` are derived
 #' (usually `CHG` or `AVAL`).
-#' @param paramcds Vector of `PARAMCD` values for which to derive `CRITx` and `CRITxFL`.
-#' @param basetype `BASETYPE` value for which to derive `CRITx` and `CRITxFL`.
 #' @param additional_text string containing additional text to append to `CRITx`
 #' @param critxfl_index positive integer detailing the first value of x to use
 #' in "CRITxFL". If not supplied, the function takes the first available value of

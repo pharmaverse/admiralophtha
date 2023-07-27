@@ -16,7 +16,9 @@ derive_var_bcvacritxfl_util(
 )
 }
 \arguments{
-\item{dataset}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
+\item{dataset}{Input dataset (ADBCVA).}
+
+\item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
 (usually \code{CHG} or \code{AVAL}).}
 
 \item{critx_text}{String containing the text for \code{CRITx} variable.}
