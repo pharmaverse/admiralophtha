@@ -195,8 +195,10 @@ derive_var_bcvacritxfl <- function(dataset,
     dataset <- derive_var_bcvacritxfl_util(
       dataset,
       crit_var = crit_var,
-      critx_text = paste0(bcva_range[1], " <= ", crit_var_char,
-                          " <= ", bcva_range[2], additional_text),
+      critx_text = paste0(
+        bcva_range[1], " <= ", crit_var_char,
+        " <= ", bcva_range[2], additional_text
+      ),
       critxfl_cond = paste0(
         "!is.na(", crit_var_char, ") & bcva_range[1] <= ",
         crit_var_char, " & ", crit_var_char, " <= bcva_range[2]"
