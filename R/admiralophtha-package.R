@@ -23,8 +23,8 @@
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
-#' @importFrom admiral derive_var_merged_cat restrict_derivation params derive_param_computed
-#' @importFrom admiraldev assert_symbol assert_data_frame expect_dfs_equal quo_c assert_data_frame
+#' @importFrom admiral derive_vars_merged restrict_derivation params derive_param_computed
+#' @importFrom admiraldev assert_symbol assert_data_frame expect_dfs_equal assert_data_frame
 #'             assert_character_vector assert_character_scalar assert_integer_scalar
 #'             assert_numeric_vector expr_c
 "_PACKAGE"

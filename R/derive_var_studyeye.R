@@ -54,16 +54,16 @@ derive_var_studyeye <- function(dataset_adsl, dataset_sc, sctestcd_value = "FOCI
     )
   }
 
-  derive_var_merged_cat(
+  derive_vars_merged(
     dataset_adsl,
     dataset_add = dataset_sc,
     by_vars = exprs(STUDYID, USUBJID),
     order = NULL,
     filter_add = SCTESTCD == !!sctestcd_value,
-    new_var = STUDYEYE,
-    source_var = SCSTRESC,
-    cat_fun = seye_cat,
+    new_var = exprs(tmp_STUDYEYE = SCSTRESC),
     mode = NULL,
-    missing_value = ""
-  )
+    missing_values = exprs(tmp_STUDYEYE = "")
+  ) %>%
+    mutate(STUDYEYE = seye_cat(tmp_STUDYEYE)) %>%
+    select(-tmp_STUDYEYE)
 }
