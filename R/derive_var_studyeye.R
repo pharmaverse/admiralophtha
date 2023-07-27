@@ -64,6 +64,5 @@ derive_var_studyeye <- function(dataset_adsl, dataset_sc, sctestcd_value = "FOCI
     mode = NULL,
     missing_values = exprs(tmp_STUDYEYE = "")
   ) %>%
-    mutate(STUDYEYE = seye_cat(tmp_STUDYEYE)) %>%
-    select(-tmp_STUDYEYE)
+    mutate(STUDYEYE = seye_cat(STUDYEYE))
 }
