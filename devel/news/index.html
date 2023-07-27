@@ -36,14 +36,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -65,11 +57,22 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="admiralophtha-030">admiralophtha 0.3.0<a class="anchor" aria-label="anchor" href="#admiralophtha-030"></a></h2>
+<div class="section level3">
+<h3 id="updates-to-functions-0-3-0">Updates to Functions<a class="anchor" aria-label="anchor" href="#updates-to-functions-0-3-0"></a></h3>
+<ul><li>Switched out <code><a href="https://rdrr.io/pkg/admiral/man/derive_var_merged_cat.html" class="external-link">derive_var_merged_cat()</a></code> for <code><a href="https://rdrr.io/pkg/admiral/man/derive_vars_merged.html" class="external-link">derive_vars_merged()</a></code> in the function <code>derive_var_Studyeye()</code> due to deprecation of the former in favor of the latter in <code>{admiral }</code>(<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="updates-to-templates-0-3-0">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-0-3-0"></a></h3>
+</div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="admiralophtha-020">admiralophtha 0.2.0<a class="anchor" aria-label="anchor" href="#admiralophtha-020"></a></h2>
 <div class="section level3">
 <h3 id="updates-to-functions-0-2-0">Updates to Functions<a class="anchor" aria-label="anchor" href="#updates-to-functions-0-2-0"></a></h3>
 <ul><li>Added new parameter <code>loc_vals</code> to function <code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code> to allow users to specify values of <code>xxLOC</code> for which <code>AFEYE</code> is derived (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/163" class="external-link">#163</a>).</li>
 <li>Updated function <code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code> to resolve bug when <code>STUDYEYE</code> is ‘Bilateral’ (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/134" class="external-link">#134</a>).</li>
+<li>Added new parameter <code>lat_vals</code> to function <code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code> to allow users to specify values of <code>xxLAT</code> for which <code>AFEYE</code> is derived, as well as issuing warnings when unexpected values are found (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/174" class="external-link">#174</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-to-templates-0-2-0">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-0-2-0"></a></h3>

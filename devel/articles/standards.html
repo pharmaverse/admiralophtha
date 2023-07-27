@@ -60,14 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -172,6 +164,26 @@ dataset, as this renders the dataset confusing to scrutinise.</p>
 <code>derive_var_bcvacritxfl</code> to add them en masse. Additionally,
 the function automatically populates <code>CRITx</code> in the
 programmatic manner described above.</p>
+</div>
+<div class="section level3">
+<h3 id="affected-eye-derivation">Affected Eye Derivation<a class="anchor" aria-label="anchor" href="#affected-eye-derivation"></a>
+</h3>
+<p><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> function <code>derive_var_afeye</code>
+follows the standard derivation: Set to “BOTH EYES” when Study Eye
+Selection [ADSL.STUDYEYE] is not missing, and Laterality [xxLAT] is
+equal to “BILATERAL”. Else set to “STUDY EYE” when Study Eye Selection
+[ADSL.STUDYEYE] is either “RIGHT” or “LEFT”, and matches Laterality
+[xxLAT] for the observation record. Else set to “STUDY EYE” when Study
+Eye Selection [ADSL.STUDYEYE] is “BILATERAL”, and Laterality [xxLAT] is
+not missing for the observation record. Else set to “FELLOW EYE” when
+Study Eye Selection [ADSL.STUDYEYE] is either “RIGHT” or “LEFT”, and
+[xxLAT] is not missing and does not match Laterality [xxLAT] for the
+observation record. Else set to null.</p>
+<p>If the standard values of Location [xxLOC] = “EYE” and Laterality
+[xxLAT] = “LEFT”, “RIGHT”, “BILATERAL” are not the same for your study
+this can be updated as inputs in the function, otherwise this is also
+expected for <code>AFEYE</code> to be derived, and a warning will be
+returned if any other values are found.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
