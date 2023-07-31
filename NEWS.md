@@ -2,7 +2,7 @@
 
 ## Updates to Functions
 
-- Added a new parameter `crit_var` to `derive_var_bcvacritxfl()` so that criterion flags can be derived with respect to any variable. Also removed arguments `paramcds` and `basetype` as their function can be achieved using `restrict_derivation()` from `{admiral}` (#119).
+- Added a new parameter `crit_var` to `derive_var_bcvacritxfl()` so that criterion flags can be derived with respect to any variable. Also removed arguments `paramcds` and `basetype` as their function can be achieved using `restrict_derivation()` from `{admiral}`. This also required renaming of argument `dataset_adbcva` to `dataset` (#119).
 
 ## Updates to Templates
 
