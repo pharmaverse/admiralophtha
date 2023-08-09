@@ -276,13 +276,16 @@ adbcva_adsl <- adbcva_aseq %>%
 
 adbcva_crtflag <- adbcva_adsl %>%
   # Add criterion flags for BCVA endpoints
-  derive_var_bcvacritxfl(
-    paramcds = c("SBCVA", "FBCVA"),
-    basetype = NULL,
-    bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
-    bcva_uplims = list(-20, 5, 10),
-    bcva_lowlims = list(-15, 15),
-    additional_text = ""
+  restrict_derivation(
+    derivation = derive_var_bcvacritxfl,
+    args = params(
+      crit_var = exprs(CHG),
+      bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
+      bcva_uplims = list(-20, 5, 10),
+      bcva_lowlims = list(-15, 15),
+      additional_text = ""
+    ),
+    filter = PARAMCD %in% c("SBCVA", "FBCVA")
   ) %>%
   # Add AVALCATx variables
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%

@@ -1,9 +1,22 @@
+# admiralophtha 0.3.0
+
+## Updates to Functions
+
+- Added a new parameter `crit_var` to `derive_var_bcvacritxfl()` so that criterion flags can be derived with respect to any variable. Also removed arguments `paramcds` and `basetype` as their function can be achieved using `restrict_derivation()` from `{admiral}`. This also required renaming of argument `dataset_adbcva` to `dataset` (#119).
+
+## Updates to Templates
+
+- Updated `ADBCVA` template's calls to use `restrict_derivation()` in calls to `derive_var_bcvacritxfl()` and also to showcase use of `crit_var` argument of `derive_var_bcvacritxfl()` (#119).
+
+- Switched out `derive_var_merged_cat()` for `derive_vars_merged()` in the function `derive_var_Studyeye()` due to deprecation of the former in favor of the latter in `{admiral }`(#119).
+
 # admiralophtha 0.2.0
 
 ## Updates to Functions
 
 - Added new parameter `loc_vals` to function `derive_var_afeye()` to allow users to specify values of `xxLOC` for which `AFEYE` is derived (issue #163).
 - Updated function `derive_var_afeye()` to resolve bug when `STUDYEYE` is 'Bilateral' (issue #134).
+- Added new parameter `lat_vals` to function `derive_var_afeye()` to allow users to specify values of `xxLAT` for which `AFEYE` is derived, as well as issuing warnings when unexpected values are found (issue #174).
 
 ## Updates to Templates
 
