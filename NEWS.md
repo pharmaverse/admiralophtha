@@ -10,6 +10,10 @@
 
 - Switched out `derive_var_merged_cat()` for `derive_vars_merged()` in the function `derive_var_Studyeye()` due to deprecation of the former in favor of the latter in `{admiral }`(#119).
 
+## Updates to Documentation
+
+- Added a reference for the ETDRS to LogMAR conversion done by `convert_etdrs_to_logmar()` and `convert_logmar_to_etdrs()` (#121).
+
 # admiralophtha 0.2.0
 
 ## Updates to Functions
