@@ -36,14 +36,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -74,6 +66,10 @@
 <h3 id="updates-to-templates-0-3-0">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-0-3-0"></a></h3>
 <ul><li><p>Updated <code>ADBCVA</code> template’s calls to use <code><a href="https://rdrr.io/pkg/admiral/man/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> in calls to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> and also to showcase use of <code>crit_var</code> argument of <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
 <li><p>Switched out <code><a href="https://rdrr.io/pkg/admiral/man/derive_var_merged_cat.html" class="external-link">derive_var_merged_cat()</a></code> for <code><a href="https://rdrr.io/pkg/admiral/man/derive_vars_merged.html" class="external-link">derive_vars_merged()</a></code> in the function <code>derive_var_Studyeye()</code> due to deprecation of the former in favor of the latter in <code>{admiral }</code>(<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="updates-to-documentation-0-3-0">Updates to Documentation<a class="anchor" aria-label="anchor" href="#updates-to-documentation-0-3-0"></a></h3>
+<ul><li>Added a reference for the ETDRS to LogMAR conversion done by <code><a href="../reference/convert_etdrs_to_logmar.html">convert_etdrs_to_logmar()</a></code> and <code><a href="../reference/convert_logmar_to_etdrs.html">convert_logmar_to_etdrs()</a></code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/136" class="external-link">#136</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
