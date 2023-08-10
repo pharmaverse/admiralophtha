@@ -45,7 +45,7 @@ Imports:
     tidyselect,
     lifecycle
 Suggests:
-    admiral.test,
+    pharmaversesdtm,
     devtools,
     diffdf,
     lintr,

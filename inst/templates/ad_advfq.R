@@ -5,15 +5,15 @@
 # Input: adsl, qs
 library(admiral)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(pharmaversesdtm)
 library(stringr)
 library(tibble)
 
 data("admiral_adsl")
-data("admiral_qs")
+data("qs_ophtha")
 
 adsl <- admiral_adsl
-qs <- admiral_qs
+qs <- qs_ophtha
 
 qs <- convert_blanks_to_na(qs)
 

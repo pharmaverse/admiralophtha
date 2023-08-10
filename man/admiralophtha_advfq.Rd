@@ -20,9 +20,7 @@ An example Visual Function Questionnaire (VFQ) analysis dataset
 \seealso{
 Other datasets: 
 \code{\link{admiralophtha_adbcva}},
-\code{\link{admiralophtha_adoe}},
-\code{\link{admiralophtha_ex}},
-\code{\link{admiralophtha_qs}}
+\code{\link{admiralophtha_adoe}}
 }
 \concept{datasets}
 \keyword{datasets}

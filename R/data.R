@@ -1,13 +1,3 @@
-#' Exposure Ophthalmology SDTM Dataset
-#'
-#' An example Exposure SDTM dataset with ophthalmology-specific variables such as EXLOC and EXLAT
-#' @keywords datasets
-#' @family datasets
-#' @source
-#' Constructed using `ex` from the `{admiral}` package
-#'
-"admiralophtha_ex"
-
 #' Best Corrected Visual Acuity Analysis Dataset
 #'
 #' An example Best Corrected Visual Acuity (BCVA) analysis dataset
@@ -40,13 +30,3 @@
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R})
 #'
 "admiralophtha_adoe"
-
-#' Ophthalmology Questionnaires SDTM Dataset
-#'
-#' An example Questionnaires SDTM dataset with ophthalmology-specific questionnaire of NEI VFQ-25
-#' @keywords datasets
-#' @family datasets
-#' @source
-#' Constructed using `qs` from the `{admiral}` package
-#'
-"admiralophtha_qs"

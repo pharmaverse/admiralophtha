@@ -61,7 +61,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 library(admiraldev)
 library(admiralophtha)
 ```
@@ -83,9 +83,9 @@ The QS dataset is filtered to the VFQ parameters of interest.
 
 ```{r} 
 data("admiral_adsl")
-data("admiral_qs")
+data("qs_ophtha")
 adsl <- admiral_adsl
-qs <- admiral_qs
+qs <- qs_ophtha
 
 qs <- qs %>% filter(QSTESTCD %in% c("VFQ1", "VFQ2", "VFQ3", "VFQ4"))
 ```
