@@ -12,7 +12,7 @@
 
 ## Updates to Documentation
 
-- Added a reference for the ETDRS to LogMAR conversion done by `convert_etdrs_to_logmar()` and `convert_logmar_to_etdrs()` (#121).
+- Added a reference for the ETDRS to LogMAR conversion done by `convert_etdrs_to_logmar()` and `convert_logmar_to_etdrs()` (#136).
 
 # admiralophtha 0.2.0
 
