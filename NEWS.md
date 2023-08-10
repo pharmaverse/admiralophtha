@@ -8,11 +8,18 @@
 
 - Updated `ADBCVA` template's calls to use `restrict_derivation()` in calls to `derive_var_bcvacritxfl()` and also to showcase use of `crit_var` argument of `derive_var_bcvacritxfl()` (#119).
 
+- Switched out all references to `admiral.test` for references to `pharmaversesdtm` in `ADOE` and `ADBCVA` templates, and updtaed code to refer to `oe_ophtha` accordingly (#184). 
+
 - Switched out `derive_var_merged_cat()` for `derive_vars_merged()` in the function `derive_var_Studyeye()` due to deprecation of the former in favor of the latter in `{admiral }`(#119).
 
 ## Updates to Documentation
 
 - Added a reference for the ETDRS to LogMAR conversion done by `convert_etdrs_to_logmar()` and `convert_logmar_to_etdrs()` (#136).
+
+## Updates to Data
+
+- Removed `admiralophtha_ex` and `admiralophtha_qs` from the package, as they now reside in `pharmaversesdtm`, where they are now names `ex_ophtha` and `qs_ophtha` respectively (#184).
+
 
 # admiralophtha 0.2.0
 

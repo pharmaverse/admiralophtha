@@ -5,7 +5,7 @@
 # Input: adsl, oe
 
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm)
 library(admiralophtha)
 library(dplyr)
 library(lubridate)
@@ -17,7 +17,7 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_oe")
+data("oe_ophtha")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
@@ -26,7 +26,7 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(admiral_oe) %>%
+oe <- convert_blanks_to_na(oe_ophtha) %>%
   ungroup()
 
 # ---- Lookup tables ----

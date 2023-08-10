@@ -61,7 +61,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 library(admiraldev)
 library(admiralophtha)
 ```
@@ -83,7 +83,7 @@ As with all BDS ADaM datasets, one should start from the OE SDTM, where only the
 **Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye()`.
 
 ```{r}
-data("admiral_oe")
+data("oe_ophtha")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
@@ -92,7 +92,7 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(admiral_oe) %>%
+oe <- convert_blanks_to_na(oe_ophtha) %>%
   ungroup()
 
 # ---- Lookup table ----
