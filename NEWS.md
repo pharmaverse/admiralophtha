@@ -8,7 +8,7 @@
 
 - Updated `ADBCVA` template's calls to use `restrict_derivation()` in calls to `derive_var_bcvacritxfl()` and also to showcase use of `crit_var` argument of `derive_var_bcvacritxfl()` (#119).
 
-- Switched out all references to `admiral.test` for references to `pharmaversesdtm` in `ADOE` and `ADBCVA` templates, and updtaed code to refer to `oe_ophtha` accordingly (#184). 
+- Switched out all references to `admiral.test` for references to `pharmaversesdtm` in `ADOE` and `ADBCVA` templates, and updated code to refer to `oe_ophtha` accordingly (#184). 
 
 - Switched out `derive_var_merged_cat()` for `derive_vars_merged()` in the function `derive_var_Studyeye()` due to deprecation of the former in favor of the latter in `{admiral }`(#119).
 
