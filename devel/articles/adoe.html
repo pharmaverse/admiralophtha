@@ -60,14 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -202,6 +194,24 @@ the derivation of variables such as Analysis Day (<code>ADY</code>).</p>
     new_vars <span class="op">=</span> <span class="va">adsl_vars</span>,
     by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/admiral/man/reexport-exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
+<p>The next item of business is to derive <code>AVAL</code>,
+<code>AVALU</code>, and <code>DTYPE</code>. In this example, due to the
+small number of parameters their derivation is trivial.
+<code>AFEYE</code> is also created in this step using the function
+<code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code>. To determine the affected eye, this
+function compares <code>OELAT</code> to the <code>STUDYEYE</code>
+variable created from the previous step.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">adoe</span> <span class="op">&lt;-</span> <span class="va">adoe</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="co"># Calculate AVAL, AVALC, AVALU and DTYPE</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
+    AVAL <span class="op">=</span> <span class="va">OESTRESN</span>,
+    AVALC <span class="op">=</span> <span class="va">OESTRESC</span>,
+    AVALU <span class="op">=</span> <span class="va">OESTRESU</span>,
+    DTYPE <span class="op">=</span> <span class="cn">NA_character_</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="co"># Derive AFEYE needed for PARAMCD derivation</span>
+  <span class="fu"><a href="../reference/derive_var_afeye.html">derive_var_afeye</a></span><span class="op">(</span><span class="va">OELOC</span>, <span class="va">OELAT</span>, loc_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EYE"</span>, <span class="st">"RETINA"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="further">Further Derivations of Standard BDS Variables<a class="anchor" aria-label="anchor" href="#further"></a>
