@@ -4,6 +4,8 @@
 
 - Added a new parameter `crit_var` to `derive_var_bcvacritxfl()` so that criterion flags can be derived with respect to any variable. Also removed arguments `paramcds` and `basetype` as their function can be achieved using `restrict_derivation()` from `{admiral}`. This also required renaming of argument `dataset_adbcva` to `dataset` (#119).
 
+- Added `AFEYE` derivation and description to `ADOE` Vignette (#165).
+
 ## Updates to Templates
 
 - Updated `ADBCVA` template's calls to use `restrict_derivation()` in calls to `derive_var_bcvacritxfl()` and also to showcase use of `crit_var` argument of `derive_var_bcvacritxfl()` (#119).

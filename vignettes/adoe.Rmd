@@ -121,6 +121,20 @@ adoe <- oe %>%
   )
 ```
 
+The next item of business is to derive `AVAL`, `AVALU`, and `DTYPE`. In this example, due to the small number of parameters their derivation is trivial. `AFEYE` is also created in this step using the function `derive_var_afeye()`. To determine the affected eye, this function compares `OELAT` to the `STUDYEYE` variable created from the previous step.
+
+```{r}
+adoe <- adoe %>%
+  # Calculate AVAL, AVALC, AVALU and DTYPE
+  mutate(
+    AVAL = OESTRESN,
+    AVALC = OESTRESC,
+    AVALU = OESTRESU,
+    DTYPE = NA_character_
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(OELOC, OELAT, loc_vals = c("EYE", "RETINA"))
+```
 ## Further Derivations of Standard BDS Variables {#further}
 
 The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
