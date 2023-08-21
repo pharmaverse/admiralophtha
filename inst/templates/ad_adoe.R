@@ -5,7 +5,7 @@
 # Input: adsl, oe
 
 library(admiral)
-library(pharmaversesdtm)
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(admiralophtha)
 library(dplyr)
 library(lubridate)
@@ -17,7 +17,7 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("oe_ophtha")
+data("admiral_oe")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
@@ -26,18 +26,22 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(oe_ophtha) %>%
+oe <- convert_blanks_to_na(admiral_oe) %>%
   ungroup()
 
 # ---- Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
-  "CSUBTH", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
-  "DRSSR", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
+  ~OETESTCD, ~OECAT, ~OESCAT, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "RIGHT", "RIGHT", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "LEFT", "LEFT", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "RIGHT", "LEFT", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "LEFT", "RIGHT", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "RIGHT", "RIGHT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "LEFT", "LEFT", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "RIGHT", "LEFT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "LEFT", "RIGHT", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4
 )
 
 # ---- Derivations ----
@@ -50,7 +54,7 @@ adoe_adslvar <- oe %>%
   filter(
     OETESTCD %in% c("CSUBTH", "DRSSR")
   ) %>%
-  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
+  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY and PARAMCD derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
@@ -64,16 +68,14 @@ adoe_aval <- adoe_adslvar %>%
     AVALC = OESTRESC,
     AVALU = OESTRESU,
     DTYPE = NA_character_
-  ) %>%
-  # Derive AFEYE needed for PARAMCD derivation
-  derive_var_afeye(OELOC, OELAT, loc_vals = c("EYE", "RETINA"))
+  )
 
 adoe_param <- adoe_aval %>%
   # Add PARAM, PARAMCD
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, AFEYE)
+    by_vars = exprs(OETESTCD, OELAT, STUDYEYE)
   ) %>%
   # Calculate ADT, ADY
   derive_vars_dt(
