@@ -5,7 +5,7 @@
 # Input: adsl, oe
 
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm)
 library(admiralophtha)
 library(dplyr)
 library(lubridate)
@@ -17,7 +17,7 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_oe")
+data("oe_ophtha")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
@@ -26,18 +26,16 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(admiral_oe) %>%
+oe <- convert_blanks_to_na(oe_ophtha) %>%
   ungroup()
 
 # ---- Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OECAT, ~OESCAT, ~OELAT, ~STUDYEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "RIGHT", "RIGHT", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
-  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "LEFT", "LEFT", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
-  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "RIGHT", "LEFT", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2,
-  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "LEFT", "RIGHT", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2
+  ~OETESTCD,  ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2,
 )
 
 # Assign AVALCAT1
@@ -110,7 +108,7 @@ adbcva_adslvar <- oe %>%
   filter(
     OETESTCD %in% c("VACSCORE")
   ) %>%
-  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY and PARAMCD derivation)
+  # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
@@ -123,21 +121,23 @@ adbcva_aval <- adbcva_adslvar %>%
     AVAL = OESTRESN,
     AVALU = "letters",
     DTYPE = NA_character_
-  )
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(OELOC, OELAT)
 
 adbcva_nlogparam <- adbcva_aval %>%
   # Add PARAM, PARAMCD for non log parameters
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OELAT, STUDYEYE),
+    by_vars = exprs(OETESTCD, AFEYE),
     filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
   )
 
 adbcva_logparam <- adbcva_nlogparam %>%
   # Add derived log parameters
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("SBCVA"),
     analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
     set_values_to = exprs(
@@ -148,7 +148,7 @@ adbcva_logparam <- adbcva_nlogparam %>%
     )
   ) %>%
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("FBCVA"),
     analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
     set_values_to = exprs(
@@ -276,13 +276,16 @@ adbcva_adsl <- adbcva_aseq %>%
 
 adbcva_crtflag <- adbcva_adsl %>%
   # Add criterion flags for BCVA endpoints
-  derive_var_bcvacritxfl(
-    paramcds = c("SBCVA", "FBCVA"),
-    basetype = NULL,
-    bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
-    bcva_uplims = list(-20, 5, 10),
-    bcva_lowlims = list(-15, 15),
-    additional_text = ""
+  restrict_derivation(
+    derivation = derive_var_bcvacritxfl,
+    args = params(
+      crit_var = exprs(CHG),
+      bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
+      bcva_uplims = list(-20, 5, 10),
+      bcva_lowlims = list(-15, 15),
+      additional_text = ""
+    ),
+    filter = PARAMCD %in% c("SBCVA", "FBCVA")
   ) %>%
   # Add AVALCATx variables
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
