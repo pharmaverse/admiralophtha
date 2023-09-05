@@ -196,7 +196,12 @@ adoe_adsl <- adoe_aseq %>%
 
 admiralophtha_adoe <- adoe_adsl
 
-# ---- Save output ----
+# Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(admiralophtha_adoe, file = file.path(dir, "admiralophtha_adoe.rda"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+print(dir)
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(admiralophtha_adoe, file = file.path(dir, "adoe.rda"), compress = "bzip2")

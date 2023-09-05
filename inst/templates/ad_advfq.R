@@ -306,5 +306,12 @@ admiralophtha_advfq <- advfq_adsl
 
 # ---- Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(admiralophtha_advfq, file = file.path(dir, "admiralophtha_advfq.rda"), compress = "bzip2")
+# Save output ----
+
+dir <- file.path(getwd(), "tmp")
+print(dir)
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(admiralophtha_advfq, file = file.path(dir, "advfq.rda"), compress = "bzip2")
