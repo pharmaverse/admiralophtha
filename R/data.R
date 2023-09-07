@@ -4,7 +4,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `oe` and `ADSL` datasets using `{admiral}`, `{admiralophtha}` and
+#' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R})
 #'
 "admiralophtha_adbcva"
@@ -15,7 +15,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `ADSL` and `qs` datasets using `{admiral}`, `{admiralophtha}` and
+#' Derived from the ADSL and QS datasets using `{admiral}`, `{admiralophtha}` and
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R})
 #'
 "admiralophtha_advfq"
@@ -26,7 +26,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the `oe` and `ADSL` datasets using `{admiral}`, `{admiralophtha}` and
+#' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and
 #' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R})
 #'
 "admiralophtha_adoe"
