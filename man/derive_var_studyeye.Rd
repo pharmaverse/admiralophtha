@@ -11,7 +11,7 @@ derive_var_studyeye(dataset_adsl, dataset_sc, sctestcd_value = "FOCID")
 
 \item{dataset_sc}{SC input dataset}
 
-\item{sctestcd_value}{SCTESTCD value flagging Study Eye selection records. Default: "FOCID".}
+\item{sctestcd_value}{\code{SCTESTCD} value flagging Study Eye selection records. Default: "FOCID".}
 }
 \value{
 The input ADSL dataset with an additional column named \code{STUDYEYE}
