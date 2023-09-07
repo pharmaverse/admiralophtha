@@ -12,7 +12,7 @@
 
 - Switched out all references to `admiral.test` for references to `pharmaversesdtm` in `ADOE` and `ADBCVA` templates, and updated code to refer to `oe_ophtha` accordingly (#184). 
 
-- Switched out `derive_var_merged_cat()` for `derive_vars_merged()` in the function `derive_var_Studyeye()` due to deprecation of the former in favor of the latter in `{admiral }`(#119).
+- Switched out `derive_var_merged_cat()` for `derive_vars_merged()` in the function `derive_var_studyeye()` due to deprecation of the former in favor of the latter in `{admiral}`(#119).
 
 - `OECAT` and `OESCAT` have been added to the lookup tables in the `ADOE` and `ADBCVA` templates (#189).
 
