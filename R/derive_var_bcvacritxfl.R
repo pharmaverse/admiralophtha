@@ -9,7 +9,7 @@
 #' @param critx_text String containing the text for `CRITx` variable.
 #' @param critxfl_cond String containing R code detailing the criterion to be satisfied
 #' for `CRITxFL` variable to be equal to "Y".
-#' @param counter Integer detailing the value of x to use in "CRITxFL".
+#' @param counter Integer detailing the value of x to use in `CRITxFL`.
 #' @param bcva_range Numeric vector of length two detailing lower and upper change in
 #' BCVA limits (`bcva_range` will be called in `critxfl_cond` if the criterion
 #' stipulates that change in BCVA lie inside some range).
@@ -76,7 +76,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' (usually `CHG` or `AVAL`).
 #' @param additional_text string containing additional text to append to `CRITx`
 #' @param critxfl_index positive integer detailing the first value of x to use
-#' in "CRITxFL". If not supplied, the function takes the first available value of
+#' in `CRITxFL`. If not supplied, the function takes the first available value of
 #' x, counting up from x = 1.
 #' @param bcva_ranges List containing one or more numeric vectors of length 2. For each
 #' vector c(a,b) in `bcva_ranges`, a pair of variables `CRITx`, `CRITxFL` is created
