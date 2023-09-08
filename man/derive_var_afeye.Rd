@@ -24,7 +24,7 @@ derive_var_afeye(
 \item{lat_vals}{\code{xxLAT}values for which \code{AFEYE} is derived}
 }
 \value{
-The input occurrence dataset with Affected Eye (AFEYE) added.
+The input occurrence dataset with Affected Eye (\code{AFEYE}) added.
 }
 \description{
 Derive Affected Eye (\code{AFEYE}) in occurrence datasets

@@ -26,7 +26,7 @@ derive_var_bcvacritxfl_util(
 \item{critxfl_cond}{String containing R code detailing the criterion to be satisfied
 for \code{CRITxFL} variable to be equal to "Y".}
 
-\item{counter}{Integer detailing the value of x to use in "CRITxFL".}
+\item{counter}{Integer detailing the value of x to use in \code{CRITxFL}.}
 
 \item{bcva_range}{Numeric vector of length two detailing lower and upper change in
 BCVA limits (\code{bcva_range} will be called in \code{critxfl_cond} if the criterion

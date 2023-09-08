@@ -38,7 +38,7 @@ then leave as NULL.}
 \item{additional_text}{string containing additional text to append to \code{CRITx}}
 
 \item{critxfl_index}{positive integer detailing the first value of x to use
-in "CRITxFL". If not supplied, the function takes the first available value of
+in \code{CRITxFL}. If not supplied, the function takes the first available value of
 x, counting up from x = 1.}
 }
 \value{
