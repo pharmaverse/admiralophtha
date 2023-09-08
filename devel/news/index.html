@@ -36,14 +36,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -69,19 +61,20 @@
 <div class="section level3">
 <h3 id="updates-to-functions-0-3-0">Updates to Functions<a class="anchor" aria-label="anchor" href="#updates-to-functions-0-3-0"></a></h3>
 <ul><li><p>Added a new parameter <code>crit_var</code> to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> so that criterion flags can be derived with respect to any variable. Also removed arguments <code>paramcds</code> and <code>basetype</code> as their function can be achieved using <code><a href="https://rdrr.io/pkg/admiral/man/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>. This also required renaming of argument <code>dataset_adbcva</code> to <code>dataset</code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
-<li><p>Added <code>AFEYE</code> derivation and description to <code>ADOE</code> Vignette (<a href="https://github.com/pharmaverse/admiralophtha/issues/165" class="external-link">#165</a>).</p></li>
+<li><p>Added <code>AFEYE</code> derivation and description to ADOE Vignette (<a href="https://github.com/pharmaverse/admiralophtha/issues/165" class="external-link">#165</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-to-templates-0-3-0">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-0-3-0"></a></h3>
-<ul><li><p>Updated <code>ADBCVA</code> template’s calls to use <code><a href="https://rdrr.io/pkg/admiral/man/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> in calls to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> and also to showcase use of <code>crit_var</code> argument of <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
-<li><p>Switched out all references to <code>admiral.test</code> for references to <code>pharmaversesdtm</code> in <code>ADOE</code> and <code>ADBCVA</code> templates, and updated code to refer to <code>oe_ophtha</code> accordingly (<a href="https://github.com/pharmaverse/admiralophtha/issues/184" class="external-link">#184</a>).</p></li>
-<li><p>Switched out <code><a href="https://rdrr.io/pkg/admiral/man/derive_var_merged_cat.html" class="external-link">derive_var_merged_cat()</a></code> for <code><a href="https://rdrr.io/pkg/admiral/man/derive_vars_merged.html" class="external-link">derive_vars_merged()</a></code> in the function <code>derive_var_Studyeye()</code> due to deprecation of the former in favor of the latter in <code>{admiral }</code>(<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
-<li><p><code>OECAT</code> and <code>OESCAT</code> have been added to the lookup tables in the <code>ADOE</code> and <code>ADBCVA</code> templates (<a href="https://github.com/pharmaverse/admiralophtha/issues/189" class="external-link">#189</a>).</p></li>
+<ul><li><p>Updated ADBCVA template’s calls to use <code><a href="https://rdrr.io/pkg/admiral/man/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> in calls to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> and also to showcase use of <code>crit_var</code> argument of <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
+<li><p>Switched out all references to <code>admiral.test</code> for references to <code>pharmaversesdtm</code> in ADOE and ADBCVA templates, and updated code to refer to <code>oe_ophtha</code> accordingly (<a href="https://github.com/pharmaverse/admiralophtha/issues/184" class="external-link">#184</a>).</p></li>
+<li><p>Switched out <code><a href="https://rdrr.io/pkg/admiral/man/derive_var_merged_cat.html" class="external-link">derive_var_merged_cat()</a></code> for <code><a href="https://rdrr.io/pkg/admiral/man/derive_vars_merged.html" class="external-link">derive_vars_merged()</a></code> in the function <code><a href="../reference/derive_var_studyeye.html">derive_var_studyeye()</a></code> due to deprecation of the former in favor of the latter in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>(<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
+<li><p><code>OECAT</code> and <code>OESCAT</code> have been added to the lookup tables in the ADOE and ADBCVA templates (<a href="https://github.com/pharmaverse/admiralophtha/issues/189" class="external-link">#189</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-to-documentation-0-3-0">Updates to Documentation<a class="anchor" aria-label="anchor" href="#updates-to-documentation-0-3-0"></a></h3>
 <ul><li><p>Added a reference for the ETDRS to LogMAR conversion done by <code><a href="../reference/convert_etdrs_to_logmar.html">convert_etdrs_to_logmar()</a></code> and <code><a href="../reference/convert_logmar_to_etdrs.html">convert_logmar_to_etdrs()</a></code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/136" class="external-link">#136</a>).</p></li>
-<li><p><code>OECAT</code> and <code>OESCAT</code> have been added to the lookup tables in the <code>ADOE</code> and <code>ADBCVA</code> vignettes (<a href="https://github.com/pharmaverse/admiralophtha/issues/189" class="external-link">#189</a>).</p></li>
+<li><p><code>OECAT</code> and <code>OESCAT</code> have been added to the lookup tables in the ADOE and ADBCVA vignettes (<a href="https://github.com/pharmaverse/admiralophtha/issues/189" class="external-link">#189</a>).</p></li>
+<li><p>All function and variable names on the website are in backquotes (<a href="https://github.com/pharmaverse/admiralophtha/issues/173" class="external-link">#173</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-to-data-0-3-0">Updates to Data<a class="anchor" aria-label="anchor" href="#updates-to-data-0-3-0"></a></h3>
@@ -98,11 +91,11 @@
 </ul></div>
 <div class="section level3">
 <h3 id="updates-to-templates-0-2-0">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-0-2-0"></a></h3>
-<ul><li>Updated <code>ADOE</code> to refer to <code>OESTRESU</code> for <code>AVALU</code> creation (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/139" class="external-link">#139</a>).</li>
-<li>Updated <code>ADOE</code> and <code>ADBCVA</code> <code>PARAM</code> mapping to include units where applicable (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/139" class="external-link">#139</a>).</li>
-<li>Updated <code>ADOE</code>, <code>ADVFQ</code> and <code>ADBCVA</code> for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in <code>ADVFQ</code> (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/128" class="external-link">#128</a>).</li>
-<li>Corrected values of <code>DTYPE</code>, <code>VISIT</code>, <code>VISITNUM</code>, <code>OEDY</code>, <code>OEDTC</code> for derived parameters in <code>ADBCVA</code> template (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/137" class="external-link">#137</a>).</li>
-<li>Updated <code>ADBCVA</code> and <code>ADOE</code> templates to include <code>AFEYE</code> (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/133" class="external-link">#133</a>).</li>
+<ul><li>Updated ADOE to refer to <code>OESTRESU</code> for <code>AVALU</code> creation (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/139" class="external-link">#139</a>).</li>
+<li>Updated ADOE and ADBCVA <code>PARAM</code> mapping to include units where applicable (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/139" class="external-link">#139</a>).</li>
+<li>Updated ADOE, ADVFQ and ADBCVA for the unique intermediate dataset name to avoid overwriting, corrected the link for Visit and Period variables Vignette in ADVFQ (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/128" class="external-link">#128</a>).</li>
+<li>Corrected values of <code>DTYPE</code>, <code>VISIT</code>, <code>VISITNUM</code>, <code>OEDY</code>, <code>OEDTC</code> for derived parameters in ADBCVA template (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/137" class="external-link">#137</a>).</li>
+<li>Updated ADBCVA and ADOE templates to include <code>AFEYE</code> (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/133" class="external-link">#133</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-to-site-0-2-0">Updates to Site<a class="anchor" aria-label="anchor" href="#updates-to-site-0-2-0"></a></h3>
@@ -114,14 +107,14 @@
 <h2 class="pkg-version" data-toc-text="0.1.0" id="admiralophtha-010">admiralophtha 0.1.0<a class="anchor" aria-label="anchor" href="#admiralophtha-010"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-1-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
-<ul><li>Added a function to derive the variable <code>STUDYEYE</code> in <code>ADSL</code> (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/9" class="external-link">#9</a>).</li>
+<ul><li>Added a function to derive the variable <code>STUDYEYE</code> in ADSL (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/9" class="external-link">#9</a>).</li>
 <li>Added a function to derive the variable <code>AFEYE</code> in Occurrence datasets (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/10" class="external-link">#10</a>).</li>
-<li>Added a function to derive the criterion flags in <code>ADBCVA</code> (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/49" class="external-link">#49</a>).</li>
+<li>Added a function to derive the criterion flags in ADBCVA (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/49" class="external-link">#49</a>).</li>
 <li>Added a function to convert LogMAR scores to ETDRS scores (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/50" class="external-link">#50</a>).</li>
 <li>Added a function to convert ETDRS scores to LogMAR scores (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/50" class="external-link">#50</a>).</li>
-<li>Created ophthalmology-specific test data for the <code>EX</code> SDTM domain, stored in <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> package and accessible by calling <code>data(admiralophtha_ex)</code> (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/36" class="external-link">#36</a>).</li>
-<li>Created ophthalmology-specific test data for the <code>SC</code> and <code>OE</code> SDTM domains, stored in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> package and accessible by calling <code>data(admiral_sc)</code> or <code>data(admiral_oe)</code> (issues <a href="https://github.com/pharmaverse/admiralophtha/issues/11" class="external-link">#11</a> and <a href="https://github.com/pharmaverse/admiralophtha/issues/13" class="external-link">#13</a>).</li>
-<li>Updated <code>AE</code> and <code>QS</code> test datasets in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> to include ophthalmology-specific variables and records, such as laterality variables in <code>AE</code> and VFQ records in <code>QS</code> (issues <a href="https://github.com/pharmaverse/admiralophtha/issues/12" class="external-link">#12</a> and <a href="https://github.com/pharmaverse/admiralophtha/issues/52" class="external-link">#52</a>).</li>
+<li>Created ophthalmology-specific test data for the EX SDTM domain, stored in <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> package and accessible by calling <code>data(admiralophtha_ex)</code> (issue <a href="https://github.com/pharmaverse/admiralophtha/issues/36" class="external-link">#36</a>).</li>
+<li>Created ophthalmology-specific test data for the SC and OE SDTM domains, stored in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> package and accessible by calling <code>data(admiral_sc)</code> or <code>data(admiral_oe)</code> (issues <a href="https://github.com/pharmaverse/admiralophtha/issues/11" class="external-link">#11</a> and <a href="https://github.com/pharmaverse/admiralophtha/issues/13" class="external-link">#13</a>).</li>
+<li>Updated AE and QS test datasets in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> to include ophthalmology-specific variables and records, such as laterality variables in AE and VFQ records in QS (issues <a href="https://github.com/pharmaverse/admiralophtha/issues/12" class="external-link">#12</a> and <a href="https://github.com/pharmaverse/admiralophtha/issues/52" class="external-link">#52</a>).</li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
