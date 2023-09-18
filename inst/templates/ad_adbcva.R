@@ -300,7 +300,12 @@ adbcva_crtflag <- adbcva_adsl %>%
 
 admiralophtha_adbcva <- adbcva_crtflag
 
-# ---- Save output ----
+# Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(admiralophtha_adbcva, file = file.path(dir, "admiralophtha_adbcva.rda"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+print(dir)
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(admiralophtha_adbcva, file = file.path(dir, "adbcva.rda"), compress = "bzip2")
