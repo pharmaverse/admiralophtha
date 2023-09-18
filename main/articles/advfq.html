@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,14 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -104,9 +96,9 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This article describes creating an <code>ADVFQ</code> ADaM with
-Visual Functioning Questionnaire data for ophthalmology endpoints. It is
-to be used in conjunction with the article on <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html" class="external-link">creating
+<p>This article describes creating an ADVFQ ADaM with Visual Functioning
+Questionnaire data for ophthalmology endpoints. It is to be used in
+conjunction with the article on <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html" class="external-link">creating
 a BDS dataset from SDTM</a>. As such, derivations and processes that are
 not specific to ADVFQ are absent, and the user is invited to consult the
 aforementioned article for guidance.</p>
@@ -126,7 +118,7 @@ placed in separate datasets (e.g. ADQS).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/pharmaversesdtm/main/" class="external-link">pharmaversesdtm</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiraldev/main/" class="external-link">admiraldev</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a></span><span class="op">)</span></code></pre></div>
 </div>
@@ -154,17 +146,16 @@ demonstration we shall use the <a href="https://pharmaverse.github.io/admiral/" 
 data. The QS dataset is filtered to the VFQ parameters of interest.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_adsl"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_qs"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"qs_ophtha"</span><span class="op">)</span>
 <span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">admiral_adsl</span>
-<span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">admiral_qs</span>
+<span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">qs_ophtha</span>
 
 <span class="va">qs</span> <span class="op">&lt;-</span> <span class="va">qs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">QSTESTCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VFQ1"</span>, <span class="st">"VFQ2"</span>, <span class="st">"VFQ3"</span>, <span class="st">"VFQ4"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Next, the programmer should create a parameter lookup table which
 includes <code>QSTESTCD</code>, <code>PARAMCD</code>,
 <code>PARAM</code>, <code>PARCAT1</code> and <code>PARCAT2</code>
 variables. This should include all parameters that will be needed in the
-final <code>ADVFQ</code> and will be used later to merge parameter
-information.</p>
+final ADVFQ and will be used later to merge parameter information.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">param_lookup</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">QSTESTCD</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">PARCAT1</span>, <span class="op">~</span><span class="va">PARCAT2</span>,
@@ -278,7 +269,7 @@ be used to choose the appropriate record for analysis.</p>
 <p>This flag may be derived using the <a href="https://pharmaverse.github.io/admiral/" class="external-link"><code>admiral</code></a>
 function <code><a href="https://rdrr.io/pkg/admiral/man/derive_var_extreme_flag.html" class="external-link">admiral::derive_var_extreme_flag()</a></code>. For this
 example, we will assume we would like to choose the latest value by
-USUBJID, PARAMCD and AVISIT.</p>
+<code>USUBJID</code>, <code>PARAMCD</code> and <code>AVISIT</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## ANL01FL: Flag last result within an AVISIT for post-baseline records ----</span>
 <span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>

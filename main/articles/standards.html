@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,14 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -121,23 +113,20 @@ ADaM programming.</p>
 </h3>
 <p>Due to the aforementioned high complexity and diversity of
 ophthalmology data, it is discouraged to funnel <em>all</em> records
-from the <code>OE</code> SDTM dataset into a single <code>ADOE</code>
-dataset, as this will result in an overly complicated program/dataset
-pair. <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> instead suggests the following
+from the OE SDTM dataset into a single ADOE dataset, as this will result
+in an overly complicated program/dataset pair.
+<a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> instead suggests the following
 partition:</p>
 <ul>
-<li>
-<code>ADOE</code> for general miscellaneous ophthalmology tests not
-used for efficacy programming.</li>
-<li>
-<code>ADBCVA</code> for BCVA data only - these will almost always
-constitute a primary or secondary endpoint and so will require
-endpoint-related programming such as criterion flags.</li>
+<li>ADOE for general miscellaneous ophthalmology tests not used for
+efficacy programming.</li>
+<li>ADBCVA for BCVA data only - these will almost always constitute a
+primary or secondary endpoint and so will require endpoint-related
+programming such as criterion flags.</li>
 <li>Any other endpoints for which specific efficacy programming may be
 required should have their own ADaM dataset (e.g. for intraocular
-pressure data, <code>ADIOP</code>).</li>
-<li>
-<code>ADVFQ</code> for Visual Functioning Questionnaire data.</li>
+pressure data, ADIOP).</li>
+<li>ADVFQ for Visual Functioning Questionnaire data.</li>
 </ul>
 <p>Subdividing the ADaM datasets in a study as above will ensure that
 wherever custom efficacy programming is required, this will
@@ -145,11 +134,11 @@ automatically be limited to the data of interest. For instance, if a
 study has various endpoints of the form <em>Gain of between x and y
 letters relative to baseline</em> (or similar) then each will likely
 require a criterion variable/flag pair (see the <a href="#criterion">Criterion Flag</a> section for more detail). If the
-BCVA data were stored in <code>ADOE</code>, then these criterion
-variable/flag pairs would be blank and irrelevant for most of the data
-in the dataset, save for the BCVA records. Conversely, collecting the
-BCVA data in <code>ADBCVA</code> ensures the criterion variable/flag
-pairs are more relevant, and the resulting dataset is more readable.</p>
+BCVA data were stored in ADOE, then these criterion variable/flag pairs
+would be blank and irrelevant for most of the data in the dataset, save
+for the BCVA records. Conversely, collecting the BCVA data in ADBCVA
+ensures the criterion variable/flag pairs are more relevant, and the
+resulting dataset is more readable.</p>
 </div>
 <div class="section level3">
 <h3 id="criterion">Criterion Flags<a class="anchor" aria-label="anchor" href="#criterion"></a>
@@ -172,6 +161,28 @@ dataset, as this renders the dataset confusing to scrutinise.</p>
 <code>derive_var_bcvacritxfl</code> to add them en masse. Additionally,
 the function automatically populates <code>CRITx</code> in the
 programmatic manner described above.</p>
+</div>
+<div class="section level3">
+<h3 id="affected-eye-derivation">Affected Eye Derivation<a class="anchor" aria-label="anchor" href="#affected-eye-derivation"></a>
+</h3>
+<p><a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> function <code>derive_var_afeye</code>
+follows the standard derivation: Set to “BOTH EYES” when Study Eye
+Selection [<code>ADSL.STUDYEYE</code>] is not missing, and Laterality
+[<code>xxLAT</code>] is equal to “BILATERAL”. Else set to “STUDY EYE”
+when Study Eye Selection [<code>ADSL.STUDYEYE</code>] is either “RIGHT”
+or “LEFT”, and matches Laterality [<code>xxLAT</code>] for the
+observation record. Else set to “STUDY EYE” when Study Eye Selection
+[<code>ADSL.STUDYEYE</code>] is “BILATERAL”, and Laterality
+[<code>xxLAT</code>] is not missing for the observation record. Else set
+to “FELLOW EYE” when Study Eye Selection [<code>ADSL.STUDYEYE</code>] is
+either “RIGHT” or “LEFT”, and [<code>xxLAT</code>] is not missing and
+does not match Laterality [<code>xxLAT</code>] for the observation
+record. Else set to null.</p>
+<p>If the standard values of Location [<code>xxLOC</code>] = “EYE” and
+Laterality [<code>xxLAT</code>] = “LEFT”, “RIGHT”, “BILATERAL” are not
+the same for your study this can be updated as inputs in the function,
+otherwise this is also expected for <code>AFEYE</code> to be derived,
+and a warning will be returned if any other values are found.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
