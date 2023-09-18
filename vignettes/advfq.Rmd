@@ -44,7 +44,7 @@ admiral_homepage <- "https://pharmaverse.github.io/admiral"
 
 # Introduction
 
-This article describes creating an `ADVFQ` ADaM with Visual Functioning Questionnaire
+This article describes creating an ADVFQ ADaM with Visual Functioning Questionnaire
 data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are absent, and the user is invited to consult the aforementioned article for guidance.
 
  **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
@@ -61,7 +61,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 library(admiraldev)
 library(admiralophtha)
 ```
@@ -83,13 +83,13 @@ The QS dataset is filtered to the VFQ parameters of interest.
 
 ```{r} 
 data("admiral_adsl")
-data("admiral_qs")
+data("qs_ophtha")
 adsl <- admiral_adsl
-qs <- admiral_qs
+qs <- qs_ophtha
 
 qs <- qs %>% filter(QSTESTCD %in% c("VFQ1", "VFQ2", "VFQ3", "VFQ4"))
 ```
-Next, the programmer should create a parameter lookup table which includes `QSTESTCD`, `PARAMCD`, `PARAM`, `PARCAT1` and `PARCAT2` variables. This should include all parameters that will be needed in the final `ADVFQ` and will be used later to merge parameter information.
+Next, the programmer should create a parameter lookup table which includes `QSTESTCD`, `PARAMCD`, `PARAM`, `PARCAT1` and `PARCAT2` variables. This should include all parameters that will be needed in the final ADVFQ and will be used later to merge parameter information.
 
 ```{r, eval=FALSE} 
 param_lookup <- tibble::tribble(
@@ -193,7 +193,7 @@ In most finding ADaMs, an analysis flag is derived to identify the appropriate o
 
 In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the appropriate record for analysis.
 
-This flag may be derived using the [`admiral`](https://pharmaverse.github.io/admiral/) function `admiral::derive_var_extreme_flag()`. For this example, we will assume we would like to choose the latest value by USUBJID, PARAMCD and AVISIT.
+This flag may be derived using the [`admiral`](https://pharmaverse.github.io/admiral/) function `admiral::derive_var_extreme_flag()`. For this example, we will assume we would like to choose the latest value by `USUBJID`, `PARAMCD` and `AVISIT`.
 
 ```{r, eval=FALSE}
 ## ANL01FL: Flag last result within an AVISIT for post-baseline records ----

@@ -63,7 +63,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 library(admiraldev)
 library(admiralophtha)
 ```
@@ -81,7 +81,7 @@ As with all BDS ADaM datasets, one should start from the OE SDTM, where only the
 **Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye()`.
 
 ```{r}
-data("admiral_oe")
+data("oe_ophtha")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
@@ -90,18 +90,18 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(admiral_oe) %>%
+oe <- convert_blanks_to_na(oe_ophtha) %>%
   ungroup()
 
 # ---- Lookup table ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
-  "CSUBTH", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
-  "DRSSR", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1, # nolint
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2, # nolint
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3, # nolint
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4, # nolint
 )
 ```
 
@@ -121,6 +121,20 @@ adoe <- oe %>%
   )
 ```
 
+The next item of business is to derive `AVAL`, `AVALU`, and `DTYPE`. In this example, due to the small number of parameters their derivation is trivial. `AFEYE` is also created in this step using the function `derive_var_afeye()`. To determine the affected eye, this function compares `OELAT` to the `STUDYEYE` variable created from the previous step.
+
+```{r}
+adoe <- adoe %>%
+  # Calculate AVAL, AVALC, AVALU and DTYPE
+  mutate(
+    AVAL = OESTRESN,
+    AVALC = OESTRESC,
+    AVALU = OESTRESU,
+    DTYPE = NA_character_
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(OELOC, OELAT, loc_vals = c("EYE", "RETINA"))
+```
 ## Further Derivations of Standard BDS Variables {#further}
 
 The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 

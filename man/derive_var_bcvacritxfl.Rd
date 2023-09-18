@@ -2,12 +2,11 @@
 % Please edit documentation in R/derive_var_bcvacritxfl.R
 \name{derive_var_bcvacritxfl}
 \alias{derive_var_bcvacritxfl}
-\title{Adds CRITx CRITxFL pairs to ADBCVA dataset}
+\title{Adds \code{CRITx}/\code{CRITxFL} pairs to BCVA dataset}
 \usage{
 derive_var_bcvacritxfl(
-  dataset_adbcva,
-  paramcds = NULL,
-  basetype = NULL,
+  dataset,
+  crit_var,
   bcva_ranges = NULL,
   bcva_uplims = NULL,
   bcva_lowlims = NULL,
@@ -16,45 +15,44 @@ derive_var_bcvacritxfl(
 )
 }
 \arguments{
-\item{dataset_adbcva}{Input dataset (ADBCVA).}
+\item{dataset}{Input dataset containing BCVA data (usually ADBCVA).}
 
-\item{paramcds}{Vector of \code{PARAMCD} values for which to derive \code{CRITx} and \code{CRITxFL}.}
-
-\item{basetype}{\code{BASETYPE} value for which to derive \code{CRITx} and \code{CRITxFL}.}
+\item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
+(usually \code{CHG} or \code{AVAL}).}
 
 \item{bcva_ranges}{List containing one or more numeric vectors of length 2. For each
 vector c(a,b) in \code{bcva_ranges}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
-with the condition: a <= \code{CHG} <= b. If criterion flags of that type are not
+with the condition: \verb{a <=  crit_var <= b}. If criterion flags of that type are not
 required, then leave as NULL.}
 
 \item{bcva_uplims}{List containing one or more numeric elements. For each
 element a in \code{bcva_uplims}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
-with the condition: \code{CHG} <= a. If criterion flags of that type are not
+with the condition: \code{crit_var <= a}. If criterion flags of that type are not
 required, then leave as NULL.}
 
 \item{bcva_lowlims}{List containing one or more numeric elements. For each
 element b in \code{bcva_lowlims}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
-with the condition: CHG >= b. If criterion flags of that type are not required,
+with the condition: \code{crit_var >= b}. If criterion flags of that type are not required,
 then leave as NULL.}
 
 \item{additional_text}{string containing additional text to append to \code{CRITx}}
 
 \item{critxfl_index}{positive integer detailing the first value of x to use
-in "CRITxFL". If not supplied, the function takes the first available value of
+in \code{CRITxFL}. If not supplied, the function takes the first available value of
 x, counting up from x = 1.}
 }
 \value{
-The input ADBCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.
+The input BCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.
 }
 \description{
-Adds a criterion variables \code{CRITx} and their corresponding flags \code{CRITxFL} to an
-ADBCVA dataset.
+Adds a criterion variables \code{CRITx} and their corresponding flags \code{CRITxFL} to a
+dataset containing BCVA records
 }
 \details{
-This function works by calling \code{derive_var_bcvacritxfl}once for each of the
+This function works by calling \code{derive_var_bcvacritxfl()} once for each of the
 elements in \code{bcva_ranges}, \code{bcva_uplims} and \code{bcva_lowlims}.
-NOTE: if \code{CHG} is equal to NA, then the resulting criterion flag is also marked
-as NA.
+NOTE: if \code{crit_var} is equal to \code{NA}, then the resulting criterion flag is also marked
+as \code{NA}.
 }
 \examples{
 library(tibble)
@@ -62,21 +60,18 @@ library(admiral)
 library(admiraldev)
 
 adbcva1 <- tribble(
-  ~STUDYID, ~USUBJID, ~BASETYPE, ~PARAMCD, ~CHG,
-  "XXX001", "P01", "LAST", "SBCVA", 0,
-  "XXX001", "P01", "LAST", "FBCVA", 2,
-  "XXX001", "P01", "LAST", "SBCVALOG", -7,
-  "XXX001", "P02", "LAST", "SBCVA", -13,
-  "XXX001", "P02", "LAST", "FBCVA", 5,
-  "XXX001", "P02", "LAST", "SBCVALOG", 12,
-  "XXX001", "P03", "LAST", "SBCVA", NA,
-  "XXX001", "P03", "LAST", "FBCVA", 17
+  ~STUDYID, ~USUBJID, ~AVISIT, ~BASETYPE, ~PARAMCD, ~CHG,
+  "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 0,
+  "XXX001", "P01", "WEEK 2", "LAST", "FBCVA", 2,
+  "XXX001", "P02", "BASELINE", "LAST", "SBCVA", -13,
+  "XXX001", "P02", "WEEK 2", "LAST", "FBCVA", 5,
+  "XXX001", "P03", "BASELINE", "LAST", "SBCVA", NA,
+  "XXX001", "P03", "WEEK 2", "LAST", "FBCVA", 17
 )
 
 derive_var_bcvacritxfl(
-  dataset_adbcva = adbcva1,
-  paramcds = c("SBCVA", "FBCVA"),
-  basetype = NULL,
+  dataset = adbcva1,
+  crit_var = exprs(CHG),
   bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
   bcva_uplims = list(5, 10),
   bcva_lowlims = list(8),
@@ -96,13 +91,16 @@ adbcva2 <- tribble(
   "XXX001", "P01", "WEEK 6", "AVERAGE", "SBCVA", 3, -2
 )
 
-derive_var_bcvacritxfl(
-  dataset_adbcva = adbcva2,
-  paramcds = c("SBCVA", "FBCVA"),
-  basetype = "AVERAGE",
-  bcva_ranges = list(c(0, 5), c(-10, 0)),
-  bcva_lowlims = list(5),
-  additional_text = " (AVERAGE)"
+restrict_derivation(
+  adbcva2,
+  derivation = derive_var_bcvacritxfl,
+  args = params(
+    crit_var = exprs(CHG),
+    bcva_ranges = list(c(0, 5), c(-10, 0)),
+    bcva_lowlims = list(5),
+    additional_text = " (AVERAGE)"
+  ),
+  filter = PARAMCD \%in\% c("SBCVA", "FBCVA") & BASETYPE == "AVERAGE"
 )
 
 }

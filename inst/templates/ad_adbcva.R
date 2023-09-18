@@ -5,7 +5,7 @@
 # Input: adsl, oe
 
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(pharmaversesdtm)
 library(admiralophtha)
 library(dplyr)
 library(lubridate)
@@ -17,7 +17,7 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("admiral_oe")
+data("oe_ophtha")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
@@ -26,16 +26,16 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(admiral_oe) %>%
+oe <- convert_blanks_to_na(oe_ophtha) %>%
   ungroup()
 
 # ---- Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "VACSCORE", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
-  "VACSCORE", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2,
+  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1, # nolint
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2, # nolint
 )
 
 # Assign AVALCAT1
@@ -276,13 +276,16 @@ adbcva_adsl <- adbcva_aseq %>%
 
 adbcva_crtflag <- adbcva_adsl %>%
   # Add criterion flags for BCVA endpoints
-  derive_var_bcvacritxfl(
-    paramcds = c("SBCVA", "FBCVA"),
-    basetype = NULL,
-    bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
-    bcva_uplims = list(-20, 5, 10),
-    bcva_lowlims = list(-15, 15),
-    additional_text = ""
+  restrict_derivation(
+    derivation = derive_var_bcvacritxfl,
+    args = params(
+      crit_var = exprs(CHG),
+      bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
+      bcva_uplims = list(-20, 5, 10),
+      bcva_lowlims = list(-15, 15),
+      additional_text = ""
+    ),
+    filter = PARAMCD %in% c("SBCVA", "FBCVA")
   ) %>%
   # Add AVALCATx variables
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
@@ -297,7 +300,12 @@ adbcva_crtflag <- adbcva_adsl %>%
 
 admiralophtha_adbcva <- adbcva_crtflag
 
-# ---- Save output ----
+# Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(admiralophtha_adbcva, file = file.path(dir, "admiralophtha_adbcva.rda"), compress = "bzip2")
+dir <- file.path(getwd(), "tmp")
+print(dir)
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(admiralophtha_adbcva, file = file.path(dir, "adbcva.rda"), compress = "bzip2")

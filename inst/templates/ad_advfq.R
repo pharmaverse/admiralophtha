@@ -5,15 +5,15 @@
 # Input: adsl, qs
 library(admiral)
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(pharmaversesdtm)
 library(stringr)
 library(tibble)
 
 data("admiral_adsl")
-data("admiral_qs")
+data("qs_ophtha")
 
 adsl <- admiral_adsl
-qs <- admiral_qs
+qs <- qs_ophtha
 
 qs <- convert_blanks_to_na(qs)
 
@@ -306,5 +306,12 @@ admiralophtha_advfq <- advfq_adsl
 
 # ---- Save output ----
 
-dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(admiralophtha_advfq, file = file.path(dir, "admiralophtha_advfq.rda"), compress = "bzip2")
+# Save output ----
+
+dir <- file.path(getwd(), "tmp")
+print(dir)
+if (!file.exists(dir)) {
+  # Create the folder
+  dir.create(dir)
+}
+save(admiralophtha_advfq, file = file.path(dir, "advfq.rda"), compress = "bzip2")

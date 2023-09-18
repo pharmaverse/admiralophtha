@@ -4,7 +4,7 @@
 #'
 #' @param dataset_adsl ADSL input dataset
 #' @param dataset_sc SC input dataset
-#' @param sctestcd_value SCTESTCD value flagging Study Eye selection records. Default: "FOCID".
+#' @param sctestcd_value `SCTESTCD` value flagging Study Eye selection records. Default: "FOCID".
 #'
 #' @details
 #' Study Eye is derived in ADSL using the "Study Eye selection" records
@@ -54,16 +54,15 @@ derive_var_studyeye <- function(dataset_adsl, dataset_sc, sctestcd_value = "FOCI
     )
   }
 
-  derive_var_merged_cat(
+  derive_vars_merged(
     dataset_adsl,
     dataset_add = dataset_sc,
     by_vars = exprs(STUDYID, USUBJID),
     order = NULL,
     filter_add = SCTESTCD == !!sctestcd_value,
-    new_var = STUDYEYE,
-    source_var = SCSTRESC,
-    cat_fun = seye_cat,
+    new_vars = exprs(STUDYEYE = SCSTRESC),
     mode = NULL,
-    missing_value = ""
-  )
+    missing_values = exprs(STUDYEYE = "")
+  ) %>%
+    mutate(STUDYEYE = seye_cat(STUDYEYE))
 }

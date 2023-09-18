@@ -61,7 +61,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(admiral)
-library(admiral.test)
+library(pharmaversesdtm)
 library(admiraldev)
 library(admiralophtha)
 ```
@@ -83,7 +83,7 @@ As with all BDS ADaM datasets, one should start from the OE SDTM, where only the
 **Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye()`.
 
 ```{r}
-data("admiral_oe")
+data("oe_ophtha")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
@@ -92,14 +92,14 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(admiral_oe) %>%
+oe <- convert_blanks_to_na(oe_ophtha) %>%
   ungroup()
 
 # ---- Lookup table ----
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "VACSCORE", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1,
-  "VACSCORE", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2,
+  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1, # nolint
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2, # nolint
 )
 ```
 
@@ -211,7 +211,7 @@ Some ophthalmology studies may desire to subdivide BCVA records according to whi
 * Create a lookup table which assigns numeric equivalents (i.e. `AVALCAxN`) to Snellen categories.
 * Create a format function to map each `AVAL` to a numeric category.
 * Add `AVALCAxN` through a mutate statement using the format function.
-* Add `AVALCATx` using derive_vars_merged in combination with the lookup table.
+* Add `AVALCATx` using `derive_vars_merged` in combination with the lookup table.
 
 ```{r}
 avalcat_lookup <- tibble::tribble(
@@ -303,14 +303,18 @@ By using `derive_var_bcvacritxfl()`, the ADaM programmer can implement all three
 * *Gain of 15 letters or more relative to baseline* (Class 3: `CHG >= 15`)
 * *Loss of 10 letters or fewer relative to baseline* (Class 3: `CHG >= -10`).
 
-Then, the following call will implement criterion variable/flag pairs for the endpoints above. The `CRITx` variables will automatically encode the correct inequality.
+Then, the following call will implement criterion variable/flag pairs for the endpoints above. The `CRITx` variables will automatically encode the correct inequality. Note that that `restrict_derivation()` is wrapped around the call so as to only derive the variables for the relevant parameters. In this way, the `filter` argument can be altered to restrict derivation to only relevant records. Note also that the argument `crit_var = exprs(CHG)` has to be specified so that the criterion flags are derived with respect to the correct variable.
 
 ```{r}
-adbcva <- adbcva %>% derive_var_bcvacritxfl(
-  paramcds = c("SBCVA", "FBCVA"),
-  bcva_ranges = list(c(5, 10)),
-  bcva_uplims = list(25, -5),
-  bcva_lowlims = list(15, -10)
+adbcva <- adbcva %>% restrict_derivation(
+  derivation = derive_var_bcvacritxfl,
+  args = params(
+    crit_var = exprs(CHG),
+    bcva_ranges = list(c(5, 10)),
+    bcva_uplims = list(25, -5),
+    bcva_lowlims = list(15, -10)
+  ),
+  filter = PARAMCD %in% c("SBCVA", "FBCVA")
 )
 ```
 
@@ -328,30 +332,45 @@ It is also possible to assign significance to the "x" in `CRITxFL`. For instance
 
 ```{r}
 adbcva <- adbcva %>%
-  derive_var_bcvacritxfl(
-    paramcds = c("SBCVA", "FBCVA"),
-    bcva_ranges = list(c(5, 10)),
-    critxfl_index = 10
+  restrict_derivation(
+    derivation = derive_var_bcvacritxfl,
+    args = params(
+      crit_var = exprs(CHG),
+      bcva_ranges = list(c(5, 10)),
+      critxfl_index = 10
+    ),
+    filter = PARAMCD %in% c("SBCVA", "FBCVA")
   ) %>%
-  derive_var_bcvacritxfl(
-    paramcds = c("SBCVA", "FBCVA"),
-    bcva_uplims = list(25, -5),
-    critxfl_index = 20
+  restrict_derivation(
+    derivation = derive_var_bcvacritxfl,
+    args = params(
+      crit_var = exprs(CHG),
+      bcva_uplims = list(25, -5),
+      critxfl_index = 20
+    ),
+    filter = PARAMCD %in% c("SBCVA", "FBCVA")
   ) %>%
-  derive_var_bcvacritxfl(
-    paramcds = c("SBCVA", "FBCVA"),
-    bcva_lowlims = list(15, -10),
-    critxfl_index = 30
+  restrict_derivation(
+    derivation = derive_var_bcvacritxfl,
+    args = params(
+      crit_var = exprs(CHG),
+      bcva_lowlims = list(15, -10),
+      critxfl_index = 30
+    ),
+    filter = PARAMCD %in% c("SBCVA", "FBCVA")
   )
 ```
-
+  
 ## Additional Notes
-
-* When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl()`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl()` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
-
+  
+  * When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl()`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl()` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
+  
+  * This vignette extensively showcases the use of `derive_var_bcvacritxfl()` applied to the variable `CHG`, but through the argument `crit_var` the function can also be used to create criterion flag relative to other variables (e.g. `crit_var = exprs(AVAL)` for `AVAL`).
+  
 ## Example Script {#example}
-
-ADaM | Sample Code 
- ---- | -------------- 
-ADBCVA | `r dyn_link("ad_adbcva.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adbcva.R", is_multiversion = TRUE)`
-
+  
+  ADaM | Sample Code 
+  ---- | -------------- 
+  ADBCVA | `r dyn_link("ad_adbcva.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adbcva.R", is_multiversion = TRUE)`
+  
+  

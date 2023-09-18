@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 28798 rows and 41 columns.
 }
 \source{
-Derived from the \code{ADSL} and \code{qs} datasets using \code{{admiral}}, \code{{admiralophtha}} and
+Derived from the ADSL and QS datasets using \code{{admiral}}, \code{{admiralophtha}} and
 (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R})
 }
 \usage{
@@ -20,9 +20,7 @@ An example Visual Function Questionnaire (VFQ) analysis dataset
 \seealso{
 Other datasets: 
 \code{\link{admiralophtha_adbcva}},
-\code{\link{admiralophtha_adoe}},
-\code{\link{admiralophtha_ex}},
-\code{\link{admiralophtha_qs}}
+\code{\link{admiralophtha_adoe}}
 }
 \concept{datasets}
 \keyword{datasets}

@@ -2,10 +2,11 @@
 % Please edit documentation in R/derive_var_bcvacritxfl.R
 \name{derive_var_bcvacritxfl_util}
 \alias{derive_var_bcvacritxfl_util}
-\title{Add CRITx and CRITxFL pair to ADBCVA dataset}
+\title{Add \code{CRITx}/\code{CRITxFL} pair to BCVA dataset}
 \usage{
 derive_var_bcvacritxfl_util(
   dataset,
+  crit_var,
   critx_text,
   critxfl_cond,
   counter,
@@ -15,14 +16,17 @@ derive_var_bcvacritxfl_util(
 )
 }
 \arguments{
-\item{dataset}{Input dataset (ADBCVA).}
+\item{dataset}{Input dataset (usually ADBCVA).}
+
+\item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
+(usually \code{CHG} or \code{AVAL}).}
 
 \item{critx_text}{String containing the text for \code{CRITx} variable.}
 
 \item{critxfl_cond}{String containing R code detailing the criterion to be satisfied
 for \code{CRITxFL} variable to be equal to "Y".}
 
-\item{counter}{Integer detailing the value of x to use in "CRITxFL".}
+\item{counter}{Integer detailing the value of x to use in \code{CRITxFL}.}
 
 \item{bcva_range}{Numeric vector of length two detailing lower and upper change in
 BCVA limits (\code{bcva_range} will be called in \code{critxfl_cond} if the criterion
@@ -37,20 +41,20 @@ will be called in \code{critxfl_cond} if the criterion stipulates that change in
 lie above some lower limit).}
 }
 \value{
-The input ADBCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.
+The input BCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.
 }
 \description{
-Helper function for \code{derive_var_bcvacritxfl} that adds a criterion variable \code{CRITx} and
-its corresponding flag \code{CRITxFL} to an ADBCVA dataset.
+Helper function for \code{derive_var_bcvacritxfl()} that adds a criterion variable \code{CRITx} and
+its corresponding flag \code{CRITxFL} to a dataset containing BCVA records
 }
 \details{
 The criterion for change in BCVA in \code{CRITxFL} can be of three types: (1) value lies
-within some range; a <= CHG <= b; (2) value is below some upper limit; CHG <= a; (3)
-value is above some lower limit; b <= CHG. For (1), \code{bcva_range} must be specified to
-this function; for (2), \code{bcva_uplim}; for (3) \code{bcva_lowlim}. It is only ever
-necessary to supply one of these three arguments.
-NOTE: if \code{CHG} is equal to NA, then the resulting criterion flag is also marked
-as NA.
+within some range; \verb{a <= crit_var <= b}; (2) value is below some upper limit; \code{crit_var <= a};
+(3) value is above some lower limit; \code{b <= crit_var}. For (1), \code{bcva_range} must
+be specified to this function; for (2), \code{bcva_uplim}; for (3) \code{bcva_lowlim}. It is
+necessary to supply at least one of these three arguments.
+NOTE: if \code{crit_var} is equal to NA, then the resulting criterion flag is also marked
+as \code{NA}.
 }
 \author{
 Edoardo Mancini
