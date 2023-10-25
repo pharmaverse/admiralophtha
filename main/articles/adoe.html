@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,14 +60,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -168,9 +160,9 @@ practice <code>STUDYEYE</code> will already have been derived using
 <span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">admiral_adsl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYEYE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LEFT"</span>, <span class="st">"RIGHT"</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/admiral/man/convert_blanks_to_na.html" class="external-link">convert_blanks_to_na</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="fu"><a href="https://pharmaverse.github.io/admiral/main/reference/convert_blanks_to_na.html" class="external-link">convert_blanks_to_na</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">oe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/admiral/man/convert_blanks_to_na.html" class="external-link">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">oe_ophtha</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="va">oe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/main/reference/convert_blanks_to_na.html" class="external-link">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">oe_ophtha</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># ---- Lookup table ----</span>
@@ -197,7 +189,7 @@ the derivation of variables such as Analysis Day (<code>ADY</code>).</p>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>
     <span class="va">OETESTCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CSUBTH"</span>, <span class="st">"DRSSR"</span><span class="op">)</span>
   <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/admiral/man/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://pharmaverse.github.io/admiral/main/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span>
     dataset_add <span class="op">=</span> <span class="va">adsl</span>,
     new_vars <span class="op">=</span> <span class="va">adsl_vars</span>,
     by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/admiral/man/reexport-exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">STUDYID</span>, <span class="va">USUBJID</span><span class="op">)</span>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,14 +36,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/devel">devel</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://pharmaverse.github.io/admiralophtha/pre-release">pre-release</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -65,17 +57,28 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="admiralophtha-development-version">admiralophtha (development version)<a class="anchor" aria-label="anchor" href="#admiralophtha-development-version"></a></h2>
+<div class="section level3">
+<h3 id="updates-to-templates-development-version">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-development-version"></a></h3>
+<ul><li>Removed <code>analysis_value</code> argument in the calls to <code><a href="https://pharmaverse.github.io/admiral/main/reference/derive_param_computed.html" class="external-link">derive_param_computed()</a></code> in ADBCVA template in line with the deprecation of this argument in the new version of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>. Variable values for parameters of interest are now all populated through the <code>set_values_to</code> argument (<a href="https://github.com/pharmaverse/admiralophtha/issues/207" class="external-link">#207</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="updates-to-documentation-development-version">Updates to Documentation<a class="anchor" aria-label="anchor" href="#updates-to-documentation-development-version"></a></h3>
+<ul><li>Removed <code>analysis_value</code> argument in the calls to <code><a href="https://pharmaverse.github.io/admiral/main/reference/derive_param_computed.html" class="external-link">derive_param_computed()</a></code> in ADBCVA vignette in line with the deprecation of this argument in the new version of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>. Variable values for parameters of interest are now all populated through the <code>set_values_to</code> argument (<a href="https://github.com/pharmaverse/admiralophtha/issues/207" class="external-link">#207</a>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="admiralophtha-030">admiralophtha 0.3.0<a class="anchor" aria-label="anchor" href="#admiralophtha-030"></a></h2>
 <div class="section level3">
 <h3 id="updates-to-functions-0-3-0">Updates to Functions<a class="anchor" aria-label="anchor" href="#updates-to-functions-0-3-0"></a></h3>
-<ul><li><p>Added a new parameter <code>crit_var</code> to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> so that criterion flags can be derived with respect to any variable. Also removed arguments <code>paramcds</code> and <code>basetype</code> as their function can be achieved using <code><a href="https://rdrr.io/pkg/admiral/man/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>. This also required renaming of argument <code>dataset_adbcva</code> to <code>dataset</code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
+<ul><li><p>Added a new parameter <code>crit_var</code> to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> so that criterion flags can be derived with respect to any variable. Also removed arguments <code>paramcds</code> and <code>basetype</code> as their function can be achieved using <code><a href="https://pharmaverse.github.io/admiral/main/reference/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>. This also required renaming of argument <code>dataset_adbcva</code> to <code>dataset</code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
 <li><p>Added <code>AFEYE</code> derivation and description to ADOE Vignette (<a href="https://github.com/pharmaverse/admiralophtha/issues/165" class="external-link">#165</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="updates-to-templates-0-3-0">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-0-3-0"></a></h3>
-<ul><li><p>Updated ADBCVA template’s calls to use <code><a href="https://rdrr.io/pkg/admiral/man/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> in calls to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> and also to showcase use of <code>crit_var</code> argument of <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
+<ul><li><p>Updated ADBCVA template’s calls to use <code><a href="https://pharmaverse.github.io/admiral/main/reference/restrict_derivation.html" class="external-link">restrict_derivation()</a></code> in calls to <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> and also to showcase use of <code>crit_var</code> argument of <code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
 <li><p>Switched out all references to <code>admiral.test</code> for references to <code>pharmaversesdtm</code> in ADOE and ADBCVA templates, and updated code to refer to <code>oe_ophtha</code> accordingly (<a href="https://github.com/pharmaverse/admiralophtha/issues/184" class="external-link">#184</a>).</p></li>
-<li><p>Switched out <code><a href="https://rdrr.io/pkg/admiral/man/derive_var_merged_cat.html" class="external-link">derive_var_merged_cat()</a></code> for <code><a href="https://rdrr.io/pkg/admiral/man/derive_vars_merged.html" class="external-link">derive_vars_merged()</a></code> in the function <code><a href="../reference/derive_var_studyeye.html">derive_var_studyeye()</a></code> due to deprecation of the former in favor of the latter in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>(<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
+<li><p>Switched out <code>derive_var_merged_cat()</code> for <code><a href="https://pharmaverse.github.io/admiral/main/reference/derive_vars_merged.html" class="external-link">derive_vars_merged()</a></code> in the function <code><a href="../reference/derive_var_studyeye.html">derive_var_studyeye()</a></code> due to deprecation of the former in favor of the latter in <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>(<a href="https://github.com/pharmaverse/admiralophtha/issues/119" class="external-link">#119</a>).</p></li>
 <li><p><code>OECAT</code> and <code>OESCAT</code> have been added to the lookup tables in the ADOE and ADBCVA templates (<a href="https://github.com/pharmaverse/admiralophtha/issues/189" class="external-link">#189</a>).</p></li>
 </ul></div>
 <div class="section level3">
