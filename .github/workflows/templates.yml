@@ -8,6 +8,7 @@ on:
       - main
       - devel
 
+# dummy update
 jobs:
   templates:
     name: Check Templates
