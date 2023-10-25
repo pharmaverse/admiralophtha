@@ -41,7 +41,7 @@ remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
 ## References and Documentation
 
 * Please refer to the [{admiral} References and
-  Documentation](https://pharmaverse.github.io/admiral/devel/).
+  Documentation](https://pharmaverse.github.io/admiral/cran-release/).
 
 ## R Versions
 
@@ -73,4 +73,4 @@ developer community:
 * The first release (v. 0.1.0) came out on 13th March 2023.
 * The second release (v. 0.2.0) came out on 12th June 2023.
 * The third release (v. 0.3.0) came out on 18th September 2023.
-* We are planning for a fourth release before the end of 2023.
+* We are planning for a fourth release (v.1.0) on December 11th 2023. The objective of the 1.0 release of `{admiralophtha}` is to provide a package that is mature enough to be used as it is as part of the ADaM work on any ophthalmology study.

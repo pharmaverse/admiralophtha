@@ -139,8 +139,8 @@ adbcva_logparam <- adbcva_nlogparam %>%
   derive_param_computed(
     by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("SBCVA"),
-    analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
     set_values_to = exprs(
+      AVAL = convert_etdrs_to_logmar(AVAL.SBCVA),
       PARAMCD = "SBCVALOG",
       PARAM = "Study Eye Visual Acuity LogMAR Score",
       DTYPE = NA_character_,
@@ -150,8 +150,8 @@ adbcva_logparam <- adbcva_nlogparam %>%
   derive_param_computed(
     by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("FBCVA"),
-    analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
     set_values_to = exprs(
+      AVAL = convert_etdrs_to_logmar(AVAL.FBCVA),
       PARAMCD = "FBCVALOG",
       PARAM = "Fellow Eye Visual Acuity LogMAR Score",
       DTYPE = NA_character_,
