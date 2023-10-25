@@ -1,3 +1,9 @@
+# admiralophtha (development version)
+
+## Updates to Documentation
+
+- Added release date for `{admiralophtha}` 1.0 to the front page (#203).
+
 # admiralophtha 0.3.0
 
 ## Updates to Functions
