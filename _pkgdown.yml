@@ -91,6 +91,7 @@ reference:
 navbar:
   structure:
     left: [getstarted, reference, articles, news]
+    right: [search, slack, newissue, github]
   components:
     getstarted:
       text: Get Started
@@ -109,3 +110,11 @@ navbar:
         href: articles/adbcva.html
       - text: Creating ADVFQ
         href: articles/advfq.html
+    slack:
+      icon: fa-slack
+      href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
+      aria-label: Slack
+    newissue:
+      icon: fa-bug
+      href: https://github.com/pharmaverse/admiralophtha/issues/new/choose
+      aria-label: New Issue
