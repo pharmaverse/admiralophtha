@@ -9,6 +9,10 @@
 - Added release date for `{admiralophtha}` 1.0 to the front page (#203).
 - Removed `analysis_value` argument in the calls to `derive_param_computed()` in ADBCVA vignette in line with the deprecation of this argument in the new version of `{admiral}`. Variable values for parameters of interest are now all populated through the `set_values_to` argument (#207). 
 
+## Various
+
+- Website now has button/links to Slack channel and GitHub Issues (#206).
+
 # admiralophtha 0.3.0
 
 ## Updates to Functions
