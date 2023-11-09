@@ -35,7 +35,7 @@ concurrency:
 
 env:
   R_VERSION: "4.1"
-  
+
 jobs:
   get_r_version:
     name: Get R version
@@ -91,7 +91,7 @@ jobs:
       # Whether to skip multiversion docs
       # Note that if you have multiple versions of docs,
       # your URL links are likely to break due to path changes
-      skip-multiversion-docs: false
+      skip-multiversion-docs: true
   linter:
     name: Lint
     uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
