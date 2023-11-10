@@ -217,7 +217,7 @@ advfq_qbcs <- advfq_qsg02 %>%
     filter_add = PARAMCD %in% c("QSG01", "QSG02") & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = sum(AVAL),
-      PARAMCD = "QBSCORE"
+      PARAMCD = "QBCSCORE"
     )
   )
 
@@ -234,11 +234,15 @@ advfq_visit <- advfq_qbcs %>%
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
-    AVISITN = as.numeric(case_when(
+    AVISITN = case_when(
       VISIT == "BASELINE" ~ "0",
-      str_detect(VISIT, "WEEK") ~ str_trim(str_replace(VISIT, "WEEK", "")),
-      TRUE ~ NA_character_
-    ))
+      str_detect(VISIT, "WEEK")  ~ VISIT %>%
+        str_replace("WEEK", "") %>%
+        str_replace("\\(T\\)", "") %>%
+        str_trim(),
+
+      TRUE ~ NA
+    ),
   )
 
 advfq_ontrt <- advfq_visit %>%
