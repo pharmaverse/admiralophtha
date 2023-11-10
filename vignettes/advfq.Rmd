@@ -153,11 +153,13 @@ Run this section of code for every question that you need recoding. This gives a
 # else set to 0 if [advfq.AVAL] = 5
 advfq <- advfq %>%
   derive_summary_records(
+    dataset_add = advfq,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT),
     filter = QSTESTCD == "VFQ1" & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = identity,
-    set_values_to = exprs(PARAMCD = "QR01")
+    set_values_to = exprs(
+      AVAL = identity(AVAL),
+      PARAMCD = "QR01"
+    )
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR01",
     case_when(
@@ -179,11 +181,13 @@ Next, the programmer should create summary records as average of recoded questio
 # Average of QR01 and QR02 records
 advfq <- advfq %>%
   derive_summary_records(
+    dataset_add = advfq,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = mean,
-    set_values_to = exprs(PARAMCD = "QSG01")
+    set_values_to = exprs(
+      AVAL = mean(AVAL),
+      PARAMCD = "QSG01"
+    )
   )
 ```
 
