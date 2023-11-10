@@ -4,7 +4,7 @@
 
 - Removed `analysis_value` argument in the calls to `derive_param_computed()` in ADBCVA template in line with the deprecation of this argument in the new version of `{admiral}`. Variable values for parameters of interest are now all populated through the `set_values_to` argument (#207). 
 
-- Modified calls to `derive_summary_records()` in ADVFQ template in line with the updates to this function in the new version of the `{admiral}` package. The argument `dataset_add` is now always specified and the variable values are now all populated through the `set_values_to` argument (#204).
+- Modified calls to `derive_summary_records()` in ADVFQ template in line with the updates to this function in the new version of the `{admiral}` package. The `filter` argument is now renamed to `filter_add`, the argument `dataset_add` is now always specified and the variable values are now all populated through the `set_values_to` argument (#204).
 
 ## Updates to Documentation
 
@@ -12,7 +12,7 @@
 
 - Removed `analysis_value` argument in the calls to `derive_param_computed()` in ADBCVA vignette in line with the deprecation of this argument in the new version of `{admiral}`. Variable values for parameters of interest are now all populated through the `set_values_to` argument (#207). 
 
-- Modified calls to `derive_summary_records()` in ADVFQ vignette in line with the updates to this function in the new version of the `{admiral}` package. The argument `dataset_add` is now always specified and the variable values are now all populated through the `set_values_to` argument (#204).
+- Modified calls to `derive_summary_records()` in ADVFQ vignette in line with the updates to this function in the new version of the `{admiral}` package. The `filter` argument is now renamed to `filter_add`, the argument `dataset_add` is now always specified and the variable values are now all populated through the `set_values_to` argument (#204).
 
 ## Various
 

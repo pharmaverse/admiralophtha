@@ -155,7 +155,7 @@ advfq <- advfq %>%
   derive_summary_records(
     dataset_add = advfq,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT),
-    filter = QSTESTCD == "VFQ1" & !is.na(AVAL),
+    filter_add = QSTESTCD == "VFQ1" & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = identity(AVAL),
       PARAMCD = "QR01"
@@ -183,7 +183,7 @@ advfq <- advfq %>%
   derive_summary_records(
     dataset_add = advfq,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
-    filter = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
+    filter_add = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = mean(AVAL),
       PARAMCD = "QSG01"
