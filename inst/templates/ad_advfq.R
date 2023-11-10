@@ -81,7 +81,7 @@ advfq_qr01 <- advfq_aval %>%
     set_values_to = exprs(
       AVAL = identity(AVAL),
       PARAMCD = "QR01"
-      )
+    )
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR01",
     case_when(
@@ -236,11 +236,10 @@ advfq_visit <- advfq_qbcs %>%
     ),
     AVISITN = case_when(
       VISIT == "BASELINE" ~ "0",
-      str_detect(VISIT, "WEEK")  ~ VISIT %>%
+      str_detect(VISIT, "WEEK") ~ VISIT %>%
         str_replace("WEEK", "") %>%
         str_replace("\\(T\\)", "") %>%
         str_trim(),
-
       TRUE ~ NA
     ),
   )
