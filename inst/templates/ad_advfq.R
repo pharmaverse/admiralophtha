@@ -75,11 +75,13 @@ advfq_aval <- advfq_dtdy %>%
 # else set to 0 if [advfq.AVAL] = 5
 advfq_qr01 <- advfq_aval %>%
   derive_summary_records(
+    dataset_add = advfq_aval,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ1" & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = identity,
-    set_values_to = exprs(PARAMCD = "QR01")
+    set_values_to = exprs(
+      AVAL = identity(AVAL),
+      PARAMCD = "QR01"
+      )
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR01",
     case_when(
@@ -101,11 +103,13 @@ advfq_qr01 <- advfq_aval %>%
 # else set to 0 if [advfq.AVAL] = 6
 advfq_qr02 <- advfq_qr01 %>%
   derive_summary_records(
+    dataset_add = advfq_qr01,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ2" & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = identity,
-    set_values_to = exprs(PARAMCD = "QR02")
+    set_values_to = exprs(
+      AVAL = identity(AVAL),
+      PARAMCD = "QR02"
+    )
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR02",
     case_when(
@@ -127,11 +131,13 @@ advfq_qr02 <- advfq_qr01 %>%
 # else set to 0 if [advfq.AVAL] = 1
 advfq_qr03 <- advfq_qr02 %>%
   derive_summary_records(
+    dataset_add = advfq_qr02,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ3" & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = identity,
-    set_values_to = exprs(PARAMCD = "QR03")
+    set_values_to = exprs(
+      AVAL = identity(AVAL),
+      PARAMCD = "QR03"
+    )
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR03",
     case_when(
@@ -153,11 +159,13 @@ advfq_qr03 <- advfq_qr02 %>%
 # else set to 0 if [advfq.AVAL] = 1
 advfq_qr04 <- advfq_qr03 %>%
   derive_summary_records(
+    dataset_add = advfq_qr03,
     by_vars = exprs(STUDYID, USUBJID, PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = QSTESTCD == "VFQ4" & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = identity,
-    set_values_to = exprs(PARAMCD = "QR04")
+    set_values_to = exprs(
+      AVAL = identity(AVAL),
+      PARAMCD = "QR04"
+    )
   ) %>%
   mutate(AVAL = ifelse(PARAMCD == "QR04",
     case_when(
@@ -175,11 +183,13 @@ advfq_qr04 <- advfq_qr03 %>%
 # Average of QR01 and QR02 records
 advfq_qsg01 <- advfq_qr04 %>%
   derive_summary_records(
+    dataset_add = advfq_qr04,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = mean,
-    set_values_to = exprs(PARAMCD = "QSG01")
+    set_values_to = exprs(
+      AVAL = mean(AVAL),
+      PARAMCD = "QSG01"
+    )
   )
 
 ## Derive a new record as a summary record  ----
@@ -187,11 +197,13 @@ advfq_qsg01 <- advfq_qr04 %>%
 # Average of QR03 and QR04 records
 advfq_qsg02 <- advfq_qsg01 %>%
   derive_summary_records(
+    dataset_add = advfq_qsg01,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QR03", "QR04") & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = mean,
-    set_values_to = exprs(PARAMCD = "QSG02")
+    set_values_to = exprs(
+      AVAL = mean(AVAL),
+      PARAMCD = "QSG02"
+    )
   )
 
 
@@ -200,11 +212,13 @@ advfq_qsg02 <- advfq_qsg01 %>%
 # Average of QSG01 and QSG02 records
 advfq_qbcs <- advfq_qsg02 %>%
   derive_summary_records(
+    dataset_add = advfq_qsg02,
     by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
     filter = PARAMCD %in% c("QSG01", "QSG02") & !is.na(AVAL),
-    analysis_var = AVAL,
-    summary_fun = sum,
-    set_values_to = exprs(PARAMCD = "QBCSCORE")
+    set_values_to = exprs(
+      AVAL = sum(AVAL),
+      PARAMCD = "QBSCORE"
+    )
   )
 
 ## Get visit info ----
