@@ -12,6 +12,10 @@ repo:
     source: https://github.com/pharmaverse/admiralophtha/blob/main/
     issue: https://github.com/pharmaverse/admiralophtha/issues/
     user: https://github.com/
+
+development:
+  mode: auto
+
 news:
   cran_dates: false
 reference:
@@ -90,8 +94,8 @@ reference:
 
 navbar:
   structure:
-    left: [getstarted, reference, articles, news]
-    right: [search, slack, newissue, github]
+    left: [getstarted, reference, articles, news, versions]
+    right: [search, slack, history, newissue, github]
   components:
     getstarted:
       text: Get Started
@@ -110,6 +114,10 @@ navbar:
         href: articles/adbcva.html
       - text: Creating ADVFQ
         href: articles/advfq.html
+    history:
+      icon: fa-history
+      href: articles/website-versions.html
+      aria-label: Previous Release Websites
     slack:
       icon: fa-slack
       href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
