@@ -308,10 +308,9 @@ admiralophtha_advfq <- advfq_adsl
 
 # Save output ----
 
-dir <- file.path(getwd(), "tmp")
-print(dir)
+dir <- tools::R_user_dir("admiralophtha_templates_data", which = "cache")
 if (!file.exists(dir)) {
   # Create the folder
-  dir.create(dir)
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
 save(admiralophtha_advfq, file = file.path(dir, "advfq.rda"), compress = "bzip2")
