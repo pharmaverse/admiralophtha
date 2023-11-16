@@ -13,33 +13,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-link <- function(text, url) {
-  return(
-    paste0(
-      "[", text, "]",
-      "(", url, ")"
-    )
-  )
-}
-dyn_link <- function(text,
-                     base_url,
-                     relative_url = "",
-                     # Change to TRUE when admiral adopts multiversion docs
-                     is_multiversion = FALSE,
-                     multiversion_default_ref = "main") {
-  url <- paste(base_url, relative_url, sep = "/")
-  if (is_multiversion) {
-    url <- paste(
-      base_url,
-      Sys.getenv("BRANCH_NAME", multiversion_default_ref),
-      relative_url,
-      sep = "/"
-    )
-  }
-  return(link(text, url))
-}
-# Other variables
-admiral_homepage <- "https://pharmaverse.github.io/admiral"
 library(admiraldev)
 ```
 
@@ -143,5 +116,5 @@ The user is invited to consult the article on [creating a BDS dataset from SDTM]
 
 ADaM | Sample Code 
  ---- | -------------- 
-ADOE | `r dyn_link("ad_adoe.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adoe.R", is_multiversion = TRUE)`
+ADOE | [ad_adoe.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R)
 

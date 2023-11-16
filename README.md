@@ -1,7 +1,4 @@
 <!-- Please do not edit the README.md file as it is auto-generated after PR merges. Only edit the README.Rmd file -->
-
-<!-- The purpose of this is to enable dynamic links using dyn_link function above to access devel/main admiral homepage respectively -->
-
 <!-- To test this in your feature branch use code: rmarkdown::render("README.Rmd", output_format ="md_document") -->
 
 # Admiral Extension for Ophthalmology <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
@@ -41,7 +38,7 @@ remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
 ## References and Documentation
 
 * Please refer to the [{admiral} References and
-  Documentation](https://pharmaverse.github.io/admiral/devel/).
+  Documentation](https://pharmaverse.github.io/admiral/cran-release/).
 
 ## R Versions
 
@@ -71,4 +68,6 @@ developer community:
 ## Release Schedule
 
 * The first release (v. 0.1.0) came out on 13th March 2023.
-* The second release will be in Q3 of 2023.
+* The second release (v. 0.2.0) came out on 12th June 2023.
+* The third release (v. 0.3.0) came out on 18th September 2023.
+* We are planning for a fourth release (v.1.0) on December 11th 2023. The objective of the 1.0 release of `{admiralophtha}` is to provide a package that is mature enough to be used as it is as part of the ADaM work on any ophthalmology study.

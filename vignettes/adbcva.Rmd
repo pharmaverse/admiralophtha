@@ -13,33 +13,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-link <- function(text, url) {
-  return(
-    paste0(
-      "[", text, "]",
-      "(", url, ")"
-    )
-  )
-}
-dyn_link <- function(text,
-                     base_url,
-                     relative_url = "",
-                     # Change to TRUE when admiral adopts multiversion docs
-                     is_multiversion = FALSE,
-                     multiversion_default_ref = "main") {
-  url <- paste(base_url, relative_url, sep = "/")
-  if (is_multiversion) {
-    url <- paste(
-      base_url,
-      Sys.getenv("BRANCH_NAME", multiversion_default_ref),
-      relative_url,
-      sep = "/"
-    )
-  }
-  return(link(text, url))
-}
-# Other variables
-admiral_homepage <- "https://pharmaverse.github.io/admiral"
 library(admiraldev)
 ```
 
@@ -150,24 +123,24 @@ Often ADBCVA datasets contain derived records for BCVA in LogMAR units. This can
 ```{r}
 adbcva <- adbcva %>%
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("SBCVA"),
-    analysis_value = convert_etdrs_to_logmar(AVAL.SBCVA),
     set_values_to = exprs(
+      AVAL = convert_etdrs_to_logmar(AVAL.SBCVA),
       PARAMCD = "SBCVALOG",
       PARAM = "Study Eye Visual Acuity LogMAR Score",
-      DTYPE = "DERIVED",
+      DTYPE = NA_character_,
       AVALU = "LogMAR"
     )
   ) %>%
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC), adsl_vars),
+    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC, AFEYE), adsl_vars),
     parameters = c("FBCVA"),
-    analysis_value = convert_etdrs_to_logmar(AVAL.FBCVA),
     set_values_to = exprs(
+      AVAL = convert_etdrs_to_logmar(AVAL.FBCVA),
       PARAMCD = "FBCVALOG",
       PARAM = "Fellow Eye Visual Acuity LogMAR Score",
-      DTYPE = "DERIVED",
+      DTYPE = NA_character_,
       AVALU = "LogMAR"
     )
   ) %>%
@@ -211,7 +184,7 @@ Some ophthalmology studies may desire to subdivide BCVA records according to whi
 * Create a lookup table which assigns numeric equivalents (i.e. `AVALCAxN`) to Snellen categories.
 * Create a format function to map each `AVAL` to a numeric category.
 * Add `AVALCAxN` through a mutate statement using the format function.
-* Add `AVALCATx` using derive_vars_merged in combination with the lookup table.
+* Add `AVALCATx` using `derive_vars_merged` in combination with the lookup table.
 
 ```{r}
 avalcat_lookup <- tibble::tribble(
@@ -371,6 +344,4 @@ adbcva <- adbcva %>%
   
   ADaM | Sample Code 
   ---- | -------------- 
-  ADBCVA | `r dyn_link("ad_adbcva.R", "https://github.com/pharmaverse/admiralophtha/blob", "inst/templates/ad_adbcva.R", is_multiversion = TRUE)`
-  
-  
+  ADBCVA | [ad_adbcva.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R)

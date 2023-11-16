@@ -247,8 +247,7 @@ advfq_blfl <- advfq_ontrt %>%
       new_var = ABLFL,
       mode = "last"
     ),
-    filter = (!is.na(AVAL) &
-      ADT <= TRTSDT)
+    filter = (!is.na(AVAL) & ADT <= TRTSDT)
   )
 
 ## Derive baseline information ----

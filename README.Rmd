@@ -4,39 +4,7 @@ output: md_document
 date: '2022-08-06'
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-link <- function(text, url) {
-  return(
-    paste0(
-      "[", text, "]",
-      "(", url, ")"
-    )
-  )
-}
-dyn_link <- function(text,
-                     base_url,
-                     relative_url = "",
-                     # Change to TRUE when admiral adopts multiversion docs
-                     is_multiversion = TRUE,
-                     multiversion_default_ref = "main") {
-  url <- paste(base_url, relative_url, "", sep = "/")
-  if (is_multiversion) {
-    url <- paste(
-      base_url,
-      Sys.getenv("BRANCH_NAME", multiversion_default_ref),
-      "",
-      sep = "/"
-    )
-  }
-  return(link(text, url))
-} 
-# Other variables
-admiral_homepage <- "https://pharmaverse.github.io/admiral"
-```
-
 <!-- Please do not edit the README.md file as it is auto-generated after PR merges. Only edit the README.Rmd file -->
-<!-- The purpose of this is to enable dynamic links using dyn_link function above to access devel/main admiral homepage respectively -->
 <!-- To test this in your feature branch use code: rmarkdown::render("README.Rmd", output_format ="md_document") -->
 
 # Admiral Extension for Ophthalmology <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
@@ -68,7 +36,7 @@ remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
 
 ## References and Documentation
 
-* Please refer to the `r dyn_link("{admiral} References and Documentation", admiral_homepage, "index.html#references-and-documentation")`.
+* Please refer to the [the `{admiral}` References & Documentation page](https://pharmaverse.github.io/admiral/index.html#references-and-documentation).
 
 ## R Versions
 
@@ -87,8 +55,9 @@ We use the following for support and communications between user and developer c
 ## Release Schedule
 
 * The first release (v. 0.1.0) came out on 13th March 2023.
-* The second release will be in Q3 of 2023.
-
+* The second release (v. 0.2.0) came out on 12th June 2023.
+* The third release (v. 0.3.0) came out on 18th September 2023.
+* We are planning for a fourth release before the end of 2023.
 
 
 
