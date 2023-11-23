@@ -3,9 +3,9 @@ title: "Previous Versions of Website"
 ---
 
 ```{r, include = FALSE}
-# TO USE THIS ARTICLE, THE DESCRIPTION FILE MUST INCLUDE
-# Config/Needs/website: gert
-# Make sure to copy the gh-pages branch to your local git
+# TO USE THIS ARTICLE, THE DESCRIPTION FILE MUST INCLUDE #nolint
+# Config/Needs/website: gert #nolint
+# Make sure to copy the gh-pages branch to your local git #nolint
 
 knitr::opts_chunk$set(
   collapse = TRUE,
