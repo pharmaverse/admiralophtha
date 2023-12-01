@@ -41,7 +41,7 @@ test_that("AFEYE is derived correctly", {
   )
 
   expect_dfs_equal(
-    derive_var_afeye(adae1, loc_var = AELOC, lat_var =  AELAT),
+    derive_var_afeye(adae1, loc_var = AELOC, lat_var = AELAT),
     expected_output1,
     keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
   )
