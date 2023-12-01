@@ -61,9 +61,7 @@
 #' )
 #'
 #' derive_var_afeye(adae2, loc_var = AELOC, lat_var = AELAT, loc_vals = c("EYES", "RETINA"))
-
 derive_var_afeye <- function(dataset, dataset_occ, loc_var, lat_var, lat_vals, loc_vals = "EYE") {
-
   # BEGIN DEPRECATION
   if (!missing(lat_vals)) {
     deprecate_warn(
@@ -71,7 +69,7 @@ derive_var_afeye <- function(dataset, dataset_occ, loc_var, lat_var, lat_vals, l
       "derive_var_afeye(lat_vals = )",
       "derive_var_afeye()"
     )
-  }else{
+  } else {
     lat_vals <- c("LEFT", "RIGHT", "BILATERAL")
   }
 
