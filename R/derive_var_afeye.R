@@ -2,11 +2,19 @@
 #'
 #' Derive Affected Eye (`AFEYE`) in occurrence datasets
 #'
-#' @param dataset_occ Input Occurence dataset
+#' @param dataset Input dataset
+#' @param dataset_occ Input dataset
+#'
+#' `r lifecycle::badge("deprecated")` Please use `dataset` instead.
+#'
 #' @param loc_var Location variable
 #' @param lat_var Laterality variable
-#' @param loc_vals `xxLOC`values for which `AFEYE` is derived
+#' @param loc_vals `xxLOC` values for which `AFEYE` is derived
+#'
 #' @param lat_vals `xxLAT`values for which `AFEYE` is derived
+#'
+#' `r lifecycle::badge("deprecated")` Please simply ensure `xxLAT` values are
+#' contained in `c("LEFT", RIGHT", "BILATERAL")`.
 #'
 #' @details
 #' Affected Eye is derived in the occurrence dataset using laterality and Study
@@ -22,7 +30,7 @@
 #' library(tibble)
 #' library(admiral)
 #'
-#' adae <- tribble(
+#' adae1 <- tribble(
 #'   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
 #'   "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
 #'   "XXX001", "P01", "RIGHT", "EYE", "LEFT",
@@ -43,31 +51,56 @@
 #'   "XXX001", "P10", "RIGHT", "EYE", "BOTH"
 #' )
 #'
-#' adae <- derive_var_afeye(adae, AELOC, AELAT)
-derive_var_afeye <- function(dataset_occ, loc_var, lat_var, loc_vals = "EYE",
-                             lat_vals = c("LEFT", "RIGHT", "BILATERAL")) {
+#' derive_var_afeye(adae1, loc_var = AELOC, lat_var = AELAT)
+#'
+#' adae2 <- tribble(
+#'   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
+#'   "XXX001", "P01", "RIGHT", "EYES", "RIGHT",
+#'   "XXX001", "P02", "RIGHT", "RETINA", "LEFT",
+#'   "XXX001", "P03", "LEFT", "", ""
+#' )
+#'
+#' derive_var_afeye(adae2, loc_var = AELOC, lat_var = AELAT, loc_vals = c("EYES", "RETINA"))
+
+derive_var_afeye <- function(dataset, dataset_occ, loc_var, lat_var, lat_vals, loc_vals = "EYE") {
+
+  # BEGIN DEPRECATION
+  if (!missing(lat_vals)) {
+    deprecate_warn(
+      "1.0.0",
+      "derive_var_afeye(lat_vals = )",
+      "derive_var_afeye()"
+    )
+  }else{
+    lat_vals <- c("LEFT", "RIGHT", "BILATERAL")
+  }
+
+  if (!missing(dataset_occ)) {
+    deprecate_warn(
+      "1.0.0",
+      "derive_var_afeye(dataset_occ = )",
+      "derive_var_afeye(dataset = )"
+    )
+    dataset <- dataset_occ
+  }
+
+  # END DEPRECATION
+
   seye_vals <- c("LEFT", "RIGHT", "BILATERAL")
+
   loc_var <- assert_symbol(enexpr(loc_var))
   lat_var <- assert_symbol(enexpr(lat_var))
+
   assert_character_vector(loc_vals)
   assert_character_vector(seye_vals)
   assert_character_vector(lat_vals)
-  assert_data_frame(dataset_occ, required_vars = expr_c(
+
+  assert_data_frame(dataset, required_vars = expr_c(
     loc_var, lat_var,
     exprs(STUDYEYE)
   ))
 
-  if (!all(unique(dataset_occ[[lat_var]]) %in% lat_vals)) {
-    warning("Warning: value not in lat_vals")
-  }
-  if (!all(unique(dataset_occ[[loc_var]]) %in% loc_vals)) {
-    warning("Warning: value not in loc_vals")
-  }
-  if (!all(unique(dataset_occ$STUDYEYE) %in% seye_vals)) {
-    warning("Warning: STUDYEYE is expected to be 'LEFT', 'RIGHT' or 'BILATERAL'")
-  }
-
-  dataset_occ %>%
+  dataset %>%
     mutate(AFEYE = case_when(
       toupper(STUDYEYE) %in% seye_vals & !!lat_var == "BILATERAL" &
         !!loc_var %in% loc_vals ~ "Both Eyes",

@@ -123,7 +123,7 @@ adbcva_aval <- adbcva_adslvar %>%
     DTYPE = NA_character_
   ) %>%
   # Derive AFEYE needed for PARAMCD derivation
-  derive_var_afeye(OELOC, OELAT)
+  derive_var_afeye(loc_var = OELOC, lat_var = OELAT)
 
 adbcva_nlogparam <- adbcva_aval %>%
   # Add PARAM, PARAMCD for non log parameters

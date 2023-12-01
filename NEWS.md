@@ -14,6 +14,14 @@
 
 - Modified calls to `derive_summary_records()` in ADVFQ vignette in line with the updates to this function in the new version of the `{admiral}` package. The `filter` argument is now renamed to `filter_add`, the argument `dataset_add` is now always specified and the variable values are now all populated through the `set_values_to` argument (#204).
 
+## Updates to Functions
+
+- `derive_var_afeye()` was updated (#214):
+
+  * A bug was removed where the function issued warnings when missing `xxLOC` values were present in the input dataset.
+  * The argument `dataset_occ` was deprecated in favor of `dataset`, in line with `{admiral}` conventions.
+  * The argument `lat_vals` was deprecated. Laterality values are now just expected to be "LEFT", "RIGHT" or "BILATERAL".
+
 ## Various
 
 - Website now has button/links to Slack channel and GitHub Issues (#206).

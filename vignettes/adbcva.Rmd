@@ -101,7 +101,7 @@ adbcva <- adbcva %>%
     AVALU = "letters",
     DTYPE = NA_character_
   ) %>%
-  derive_var_afeye(OELOC, OELAT)
+  derive_var_afeye(loc_var = OELOC, lat_var = OELAT)
 ```
 
 Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above.
