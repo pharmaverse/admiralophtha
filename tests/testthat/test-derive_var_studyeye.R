@@ -1,13 +1,15 @@
-test_that("STUDYEYE is derived correctly", {
-  input <- tibble::tribble(
-    ~STUDYID, ~USUBJID,
-    "XXX001", "P01",
-    "XXX001", "P02",
-    "XXX001", "P03",
-    "XXX001", "P04",
-    "XXX001", "P05",
-    "XXX001", "P06",
-    "XXX002", "P01",
+## Test 1: STUDYEYE is derived correctly in normal case ----
+test_that("derive_var_studyeye Test 1: STUDYEYE is derived correctly in normal case", {
+
+  expected_output1 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~STUDYEYE,
+    "XXX001", "P01", "LEFT",
+    "XXX001", "P02", "RIGHT",
+    "XXX001", "P03", "",
+    "XXX001", "P04", "BILATERAL",
+    "XXX001", "P05", "RIGHT",
+    "XXX001", "P06", "",
+    "XXX002", "P01", "LEFT"
   )
 
   sc1 <- tibble::tribble(
@@ -22,6 +24,33 @@ test_that("STUDYEYE is derived correctly", {
     "XXX002", "P01", "FOCID", "OS"
   )
 
+  actual_output1 <-
+    expected_output1 %>%
+    select(-STUDYEYE) %>%
+    derive_var_studyeye(sc1)
+
+  expect_dfs_equal(
+    actual_output1,
+    expected_output1,
+    keys = c("STUDYID", "USUBJID")
+  )
+
+})
+
+## Test 2: STUDYEYE is derived correctly when parsing non-standard SCTESTCD ----
+test_that("derive_var_studyeye Test 2: STUDYEYE is derived correctly when parsing non-standard SCTESTCD", {
+
+  expected_output2 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~STUDYEYE,
+    "XXX001", "P01", "LEFT",
+    "XXX001", "P02", "RIGHT",
+    "XXX001", "P03", "",
+    "XXX001", "P04", "BILATERAL",
+    "XXX001", "P05", "RIGHT",
+    "XXX001", "P06", "",
+    "XXX002", "P01", "LEFT"
+  )
+
   sc2 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SCTESTCD, ~SCSTRESC,
     "XXX001", "P01", "STDEYE", "OS",
@@ -34,26 +63,14 @@ test_that("STUDYEYE is derived correctly", {
     "XXX002", "P01", "STDEYE", "OS"
   )
 
-  expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~STUDYEYE,
-    "XXX001", "P01", "LEFT",
-    "XXX001", "P02", "RIGHT",
-    "XXX001", "P03", "",
-    "XXX001", "P04", "BILATERAL",
-    "XXX001", "P05", "RIGHT",
-    "XXX001", "P06", "",
-    "XXX002", "P01", "LEFT"
-  )
+  actual_output2 <-
+    expected_output2 %>%
+    select(-STUDYEYE) %>%
+    derive_var_studyeye(sc2, "STDEYE")
 
   expect_dfs_equal(
-    derive_var_studyeye(input, sc1),
-    expected_output,
-    keys = c("STUDYID", "USUBJID")
-  )
-
-  expect_dfs_equal(
-    derive_var_studyeye(input, sc2, "STDEYE"),
-    expected_output,
+    actual_output2,
+    expected_output2,
     keys = c("STUDYID", "USUBJID")
   )
 })
