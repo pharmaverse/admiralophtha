@@ -21,7 +21,7 @@ derive_var_bcvacritxfl(
 (usually \code{CHG} or \code{AVAL}).}
 
 \item{bcva_ranges}{List containing one or more numeric vectors of length 2. For each
-vector c(a,b) in \code{bcva_ranges}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
+vector \code{c(a,b)} in \code{bcva_ranges}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
 with the condition: \verb{a <=  crit_var <= b}. If criterion flags of that type are not
 required, then leave as NULL.}
 

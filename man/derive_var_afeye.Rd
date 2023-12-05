@@ -27,7 +27,7 @@ derive_var_afeye(
 \item{lat_vals}{\code{xxLAT}values for which \code{AFEYE} is derived
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please simply ensure \code{xxLAT} values are
-contained in \verb{c("LEFT", RIGHT", "BILATERAL")}.}
+contained in \code{c("LEFT", "RIGHT", "BILATERAL")}.}
 
 \item{loc_vals}{\code{xxLOC} values for which \code{AFEYE} is derived}
 }

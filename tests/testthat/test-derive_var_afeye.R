@@ -1,6 +1,5 @@
 ## Test 1: AFEYE is derived correctly in all possible loc/lat combinations ----
-test_that("derive_var_afeye Test 1: AFEYE is derived correctly in all possible loc/lat combinations", {
-
+test_that("derive_var_afeye Test 1: AFEYE is derived correctly in all possible loc/lat combinations", { #nolint
   expected_output1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~OELOC, ~OELAT, ~AFEYE,
     "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
@@ -34,12 +33,10 @@ test_that("derive_var_afeye Test 1: AFEYE is derived correctly in all possible l
     expected_output1,
     keys = c("STUDYID", "USUBJID", "OELOC", "OELAT")
   )
-
 })
 
 ## Test 2: AFEYE is derived correctly when parsing loc_vals ----
 test_that("derive_var_afeye Test 2: AFEYE is derived correctly when parsing loc_vals", {
-
   expected_output2 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
     "XXX001", "P01", "RIGHT", "EYES", "RIGHT", "Study Eye",
@@ -64,7 +61,6 @@ test_that("derive_var_afeye Test 2: AFEYE is derived correctly when parsing loc_
 
 ## Test 3: Deprecation of dataset_occ ----
 test_that("derive_var_afeye Test 3: Deprecation of dataset_occ", {
-
   expected_output3 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
     "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
@@ -93,7 +89,6 @@ test_that("derive_var_afeye Test 3: Deprecation of dataset_occ", {
 
 ## Test 4: Deprecation of lat_vals ----
 test_that("derive_var_afeye Test 4: Deprecation of lat_vals", {
-
   expected_output4 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
     "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",

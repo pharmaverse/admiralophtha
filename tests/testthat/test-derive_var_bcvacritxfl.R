@@ -30,12 +30,10 @@ test_that("derive_var_bcvacritxfl Test 1: Criterion flags derived correctly", {
     actual_output1,
     expected_output1,
   )
-
 })
 
 ## Test 2: Correct appending in CRITx of additional text ----
 test_that("derive_var_bcvacritxfl Test 2: Correct appending in CRITx of additional text", {
-
   expected_output2 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL, ~CHG, ~CRIT1, ~CRIT1FL,
     "XXX001", "P01", 6, 3, "4 <= AVAL <= 7 (transformed)", "Y",
@@ -62,7 +60,6 @@ test_that("derive_var_bcvacritxfl Test 2: Correct appending in CRITx of addition
 
 ## Test 3: Correct CRITx index when critxfl_index not supplied ----
 test_that("derive_var_bcvacritxfl Test 3: Correct CRITx index when critxfl_index not supplied", {
-
   expected_output3 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL, ~CHG, ~CRIT1, ~CRIT1FL, ~CRIT2, ~CRIT2FL,
     "XXX001", "P01", 6, 3, "4 <= AVAL <= 7", "Y", "AVAL >= 5", "Y",
@@ -87,7 +84,6 @@ test_that("derive_var_bcvacritxfl Test 3: Correct CRITx index when critxfl_index
 
 ## Test 4: Correct CRITx index when critxfl_index is supplied ----
 test_that("derive_var_bcvacritxfl Test 4: Correct CRITx index when critxfl_index is supplied", {
-
   expected_output4 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL, ~CHG, ~CRIT12, ~CRIT12FL,
     "XXX001", "P01", 6, 3, "AVAL <= 1", "N",
