@@ -302,10 +302,10 @@ admiralophtha_adbcva <- adbcva_crtflag
 
 # Save output ----
 
-dir <- file.path(getwd(), "tmp")
-print(dir)
+dir <- tools::R_user_dir("admiralophtha_templates_data", which = "cache")
+# Change to whichever directory you want to save the dataset in
 if (!file.exists(dir)) {
   # Create the folder
-  dir.create(dir)
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
 save(admiralophtha_adbcva, file = file.path(dir, "adbcva.rda"), compress = "bzip2")
