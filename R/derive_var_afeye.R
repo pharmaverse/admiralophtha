@@ -10,7 +10,6 @@
 #' @param loc_var Location variable
 #' @param lat_var Laterality variable
 #' @param loc_vals `xxLOC` values for which `AFEYE` is derived
-#'
 #' @param lat_vals `xxLAT`values for which `AFEYE` is derived
 #'
 #' `r lifecycle::badge("deprecated")` Please simply ensure `xxLAT` values are
@@ -67,7 +66,7 @@ derive_var_afeye <- function(dataset, dataset_occ, loc_var, lat_var, lat_vals, l
     deprecate_warn(
       "1.0.0",
       "derive_var_afeye(lat_vals = )",
-      "derive_var_afeye()"
+      details = "Please ensure your laterality values are from the set `c('LEFT', 'RIGHT', 'BILATERAL')`"
     )
   } else {
     lat_vals <- c("LEFT", "RIGHT", "BILATERAL")
