@@ -1,26 +1,7 @@
-test_that("AFEYE is derived correctly", {
-  adae1 <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
-    "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
-    "XXX001", "P01", "RIGHT", "EYE", "LEFT",
-    "XXX001", "P01", "RIGHT", "EYE", "",
-    "XXX001", "P01", "RIGHT", "", "RIGHT",
-    "XXX001", "P02", "LEFT", "", "",
-    "XXX001", "P02", "LEFT", "EYE", "LEFT",
-    "XXX001", "P04", "BILATERAL", "EYE", "RIGHT",
-    "XXX001", "P05", "RIGHT", "EYE", "RIGHT",
-    "XXX001", "P05", "RIGHT", "EYE", "BILATERAL",
-    "XXX001", "P06", "BILATERAL", "", "",
-    "XXX001", "P06", "BILATERAL", "", "RIGHT",
-    "XXX001", "P07", "BILATERAL", "EYE", "BILATERAL",
-    "XXX001", "P08", "", "EYE", "BILATERAL",
-    "XXX001", "P09", "NONSENSE", "EYE", "BILATERAL",
-    "XXX001", "P09", "BILATERAL", "EYE", "NONSENSE",
-    "XXX001", "P09", "BILATERAL", "NONSENSE", "BILATERAL",
-    "XXX001", "P10", "RIGHT", "EYE", "BOTH"
-  )
+## Test 1: AFEYE is derived correctly in all possible loc/lat combinations ----
+test_that("derive_var_afeye Test 1: AFEYE is derived correctly in all possible loc/lat combinations", { # nolint
   expected_output1 <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
+    ~STUDYID, ~USUBJID, ~STUDYEYE, ~OELOC, ~OELAT, ~AFEYE,
     "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
     "XXX001", "P01", "RIGHT", "EYE", "LEFT", "Fellow Eye",
     "XXX001", "P01", "RIGHT", "EYE", "", NA_character_,
@@ -40,28 +21,95 @@ test_that("AFEYE is derived correctly", {
     "XXX001", "P10", "RIGHT", "EYE", "BOTH", NA_character_
   )
 
-  expect_dfs_equal(
-    derive_var_afeye(adae1, loc_var = AELOC, lat_var = AELAT),
-    expected_output1,
-    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
-  )
+  actual_output1 <- expected_output1 %>%
+    select(-AFEYE) %>%
+    derive_var_afeye(
+      loc_var = OELOC,
+      lat_var = OELAT
+    )
 
-  adae2 <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
-    "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
-    "XXX001", "P01", "RIGHT", "RETINA", "LEFT",
-    "XXX001", "P01", "RIGHT", "", "",
+  expect_dfs_equal(
+    actual_output1,
+    expected_output1,
+    keys = c("STUDYID", "USUBJID", "OELOC", "OELAT")
   )
+})
+
+## Test 2: AFEYE is derived correctly when parsing loc_vals ----
+test_that("derive_var_afeye Test 2: AFEYE is derived correctly when parsing loc_vals", {
   expected_output2 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
-    "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
+    "XXX001", "P01", "RIGHT", "EYES", "RIGHT", "Study Eye",
     "XXX001", "P01", "RIGHT", "RETINA", "LEFT", "Fellow Eye",
     "XXX001", "P01", "RIGHT", "", "", NA_character_,
   )
 
+  actual_output2 <- expected_output2 %>%
+    select(-AFEYE) %>%
+    derive_var_afeye(
+      loc_var = AELOC,
+      lat_var = AELAT,
+      loc_vals = c("EYES", "RETINA")
+    )
+
   expect_dfs_equal(
-    derive_var_afeye(adae2, loc_var = AELOC, lat_var = AELAT, loc_vals = c("EYE", "RETINA")),
+    actual_output2,
     expected_output2,
+    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
+  )
+})
+
+## Test 3: Deprecation of dataset_occ ----
+test_that("derive_var_afeye Test 3: Deprecation of dataset_occ", {
+  expected_output3 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
+    "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
+    "XXX001", "P01", "RIGHT", "EYE", "LEFT", "Fellow Eye",
+    "XXX001", "P01", "RIGHT", "", "", NA_character_,
+  )
+
+  expect_warning(
+    actual_output3 <- expected_output3 %>%
+      select(-AFEYE) %>%
+      derive_var_afeye(
+        dataset = NULL,
+        dataset_occ = .,
+        loc_var = AELOC,
+        lat_var = AELAT
+      ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expect_dfs_equal(
+    actual_output3,
+    expected_output3,
+    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
+  )
+})
+
+## Test 4: Deprecation of lat_vals ----
+test_that("derive_var_afeye Test 4: Deprecation of lat_vals", {
+  expected_output4 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT, ~AFEYE,
+    "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
+    "XXX001", "P01", "RIGHT", "EYE", "LEFT", "Fellow Eye",
+    "XXX001", "P01", "RIGHT", "", "", NA_character_,
+  )
+
+  expect_warning(
+    actual_output4 <- expected_output4 %>%
+      select(-AFEYE) %>%
+      derive_var_afeye(
+        loc_var = AELOC,
+        lat_var = AELAT,
+        lat_vals = c("LEFT", "RIGHT", "BILATERAL")
+      ),
+    class = "lifecycle_warning_deprecated"
+  )
+
+  expect_dfs_equal(
+    actual_output4,
+    expected_output4,
     keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
   )
 })

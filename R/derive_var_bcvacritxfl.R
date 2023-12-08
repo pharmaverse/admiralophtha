@@ -79,7 +79,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' in `CRITxFL`. If not supplied, the function takes the first available value of
 #' x, counting up from x = 1.
 #' @param bcva_ranges List containing one or more numeric vectors of length 2. For each
-#' vector c(a,b) in `bcva_ranges`, a pair of variables `CRITx`, `CRITxFL` is created
+#' vector `c(a,b)` in `bcva_ranges`, a pair of variables `CRITx`, `CRITxFL` is created
 #' with the condition: `a <=  crit_var <= b`. If criterion flags of that type are not
 #' required, then leave as NULL.
 #' @param bcva_uplims List containing one or more numeric elements. For each
