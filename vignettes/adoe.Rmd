@@ -106,7 +106,7 @@ adoe <- adoe %>%
     DTYPE = NA_character_
   ) %>%
   # Derive AFEYE needed for PARAMCD derivation
-  derive_var_afeye(OELOC, OELAT, loc_vals = c("EYE", "RETINA"))
+  derive_var_afeye(loc_var = OELOC, lat_var = OELAT, loc_vals = c("EYE", "RETINA"))
 ```
 ## Further Derivations of Standard BDS Variables {#further}
 

@@ -5,23 +5,31 @@
 \title{Derive Affected Eye}
 \usage{
 derive_var_afeye(
+  dataset,
   dataset_occ,
   loc_var,
   lat_var,
-  loc_vals = "EYE",
-  lat_vals = c("LEFT", "RIGHT", "BILATERAL")
+  lat_vals,
+  loc_vals = "EYE"
 )
 }
 \arguments{
-\item{dataset_occ}{Input Occurence dataset}
+\item{dataset}{Input dataset}
+
+\item{dataset_occ}{Input dataset
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{dataset} instead.}
 
 \item{loc_var}{Location variable}
 
 \item{lat_var}{Laterality variable}
 
-\item{loc_vals}{\code{xxLOC}values for which \code{AFEYE} is derived}
+\item{lat_vals}{\code{xxLAT}values for which \code{AFEYE} is derived
 
-\item{lat_vals}{\code{xxLAT}values for which \code{AFEYE} is derived}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please simply ensure \code{xxLAT} values are
+contained in \verb{c("LEFT", RIGHT", "BILATERAL")}.}
+
+\item{loc_vals}{\code{xxLOC} values for which \code{AFEYE} is derived}
 }
 \value{
 The input occurrence dataset with Affected Eye (\code{AFEYE}) added.
@@ -37,7 +45,7 @@ Eye. This assumes Study Eye has already been added from ADSL.
 library(tibble)
 library(admiral)
 
-adae <- tribble(
+adae1 <- tribble(
   ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
   "XXX001", "P01", "RIGHT", "EYE", "RIGHT",
   "XXX001", "P01", "RIGHT", "EYE", "LEFT",
@@ -58,7 +66,16 @@ adae <- tribble(
   "XXX001", "P10", "RIGHT", "EYE", "BOTH"
 )
 
-adae <- derive_var_afeye(adae, AELOC, AELAT)
+derive_var_afeye(adae1, loc_var = AELOC, lat_var = AELAT)
+
+adae2 <- tribble(
+  ~STUDYID, ~USUBJID, ~STUDYEYE, ~AELOC, ~AELAT,
+  "XXX001", "P01", "RIGHT", "EYES", "RIGHT",
+  "XXX001", "P02", "RIGHT", "RETINA", "LEFT",
+  "XXX001", "P03", "LEFT", "", ""
+)
+
+derive_var_afeye(adae2, loc_var = AELOC, lat_var = AELAT, loc_vals = c("EYES", "RETINA"))
 }
 \author{
 Lucy Palmen
