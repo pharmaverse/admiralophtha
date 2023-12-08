@@ -26,6 +26,8 @@
 
 - Website now has button/links to Slack channel and GitHub Issues (#206).
 
+- Test coverage is now improved to 100% (#217).
+
 # admiralophtha 0.3.0
 
 ## Updates to Functions

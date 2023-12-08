@@ -36,7 +36,7 @@ test_that("derive_var_studyeye Test 1: STUDYEYE is derived correctly in normal c
 })
 
 ## Test 2: STUDYEYE is derived correctly when parsing non-standard SCTESTCD ----
-test_that("derive_var_studyeye Test 2: STUDYEYE is derived correctly when parsing non-standard SCTESTCD", { #nolint
+test_that("derive_var_studyeye Test 2: STUDYEYE is derived correctly when parsing non-standard SCTESTCD", { # nolint
   expected_output2 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE,
     "XXX001", "P01", "LEFT",

@@ -1,5 +1,5 @@
 ## Test 1: AFEYE is derived correctly in all possible loc/lat combinations ----
-test_that("derive_var_afeye Test 1: AFEYE is derived correctly in all possible loc/lat combinations", { #nolint
+test_that("derive_var_afeye Test 1: AFEYE is derived correctly in all possible loc/lat combinations", { # nolint
   expected_output1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~STUDYEYE, ~OELOC, ~OELAT, ~AFEYE,
     "XXX001", "P01", "RIGHT", "EYE", "RIGHT", "Study Eye",
