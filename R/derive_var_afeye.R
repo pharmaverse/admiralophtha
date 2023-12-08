@@ -66,7 +66,8 @@ derive_var_afeye <- function(dataset, dataset_occ, loc_var, lat_var, lat_vals, l
     deprecate_warn(
       "1.0.0",
       "derive_var_afeye(lat_vals = )",
-      details = "Please ensure your laterality values are from the set `c('LEFT', 'RIGHT', 'BILATERAL')`"
+      details = "Please ensure your laterality values are from the
+      set `c('LEFT', 'RIGHT', 'BILATERAL')`"
     )
   } else {
     lat_vals <- c("LEFT", "RIGHT", "BILATERAL")
