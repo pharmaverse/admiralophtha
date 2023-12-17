@@ -38,7 +38,7 @@ remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
 ## References and Documentation
 
 * Please refer to the [{admiral} References and
-  Documentation](https://pharmaverse.github.io/admiral/cran-release/).
+  Documentation](https://pharmaverse.github.io/admiral/).
 
 ## R Versions
 

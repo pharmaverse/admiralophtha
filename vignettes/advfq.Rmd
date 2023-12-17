@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 # Introduction
 
 This article describes creating an ADVFQ ADaM with Visual Functioning Questionnaire
-data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are absent, and the user is invited to consult the aforementioned article for guidance.
+data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are absent, and the user is invited to consult the aforementioned article for guidance.
 
  **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
  otherwise specified.* 
@@ -80,7 +80,7 @@ param_lookup <- tibble::tribble(
   "QBCSCORE", "QBCSCORE", "Composite Score", "NEI VFQ-25", "Averaged Result"
 )
 ```
-Now the ADVFQ dataset can be constructed, merging the filtered QS dataset with ADSL. This is necessary because treatment start date `TRTSDT` is a prerequisite for the derivation of variables such as Analysis Day `ADY` which can be programmed by following the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html).
+Now the ADVFQ dataset can be constructed, merging the filtered QS dataset with ADSL. This is necessary because treatment start date `TRTSDT` is a prerequisite for the derivation of variables such as Analysis Day `ADY` which can be programmed by following the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html).
 ```{r, eval=FALSE}
 adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
