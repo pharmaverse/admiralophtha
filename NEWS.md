@@ -1,4 +1,4 @@
-# admiralophtha (development version)
+# admiralophtha 1.0.0
 
 ## Updates to Templates
 
