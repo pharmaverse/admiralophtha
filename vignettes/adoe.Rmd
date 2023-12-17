@@ -110,7 +110,7 @@ adoe <- adoe %>%
 ```
 ## Further Derivations of Standard BDS Variables {#further}
 
-The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
 
 ## Example Script {#example}
 
