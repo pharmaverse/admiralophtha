@@ -18,7 +18,7 @@ library(admiraldev)
 
 # Introduction
 
-This article describes creating an ADBCVA ADaM with Best-Corrected Visual Acuity (BCVA) data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html). As such, derivations and processes that are not specific to ADBCVA are absent, and the user is invited to consult the aforementioned article for guidance.
+This article describes creating an ADBCVA ADaM with Best-Corrected Visual Acuity (BCVA) data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADBCVA are absent, and the user is invited to consult the aforementioned article for guidance.
 
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
 otherwise specified.*
