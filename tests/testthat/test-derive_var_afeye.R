@@ -96,7 +96,7 @@ test_that("derive_var_afeye Test 4: Deprecation of lat_vals", {
     "XXX001", "P01", "RIGHT", "", "", NA_character_,
   )
 
-  expect_warning(
+  expect_error(
     actual_output4 <- expected_output4 %>%
       select(-AFEYE) %>%
       derive_var_afeye(
@@ -104,7 +104,7 @@ test_that("derive_var_afeye Test 4: Deprecation of lat_vals", {
         lat_var = AELAT,
         lat_vals = c("LEFT", "RIGHT", "BILATERAL")
       ),
-    class = "lifecycle_warning_deprecated"
+    class = "lifecycle_error_deprecated"
   )
 
   expect_dfs_equal(

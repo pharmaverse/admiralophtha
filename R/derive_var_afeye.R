@@ -63,23 +63,20 @@
 derive_var_afeye <- function(dataset, dataset_occ, loc_var, lat_var, lat_vals, loc_vals = "EYE") {
   # BEGIN DEPRECATION
   if (!missing(lat_vals)) {
-    deprecate_warn(
+    deprecate_stop(
       "1.0.0",
       "derive_var_afeye(lat_vals = )",
       details = "Please ensure your laterality values are from the
       set `c('LEFT', 'RIGHT', 'BILATERAL')`"
     )
-  } else {
-    lat_vals <- c("LEFT", "RIGHT", "BILATERAL")
   }
 
   if (!missing(dataset_occ)) {
-    deprecate_warn(
+    deprecate_stop(
       "1.0.0",
       "derive_var_afeye(dataset_occ = )",
       "derive_var_afeye(dataset = )"
     )
-    dataset <- dataset_occ
   }
 
   # END DEPRECATION
