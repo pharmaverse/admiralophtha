@@ -1,3 +1,12 @@
+# admiralophtha 1.1.0
+
+## Updates to Functions
+
+- The following function arguments are entering the next phase of the deprecation process (#223): 
+
+  * The argument `dataset_occ`
+  * The argument `lat_vals`
+
 # admiralophtha 1.0.0
 
 ## Updates to Templates
