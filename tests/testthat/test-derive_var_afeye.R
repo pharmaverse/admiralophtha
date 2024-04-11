@@ -79,12 +79,6 @@ test_that("derive_var_afeye Test 3: Deprecation of dataset_occ", {
       ),
     class = "lifecycle_error_deprecated"
   )
-
-  expect_dfs_equal(
-    actual_output3,
-    expected_output3,
-    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
-  )
 })
 
 ## Test 4: Deprecation of lat_vals ----
@@ -105,11 +99,5 @@ test_that("derive_var_afeye Test 4: Deprecation of lat_vals", {
         lat_vals = c("LEFT", "RIGHT", "BILATERAL")
       ),
     class = "lifecycle_error_deprecated"
-  )
-
-  expect_dfs_equal(
-    actual_output4,
-    expected_output4,
-    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
   )
 })
