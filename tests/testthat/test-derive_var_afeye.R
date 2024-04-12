@@ -68,7 +68,7 @@ test_that("derive_var_afeye Test 3: Deprecation of dataset_occ", {
     "XXX001", "P01", "RIGHT", "", "", NA_character_,
   )
 
-  expect_warning(
+  expect_error(
     actual_output3 <- expected_output3 %>%
       select(-AFEYE) %>%
       derive_var_afeye(
@@ -77,13 +77,7 @@ test_that("derive_var_afeye Test 3: Deprecation of dataset_occ", {
         loc_var = AELOC,
         lat_var = AELAT
       ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expect_dfs_equal(
-    actual_output3,
-    expected_output3,
-    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
+    class = "lifecycle_error_deprecated"
   )
 })
 
@@ -96,7 +90,7 @@ test_that("derive_var_afeye Test 4: Deprecation of lat_vals", {
     "XXX001", "P01", "RIGHT", "", "", NA_character_,
   )
 
-  expect_warning(
+  expect_error(
     actual_output4 <- expected_output4 %>%
       select(-AFEYE) %>%
       derive_var_afeye(
@@ -104,12 +98,6 @@ test_that("derive_var_afeye Test 4: Deprecation of lat_vals", {
         lat_var = AELAT,
         lat_vals = c("LEFT", "RIGHT", "BILATERAL")
       ),
-    class = "lifecycle_warning_deprecated"
-  )
-
-  expect_dfs_equal(
-    actual_output4,
-    expected_output4,
-    keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
+    class = "lifecycle_error_deprecated"
   )
 })
