@@ -40,7 +40,7 @@ for the most common steps are provided by the following vignettes:
 # Support
 
 Support is provided via the [admiral Slack
-channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
+channel](https://pharmaverse.slack.com/).
 
 <!-- This article is in the process of being written. Please use the `{admiralonco}` "Get Started"  -->
 <!-- page (commented out at the moment) as a basis. -->
