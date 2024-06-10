@@ -9,7 +9,7 @@
 #'
 #' Source for conversion formula:
 #' Beck, R.W., et al. A computerized method of visual acuity testing.
-#' American Journal of Ophthalmology, 135(2), pp.194–205.
+#' American Journal of Ophthalmology, 135(2), pp.194-205.
 #' doi:https://doi.org/10.1016/s0002-9394(02)01825-1.
 #'
 #' @author Nandini R Thampi
