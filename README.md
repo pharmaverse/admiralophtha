@@ -42,7 +42,7 @@ remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
 
 ## R Versions
 
-Here’s a summary of our strategy for this package related to R versions:
+Here's a summary of our strategy for this package related to R versions:
 
 * R versions for developers and users will follow the same as
   `{admiral}` core package.
@@ -58,7 +58,7 @@ developer community:
 
 * [Slack](https://pharmaverse.slack.com/) - for
   informal discussions, Q\&A and building our user community. If you
-  don’t have access, use this
+  don't have access, use this
   [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A)
   to join the pharmaverse Slack workspace
 * [GitHub
