@@ -1,64 +1,69 @@
-Package: admiralophtha
 Type: Package
+Package: admiralophtha
 Title: ADaM in R Asset Library - Ophthalmology
-Version: 1.0.0
+Version: 1.0.0.9000
 Authors@R: c(
-    person("Edoardo", "Mancini", email = "edoardo.mancini@roche.com", role = c("aut", "cre")),
-    person("Ritika", "Aggarwal", email = "ritika.aggarwal@novartis.com", role = c("aut")),
-    person("Jane", "Gao", email = "jane.gao@roche.com",role = c("aut")),
-    person("William", "Holmes", email = "william.holmes@roche.com", role = c("aut")),
-    person("Josie", "Jackson", email = "josie.jackson@roche.com", role = c("aut")),
-    person("Sonali", "Jain", email = "sonali.jain@novartis.com", role = c("aut")),
-    person("Yuki", "Matsunaga", email = "yuki.matsunaga@novartis.com", role = c("aut")),
-    person("Gordon", "Miller", email = "gordon.miller@roche.com", role = c("aut")),
-    person("Rachel", "Linacre", email = "rachel.linacre@roche.com", role = c("aut")),
-    person("Lucy", "Palmen", email = "lucy.palmen@roche.com", role = c("aut")),
-    person("Nandini", "R Thampi", email = "nandini.rajendhiran@novartis.com", role = c("aut")),
-    person("Aldrich", "Salva", email = "salva.aldrich@gene.com", role = c("aut"))
-    )
-Description: Aids the programming of Clinical Data Standards Interchange Consortium
-    (CDISC) compliant Ophthalmology Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
-    mandatory part of any New Drug or Biologics License Application submitted to the
-    United States Food and Drug Administration (FDA). Analysis derivations are
-    implemented in accordance with the "Analysis Data Model Implementation Guide"
-    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
+    person("Edoardo", "Mancini", , "edoardo.mancini@roche.com", role = c("aut", "cre")),
+    person("Ritika", "Aggarwal", , "ritika.aggarwal@novartis.com", role = "aut"),
+    person("Jane", "Gao", , "jane.gao@roche.com", role = "aut"),
+    person("William", "Holmes", , "william.holmes@roche.com", role = "aut"),
+    person("Josie", "Jackson", , "josie.jackson@roche.com", role = "aut"),
+    person("Sonali", "Jain", , "sonali.jain@novartis.com", role = "aut"),
+    person("Yuki", "Matsunaga", , "yuki.matsunaga@novartis.com", role = "aut"),
+    person("Gordon", "Miller", , "gordon.miller@roche.com", role = "aut"),
+    person("Rachel", "Linacre", , "rachel.linacre@roche.com", role = "aut"),
+    person("Lucy", "Palmen", , "lucy.palmen@roche.com", role = "aut"),
+    person("Nandini", "R Thampi", , "nandini.rajendhiran@novartis.com", role = "aut"),
+    person("Aldrich", "Salva", , "salva.aldrich@gene.com", role = "aut")
+  )
+Description: Aids the programming of Clinical Data Standards Interchange
+    Consortium (CDISC) compliant Ophthalmology Analysis Data Model (ADaM)
+    datasets in R. ADaM datasets are a mandatory part of any New Drug or
+    Biologics License Application submitted to the United States Food and
+    Drug Administration (FDA). Analysis derivations are implemented in
+    accordance with the "Analysis Data Model Implementation Guide" (CDISC
+    Analysis Data Model Team, 2021,
+    <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 License: Apache License (>= 2)
+URL: https://pharmaverse.github.io/admiralophtha/,
+    https://github.com/pharmaverse/admiralophtha/
 BugReports: https://github.com/pharmaverse/admiralophtha/issues
-URL: https://pharmaverse.github.io/admiralophtha/, https://github.com/pharmaverse/admiralophtha/
-Encoding: UTF-8
-Language: en-US
-LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
-Depends: R (>= 3.5)
+Depends: 
+    R (>= 3.5)
 Imports:
     admiral,
     admiraldev,
     dplyr,
+    hms,
+    lifecycle,
     lubridate,
     magrittr,
     purrr,
     rlang,
     stringr,
-    hms,
     tidyr,
-    tidyselect,
-    lifecycle
+    tidyselect
 Suggests:
-    pharmaversesdtm,
+    covr,
     devtools,
     diffdf,
-    lintr,
-    pkgdown,
-    testthat,
+    DT,
     knitr,
+    lintr,
     methods,
     miniUI,
+    pharmaversesdtm,
+    pkgdown,
     rmarkdown,
     roxygen2,
     spelling,
+    testthat,
     tibble,
-    usethis,
-    covr,
-    DT
-VignetteBuilder: knitr
+    usethis
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
