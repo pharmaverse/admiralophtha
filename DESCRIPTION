@@ -1,7 +1,7 @@
 Package: admiralophtha
 Type: Package
 Title: ADaM in R Asset Library - Ophthalmology
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: c(
     person("Edoardo", "Mancini", email = "edoardo.mancini@roche.com", role = c("aut", "cre")),
     person("Ritika", "Aggarwal", email = "ritika.aggarwal@novartis.com", role = c("aut")),
@@ -30,27 +30,27 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-Depends: R (>= 3.5)
+Depends: R (>= 4.0)
 Imports:
-    admiral,
-    admiraldev,
-    dplyr,
-    lubridate,
-    magrittr,
-    purrr,
-    rlang,
-    stringr,
-    hms,
-    tidyr,
-    tidyselect,
-    lifecycle
+    admiral (>= 1.1.0),
+    admiraldev (>= 1.1.0),
+    dplyr (>= 1.0.5),
+    lubridate (>= 1.7.4),
+    magrittr (>= 1.5),
+    purrr (>= 0.3.3),
+    rlang (>= 0.4.4),
+    stringr (>= 1.4.0),
+    hms (>= 0.5.3),
+    tidyr (>= 1.0.2),
+    tidyselect (>= 1.1.0),
+    lifecycle (>= 0.1.0)
 Suggests:
-    pharmaversesdtm,
+    pharmaversesdtm (>= 1.0.0),
     devtools,
     diffdf,
     lintr,
     pkgdown,
-    testthat,
+    testthat (>= 3.0.0),
     knitr,
     methods,
     miniUI,
