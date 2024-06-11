@@ -137,7 +137,10 @@ adbcva_nlogparam <- adbcva_aval %>%
 adbcva_logparam <- adbcva_nlogparam %>%
   # Add derived log parameters
   derive_param_computed(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)
+    ),
     parameters = c("SBCVA"),
     set_values_to = exprs(
       AVAL = convert_etdrs_to_logmar(AVAL.SBCVA),
@@ -148,7 +151,10 @@ adbcva_logparam <- adbcva_nlogparam %>%
     )
   ) %>%
   derive_param_computed(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)
+    ),
     parameters = c("FBCVA"),
     set_values_to = exprs(
       AVAL = convert_etdrs_to_logmar(AVAL.FBCVA),

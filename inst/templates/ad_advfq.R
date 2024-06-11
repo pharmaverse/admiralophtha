@@ -76,7 +76,10 @@ advfq_aval <- advfq_dtdy %>%
 advfq_qr01 <- advfq_aval %>%
   derive_summary_records(
     dataset_add = advfq_aval,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = QSTESTCD == "VFQ1" & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = identity(AVAL),
@@ -104,7 +107,10 @@ advfq_qr01 <- advfq_aval %>%
 advfq_qr02 <- advfq_qr01 %>%
   derive_summary_records(
     dataset_add = advfq_qr01,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, PARAMCD, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = QSTESTCD == "VFQ2" & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = identity(AVAL),
@@ -132,7 +138,10 @@ advfq_qr02 <- advfq_qr01 %>%
 advfq_qr03 <- advfq_qr02 %>%
   derive_summary_records(
     dataset_add = advfq_qr02,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = QSTESTCD == "VFQ3" & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = identity(AVAL),
@@ -160,7 +169,10 @@ advfq_qr03 <- advfq_qr02 %>%
 advfq_qr04 <- advfq_qr03 %>%
   derive_summary_records(
     dataset_add = advfq_qr03,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(PARAMCD, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = QSTESTCD == "VFQ4" & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = identity(AVAL),
@@ -184,7 +196,10 @@ advfq_qr04 <- advfq_qr03 %>%
 advfq_qsg01 <- advfq_qr04 %>%
   derive_summary_records(
     dataset_add = advfq_qr04,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = mean(AVAL),
@@ -198,7 +213,10 @@ advfq_qsg01 <- advfq_qr04 %>%
 advfq_qsg02 <- advfq_qsg01 %>%
   derive_summary_records(
     dataset_add = advfq_qsg01,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = PARAMCD %in% c("QR03", "QR04") & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = mean(AVAL),
@@ -213,7 +231,10 @@ advfq_qsg02 <- advfq_qsg01 %>%
 advfq_qbcs <- advfq_qsg02 %>%
   derive_summary_records(
     dataset_add = advfq_qsg02,
-    by_vars = c(get_admiral_option("subject_keys"), exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = PARAMCD %in% c("QSG01", "QSG02") & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = sum(AVAL),
