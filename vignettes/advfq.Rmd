@@ -88,7 +88,7 @@ advfq <- derive_vars_merged(
   qs,
   dataset_add = adsl,
   new_vars = adsl_vars,
-  by_vars = exprs(STUDYID, USUBJID)
+  by_vars = get_admiral_option("subject_keys")
 )
 ```
 
@@ -127,7 +127,10 @@ Run this section of code for every question that you need recoding. This gives a
 advfq <- advfq %>%
   derive_summary_records(
     dataset_add = advfq,
-    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, VISITNUM, VISIT),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, PARAMCD, VISITNUM, VISIT)
+    ),
     filter_add = QSTESTCD == "VFQ1" & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = identity(AVAL),
@@ -155,7 +158,10 @@ Next, the programmer should create summary records as average of recoded questio
 advfq <- advfq %>%
   derive_summary_records(
     dataset_add = advfq,
-    by_vars = exprs(STUDYID, USUBJID, !!!adsl_vars, VISITNUM, VISIT, ADT, ADY),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)
+    ),
     filter_add = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
     set_values_to = exprs(
       AVAL = mean(AVAL),
@@ -170,7 +176,7 @@ In most finding ADaMs, an analysis flag is derived to identify the appropriate o
 
 In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the appropriate record for analysis.
 
-This flag may be derived using the [`admiral`](https://pharmaverse.github.io/admiral/) function `admiral::derive_var_extreme_flag()`. For this example, we will assume we would like to choose the latest value by `USUBJID`, `PARAMCD` and `AVISIT`.
+This flag may be derived using the [`admiral`](https://pharmaverse.github.io/admiral/) function `admiral::derive_var_extreme_flag()`. For this example, we will assume we would like to choose the latest value by our subject keys along with `PARAMCD` and `AVISIT`.
 
 ```{r, eval=FALSE}
 ## ANL01FL: Flag last result within an AVISIT for post-baseline records ----
@@ -179,7 +185,7 @@ advfq <- advfq %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = exprs(USUBJID, PARAMCD, AVISIT),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT)),
       order = exprs(ADT, AVAL),
       mode = "last"
     ),
@@ -195,7 +201,7 @@ advfq <- advfq %>%
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(PARAMCD, ADT, AVISITN, VISITNUM),
     check_type = "error"
   ) %>%
@@ -211,7 +217,7 @@ Once analysis variables have been programmed, variables from ADSL which are requ
 advfq <- advfq %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 ```
 ## Example Script {#example}

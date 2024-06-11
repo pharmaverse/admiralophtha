@@ -1,4 +1,4 @@
-# admiralophtha 1.1.0
+# admiralophtha 1.0.0.9001
 
 ## Updates to Functions
 
@@ -6,6 +6,12 @@
 
   * The argument `dataset_occ`
   * The argument `lat_vals`
+
+## Various
+
+- All vignettes and templates in `{admiralophtha}` have been updated to use the `{admiral}` subject keys option rather than
+  explicitly quoting key variables such as `STUYDID` and `USUBJID`. For instance, a line such as `by_vars = exprs(STUDYID, USUBJID)`
+  would be replaced by `by_vars = get_admiral_option("subject_keys")` (#226).
 
 # admiralophtha 1.0.0
 
