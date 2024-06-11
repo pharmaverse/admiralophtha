@@ -161,7 +161,7 @@ derive_var_bcvacritxfl <- function(dataset,
                                    critxfl_index = NULL) {
   # Input checks
   assert_vars(crit_var)
-  assert_data_frame(dataset, required_vars = c(exprs(STUDYID, USUBJID), crit_var))
+  assert_data_frame(dataset, required_vars = crit_var)
   assert_character_scalar(additional_text)
   assert_integer_scalar(critxfl_index, optional = TRUE)
   if (!is.null(bcva_ranges)) lapply(bcva_ranges, assert_numeric_vector)

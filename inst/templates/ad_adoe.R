@@ -54,7 +54,7 @@ adoe_adslvar <- oe %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 
 adoe_aval <- adoe_adslvar %>%
@@ -111,7 +111,7 @@ adoe_trtflag <- adoe_visit %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ABLFL,
-      by_vars = exprs(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(BASETYPE, PARAMCD)),
       order = exprs(ADT, VISITNUM, OESEQ),
       mode = "last"
     ),
@@ -125,7 +125,7 @@ adoe_vstflag <- adoe_trtflag %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = exprs(USUBJID, PARAMCD, AVISIT, DTYPE),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, DTYPE)),
       order = exprs(ADT, AVAL),
       mode = "last"
     ),
@@ -136,7 +136,7 @@ adoe_vstflag <- adoe_trtflag %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL02FL,
-      by_vars = exprs(USUBJID, PARAMCD, ABLFL),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ABLFL)),
       order = exprs(ADT),
       mode = "last"
     ),
@@ -147,7 +147,7 @@ adoe_vstflag <- adoe_trtflag %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = exprs(USUBJID, PARAMCD),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
       order = exprs(AVAL, ADT),
       new_var = WORS01FL,
       mode = "last"
@@ -159,13 +159,13 @@ adoe_vstflag <- adoe_trtflag %>%
 adoe_change <- adoe_vstflag %>%
   # Calculate BASE
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
     source_var = AVAL,
     new_var = BASE
   ) %>%
   # Calculate BASEC
   derive_var_base(
-    by_vars = exprs(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
@@ -178,7 +178,7 @@ adoe_change <- adoe_vstflag %>%
 adoe_aseq <- adoe_change %>%
   derive_var_obs_number(
     new_var = ASEQ,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
     check_type = "error"
   )
@@ -187,7 +187,7 @@ adoe_aseq <- adoe_change %>%
 adoe_adsl <- adoe_aseq %>%
   derive_vars_merged(
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 
 # Final Steps, Select final variables and Add labels

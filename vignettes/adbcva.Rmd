@@ -88,7 +88,7 @@ adbcva <- oe %>%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
-    by_vars = exprs(STUDYID, USUBJID)
+    by_vars = get_admiral_option("subject_keys")
   )
 ```
 
@@ -123,7 +123,7 @@ Often ADBCVA datasets contain derived records for BCVA in LogMAR units. This can
 ```{r}
 adbcva <- adbcva %>%
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, VISITNUM, OEDY, OEDTC, AFEYE), adsl_vars),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)),
     parameters = c("SBCVA"),
     set_values_to = exprs(
       AVAL = convert_etdrs_to_logmar(AVAL.SBCVA),
@@ -134,7 +134,7 @@ adbcva <- adbcva %>%
     )
   ) %>%
   derive_param_computed(
-    by_vars = c(exprs(STUDYID, USUBJID, VISIT, OEDY, OEDTC, AFEYE), adsl_vars),
+    by_vars = c(get_admiral_option("subject_keys"), exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)),
     parameters = c("FBCVA"),
     set_values_to = exprs(
       AVAL = convert_etdrs_to_logmar(AVAL.FBCVA),
