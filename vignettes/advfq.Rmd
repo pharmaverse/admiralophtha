@@ -128,7 +128,7 @@ advfq <- advfq %>%
   derive_summary_records(
     dataset_add = advfq,
     by_vars = c(
-      get_admiral_option("subject_keys"), 
+      get_admiral_option("subject_keys"),
       exprs(!!!adsl_vars, PARAMCD, VISITNUM, VISIT)
     ),
     filter_add = QSTESTCD == "VFQ1" & !is.na(AVAL),
@@ -159,7 +159,7 @@ advfq <- advfq %>%
   derive_summary_records(
     dataset_add = advfq,
     by_vars = c(
-      get_admiral_option("subject_keys"), 
+      get_admiral_option("subject_keys"),
       exprs(!!!adsl_vars, VISITNUM, VISIT, ADT, ADY)
     ),
     filter_add = PARAMCD %in% c("QR01", "QR02") & !is.na(AVAL),
