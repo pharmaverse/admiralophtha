@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,16 +75,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="admiralophtha-110">admiralophtha 1.1.0<a class="anchor" aria-label="anchor" href="#admiralophtha-110"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.0.9001" id="admiralophtha-1009001">admiralophtha 1.0.0.9001<a class="anchor" aria-label="anchor" href="#admiralophtha-1009001"></a></h2>
 <div class="section level3">
-<h3 id="updates-to-functions-1-1-0">Updates to Functions<a class="anchor" aria-label="anchor" href="#updates-to-functions-1-1-0"></a></h3>
+<h3 id="updates-to-functions-1-0-0-9001">Updates to Functions<a class="anchor" aria-label="anchor" href="#updates-to-functions-1-0-0-9001"></a></h3>
 <ul><li>
-<p>The following function arguments of <code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code> are entering the next phase of the deprecation process (<a href="https://github.com/pharmaverse/admiralophtha/issues/223" class="external-link">#223</a>):</p>
+<p>The following function arguments of <code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code> are entering the next (and final) phase of the deprecation process (<a href="https://github.com/pharmaverse/admiralophtha/issues/223" class="external-link">#223</a>):</p>
 <ul><li>The argument <code>dataset_occ</code>
 </li>
 <li>The argument <code>lat_vals</code>
 </li>
 </ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="various-1-0-0-9001">Various<a class="anchor" aria-label="anchor" href="#various-1-0-0-9001"></a></h3>
+<ul><li>All vignettes and templates in <a href="https://pharmaverse.github.io/admiralophtha/">admiralophtha</a> have been updated to use the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> subject keys option rather than explicitly quoting key variables such as <code>STUYDID</code> and <code>USUBJID</code>. For instance, a line such as <code>by_vars = exprs(STUDYID, USUBJID)</code> would be replaced by <code>by_vars = get_admiral_option("subject_keys")</code> (<a href="https://github.com/pharmaverse/admiralophtha/issues/226" class="external-link">#226</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
