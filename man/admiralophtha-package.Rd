@@ -15,7 +15,7 @@ Useful links:
 \itemize{
   \item \url{https://pharmaverse.github.io/admiralophtha/}
   \item \url{https://github.com/pharmaverse/admiralophtha/}
-  \item Report bugs at \url{https://github.com/pharmaverse/admiralophtha/issues}
+  \item Report bugs at \url{https://github.com/pharmaverse/admiralophtha/issues/}
 }
 
 }
