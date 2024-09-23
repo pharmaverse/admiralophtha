@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com}
+\strong{Maintainer}: Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
 
 Authors:
 \itemize{
