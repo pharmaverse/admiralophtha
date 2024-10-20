@@ -2,7 +2,7 @@
 
 ## Updates to Functions
 
-- The following function arguments of `derive_var_afeye()` are removed (#237):
+- The following function arguments of `derive_var_afeye()` are removed following the end of their deprecation cycle. (#237):
 
   * The argument `dataset_occ`
   * The argument `lat_vals`

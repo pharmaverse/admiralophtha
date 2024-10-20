@@ -3,14 +3,12 @@
 #' Derive Affected Eye (`AFEYE`) in occurrence datasets
 #'
 #' @param dataset Input dataset
-#' @param dataset_occ Input dataset
 #'
 #' `r lifecycle::badge("deprecated")` Please use `dataset` instead.
 #'
 #' @param loc_var Location variable
 #' @param lat_var Laterality variable
 #' @param loc_vals `xxLOC` values for which `AFEYE` is derived
-#' @param lat_vals `xxLAT`values for which `AFEYE` is derived
 #'
 #' `r lifecycle::badge("deprecated")` Please simply ensure `xxLAT` values are
 #' contained in `c("LEFT", "RIGHT", "BILATERAL")`.
