@@ -58,7 +58,6 @@
 #' )
 #'
 #' derive_var_afeye(adae2, loc_var = AELOC, lat_var = AELAT, loc_vals = c("EYES", "RETINA"))
-
 derive_var_afeye <- function(dataset, loc_var, lat_var, loc_vals = "EYE") {
   seye_vals <- c("LEFT", "RIGHT", "BILATERAL")
 
