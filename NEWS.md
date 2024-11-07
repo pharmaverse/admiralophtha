@@ -13,6 +13,12 @@
   explicitly quoting key variables such as `STUDYID` and `USUBJID`. For instance, a line such as `by_vars = exprs(STUDYID, USUBJID)`
   would be replaced by `by_vars = get_admiral_option("subject_keys")` (#226).
 
+# admiralophtha 1.1.0
+
+## Updates to Templates
+
+- Replaced look-up table with derive_vars_merged() in adbcva_crtflag dataframe to derive_vars_cat() to derive AVALCA1N and AVALCAT1 in ADBCVA template using new SBCVA and FBCVA definition list (#244)
+
 # admiralophtha 1.0.0
 
 ## Updates to Templates
