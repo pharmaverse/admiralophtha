@@ -17,7 +17,7 @@
 
 ## Updates to Templates
 
-- Replaced look-up table with derive_vars_merged() in adbcva_crtflag dataframe to derive_vars_cat() to derive AVALCA1N and AVALCAT1 in ADBCVA template using new SBCVA and FBCVA definition list (#244)
+- Replaced look-up table with derive_vars_merged() in adbcva_crtflag dataframe with derive_vars_cat() to derive AVALCA1N and AVALCAT1 in ADBCVA template using new SBCVA and FBCVA definition list (#244)
 
 # admiralophtha 1.0.0
 
