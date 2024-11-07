@@ -38,146 +38,65 @@ param_lookup <- tibble::tribble(
   "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2, # nolint
 )
 
-# # Assign AVALCAT1
-# avalcat_lookup <- tibble::tribble(
-#   ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
-#   "SBCVA", 1000, "< 20/800",
-#   "SBCVA", 800, "20/800",
-#   "SBCVA", 640, "20/640",
-#   "SBCVA", 500, "20/500",
-#   "SBCVA", 400, "20/400",
-#   "SBCVA", 320, "20/320",
-#   "SBCVA", 250, "20/250",
-#   "SBCVA", 200, "20/200",
-#   "SBCVA", 160, "20/160",
-#   "SBCVA", 125, "20/125",
-#   "SBCVA", 100, "20/100",
-#   "SBCVA", 80, "20/80",
-#   "SBCVA", 63, "20/63",
-#   "SBCVA", 50, "20/50",
-#   "SBCVA", 40, "20/40",
-#   "SBCVA", 32, "20/32",
-#   "SBCVA", 25, "20/25",
-#   "SBCVA", 20, "20/20",
-#   "SBCVA", 16, "20/16",
-#   "SBCVA", 12, "20/12",
-#   "SBCVA", 1, "> 20/12",
-# )
-#
-# # add equivalent rows for PARAMCD = "FBCVA"
-# avalcat_lookup <- avalcat_lookup %>%
-#   mutate(PARAMCD = "FBCVA") %>%
-#   rbind(avalcat_lookup)
-#
-# # ---- Utility functions ----
-#
-# # Format function for AVALCAT1
-# format_avalcat1n <- function(param, aval) {
-#   case_when(
-#     param %in% c("SBCVA", "FBCVA") & aval >= 0 & aval <= 3 ~ 1000,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 4 & aval <= 8 ~ 800,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 9 & aval <= 13 ~ 640,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 14 & aval <= 18 ~ 500,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 19 & aval <= 23 ~ 400,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 24 & aval <= 28 ~ 320,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 29 & aval <= 33 ~ 250,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 34 & aval <= 38 ~ 200,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 39 & aval <= 43 ~ 160,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 44 & aval <= 48 ~ 125,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 49 & aval <= 53 ~ 100,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 54 & aval <= 58 ~ 80,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 59 & aval <= 63 ~ 63,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 64 & aval <= 68 ~ 50,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 69 & aval <= 73 ~ 40,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 74 & aval <= 78 ~ 32,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 79 & aval <= 83 ~ 25,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 84 & aval <= 88 ~ 20,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 89 & aval <= 93 ~ 16,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 94 & aval <= 97 ~ 12,
-#     param %in% c("SBCVA", "FBCVA") & aval >= 98 ~ 1
-#   )
-# }
-#
-# # SBCVA and FBCVA definition list
-definition_bcva_ <- exprs(
-  ~PARAMCD,  ~condition,              ~AVALCA1N,    ~AVALCAT1,
-  "SBCVA",   AVAL >= 0 & AVAL <= 3,   1000,          "< 20/800",
-  "FBCVA",   AVAL >= 0 & AVAL <= 3,   1000,          "< 20/800",
-  "SBCVA",   AVAL >= 4 & AVAL <= 8,   800,           "20/800",
-  "FBCVA",   AVAL >= 4 & AVAL <= 8,   800,           "20/800",
-  "SBCVA",   AVAL >= 9 & AVAL <= 13,  640,           "20/640",
-  "FBCVA",   AVAL >= 9 & AVAL <= 13,  640,           "20/640",
-  "SBCVA",   AVAL >= 14 & AVAL <= 18, 500,           "20/500",
-  "FBCVA",   AVAL >= 14 & AVAL <= 18, 500,           "20/500",
-  "SBCVA",   AVAL >= 19 & AVAL <= 23, 400,           "20/400",
-  "FBCVA",   AVAL >= 19 & AVAL <= 23, 400,           "20/400",
-  "SBCVA",   AVAL >= 24 & AVAL <= 28, 320,           "20/320",
-  "FBCVA",   AVAL >= 24 & AVAL <= 28, 320,           "20/320",
-  "SBCVA",   AVAL >= 29 & AVAL <= 33, 250,           "20/250",
-  "FBCVA",   AVAL >= 29 & AVAL <= 33, 250,           "20/250",
-  "SBCVA",   AVAL >= 34 & AVAL <= 38, 200,           "20/200",
-  "FBCVA",   AVAL >= 34 & AVAL <= 38, 200,           "20/200",
-  "SBCVA",   AVAL >= 39 & AVAL <= 43, 160,           "20/160",
-  "FBCVA",   AVAL >= 39 & AVAL <= 43, 160,           "20/160",
-  "SBCVA",   AVAL >= 44 & AVAL <= 48, 125,           "20/125",
-  "FBCVA",   AVAL >= 44 & AVAL <= 48, 125,           "20/125",
-  "SBCVA",   AVAL >= 49 & AVAL <= 53, 100,           "20/100",
-  "FBCVA",   AVAL >= 49 & AVAL <= 53, 100,           "20/100",
-  "SBCVA",   AVAL >= 54 & AVAL <= 58, 80,            "20/80",
-  "FBCVA",   AVAL >= 54 & AVAL <= 58, 80,            "20/80",
-  "SBCVA",   AVAL >= 59 & AVAL <= 63, 63,            "20/63",
-  "FBCVA",   AVAL >= 59 & AVAL <= 63, 63,            "20/63",
-  "SBCVA",   AVAL >= 64 & AVAL <= 68, 50,            "20/50",
-  "FBCVA",   AVAL >= 64 & AVAL <= 68, 50,            "20/50",
-  "SBCVA",   AVAL >= 69 & AVAL <= 73, 40,            "20/40",
-  "FBCVA",   AVAL >= 69 & AVAL <= 73, 40,            "20/40",
-  "SBCVA",   AVAL >= 74 & AVAL <= 78, 32,            "20/32",
-  "FBCVA",   AVAL >= 74 & AVAL <= 78, 32,            "20/32",
-  "SBCVA",   AVAL >= 79 & AVAL <= 83, 25,            "20/25",
-  "FBCVA",   AVAL >= 79 & AVAL <= 83, 25,            "20/25",
-  "SBCVA",   AVAL >= 84 & AVAL <= 88, 20,            "20/20",
-  "FBCVA",   AVAL >= 84 & AVAL <= 88, 20,            "20/20",
-  "SBCVA",   AVAL >= 89 & AVAL <= 93, 16,            "20/16",
-  "FBCVA",   AVAL >= 89 & AVAL <= 93, 16,            "20/16",
-  "SBCVA",   AVAL >= 94 & AVAL <= 97, 12,            "20/12",
-  "FBCVA",   AVAL >= 94 & AVAL <= 97, 12,            "20/12",
-  "SBCVA",   AVAL >= 98,               1,             "> 20/12",
-  "FBCVA",   AVAL >= 98,               1,             "> 20/12"
+# Assign AVALCAT1
+avalcat_lookup <- tibble::tribble(
+  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
+  "SBCVA", 1000, "< 20/800",
+  "SBCVA", 800, "20/800",
+  "SBCVA", 640, "20/640",
+  "SBCVA", 500, "20/500",
+  "SBCVA", 400, "20/400",
+  "SBCVA", 320, "20/320",
+  "SBCVA", 250, "20/250",
+  "SBCVA", 200, "20/200",
+  "SBCVA", 160, "20/160",
+  "SBCVA", 125, "20/125",
+  "SBCVA", 100, "20/100",
+  "SBCVA", 80, "20/80",
+  "SBCVA", 63, "20/63",
+  "SBCVA", 50, "20/50",
+  "SBCVA", 40, "20/40",
+  "SBCVA", 32, "20/32",
+  "SBCVA", 25, "20/25",
+  "SBCVA", 20, "20/20",
+  "SBCVA", 16, "20/16",
+  "SBCVA", 12, "20/12",
+  "SBCVA", 1, "> 20/12",
 )
 
-# SBCVA definition list
-definition_sbcva <- exprs(
-  ~PARAMCD,  ~condition,              ~AVALCA1N,    ~AVALCAT1,
-  "SBCVA",   AVAL >= 0 & AVAL <= 3,   1000,          "< 20/800",
-  "SBCVA",   AVAL >= 4 & AVAL <= 8,   800,           "20/800",
-  "SBCVA",   AVAL >= 9 & AVAL <= 13,  640,           "20/640",
-  "SBCVA",   AVAL >= 14 & AVAL <= 18, 500,           "20/500",
-  "SBCVA",   AVAL >= 19 & AVAL <= 23, 400,           "20/400",
-  "SBCVA",   AVAL >= 24 & AVAL <= 28, 320,           "20/320",
-  "SBCVA",   AVAL >= 29 & AVAL <= 33, 250,           "20/250",
-  "SBCVA",   AVAL >= 34 & AVAL <= 38, 200,           "20/200",
-  "SBCVA",   AVAL >= 39 & AVAL <= 43, 160,           "20/160",
-  "SBCVA",   AVAL >= 44 & AVAL <= 48, 125,           "20/125",
-  "SBCVA",   AVAL >= 49 & AVAL <= 53, 100,           "20/100",
-  "SBCVA",   AVAL >= 54 & AVAL <= 58, 80,            "20/80",
-  "SBCVA",   AVAL >= 59 & AVAL <= 63, 63,            "20/63",
-  "SBCVA",   AVAL >= 64 & AVAL <= 68, 50,            "20/50",
-  "SBCVA",   AVAL >= 69 & AVAL <= 73, 40,            "20/40",
-  "SBCVA",   AVAL >= 74 & AVAL <= 78, 32,            "20/32",
-  "SBCVA",   AVAL >= 79 & AVAL <= 83, 25,            "20/25",
-  "SBCVA",   AVAL >= 84 & AVAL <= 88, 20,            "20/20",
-  "SBCVA",   AVAL >= 89 & AVAL <= 93, 16,            "20/16",
-  "SBCVA",   AVAL >= 94 & AVAL <= 97, 12,            "20/12",
-  "SBCVA",   AVAL >= 98,               1,             "> 20/12"
-)
+# add equivalent rows for PARAMCD = "FBCVA"
+avalcat_lookup <- avalcat_lookup %>%
+  mutate(PARAMCD = "FBCVA") %>%
+  rbind(avalcat_lookup)
 
-# FBCVA definition list
-definition_fbcva <- lapply(definition_sbcva, function(row) replace(row, row == "SBCVA", "FBCVA"))
-definition_fbcva_trimmed <- definition_fbcva[-(1:4)]
+# ---- Utility functions ----
 
-# Combine both SBCVA and FBCVA definition lists
-definition_bcva <- c(definition_sbcva, definition_fbcva_trimmed)
-all.equal(definition_bcva_, definition_bcva) #TODO: Unable to get back the exact list structure
+# Format function for AVALCAT1
+format_avalcat1n <- function(param, aval) {
+  case_when(
+    param %in% c("SBCVA", "FBCVA") & aval >= 0 & aval <= 3 ~ 1000,
+    param %in% c("SBCVA", "FBCVA") & aval >= 4 & aval <= 8 ~ 800,
+    param %in% c("SBCVA", "FBCVA") & aval >= 9 & aval <= 13 ~ 640,
+    param %in% c("SBCVA", "FBCVA") & aval >= 14 & aval <= 18 ~ 500,
+    param %in% c("SBCVA", "FBCVA") & aval >= 19 & aval <= 23 ~ 400,
+    param %in% c("SBCVA", "FBCVA") & aval >= 24 & aval <= 28 ~ 320,
+    param %in% c("SBCVA", "FBCVA") & aval >= 29 & aval <= 33 ~ 250,
+    param %in% c("SBCVA", "FBCVA") & aval >= 34 & aval <= 38 ~ 200,
+    param %in% c("SBCVA", "FBCVA") & aval >= 39 & aval <= 43 ~ 160,
+    param %in% c("SBCVA", "FBCVA") & aval >= 44 & aval <= 48 ~ 125,
+    param %in% c("SBCVA", "FBCVA") & aval >= 49 & aval <= 53 ~ 100,
+    param %in% c("SBCVA", "FBCVA") & aval >= 54 & aval <= 58 ~ 80,
+    param %in% c("SBCVA", "FBCVA") & aval >= 59 & aval <= 63 ~ 63,
+    param %in% c("SBCVA", "FBCVA") & aval >= 64 & aval <= 68 ~ 50,
+    param %in% c("SBCVA", "FBCVA") & aval >= 69 & aval <= 73 ~ 40,
+    param %in% c("SBCVA", "FBCVA") & aval >= 74 & aval <= 78 ~ 32,
+    param %in% c("SBCVA", "FBCVA") & aval >= 79 & aval <= 83 ~ 25,
+    param %in% c("SBCVA", "FBCVA") & aval >= 84 & aval <= 88 ~ 20,
+    param %in% c("SBCVA", "FBCVA") & aval >= 89 & aval <= 93 ~ 16,
+    param %in% c("SBCVA", "FBCVA") & aval >= 94 & aval <= 97 ~ 12,
+    param %in% c("SBCVA", "FBCVA") & aval >= 98 ~ 1
+  )
+}
 
 # ---- Derivations ----
 
@@ -361,29 +280,6 @@ adbcva_adsl <- adbcva_aseq %>%
     by_vars = get_admiral_option("subject_keys")
   )
 
-# adbcva_crtflag <- adbcva_adsl %>%
-#   # Add criterion flags for BCVA endpoints
-#   restrict_derivation(
-#     derivation = derive_var_bcvacritxfl,
-#     args = params(
-#       crit_var = exprs(CHG),
-#       bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
-#       bcva_uplims = list(-20, 5, 10),
-#       bcva_lowlims = list(-15, 15),
-#       additional_text = ""
-#     ),
-#     filter = PARAMCD %in% c("SBCVA", "FBCVA")
-#   ) %>%
-# Add AVALCATx variables
-# mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-# derive_vars_merged(
-#   avalcat_lookup,
-#   by = exprs(PARAMCD, AVALCA1N)
-# )
-# derive_vars_cat(
-#   definition = definition_bcva,
-#   by_vars = exprs(PARAMCD)
-# )
 
 # Add criterion flags for BCVA endpoints
 adbcva_crtflag <- call_derivation(
@@ -403,9 +299,11 @@ adbcva_crtflag <- call_derivation(
 ) %>%
   bind_rows(adbcva_adsl %>% filter(!PARAMCD %in% c("SBCVA", "FBCVA"))) %>%
   arrange(USUBJID, DOMAIN, PARAMCD) %>%
-  derive_vars_cat(
-    definition = definition_bcva_,
-    by_vars = exprs(PARAMCD)
+# Add AVALCATx variables
+mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
+  derive_vars_merged(
+    avalcat_lookup,
+    by = exprs(PARAMCD, AVALCA1N)
   )
 
 # Final Steps, Select final variables and Add labels
