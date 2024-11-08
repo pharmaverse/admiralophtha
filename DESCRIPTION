@@ -15,7 +15,7 @@ Authors@R: c(
     person("Rachel", "Linacre", , "rachel.linacre@roche.com", role = "aut"),
     person("Lucy", "Palmen", , "lucy.palmen@roche.com", role = "aut"),
     person("Nandini", "R Thampi", , "nandini.rajendhiran@novartis.com", role = "aut"),
-    person("Aldrich", "Salva", , "salva.aldrich@gene.com", role = "aut")
+    person("Aldrich", "Salva", , "salva.aldrich@gene.com", role = "aut"),
     person("Steven", "Ting", , "steven.ting@cytel.com", role = "aut")    
   )
 Description: Aids the programming of Clinical Data Standards Interchange
