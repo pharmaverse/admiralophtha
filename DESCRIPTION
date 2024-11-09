@@ -35,6 +35,7 @@ Depends:
 Imports:
     admiral (>= 1.1.1),
     admiraldev (>= 1.1.0),
+    cli (>= 3.6.2),
     dplyr (>= 1.0.5),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
