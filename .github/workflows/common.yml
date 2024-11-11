@@ -25,7 +25,8 @@ on:
   # 'release' events are triggered when...
   # you guessed it - when releases are made.
   release:
-    types: [published]
+    types:
+      - published
 
 # Docs on concurrency:
 # https://docs.github.com/en/actions/using-jobs/using-concurrency
