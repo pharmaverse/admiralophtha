@@ -24,6 +24,7 @@
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 #' @importFrom admiral derive_vars_merged restrict_derivation params derive_param_computed
+#'             get_admiral_option
 #' @importFrom admiraldev assert_symbol assert_data_frame expect_dfs_equal assert_data_frame
 #'             assert_character_vector assert_character_scalar assert_integer_scalar
 #'             assert_numeric_vector assert_vars expr_c vars2chr
