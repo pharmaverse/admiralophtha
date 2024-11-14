@@ -57,7 +57,7 @@ derive_var_studyeye <- function(dataset_adsl, dataset_sc, sctestcd_value = "FOCI
   derive_vars_merged(
     dataset_adsl,
     dataset_add = dataset_sc,
-    by_vars = exprs(STUDYID, USUBJID),
+    by_vars = get_admiral_option("subject_keys"),
     order = NULL,
     filter_add = SCTESTCD == !!sctestcd_value,
     new_vars = exprs(STUDYEYE = SCSTRESC),
