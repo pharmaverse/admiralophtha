@@ -297,10 +297,10 @@ adbcva_crtflag <- call_derivation(
   ),
   values_yn = TRUE
 ) %>%
-  bind_rows(adbcva_adsl %>% filter(!PARAMCD %in% c("SBCVA", "FBCVA"))) %>%
+  bind_rows(adbcva_adsl %>% filter(!PARAMCD %in% c("SBCVA", "FBCVA"))) %>% #nolint
   arrange(USUBJID, DOMAIN, PARAMCD) %>%
-# Add AVALCATx variables
-mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
+  # Add AVALCATx variables
+  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
   derive_vars_merged(
     avalcat_lookup,
     by = exprs(PARAMCD, AVALCA1N)
