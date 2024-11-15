@@ -64,8 +64,6 @@ derive_var_afeye <- function(dataset, loc_var, lat_var, loc_vals = "EYE") {
   loc_var <- assert_symbol(enexpr(loc_var))
   lat_var <- assert_symbol(enexpr(lat_var))
 
-  assert_character_vector(lat_vals)
-
   assert_data_frame(dataset, required_vars = expr_c(
     loc_var, lat_var,
     exprs(STUDYEYE)
