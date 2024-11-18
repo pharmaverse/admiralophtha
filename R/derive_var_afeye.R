@@ -73,12 +73,12 @@ derive_var_afeye <- function(dataset, loc_var, lat_var, loc_vals = "EYE") {
     mutate(AFEYE = case_when(
       toupper(STUDYEYE) %in% seye_vals & !!lat_var == "BILATERAL" &
         !!loc_var %in% loc_vals ~ "Both Eyes",
-      toupper(STUDYEYE) == "BILATERAL" & !!lat_var %in% lat_vals &
+      toupper(STUDYEYE) == "BILATERAL" &
         !!loc_var %in% loc_vals ~ "Study Eye",
       toupper(!!lat_var) == toupper(STUDYEYE) & toupper(STUDYEYE) %in% seye_vals &
-        !!lat_var %in% lat_vals & !!loc_var %in% loc_vals ~ "Study Eye",
+        !!loc_var %in% loc_vals ~ "Study Eye",
       toupper(!!lat_var) != toupper(STUDYEYE) & toupper(STUDYEYE) %in% seye_vals &
-        !!lat_var %in% lat_vals & !!loc_var %in% loc_vals ~ "Fellow Eye",
+        !!loc_var %in% loc_vals ~ "Fellow Eye",
       TRUE ~ NA_character_
     ))
 }
