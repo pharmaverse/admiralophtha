@@ -4,19 +4,10 @@
 \alias{derive_var_afeye}
 \title{Derive Affected Eye}
 \usage{
-derive_var_afeye(
-  dataset,
-  dataset_occ,
-  loc_var,
-  lat_var,
-  lat_vals,
-  loc_vals = "EYE"
-)
+derive_var_afeye(dataset, loc_var, lat_var, loc_vals = "EYE")
 }
 \arguments{
-\item{dataset}{Input dataset}
-
-\item{dataset_occ}{Input dataset
+\item{dataset}{Input dataset
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{dataset} instead.}
 
@@ -24,12 +15,10 @@ derive_var_afeye(
 
 \item{lat_var}{Laterality variable}
 
-\item{lat_vals}{\code{xxLAT}values for which \code{AFEYE} is derived
+\item{loc_vals}{\code{xxLOC} values for which \code{AFEYE} is derived
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please simply ensure \code{xxLAT} values are
 contained in \code{c("LEFT", "RIGHT", "BILATERAL")}.}
-
-\item{loc_vals}{\code{xxLOC} values for which \code{AFEYE} is derived}
 }
 \value{
 The input occurrence dataset with Affected Eye (\code{AFEYE}) added.
