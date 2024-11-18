@@ -60,6 +60,7 @@
 #' derive_var_afeye(adae2, loc_var = AELOC, lat_var = AELAT, loc_vals = c("EYES", "RETINA"))
 derive_var_afeye <- function(dataset, loc_var, lat_var, loc_vals = "EYE") {
   seye_vals <- c("LEFT", "RIGHT", "BILATERAL")
+  lat_vals <- c("LEFT", "RIGHT", "BILATERAL")
 
   loc_var <- assert_symbol(enexpr(loc_var))
   lat_var <- assert_symbol(enexpr(lat_var))
@@ -73,12 +74,12 @@ derive_var_afeye <- function(dataset, loc_var, lat_var, loc_vals = "EYE") {
     mutate(AFEYE = case_when(
       toupper(STUDYEYE) %in% seye_vals & !!lat_var == "BILATERAL" &
         !!loc_var %in% loc_vals ~ "Both Eyes",
-      toupper(STUDYEYE) == "BILATERAL" &
+      toupper(STUDYEYE) == "BILATERAL" & !!lat_var %in% lat_vals &
         !!loc_var %in% loc_vals ~ "Study Eye",
       toupper(!!lat_var) == toupper(STUDYEYE) & toupper(STUDYEYE) %in% seye_vals &
-        !!loc_var %in% loc_vals ~ "Study Eye",
+        !!lat_var %in% lat_vals & !!loc_var %in% loc_vals ~ "Study Eye",
       toupper(!!lat_var) != toupper(STUDYEYE) & toupper(STUDYEYE) %in% seye_vals &
-        !!loc_var %in% loc_vals ~ "Fellow Eye",
+        !!lat_var %in% lat_vals & !!loc_var %in% loc_vals ~ "Fellow Eye",
       TRUE ~ NA_character_
     ))
 }
