@@ -3,14 +3,12 @@
 #' Derive Affected Eye (`AFEYE`) in occurrence datasets
 #'
 #' @param dataset Input dataset
-#' @param dataset_occ Input dataset
 #'
 #' `r lifecycle::badge("deprecated")` Please use `dataset` instead.
 #'
 #' @param loc_var Location variable
 #' @param lat_var Laterality variable
 #' @param loc_vals `xxLOC` values for which `AFEYE` is derived
-#' @param lat_vals `xxLAT`values for which `AFEYE` is derived
 #'
 #' `r lifecycle::badge("deprecated")` Please simply ensure `xxLAT` values are
 #' contained in `c("LEFT", "RIGHT", "BILATERAL")`.
@@ -60,34 +58,12 @@
 #' )
 #'
 #' derive_var_afeye(adae2, loc_var = AELOC, lat_var = AELAT, loc_vals = c("EYES", "RETINA"))
-derive_var_afeye <- function(dataset, dataset_occ, loc_var, lat_var, lat_vals, loc_vals = "EYE") {
-  # BEGIN DEPRECATION
-  if (!missing(lat_vals)) {
-    deprecate_stop(
-      "1.1.0",
-      "derive_var_afeye(lat_vals = )",
-      details = "Please ensure your laterality values are from the
-      set `c('LEFT', 'RIGHT', 'BILATERAL')`"
-    )
-  }
-
-  if (!missing(dataset_occ)) {
-    deprecate_stop(
-      "1.1.0",
-      "derive_var_afeye(dataset_occ = )",
-      "derive_var_afeye(dataset = )"
-    )
-  }
-
-  # END DEPRECATION
-
+derive_var_afeye <- function(dataset, loc_var, lat_var, loc_vals = "EYE") {
   seye_vals <- c("LEFT", "RIGHT", "BILATERAL")
   lat_vals <- c("LEFT", "RIGHT", "BILATERAL")
 
   loc_var <- assert_symbol(enexpr(loc_var))
   lat_var <- assert_symbol(enexpr(lat_var))
-
-  assert_character_vector(lat_vals)
 
   assert_data_frame(dataset, required_vars = expr_c(
     loc_var, lat_var,

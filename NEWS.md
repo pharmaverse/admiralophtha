@@ -1,4 +1,13 @@
-# admiralophtha 1.1.0.9006
+# admiralophtha 1.1.0.9007
+
+## Updates to Functions
+
+- The following function arguments of `derive_var_afeye()` are removed following the end of their deprecation cycle (#237):
+
+  * The argument `dataset_occ`
+  * The argument `lat_vals`
+
+# admiralophtha 1.1.0.
 
 ## Updates to Functions
 
