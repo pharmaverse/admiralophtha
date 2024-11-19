@@ -4,6 +4,10 @@
 
 - Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
 
+## Updates to Documentation
+
+- Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
+
 ## Updates to Functions
 
 - The following function arguments of `derive_var_afeye()` are removed following the end of their deprecation cycle (#237):
