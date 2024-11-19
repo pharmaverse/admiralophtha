@@ -1,5 +1,9 @@
 # admiralophtha 1.1.0.9007
 
+## Updates to Templates
+
+- Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
+
 ## Updates to Functions
 
 - The following function arguments of `derive_var_afeye()` are removed following the end of their deprecation cycle (#237):
@@ -21,12 +25,6 @@
 - All vignettes and templates in `{admiralophtha}` have been updated to use the `{admiral}` subject keys option rather than
   explicitly quoting key variables such as `STUDYID` and `USUBJID`. For instance, a line such as `by_vars = exprs(STUDYID, USUBJID)`
   would be replaced by `by_vars = get_admiral_option("subject_keys")` (#226).
-
-# admiralophtha 1.1.0
-
-## Updates to Templates
-
-- Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
 
 # admiralophtha 1.0.0
 
