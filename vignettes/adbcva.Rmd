@@ -51,7 +51,7 @@ library(admiralophtha)
 
 ## Initial set up of ADBCVA {#setup}
 
-As with all BDS ADaM datasets, one should start from the OE SDTM, where only the BCVA records are of interest. For the purposes of the next two sections, we shall be using the `{admiral}` OE and ADSL test data. We will also require a lookup table for the mapping of parameter codes. A SBCVA and FBCVA definition list which can be sourced from a separate R script is included as well.
+As with all BDS ADaM datasets, one should start from the OE SDTM, where only the BCVA records are of interest. For the purposes of the next two sections, we shall be using the `{admiral}` OE and ADSL test data. We will also require a lookup table for the mapping of parameter codes. An SBCVA and FBCVA definition expression is created first - this expression can also be stored within another (sourced) program.
 
 **Note**: to simulate an ophthalmology study, we add a randomly generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will already have been derived using `derive_var_studyeye()`.
 
