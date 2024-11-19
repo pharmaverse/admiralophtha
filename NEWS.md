@@ -6,7 +6,7 @@
 
 ## Updates to Documentation
 
-- Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
+- Within the ADBCVA vignette, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
 
 ## Updates to Functions
 
