@@ -232,7 +232,7 @@ adbcva <- admiralophtha_adbcva %>%
 ```
 
 ## Deriving Analysis Value Categories for Snellen Scores {#avalcats}
-Some ophthalmology studies may desire to subdivide BCVA records according to which Snellen category they fall into (eg, 20/320, 20/100, 20/20 etc). The {admiral} AVALCAT derivation function `derive_vars_cat` can be used to derive `AVALCA1N` and `AVALCAT1` based on `PARAMCD` and `condition` in the SBCVA and FBCVA definition list.
+Some ophthalmology studies may desire to subdivide BCVA records according to which Snellen category they fall into (eg, 20/320, 20/100, 20/20 etc). The `{admiral}` AVALCAT derivation function `derive_vars_cat` can be used to derive `AVALCA1N` and `AVALCAT1` based on `PARAMCD` and `condition` in the SBCVA and FBCVA definition list.
 
 ```{r}
 adbcva <- adbcva %>%
