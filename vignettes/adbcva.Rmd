@@ -299,7 +299,10 @@ adbcva <- call_derivation(
   ),
   values_yn = TRUE
 ) %>%
-  bind_rows(adbcva %>% filter(!PARAMCD %in% c("SBCVA", "FBCVA"))) %>%
+  bind_rows(
+    adbcva %>%
+      filter(!PARAMCD %in% c("SBCVA", "FBCVA"))
+  ) %>%
   arrange(USUBJID, DOMAIN, PARAMCD)
 ```
 
