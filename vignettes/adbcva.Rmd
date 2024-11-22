@@ -268,33 +268,39 @@ dataset_vignette(
 ```
 ## Deriving Criterion Flags for BCVA Change {#critflags}
 
-`{admiralophtha}` suggests the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between x and y letters* (relative to baseline or other basetypes). The package provides the function `derive_var_bcvacritxfl()` to program these endpoints efficiently and consistently. In terms of the logic to apply to the variable `CHG`, the endpoints fall into three classes, which can be represented by inequalities:
+`{admiralophtha}` suggests the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between x and y letters* (relative to baseline or other basetypes). The function `derive_vars_crit_flag()` can be used to derive all these criterion pairs by listing the criterion number, condition such as:
 
-* Class 1: `CHG` value lying inside a range, `a <= CHG <= b`.
-* Class 2: `CHG` value below an upper limit, `CHG <= a`.
-* Class 3: `CHG` value above a lower limit, `CHG => b`.
+* `CHG` value lying inside a range, `CHG >= a & CHG <= b`
+* `CHG` value below an upper limit, `CHG <= a`
+* `CHG` value above a lower limit, `CHG => b`
 
-By using `derive_var_bcvacritxfl()`, the ADaM programmer can implement all three types of endpoint at once. This is achieved by feeding the appropriate ranges, upper limits and lower limits to the `bcva_ranges`, `bcva_uplims` and `bcva_lowlims` arguments of the function. For instance, let's suppose that the endpoints of interest are:
+and their corresponding description of the criterion. The critical flag `CRITxFL` is generated if `values_yn` is set to TRUE.
 
-* *Gain of between 5 and 10 letters relative to baseline* (Class 1: `5 <= CHG <= 10`)
-* *Gain of 25 letters or fewer relative to baseline* (Class 2: `CHG <= 25`)
-* *Loss of 5 letters or more relative to baseline* (Class 2: `CHG <= -5`)
-* *Gain of 15 letters or more relative to baseline* (Class 3: `CHG >= 15`)
-* *Loss of 10 letters or fewer relative to baseline* (Class 3: `CHG >= -10`).
+Let's suppose that the endpoints of interest are:
 
-Then, the following call will implement criterion variable/flag pairs for the endpoints above. The `CRITx` variables will automatically encode the correct inequality. Note that that `restrict_derivation()` is wrapped around the call so as to only derive the variables for the relevant parameters. In this way, the `filter` argument can be altered to restrict derivation to only relevant records. Note also that the argument `crit_var = exprs(CHG)` has to be specified so that the criterion flags are derived with respect to the correct variable.
+* *Gain of between 5 and 10 letters relative to baseline* (`5 <= CHG <= 10`)
+* *Gain of 25 letters or fewer relative to baseline* (`CHG <= 25`)
+* *Loss of 5 letters or more relative to baseline* (`CHG <= -5`)
+* *Gain of 15 letters or more relative to baseline* (`CHG >= 15`)
+* *Loss of 10 letters or fewer relative to baseline* (`CHG >= -10`).
+
+Then, the following call will implement criterion variable/flag pairs for the endpoints above. Note that `call_derivation()` is wrapped around the call so as to derive all the criterion variable/flag pairs in one call. The `PARAMCD` is filtered for `SBCVA` and `FBCVA` values in the input data set in order to select only the relevant records. The remaining records are then added back and sorted to form the full data set.
 
 ```{r}
-adbcva <- adbcva %>% restrict_derivation(
-  derivation = derive_var_bcvacritxfl,
-  args = params(
-    crit_var = exprs(CHG),
-    bcva_ranges = list(c(5, 10)),
-    bcva_uplims = list(25, -5),
-    bcva_lowlims = list(15, -10)
+adbcva <- call_derivation(
+  dataset = adbcva %>% filter(PARAMCD %in% c("SBCVA", "FBCVA")),
+  derivation = derive_vars_crit_flag,
+  variable_params = list(
+    params(crit_nr = 1, condition = CHG >= 5 & CHG <= 10, description = "5 <= CHG <= 10"),
+    params(crit_nr = 2, condition = CHG <= 25, description = "CHG <= 25"),
+    params(crit_nr = 3, condition = CHG <= -5, description = "CHG <= -5"),
+    params(crit_nr = 4, condition = CHG >= 15, description = "CHG >= 15"),
+    params(crit_nr = 5, condition = CHG >= -10, description = "CHG >= -10")
   ),
-  filter = PARAMCD %in% c("SBCVA", "FBCVA")
-)
+  values_yn = TRUE
+) %>%
+  bind_rows(adbcva %>% filter(!PARAMCD %in% c("SBCVA", "FBCVA"))) %>%
+  arrange(USUBJID, DOMAIN, PARAMCD)
 ```
 
 The resulting output is shown below (limited to the first patient only):
@@ -307,44 +313,11 @@ dataset_vignette(
 )
 ```
 
-It is also possible to assign significance to the "x" in `CRITxFL`. For instance, one could designate all criterion flags of Class 1 as `CRIT1yFL`, Class 2 as `CRIT2yFL`, and Class 3 as `CRIT3yFL`. The argument `critxfl_index` allows a simple implementation of this in conjunction with three separate calls to `derive_var_bcvacritxfl()`:
-
-```{r}
-adbcva <- adbcva %>%
-  restrict_derivation(
-    derivation = derive_var_bcvacritxfl,
-    args = params(
-      crit_var = exprs(CHG),
-      bcva_ranges = list(c(5, 10)),
-      critxfl_index = 10
-    ),
-    filter = PARAMCD %in% c("SBCVA", "FBCVA")
-  ) %>%
-  restrict_derivation(
-    derivation = derive_var_bcvacritxfl,
-    args = params(
-      crit_var = exprs(CHG),
-      bcva_uplims = list(25, -5),
-      critxfl_index = 20
-    ),
-    filter = PARAMCD %in% c("SBCVA", "FBCVA")
-  ) %>%
-  restrict_derivation(
-    derivation = derive_var_bcvacritxfl,
-    args = params(
-      crit_var = exprs(CHG),
-      bcva_lowlims = list(15, -10),
-      critxfl_index = 30
-    ),
-    filter = PARAMCD %in% c("SBCVA", "FBCVA")
-  )
-```
-  
 ## Additional Notes
   
-  * When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. One would then use the `bcva_lowlims = list(-5)` argument of `derive_var_bcvacritxfl()`  to program such an endpoint. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`. Importantly, `derive_var_bcvacritxfl()` could still be used, but with the argument `bcva_ranges = list(c(-5, -1))`.
+  * When interpreting endpoints such as *Loss of 5 letters or fewer relative to baseline*, it is implicitly assumed in this article that this also includes the case where letters are *gained*, so that the inequality reads `CHG >= -5`. If this is not the case, i.e. one wishes to exclude cases of letter gains, then the inequality of interest would instead be `-5 <= CHG <= -1`.
   
-  * This vignette extensively showcases the use of `derive_var_bcvacritxfl()` applied to the variable `CHG`, but through the argument `crit_var` the function can also be used to create criterion flag relative to other variables (e.g. `crit_var = exprs(AVAL)` for `AVAL`).
+  * This vignette extensively showcases the use of `derive_vars_crit_flag()` to derive criterion variable/flag pairs applied to the variable `CHG` with the associated argument `condition` for the criterion. The function can also be used to create criterion flag relative to other variables (e.g. `condition = exprs(AVAL)` for `AVAL`).
   
 ## Example Script {#example}
   

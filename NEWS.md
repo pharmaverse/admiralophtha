@@ -1,5 +1,13 @@
 # admiralophtha 1.1.0.9004
 
+## Updates to Templates
+
+- Replaced the function `derive_var_bcvacrtixfl()` with `derive_vars_crit_flag()` in `call_derivation` for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA template. The function `derive_var_bcvacrtixfl()` is superseded.
+
+## Updates to Documentation
+
+- Replaced the function `derive_var_bcvacrtixfl()` with `derive_vars_crit_flag()` in `call_derivation` for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA vignette. The function `derive_var_bcvacrtixfl()` is superseded.
+
 ## Updates to Functions
 
 - The following function arguments of `derive_var_afeye()` are entering the next (and final) phase of the deprecation process (#223):
