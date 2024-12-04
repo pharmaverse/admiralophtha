@@ -1,5 +1,9 @@
 #' Add `CRITx`/`CRITxFL` pair to BCVA dataset
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_bcvacritxfl()`
+#' function has been superseded in favor of `admiral::derive_vars_crit_flag()`.
+#'
 #' Helper function for `derive_var_bcvacritxfl()` that adds a criterion variable `CRITx` and
 #' its corresponding flag `CRITxFL` to a dataset containing BCVA records
 #'
@@ -32,7 +36,9 @@
 #' @author Edoardo Mancini
 #'
 #' @return The input BCVA dataset with additional columns `CRITx`, `CRITxFL`.
-#' @keywords internal
+#'
+#' @family superseded
+#' @keywords superseded
 
 derive_var_bcvacritxfl_util <- function(dataset,
                                         crit_var,
