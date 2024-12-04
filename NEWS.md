@@ -1,4 +1,21 @@
-# admiralophtha 1.1.0.9004
+# admiralophtha 1.1.0.9008
+
+## Updates to Templates
+
+- Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
+
+## Updates to Documentation
+
+- Within the ADBCVA vignette, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
+
+## Updates to Functions
+
+- The following function arguments of `derive_var_afeye()` are removed following the end of their deprecation cycle (#237):
+
+  * The argument `dataset_occ`
+  * The argument `lat_vals`
+
+# admiralophtha 1.1.0.
 
 ## Updates to Templates
 

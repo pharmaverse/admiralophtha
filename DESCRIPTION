@@ -1,7 +1,7 @@
 Type: Package
 Package: admiralophtha
 Title: ADaM in R Asset Library - Ophthalmology
-Version: 1.1.0.9004
+Version: 1.1.0.9008
 Authors@R: c(
     person("Edoardo", "Mancini", , "edoardo.mancini@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0006-4899-8641")),
@@ -15,7 +15,8 @@ Authors@R: c(
     person("Rachel", "Linacre", , "rachel.linacre@roche.com", role = "aut"),
     person("Lucy", "Palmen", , "lucy.palmen@roche.com", role = "aut"),
     person("Nandini", "R Thampi", , "nandini.rajendhiran@novartis.com", role = "aut"),
-    person("Aldrich", "Salva", , "salva.aldrich@gene.com", role = "aut")
+    person("Aldrich", "Salva", , "salva.aldrich@gene.com", role = "aut"),
+    person("Steven", "Ting", , "steven.ting@cytel.com", role = "aut")
   )
 Description: Aids the programming of Clinical Data Standards Interchange
     Consortium (CDISC) compliant Ophthalmology Analysis Data Model (ADaM)
@@ -34,6 +35,7 @@ Depends:
 Imports:
     admiral (>= 1.1.1),
     admiraldev (>= 1.1.0),
+    cli (>= 3.6.2),
     dplyr (>= 1.0.5),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
