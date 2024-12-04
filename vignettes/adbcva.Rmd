@@ -268,13 +268,13 @@ dataset_vignette(
 ```
 ## Deriving Criterion Flags for BCVA Change {#critflags}
 
-`{admiralophtha}` suggests the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between x and y letters* (relative to baseline or other basetypes). The function `derive_vars_crit_flag()` can be used to derive all these criterion pairs by listing the criterion number, condition such as:
+`{admiralophtha}` suggests the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program BCVA endpoints such as *Avoiding a loss of x letters*  or *Gain of y letters* or *Gain of between x and y letters* (relative to baseline or other basetypes). The `{admiral}` function `derive_vars_crit_flag()` can be used to derive all these criterion pairs by listing the criterion number, condition such as:
 
 * `CHG` value lying inside a range, `CHG >= a & CHG <= b`
 * `CHG` value below an upper limit, `CHG <= a`
 * `CHG` value above a lower limit, `CHG => b`
 
-and their corresponding description of the criterion. The critical flag `CRITxFL` is generated if `values_yn` is set to TRUE.
+and their corresponding description of the criterion. If `values_yn` is set to TRUE, the `CRITxFL` variable is assigned "Y" when the condition is true, "N" when the condition is false, and NA when the condition is NA. If not set to TRUE, `CRITxFL` is assigned "Y" when the condition is true and NA otherwise.
 
 Let's suppose that the endpoints of interest are:
 
