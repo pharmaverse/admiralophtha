@@ -25,7 +25,7 @@ GitHub use the following code:
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
-remotes::install_github("pharmaverse/admiralophtha", ref = "devel")
+remotes::install_github("pharmaverse/admiralophtha", ref = "main")
 ```
 
 ## Scope
@@ -46,9 +46,9 @@ Here's a summary of our strategy for this package related to R versions:
 
 * R versions for developers and users will follow the same as
   `{admiral}` core package.
-* For development the `devel` branch of `{admiral}` core is used as a
+* For development the `main` branch of `{admiral}` core is used as a
   dependency. For releasing a new `{admiralophtha}` version it must
-  run using the latest released `{admiral}` core version, i.e., `main`
+  run using the latest released `{admiral}` core version, i.e., also the `main`
   branch of `{admiral}` core.
 
 ## Contact
