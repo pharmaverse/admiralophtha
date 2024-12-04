@@ -264,26 +264,10 @@ adbcva_change <- adbcva_vstflag %>%
   # Calculate PCHG
   derive_var_pchg()
 
-# Assign ASEQ
-adbcva_aseq <- adbcva_change %>%
-  derive_var_obs_number(
-    new_var = ASEQ,
-    by_vars = get_admiral_option("subject_keys"),
-    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
-    check_type = "error"
-  )
-
-# Add all ADSL variables
-adbcva_adsl <- adbcva_aseq %>%
-  derive_vars_merged(
-    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
-    by_vars = get_admiral_option("subject_keys")
-  )
-
 
 # Add criterion flags for BCVA endpoints
 adbcva_crtflag <- call_derivation(
-  dataset = adbcva_adsl %>% filter(PARAMCD %in% c("SBCVA", "FBCVA")),
+  dataset = adbcva_change %>% filter(PARAMCD %in% c("SBCVA", "FBCVA")),
   derivation = derive_vars_crit_flag,
   variable_params = list(
     params(crit_nr = 1, condition = CHG >= 0 & CHG <= 5, description = "0 <= CHG <= 5"),
@@ -297,13 +281,32 @@ adbcva_crtflag <- call_derivation(
   ),
   values_yn = TRUE
 ) %>%
-  bind_rows(adbcva_adsl %>% filter(!PARAMCD %in% c("SBCVA", "FBCVA"))) %>% #nolint
+  bind_rows(
+    adbcva_change %>%
+      filter(!PARAMCD %in% c("SBCVA", "FBCVA"))
+  ) %>%
   arrange(USUBJID, DOMAIN, PARAMCD) %>%
   # Add AVALCATx variables
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
   derive_vars_merged(
     avalcat_lookup,
     by = exprs(PARAMCD, AVALCA1N)
+  )
+
+# Assign ASEQ
+adbcva_aseq <- adbcva_crtflag %>%
+  derive_var_obs_number(
+    new_var = ASEQ,
+    by_vars = get_admiral_option("subject_keys"),
+    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN),
+    check_type = "error"
+  )
+
+# Add all ADSL variables
+adbcva_adsl <- adbcva_aseq %>%
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = get_admiral_option("subject_keys")
   )
 
 # Final Steps, Select final variables and Add labels
