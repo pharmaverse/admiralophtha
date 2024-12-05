@@ -273,12 +273,10 @@ adbcva_crtflag <- call_derivation(
     adbcva_change %>%
       filter(!PARAMCD %in% c("SBCVA", "FBCVA"))
   ) %>%
-  arrange(USUBJID, DOMAIN, PARAMCD) %>%
   # Add AVALCATx variables
-  mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(
-    avalcat_lookup,
-    by = exprs(PARAMCD, AVALCA1N)
+  derive_vars_cat(
+    definition = definition_bcva,
+    by_vars = exprs(PARAMCD)
   )
 
 # Assign ASEQ

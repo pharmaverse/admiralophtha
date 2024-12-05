@@ -1,7 +1,7 @@
 #' Add `CRITx`/`CRITxFL` pair to BCVA dataset
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_bcvacritxfl()`
+#' `r lifecycle::badge("superseded")` The `derive_var_bcvacritxfl_util()`
 #' function has been superseded in favor of `admiral::derive_vars_crit_flag()`.
 #'
 #' Helper function for `derive_var_bcvacritxfl()` that adds a criterion variable `CRITx` and
@@ -38,7 +38,7 @@
 #' @return The input BCVA dataset with additional columns `CRITx`, `CRITxFL`.
 #'
 #' @family superseded
-#' @keywords superseded
+#' @keywords internal superseded
 
 derive_var_bcvacritxfl_util <- function(dataset,
                                         crit_var,
@@ -74,6 +74,10 @@ derive_var_bcvacritxfl_util <- function(dataset,
 
 #' Adds `CRITx`/`CRITxFL` pairs to BCVA dataset
 #'
+#' @description
+#' `r lifecycle::badge("superseded")` The `derive_var_bcvacritxfl()`
+#' function has been superseded in favor of `admiral::derive_vars_crit_flag()`.
+#'
 #' Adds a criterion variables `CRITx` and their corresponding flags `CRITxFL` to a
 #' dataset containing BCVA records
 #'
@@ -106,7 +110,7 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' @author Edoardo Mancini
 #'
 #' @return The input BCVA dataset with additional column pairs`CRITx`, `CRITxFL`.
-#' @keywords der_ophtha
+#' @keywords der_ophtha superseded
 #' @export
 #'
 #' @examples

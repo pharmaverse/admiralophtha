@@ -44,6 +44,9 @@ lie above some lower limit).}
 The input BCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_bcvacritxfl_util()}
+function has been superseded in favor of \code{admiral::derive_vars_crit_flag()}.
+
 Helper function for \code{derive_var_bcvacritxfl()} that adds a criterion variable \code{CRITx} and
 its corresponding flag \code{CRITxFL} to a dataset containing BCVA records
 }
@@ -59,4 +62,6 @@ as \code{NA}.
 \author{
 Edoardo Mancini
 }
+\concept{superseded}
 \keyword{internal}
+\keyword{superseded}

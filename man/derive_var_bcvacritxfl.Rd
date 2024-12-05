@@ -45,6 +45,9 @@ x, counting up from x = 1.}
 The input BCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_bcvacritxfl()}
+function has been superseded in favor of \code{admiral::derive_vars_crit_flag()}.
+
 Adds a criterion variables \code{CRITx} and their corresponding flags \code{CRITxFL} to a
 dataset containing BCVA records
 }
@@ -108,3 +111,4 @@ restrict_derivation(
 Edoardo Mancini
 }
 \keyword{der_ophtha}
+\keyword{superseded}
