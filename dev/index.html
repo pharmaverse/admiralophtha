@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">admiralophtha</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9007</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
 <pre><code><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiralophtha"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiralophtha"</span>, ref <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="scope">Scope<a class="anchor" aria-label="anchor" href="#scope"></a>
@@ -110,7 +110,7 @@
 <p>Here’s a summary of our strategy for this package related to R versions:</p>
 <ul>
 <li>R versions for developers and users will follow the same as <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core package.</li>
-<li>For development the <code>devel</code> branch of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core is used as a dependency. For releasing a new <a href="https://pharmaverse.github.io/admiralophtha/">admiralophtha</a> version it must run using the latest released <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core version, i.e., <code>main</code> branch of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core.</li>
+<li>For development the <code>main</code> branch of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core is used as a dependency. For releasing a new <a href="https://pharmaverse.github.io/admiralophtha/">admiralophtha</a> version it must run using the latest released <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core version, i.e., also the <code>main</code> branch of <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> core.</li>
 </ul>
 </div>
 <div class="section level2">
