@@ -2,9 +2,13 @@
 
 ## Updates to Templates
 
+- Replaced the function `derive_var_bcvacrtixfl()` with the new function `admiral::derive_vars_crit_flag()` for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA template. The function `derive_var_bcvacrtixfl()` is now superseded.
+
 - Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
 
 ## Updates to Documentation
+
+- Replaced the function `derive_var_bcvacrtixfl()` with the new function `admiral::derive_vars_crit_flag()` for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA vignette. The function `derive_var_bcvacrtixfl()` is now superseded.
 
 - Within the ADBCVA vignette, updated `AVALCA1N` and `AVALCAT1` derivations to use new function `admiral::derive_vars_cat()`. (#244)
 
@@ -16,14 +20,6 @@
   * The argument `lat_vals`
 
 # admiralophtha 1.1.0.
-
-## Updates to Templates
-
-- Replaced the function `derive_var_bcvacrtixfl()` with the new function `admiral::derive_vars_crit_flag()` for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA template. The function `derive_var_bcvacrtixfl()` is now superseded.
-
-## Updates to Documentation
-
-- Replaced the function `derive_var_bcvacrtixfl()` with the new function `admiral::derive_vars_crit_flag()` for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA vignette. The function `derive_var_bcvacrtixfl()` is now superseded.
 
 ## Updates to Functions
 
