@@ -252,8 +252,35 @@ adbcva_change <- adbcva_vstflag %>%
   # Calculate PCHG
   derive_var_pchg()
 
+
+# Add criterion flags for BCVA endpoints
+adbcva_crtflag <- call_derivation(
+  dataset = adbcva_change %>% filter(PARAMCD %in% c("SBCVA", "FBCVA")),
+  derivation = derive_vars_crit_flag,
+  variable_params = list(
+    params(crit_nr = 1, condition = CHG >= 0 & CHG <= 5, description = "0 <= CHG <= 5"),
+    params(crit_nr = 2, condition = CHG >= -5 & CHG <= -1, description = "-5 <= CHG <= -1"),
+    params(crit_nr = 3, condition = CHG >= 10 & CHG <= 15, description = "10 <= CHG <= 15"),
+    params(crit_nr = 4, condition = CHG <= -20, description = "CHG <= -20"),
+    params(crit_nr = 5, condition = CHG <= 5, description = "CHG <= 5"),
+    params(crit_nr = 6, condition = CHG <= 10, description = "CHG <= 10"),
+    params(crit_nr = 7, condition = CHG >= -15, description = "CHG >= -15"),
+    params(crit_nr = 8, condition = CHG >= 15, description = "CHG >= 15")
+  ),
+  values_yn = TRUE
+) %>%
+  bind_rows(
+    adbcva_change %>%
+      filter(!PARAMCD %in% c("SBCVA", "FBCVA"))
+  ) %>%
+  # Add AVALCATx variables
+  derive_vars_cat(
+    definition = definition_bcva,
+    by_vars = exprs(PARAMCD)
+  )
+
 # Assign ASEQ
-adbcva_aseq <- adbcva_change %>%
+adbcva_aseq <- adbcva_crtflag %>%
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = get_admiral_option("subject_keys"),
@@ -267,26 +294,6 @@ adbcva_adsl <- adbcva_aseq %>%
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = get_admiral_option("subject_keys")
   )
-
-adbcva_crtflag <- adbcva_adsl %>%
-  # Add criterion flags for BCVA endpoints
-  restrict_derivation(
-    derivation = derive_var_bcvacritxfl,
-    args = params(
-      crit_var = exprs(CHG),
-      bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
-      bcva_uplims = list(-20, 5, 10),
-      bcva_lowlims = list(-15, 15),
-      additional_text = ""
-    ),
-    filter = PARAMCD %in% c("SBCVA", "FBCVA")
-  ) %>%
-  # Add AVALCATx variables
-  derive_vars_cat(
-    definition = definition_bcva,
-    by_vars = exprs(PARAMCD)
-  )
-
 
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
