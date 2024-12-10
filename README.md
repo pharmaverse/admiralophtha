@@ -67,9 +67,9 @@ developer community:
 
 ## Release Schedule
 
-* The first release (v. 0.1.0) came out on 13th March 2023.
-* The second release (v. 0.2.0) came out on 12th June 2023.
-* The third release (v. 0.3.0) came out on 18th September 2023.
-* The fourth release (v. 1.0.0) came out on December 11th 2023. The objective of this milestone release was to provide a package that is mature enough to be used as it is as part of the ADaM work on any ophthalmology study.
-* The fifth release (v. 1.1.0) came out on 11th June 2024.
-* We are planning a sixth release (v. 1.2.0) for December 2024.
+| Month / Year     | Package Version               |                          
+| ---------------- | ----------------------------- |
+|                  |                               |                                          
+| January 2025     | `{admiralophtha}` v. 1.2.0    |
+|                  |                               | 
+| June 2025        | `{admiralophtha}` v. 1.3.0    |
