@@ -1,4 +1,4 @@
-# admiralophtha 1.1.0.9010
+# admiralophtha 1.2.0
 
 ## Updates to Templates
 
