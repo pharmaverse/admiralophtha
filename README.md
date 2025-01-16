@@ -22,10 +22,7 @@ To install the latest development version of the package directly from
 GitHub use the following code:
 
 ```
-if (!requireNamespace("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-remotes::install_github("pharmaverse/admiralophtha", ref = "main")
+pak::pkg_install("admiralophtha", dependencies = TRUE)
 ```
 
 ## Scope
