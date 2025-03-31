@@ -1,3 +1,9 @@
+# admiralophtha 1.3.0.(development version)
+
+## Updates to Documentation
+
+- Removed {cli} from imports list in description. (#264)
+
 # admiralophtha 1.2.0.9000
 
 ## Updates to Templates
