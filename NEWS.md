@@ -1,4 +1,4 @@
-# admiralophtha 1.3.0.(development version)
+# admiralophtha (development version)
 
 ## Updates to Documentation
 
