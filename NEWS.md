@@ -1,6 +1,6 @@
 # admiralophtha (development version)
 
-## Updates to Documentation
+## Various
 
 - Removed `{cli}` from package imports. (#264)
 
