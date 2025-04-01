@@ -2,7 +2,7 @@
 
 ## Updates to Documentation
 
-- Removed {cli} from imports list in description. (#264)
+- Removed `{cli}` from package imports. (#264)
 
 # admiralophtha 1.2.0.9000
 
