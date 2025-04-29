@@ -31,14 +31,20 @@ oe <- convert_blanks_to_na(oe_ophtha) %>%
 
 # ---- Lookup tables ----
 
-# Assign PARAMCD, PARAM, and PARAMN
+# Assign PARAMCD, PARAM, andPARAMN
+#nolint start
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1, # nolint
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2, # nolint
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3, # nolint
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4 # nolint
+  ~OETESTCD, ~OECAT,                   ~OESCAT,                  ~OETPT,      ~AFEYE,      ~PARAMCD,    ~PARAM,                                      ~PARAMN,
+  "CSUBTH",  "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE",  "Study Eye",  "SCSUBTH",  "Study Eye Center Subfield Thickness (um)",  1,
+  "CSUBTH",  "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE",  "Fellow Eye", "FCSUBTH",  "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR",   "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE",  "Study Eye",  "SDRSSR",   "Study Eye Diabetic Retinopathy Severity",   3,
+  "DRSSR",   "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE",  "Fellow Eye", "FDRSSR",   "Fellow Eye Diabetic Retinopathy Severity",  4,
+  "IOP",     "INTRAOCULAR PRESSURES",  NA_character_,            "PRE-DOSE",  "Study Eye",  "SIOPPRE",  "Study Eye Pre-Dose IOP (mmHg)",             5,
+  "IOP",     "INTRAOCULAR PRESSURE",   NA_character_,            "PRE-DOSE",  "Fellow Eye", "FIOPPRE",  "Fellow Eye Pre-Dose IOP (mmHg)",            6,
+  "IOP",     "INTRAOCULAR PRESSURES",  NA_character_,            "POST-DOSE", "Study Eye",  "SIOPPOST", "Study Eye Post-Dose IOP (mmHg)",            7,
+  "IOP",     "INTRAOCULAR PRESSURE",   NA_character_,            "POST-DOSE", "Fellow Eye", "FIOPPOST", "Fellow Eye Post-Dose IOP (mmHg)",           8
 )
+#nolint end
 
 # ---- Derivations ----
 
@@ -48,7 +54,7 @@ adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 adoe_adslvar <- oe %>%
   # Keep only general OE parameters
   filter(
-    OETESTCD %in% c("CSUBTH", "DRSSR")
+    OETESTCD %in% c("CSUBTH", "DRSSR", "IOP")
   ) %>%
   # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
@@ -73,7 +79,7 @@ adoe_param <- adoe_aval %>%
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, AFEYE)
+    by_vars = exprs(OETESTCD, OETPT, AFEYE)
   ) %>%
   # Calculate ADT, ADY
   derive_vars_dt(
@@ -95,6 +101,35 @@ adoe_visit <- adoe_param %>%
     ),
     AVISITN = round(VISITNUM, 0),
     BASETYPE = "LAST"
+  ) %>%
+  # Add derived parameter for difference between pre and post dose IOP
+  call_derivation(
+    derivation = derive_param_computed,
+    by_vars = c(get_admiral_option("subject_keys"), !!adsl_vars, exprs(AVISIT, AVISITN, ADT)),
+    variable_params = list(
+      params(
+        parameters = c("SIOPPRE", "SIOPPOST"),
+        set_values_to = exprs(
+          PARAMCD = "SIOPCHG",
+          PARAM = "Study Eye IOP Pre to Post Dose Diff (mmHg)",
+          PARAMN = 9,
+          AVAL = AVAL.SIOPPOST - AVAL.SIOPPRE,
+          AVALC = as.character(AVAL),
+          BASETYPE = "LAST",
+        )
+      ),
+      params(
+        parameters = c("FIOPPRE", "FIOPPOST"),
+        set_values_to = exprs(
+          PARAMCD = "FIOPCHG",
+          PARAM = "Fellow Eye IOP Pre to Post Dose Diff (mmHg)",
+          PARAMN = 10,
+          AVAL = AVAL.FIOPPOST - AVAL.FIOPPRE,
+          AVALC = as.character(AVAL),
+          BASETYPE = "LAST"
+        )
+      )
+    )
   )
 
 # Derive Treatment flags
