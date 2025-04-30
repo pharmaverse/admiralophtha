@@ -181,7 +181,8 @@ adoe <- adoe %>%
 dataset_vignette(
   adoe %>% arrange(USUBJID, AVISIT) %>% select(USUBJID, AVISIT, PARAMCD, AVAL),
   display_vars = exprs(USUBJID, PARAMCD, AVISIT, AVAL),
-  filter = str_detect(PARAMCD, "IOP") & USUBJID == "01-701-1028" & AVISIT %in% c("Baseline", "Week 4")
+  filter = str_detect(PARAMCD, "IOP") & USUBJID == "01-701-1028" &
+    AVISIT %in% c("Baseline", "Week 4")
 )
 ```
 
