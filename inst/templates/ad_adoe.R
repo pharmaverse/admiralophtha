@@ -192,21 +192,29 @@ adoe_vstflag <- adoe_trtflag %>%
 
 # Derive baseline information
 adoe_change <- adoe_vstflag %>%
-  # Calculate BASE
-  derive_var_base(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
-    source_var = AVAL,
-    new_var = BASE
+  # Calculate BASE (do not derive for IOP change params)
+  restrict_derivation(
+    derivation = derive_var_base,
+    args = params(
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
+      source_var = AVAL,
+      new_var = BASE
+    ),
+    filter = !PARAMCD %in% c("SIOPCHG", "FIOPCHG")
   ) %>%
-  # Calculate BASEC
-  derive_var_base(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
-    source_var = AVALC,
-    new_var = BASEC
+  # Calculate BASEC (do not derive for IOP change params)
+  restrict_derivation(
+    derivation = derive_var_base,
+    args = params(
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
+      source_var = AVALC,
+      new_var = BASEC
+    ),
+    filter = !PARAMCD %in% c("SIOPCHG", "FIOPCHG")
   ) %>%
-  # Calculate CHG
+  # Calculate CHG (not derived for IOP change params as BASE is NA)
   derive_var_chg() %>%
-  # Calculate PCHG
+  # Calculate PCHG (not derived for IOP change params as BASE is NA)
   derive_var_pchg()
 
 # Assign ASEQ
