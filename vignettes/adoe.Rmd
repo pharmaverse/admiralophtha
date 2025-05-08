@@ -68,15 +68,13 @@ oe <- convert_blanks_to_na(oe_ophtha)
 
 # nolint start
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OECAT, ~OESCAT, ~OETPT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
-  "IOP", "INTRAOCULAR PRESSURES", NA_character_, "PRE-DOSE", "Study Eye", "SIOPPRE", "Study Eye Pre-Dose IOP (mmHg)", 5,
-  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "PRE-DOSE", "Fellow Eye", "FIOPPRE", "Fellow Eye Pre-Dose IOP (mmHg)", 6,
-  "IOP", "INTRAOCULAR PRESSURES", NA_character_, "POST-DOSE", "Study Eye", "SIOPPOST", "Study Eye Post-Dose IOP (mmHg)", 7,
-  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "POST-DOSE", "Fellow Eye", "FIOPPOST", "Fellow Eye Post-Dose IOP (mmHg)", 8
+  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  "IOP", "INTRAOCULAR PRESSURES", NA_character_, "Study Eye", "SIOP", "Study Eye Pre-Dose IOP (mmHg)", 5,
+  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "Fellow Eye", "FIOP", "Fellow Eye Pre-Dose IOP (mmHg)", 6
 )
 # nolint end
 ```
@@ -122,7 +120,7 @@ adoe <- adoe %>%
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OETPT, AFEYE)
+    by_vars = exprs(OETESTCD, AFEYE)
   ) %>%
   # Derive visit, baseline flag info and BASETYPE
   mutate(
@@ -142,7 +140,7 @@ adoe <- adoe %>%
 
 ## Creating IOP pre to post-dose difference derived parameter {#params}
 
-Two derived parameters of interest are the difference between pre and post-dose IOP in each eye at each visit. These records can be added with two calls to `derive_param_computed()`. Since the calls are very similar, they can be executed in one code block using `call_derivation()` - please see the [Higher Order Functions vignette](https://pharmaverse.github.io/admiral/articles/higher_order.html) for more details.
+Two derived parameters of interest are the difference between pre and post-dose IOP in each eye at each visit. These records can be added with two calls to `derive_param_computed()`. Since the calls are very similar, they can be executed in one code block using `call_derivation()` - please see the [Higher Order Functions vignette](https://pharmaverse.github.io/admiral/articles/higher_order.html) for more details. 
 
 ```{r}
 adoe <- adoe %>%
@@ -153,7 +151,10 @@ adoe <- adoe %>%
     variable_params = list(
       # Study eye
       params(
-        parameters = c("SIOPPRE", "SIOPPOST"),
+        parameters = exprs(
+          SIOPPRE = PARAMCD == "SIOP" & ATPT == "PRE-DOSE",
+          SIOPPOST = PARAMCD == "SIOP" & ATPT == "POST-DOSE"
+        ),
         set_values_to = exprs(
           PARAMCD = "SIOPCHG",
           PARAM = "Study Eye IOP Pre to Post Dose Diff (mmHg)",
@@ -164,7 +165,10 @@ adoe <- adoe %>%
       ),
       # Fellow eye
       params(
-        parameters = c("FIOPPRE", "FIOPPOST"),
+        parameters = exprs(
+          FIOPPRE = PARAMCD == "FIOP" & ATPT == "PRE-DOSE",
+          FIOPPOST = PARAMCD == "FIOP" & ATPT == "POST-DOSE"
+        ),
         set_values_to = exprs(
           PARAMCD = "FIOPCHG",
           PARAM = "Fellow Eye IOP Pre to Post Dose Diff (mmHg)",
@@ -186,7 +190,9 @@ dataset_vignette(
 )
 ```
 
-Note that for the `SIOPCHG` and `FIOPCHG` derived parameters, it is generally recommended not to populate `BASE`, `CHG` and `PCHG` as they are difficult/confusing to interpret. This can be simply achieved in one step, as the derivation of `derive_var_base()` can be placed inside of `restrict_derivation()` with a filter added to exclude these parameters. Then, `BASE` will be set to `NA` for `SIOPCHG` and `FIOPCHG`, so later calls to `derive_var_chg()` and `derive_var_pchg()` do not need any changes.
+Note that within the call to `derive_param_computed()`, the `parameters` argument has been used to pass an expression that uniquely identifies which records are the pre-dose IOP and which are the post-dose IOP using the timepoint variable `OETPT`, because all IOP records are mapped to `PARAMCD = "SIOP"` or `PARAMCD = "FIOP"`. Users may need to update this expression if their study-specific collection or mapping differs from this standard. 
+
+Additionally, it should be noted that for the `SIOPCHG` and `FIOPCHG` derived parameters, it is generally recommended not to populate `BASE`, `CHG` and `PCHG` as they are difficult/confusing to interpret. This can be simply achieved in one step, as the derivation of `derive_var_base()` can be placed inside of `restrict_derivation()` with a filter added to exclude these parameters. Then, `BASE` will be set to `NA` for `SIOPCHG` and `FIOPCHG`, so later calls to `derive_var_chg()` and `derive_var_pchg()` do not need any changes.
 
 ```{r}
 adoe <- adoe %>%
@@ -194,7 +200,7 @@ adoe <- adoe %>%
   restrict_derivation(
     derivation = derive_var_base,
     args = params(
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT)),
       source_var = AVAL,
       new_var = BASE
     ),

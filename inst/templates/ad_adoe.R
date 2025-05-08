@@ -34,15 +34,13 @@ oe <- convert_blanks_to_na(oe_ophtha) %>%
 # Assign PARAMCD, PARAM, andPARAMN
 # nolint start
 param_lookup <- tibble::tribble(
-  ~OETESTCD, ~OECAT, ~OESCAT, ~OETPT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "PRE-DOSE", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
-  "IOP", "INTRAOCULAR PRESSURES", NA_character_, "PRE-DOSE", "Study Eye", "SIOPPRE", "Study Eye Pre-Dose IOP (mmHg)", 5,
-  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "PRE-DOSE", "Fellow Eye", "FIOPPRE", "Fellow Eye Pre-Dose IOP (mmHg)", 6,
-  "IOP", "INTRAOCULAR PRESSURES", NA_character_, "POST-DOSE", "Study Eye", "SIOPPOST", "Study Eye Post-Dose IOP (mmHg)", 7,
-  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "POST-DOSE", "Fellow Eye", "FIOPPOST", "Fellow Eye Post-Dose IOP (mmHg)", 8
+  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  "IOP", "INTRAOCULAR PRESSURES", NA_character_, "Study Eye", "SIOP", "Study Eye Pre-Dose IOP (mmHg)", 5,
+  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "Fellow Eye", "FIOP", "Fellow Eye Pre-Dose IOP (mmHg)", 6
 )
 # nolint end
 
@@ -79,7 +77,7 @@ adoe_param <- adoe_aval %>%
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
-    by_vars = exprs(OETESTCD, OETPT, AFEYE)
+    by_vars = exprs(OETESTCD, AFEYE)
   ) %>%
   # Calculate ADT, ADY
   derive_vars_dt(
@@ -109,7 +107,12 @@ adoe_visit <- adoe_param %>%
     variable_params = list(
       # Study eye
       params(
-        parameters = c("SIOPPRE", "SIOPPOST"),
+        parameters = exprs(
+          # Differentiate between pre and post-dose IOP as they are mapped to the same PARAMCD.
+          # Users may need to update this code to identify the correct records to use.
+          SIOPPRE = PARAMCD == "SIOP" & ATPT == "PRE-DOSE",
+          SIOPPOST = PARAMCD == "SIOP" & ATPT == "POST-DOSE"
+        ),
         set_values_to = exprs(
           PARAMCD = "SIOPCHG",
           PARAM = "Study Eye IOP Pre to Post Dose Diff (mmHg)",
@@ -121,7 +124,12 @@ adoe_visit <- adoe_param %>%
       ),
       # Fellow eye
       params(
-        parameters = c("FIOPPRE", "FIOPPOST"),
+        parameters = exprs(
+          # Differentiate between pre and post-dose IOP as they are mapped to the same PARAMCD.
+          # Users may need to update this code to identify the correct records to use.
+          FIOPPRE = PARAMCD == "FIOP" & ATPT == "PRE-DOSE",
+          FIOPPOST = PARAMCD == "FIOP" & ATPT == "POST-DOSE"
+        ),
         set_values_to = exprs(
           PARAMCD = "FIOPCHG",
           PARAM = "Fellow Eye IOP Pre to Post Dose Diff (mmHg)",
@@ -162,7 +170,7 @@ adoe_vstflag <- adoe_trtflag %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, DTYPE)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, ATPT, DTYPE)),
       order = exprs(ADT, AVAL),
       mode = "last"
     ),
@@ -173,7 +181,7 @@ adoe_vstflag <- adoe_trtflag %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL02FL,
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ABLFL)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT,  ABLFL)),
       order = exprs(ADT),
       mode = "last"
     ),
@@ -184,7 +192,7 @@ adoe_vstflag <- adoe_trtflag %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT)),
       order = exprs(AVAL, ADT),
       new_var = WORS01FL,
       mode = "last"
@@ -198,7 +206,7 @@ adoe_change <- adoe_vstflag %>%
   restrict_derivation(
     derivation = derive_var_base,
     args = params(
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT, BASETYPE)),
       source_var = AVAL,
       new_var = BASE
     ),
@@ -208,7 +216,7 @@ adoe_change <- adoe_vstflag %>%
   restrict_derivation(
     derivation = derive_var_base,
     args = params(
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT, BASETYPE)),
       source_var = AVALC,
       new_var = BASEC
     ),
