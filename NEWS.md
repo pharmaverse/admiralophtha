@@ -2,11 +2,11 @@
 
 ## Updates to Templates
 
-- The ADOE template was updated to showcase the mapping of pre and post-dose IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
+- The ADOE template was updated to showcase the mapping of IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
 
 ## Updates to Documentation
 
-- The ADOE vignette was updated to showcase the mapping of pre and post-dose IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
+- The ADOE vignette was updated to showcase the mapping of IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
 
 ## Various
 
