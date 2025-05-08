@@ -39,11 +39,12 @@ Subdividing the ADaM datasets in a study as above will ensure that wherever cust
 
 **Note**: Though allowable according to ADaM standards, it is generally discouraged to use the same criterion flag/variable pair for more than one criterion across multiple parameters in an ADaM dataset, as this renders the dataset confusing to scrutinise.
 
-For BCVA change endpoints, provides the function `derive_var_bcvacritxfl` to add them en masse. Additionally, the function automatically populates `CRITx` in the programmatic manner described above.
+For BCVA change endpoints, `{admiral}` provides the function `derive_vars_crit_flag()` to add them en masse. 
 
 
 ## Affected Eye Derivation
 `{admiralophtha}` function `derive_var_afeye` follows the standard derivation:
+
 Set to "BOTH EYES" when Study Eye Selection [`ADSL.STUDYEYE`] is not missing, and Laterality [`xxLAT`] is equal to "BILATERAL".
 Else set to "STUDY EYE" when Study Eye Selection [`ADSL.STUDYEYE`] is either "RIGHT" or "LEFT", and matches Laterality [`xxLAT`] for the observation record.
 Else set to "STUDY EYE" when Study Eye Selection [`ADSL.STUDYEYE`] is "BILATERAL", and Laterality [`xxLAT`] is not missing for the observation record.
@@ -51,3 +52,7 @@ Else set to "FELLOW EYE" when Study Eye Selection [`ADSL.STUDYEYE`] is either "R
 Else set to null.
 
 If the standard values of Location [`xxLOC`] = "EYE" and Laterality [`xxLAT`] = "LEFT", "RIGHT", "BILATERAL" are not the same for your study this can be updated as inputs in the function, otherwise this is also expected for `AFEYE` to be derived, and a warning will be returned if any other values are found.
+
+## Differences between pre and post-dose IOP
+
+`{admiralophtha}` suggests to calculate the differences between pre and post-dose IOP as two new derived parameters (study and fellow eyes) please see the [ADOE vignette](https://pharmaverse.github.io/admiralophtha/articles/adoe.html) and [template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R) for more details.
