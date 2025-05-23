@@ -232,7 +232,7 @@ adbcva <- admiralophtha_adbcva %>%
 ```
 
 ## Deriving Analysis Value Categories for Snellen Scores {#avalcats}
-Some ophthalmology studies may desire to subdivide BCVA records according to which Snellen category they fall into (eg, 20/320, 20/100, 20/20 etc). The `{admiral}` AVALCAT derivation function `derive_vars_cat` can be used to derive `AVALCA1N` and `AVALCAT1` based on `PARAMCD` and `condition` in the SBCVA and FBCVA definition expression.
+Some ophthalmology studies may desire to subdivide BCVA records according to which Snellen category they fall into (eg, 20/320, 20/100, 20/20 etc). The `{admiral}` AVALCAT derivation function `derive_vars_cat()` can be used to derive `AVALCA1N` and `AVALCAT1` based on `PARAMCD` and `condition` in the SBCVA and FBCVA definition expression.
 
 ```{r}
 adbcva <- adbcva %>%
@@ -273,24 +273,27 @@ For illustrative purposes, let's suppose that the endpoints of interest are:
 * *Gain of 15 letters or more relative to baseline* (`CHG >= 15`)
 * *Loss of 10 letters or fewer relative to baseline* (`CHG >= -10`).
 
-Then, the following call will implement criterion variable/flag pairs for the endpoints above. Note that `call_derivation()` is wrapped around the call so as to derive all the criterion variable/flag pairs in one call. The `PARAMCD` is filtered for `"SBCVA"` and `"FBCVA"` values in the input data set in order to select only the relevant records. The remaining records are then added back and sorted to form the full data set.
+Then, the following call will implement criterion variable/flag pairs for the endpoints above. The base function we are using is `derive_vars_crit_flag()`. We wrap this function inside of `call_derivation()` so as to derive all the criterion variable/flag pairs in one call. Additionally, we also wrap everything inside of `restrict_derivation()` to ensure the criterion flags are only derived for the right `PARAMCD` values (`"SBCVA"` and `"FBCVA"`).
 
 ```{r}
-adbcva <- call_derivation(
-  dataset = adbcva %>% filter(PARAMCD %in% c("SBCVA", "FBCVA")),
-  derivation = derive_vars_crit_flag,
-  variable_params = list(
-    params(crit_nr = 1, condition = CHG >= 5 & CHG <= 10, description = "5 <= CHG <= 10"),
-    params(crit_nr = 2, condition = CHG <= 25, description = "CHG <= 25"),
-    params(crit_nr = 3, condition = CHG <= -5, description = "CHG <= -5"),
-    params(crit_nr = 4, condition = CHG >= 15, description = "CHG >= 15"),
-    params(crit_nr = 5, condition = CHG >= -10, description = "CHG >= -10")
-  ),
-  values_yn = TRUE
-) %>%
-  bind_rows(
-    adbcva %>%
-      filter(!PARAMCD %in% c("SBCVA", "FBCVA"))
+adbcva <- adbcva %>%
+  restrict_derivation(
+    derivation = call_derivation,
+    filter = PARAMCD %in% c("SBCVA", "FBCVA"),
+    args = params(
+      derivation = derive_vars_crit_flag,
+      variable_params = list(
+        params(crit_nr = 1, condition = CHG >= 0 & CHG <= 5, description = "0 <= CHG <= 5"),
+        params(crit_nr = 2, condition = CHG >= -5 & CHG <= -1, description = "-5 <= CHG <= -1"),
+        params(crit_nr = 3, condition = CHG >= 10 & CHG <= 15, description = "10 <= CHG <= 15"),
+        params(crit_nr = 4, condition = CHG <= -20, description = "CHG <= -20"),
+        params(crit_nr = 5, condition = CHG <= 5, description = "CHG <= 5"),
+        params(crit_nr = 6, condition = CHG <= 10, description = "CHG <= 10"),
+        params(crit_nr = 7, condition = CHG >= -15, description = "CHG >= -15"),
+        params(crit_nr = 8, condition = CHG >= 15, description = "CHG >= 15")
+      ),
+      values_yn = TRUE
+    )
   ) %>%
   arrange(USUBJID, DOMAIN, PARAMCD)
 ```
