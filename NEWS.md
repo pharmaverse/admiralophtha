@@ -1,10 +1,18 @@
 # admiralophtha (development version)
 
+## Updates to Templates
+
+- Improved model derivation of criterion flag/variable pairs in `ADBCVA` template by showcasing use of `restrict_derivation()` in combination with `call-derivation()`. (#267)
+
+## Updates to Documentation
+
+- Improved model derivation of criterion flag/variable pairs in `ADBCVA` vignette by showcasing use of `restrict_derivation()` in combination with `call-derivation()`. (#267)
+
 ## Various
 
 - Removed `{cli}` from package imports. (#264)
 
-# admiralophtha 1.2.0.9000
+# admiralophtha 1.2.0
 
 ## Updates to Templates
 
