@@ -181,7 +181,7 @@ adoe_vstflag <- adoe_trtflag %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL02FL,
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT,  ABLFL)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT, ABLFL)),
       order = exprs(ADT),
       mode = "last"
     ),
