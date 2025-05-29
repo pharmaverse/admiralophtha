@@ -1,10 +1,18 @@
 # admiralophtha (development version)
 
+## Updates to Templates
+
+- The ADOE template was updated to showcase the mapping of IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
+
+## Updates to Documentation
+
+- The ADOE vignette was updated to showcase the mapping of IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
+
 ## Various
 
 - Removed `{cli}` from package imports. (#264)
 
-# admiralophtha 1.2.0.9000
+# admiralophtha 1.2.0
 
 ## Updates to Templates
 

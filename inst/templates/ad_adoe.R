@@ -31,14 +31,18 @@ oe <- convert_blanks_to_na(oe_ophtha) %>%
 
 # ---- Lookup tables ----
 
-# Assign PARAMCD, PARAM, and PARAMN
+# Assign PARAMCD, PARAM, andPARAMN
+# nolint start
 param_lookup <- tibble::tribble(
   ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1, # nolint
-  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2, # nolint
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3, # nolint
-  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4 # nolint
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "Study Eye", "SIOP", "Study Eye IOP (mmHg)", 5,
+  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "Fellow Eye", "FIOP", "Fellow Eye IOP (mmHg)", 6
 )
+# nolint end
 
 # ---- Derivations ----
 
@@ -48,7 +52,7 @@ adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 adoe_adslvar <- oe %>%
   # Keep only general OE parameters
   filter(
-    OETESTCD %in% c("CSUBTH", "DRSSR")
+    OETESTCD %in% c("CSUBTH", "DRSSR", "IOP")
   ) %>%
   # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
@@ -95,6 +99,47 @@ adoe_visit <- adoe_param %>%
     ),
     AVISITN = round(VISITNUM, 0),
     BASETYPE = "LAST"
+  ) %>%
+  # Add derived parameter for difference between pre and post dose IOP
+  call_derivation(
+    derivation = derive_param_computed,
+    by_vars = c(get_admiral_option("subject_keys"), !!adsl_vars, exprs(AVISIT, AVISITN, ADT)),
+    variable_params = list(
+      # Study eye
+      params(
+        parameters = exprs(
+          # Differentiate between pre and post-dose IOP as they are mapped to the same PARAMCD.
+          # Users may need to update this code to identify the correct records to use.
+          SIOPPRE = PARAMCD == "SIOP" & ATPT == "PRE-DOSE",
+          SIOPPOST = PARAMCD == "SIOP" & ATPT == "POST-DOSE"
+        ),
+        set_values_to = exprs(
+          PARAMCD = "SIOPCHG",
+          PARAM = "Study Eye IOP Pre to Post Dose Diff (mmHg)",
+          PARAMN = 9,
+          AVAL = AVAL.SIOPPOST - AVAL.SIOPPRE,
+          AVALC = as.character(AVAL),
+          BASETYPE = "LAST",
+        )
+      ),
+      # Fellow eye
+      params(
+        parameters = exprs(
+          # Differentiate between pre and post-dose IOP as they are mapped to the same PARAMCD.
+          # Users may need to update this code to identify the correct records to use.
+          FIOPPRE = PARAMCD == "FIOP" & ATPT == "PRE-DOSE",
+          FIOPPOST = PARAMCD == "FIOP" & ATPT == "POST-DOSE"
+        ),
+        set_values_to = exprs(
+          PARAMCD = "FIOPCHG",
+          PARAM = "Fellow Eye IOP Pre to Post Dose Diff (mmHg)",
+          PARAMN = 10,
+          AVAL = AVAL.FIOPPOST - AVAL.FIOPPRE,
+          AVALC = as.character(AVAL),
+          BASETYPE = "LAST"
+        )
+      )
+    )
   )
 
 # Derive Treatment flags
@@ -125,7 +170,7 @@ adoe_vstflag <- adoe_trtflag %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL01FL,
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, DTYPE)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, AVISIT, ATPT, DTYPE)),
       order = exprs(ADT, AVAL),
       mode = "last"
     ),
@@ -136,7 +181,7 @@ adoe_vstflag <- adoe_trtflag %>%
     derivation = derive_var_extreme_flag,
     args = params(
       new_var = ANL02FL,
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ABLFL)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT, ABLFL)),
       order = exprs(ADT),
       mode = "last"
     ),
@@ -147,7 +192,7 @@ adoe_vstflag <- adoe_trtflag %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
-      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT)),
       order = exprs(AVAL, ADT),
       new_var = WORS01FL,
       mode = "last"
@@ -157,21 +202,29 @@ adoe_vstflag <- adoe_trtflag %>%
 
 # Derive baseline information
 adoe_change <- adoe_vstflag %>%
-  # Calculate BASE
-  derive_var_base(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
-    source_var = AVAL,
-    new_var = BASE
+  # Calculate BASE (do not derive for IOP change params)
+  restrict_derivation(
+    derivation = derive_var_base,
+    args = params(
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT, BASETYPE)),
+      source_var = AVAL,
+      new_var = BASE
+    ),
+    filter = !PARAMCD %in% c("SIOPCHG", "FIOPCHG")
   ) %>%
-  # Calculate BASEC
-  derive_var_base(
-    by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, BASETYPE)),
-    source_var = AVALC,
-    new_var = BASEC
+  # Calculate BASEC (do not derive for IOP change params)
+  restrict_derivation(
+    derivation = derive_var_base,
+    args = params(
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT, BASETYPE)),
+      source_var = AVALC,
+      new_var = BASEC
+    ),
+    filter = !PARAMCD %in% c("SIOPCHG", "FIOPCHG")
   ) %>%
-  # Calculate CHG
+  # Calculate CHG (not derived for IOP change params as BASE is NA)
   derive_var_chg() %>%
-  # Calculate PCHG
+  # Calculate PCHG (not derived for IOP change params as BASE is NA)
   derive_var_pchg()
 
 # Assign ASEQ
