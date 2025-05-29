@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9009</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,17 +142,16 @@ of between x and y letters relative to baseline</em>, one would set
 it is generally discouraged to use the same criterion flag/variable pair
 for more than one criterion across multiple parameters in an ADaM
 dataset, as this renders the dataset confusing to scrutinise.</p>
-<p>For BCVA change endpoints, provides the function
-<code>derive_var_bcvacritxfl</code> to add them en masse. Additionally,
-the function automatically populates <code>CRITx</code> in the
-programmatic manner described above.</p>
+<p>For BCVA change endpoints, <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> provides the
+function <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_crit_flag.html" class="external-link">derive_vars_crit_flag()</a></code> to add them en masse.</p>
 </div>
 <div class="section level3">
 <h3 id="affected-eye-derivation">Affected Eye Derivation<a class="anchor" aria-label="anchor" href="#affected-eye-derivation"></a>
 </h3>
 <p><a href="https://pharmaverse.github.io/admiralophtha/">admiralophtha</a> function <code>derive_var_afeye</code>
-follows the standard derivation: Set to “BOTH EYES” when Study Eye
-Selection [<code>ADSL.STUDYEYE</code>] is not missing, and Laterality
+follows the standard derivation:</p>
+<p>Set to “BOTH EYES” when Study Eye Selection
+[<code>ADSL.STUDYEYE</code>] is not missing, and Laterality
 [<code>xxLAT</code>] is equal to “BILATERAL”. Else set to “STUDY EYE”
 when Study Eye Selection [<code>ADSL.STUDYEYE</code>] is either “RIGHT”
 or “LEFT”, and matches Laterality [<code>xxLAT</code>] for the
@@ -168,6 +167,15 @@ Laterality [<code>xxLAT</code>] = “LEFT”, “RIGHT”, “BILATERAL” are n
 the same for your study this can be updated as inputs in the function,
 otherwise this is also expected for <code>AFEYE</code> to be derived,
 and a warning will be returned if any other values are found.</p>
+</div>
+<div class="section level3">
+<h3 id="differences-between-pre-and-post-dose-iop">Differences between pre and post-dose IOP<a class="anchor" aria-label="anchor" href="#differences-between-pre-and-post-dose-iop"></a>
+</h3>
+<p><a href="https://pharmaverse.github.io/admiralophtha/">admiralophtha</a> suggests to calculate the differences
+between pre and post-dose IOP as two new derived parameters (study and
+fellow eyes) please see the <a href="https://pharmaverse.github.io/admiralophtha/articles/adoe.html">ADOE
+vignette</a> and <a href="https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R" class="external-link">template</a>
+for more details.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
