@@ -10,6 +10,8 @@
  
 - Updated ADOE template to showcase the mapping of IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
 
+- Added a citation for the source of the Visual Functioning Questionnaire (VFQ) to the ADVFQ template, vignette and test dataset documentation.
+
 ## Various
 
 - Removed `{cli}` from package imports. (#264)

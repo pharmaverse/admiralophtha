@@ -4,8 +4,8 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and
-#' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R})
+#' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and the
+#' [ADBVA template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R).
 #'
 "admiralophtha_adbcva"
 
@@ -15,8 +15,12 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the ADSL and QS datasets using `{admiral}`, `{admiralophtha}` and
-#' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R})
+#' Derived from the ADSL and QS datasets using `{admiral}`, `{admiralophtha}`  and the
+#' [ADVFQ template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R).
+#' The full, open-source VFQ questionnaire can be accessed
+# #nolint start
+#' [here](https://www.nei.nih.gov/learn-about-eye-health/outreach-resources/outreach-materials/visual-function-questionnaire-25).
+# #nolint end
 #'
 "admiralophtha_advfq"
 
@@ -26,7 +30,7 @@
 #' @keywords datasets
 #' @family datasets
 #' @source
-#' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and
-#' (\url{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R})
+#' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and the
+#' [ADOE template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R).
 #'
 "admiralophtha_adoe"
