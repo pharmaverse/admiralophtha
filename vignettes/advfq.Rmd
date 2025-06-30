@@ -23,6 +23,8 @@ data for ophthalmology endpoints. It is to be used in conjunction with the artic
  **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
  otherwise specified.* 
 
+The full, open-source VFQ questionnaire can be accessed [here](https://www.nei.nih.gov/learn-about-eye-health/outreach-resources/outreach-materials/visual-function-questionnaire-25).
+
 ## Dataset Contents
 
 `{admiralophtha}` suggests to populate ADVFQ solely with VFQ records from the QS SDTM. Any other questionnaire data should be placed in separate datasets (e.g. ADQS).
