@@ -5,7 +5,7 @@
 #' @family datasets
 #' @source
 #' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and the
-#' [ADBVA template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R).
+#' [ADBCVA template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R).
 #'
 "admiralophtha_adbcva"
 

@@ -9,7 +9,7 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 }
 \source{
 Derived from the OE and ADSL datasets using \code{{admiral}}, \code{{admiralophtha}} and the
-\href{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R}{ADBVA template}.
+\href{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R}{ADBCVA template}.
 }
 \usage{
 admiralophtha_adbcva
