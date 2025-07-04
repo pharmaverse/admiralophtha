@@ -2,4 +2,4 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is the fifth release (v1.1) of admiralophtha.
+* This is the fifth release (v1.3.0) of admiralophtha.
