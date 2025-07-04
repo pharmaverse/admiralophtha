@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,7 @@ not specific to ADVFQ are absent, and the user is invited to consult the
 aforementioned article for guidance.</p>
 <p><strong>Note</strong>: <em>All examples assume CDISC SDTM and/or ADaM
 format as input unless otherwise specified.</em></p>
+<p>The full, open-source VFQ questionnaire can be accessed <a href="https://www.nei.nih.gov/learn-about-eye-health/outreach-resources/outreach-materials/visual-function-questionnaire-25" class="external-link">here</a>.</p>
 <div class="section level3">
 <h3 id="dataset-contents">Dataset Contents<a class="anchor" aria-label="anchor" href="#dataset-contents"></a>
 </h3>
@@ -164,25 +165,25 @@ a BDS dataset from SDTM</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">TRTSDT</span>, <span class="va">TRTEDT</span>, <span class="va">TRT01A</span>, <span class="va">TRT01P</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span></span>
+<span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span>
 <span>  <span class="va">qs</span>,</span>
 <span>  dataset_add <span class="op">=</span> <span class="va">adsl</span>,</span>
 <span>  new_vars <span class="op">=</span> <span class="va">adsl_vars</span>,</span>
-<span>  by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/get_admiral_option.html" class="external-link">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
+<span>  by_vars <span class="op">=</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="aval">Derive Analysis Value for Existing Questions<a class="anchor" aria-label="anchor" href="#aval"></a>
 </h3>
 <p>To derive the analysis values we use the function
-<code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged_lookup.html" class="external-link">admiral::derive_vars_merged_lookup()</a></code> which merges on
+<code><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_vars_merged_lookup.html">admiral::derive_vars_merged_lookup()</a></code> which merges on
 <code>PARAMCD</code> from the parameter lookup table. This merges on the
 parameter by <code>QSTESTCD</code> and assigns <code>AVAL</code> and
 <code>AVALC</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co">## Add PARAMCD only - add PARAM etc later ----</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged_lookup.html" class="external-link">derive_vars_merged_lookup</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_vars_merged_lookup.html">derive_vars_merged_lookup</a></span><span class="op">(</span></span>
 <span>    dataset_add <span class="op">=</span> <span class="va">param_lookup</span>,</span>
 <span>    new_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span>,</span>
 <span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">QSTESTCD</span><span class="op">)</span></span>
@@ -208,10 +209,10 @@ recoding. This gives an example of recoding one question.</p>
 <span><span class="co"># else set to 25 if [advfq.AVAL] = 4</span></span>
 <span><span class="co"># else set to 0 if [advfq.AVAL] = 5</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_summary_records.html" class="external-link">derive_summary_records</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_summary_records.html">derive_summary_records</a></span><span class="op">(</span></span>
 <span>    dataset_add <span class="op">=</span> <span class="va">advfq</span>,</span>
 <span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/get_admiral_option.html" class="external-link">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">adsl_vars</span>, <span class="va">PARAMCD</span>, <span class="va">VISITNUM</span>, <span class="va">VISIT</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    filter_add <span class="op">=</span> <span class="va">QSTESTCD</span> <span class="op">==</span> <span class="st">"VFQ1"</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
@@ -231,7 +232,7 @@ recoding. This gives an example of recoding one question.</p>
 <span>    <span class="va">AVAL</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Next, the programmer should create summary records as average of
-recoded questions using <code><a href="https://pharmaverse.github.io/admiral/reference/derive_summary_records.html" class="external-link">admiral::derive_summary_records</a></code>.
+recoded questions using <code><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_summary_records.html">admiral::derive_summary_records</a></code>.
 This example uses two of the recoded questions to create an average
 record.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -239,10 +240,10 @@ record.</p>
 <span><span class="co">## QSG01 General Score 01</span></span>
 <span><span class="co"># Average of QR01 and QR02 records</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_summary_records.html" class="external-link">derive_summary_records</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_summary_records.html">derive_summary_records</a></span><span class="op">(</span></span>
 <span>    dataset_add <span class="op">=</span> <span class="va">advfq</span>,</span>
 <span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/get_admiral_option.html" class="external-link">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">adsl_vars</span>, <span class="va">VISITNUM</span>, <span class="va">VISIT</span>, <span class="va">ADT</span>, <span class="va">ADY</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    filter_add <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"QR01"</span>, <span class="st">"QR02"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span>,</span>
@@ -261,25 +262,25 @@ subject has multiple observations within a particular timing period.</p>
 <p>In this situation, an analysis flag (e.g. <code>ANLxxFL</code>) may
 be used to choose the appropriate record for analysis.</p>
 <p>This flag may be derived using the <a href="https://pharmaverse.github.io/admiral/" class="external-link"><code>admiral</code></a>
-function <code><a href="https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html" class="external-link">admiral::derive_var_extreme_flag()</a></code>. For this
+function <code><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_var_extreme_flag.html">admiral::derive_var_extreme_flag()</a></code>. For this
 example, we will assume we would like to choose the latest value by our
 subject keys along with <code>PARAMCD</code> and
 <code>AVISIT</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## ANL01FL: Flag last result within an AVISIT for post-baseline records ----</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/restrict_derivation.html" class="external-link">restrict_derivation</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/restrict_derivation.html">restrict_derivation</a></span><span class="op">(</span></span>
 <span>    derivation <span class="op">=</span> <span class="va">derive_var_extreme_flag</span>,</span>
-<span>    args <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/params.html" class="external-link">params</a></span><span class="op">(</span></span>
+<span>    args <span class="op">=</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/params.html">params</a></span><span class="op">(</span></span>
 <span>      new_var <span class="op">=</span> <span class="va">ANL01FL</span>,</span>
-<span>      by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/get_admiral_option.html" class="external-link">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>, <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>, <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>      order <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">ADT</span>, <span class="va">AVAL</span><span class="op">)</span>,</span>
 <span>      mode <span class="op">=</span> <span class="st">"last"</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    filter <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ONTRTFL</span> <span class="op">==</span> <span class="st">"Y"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>We then derive <code>ASEQ</code> using
-<code><a href="https://pharmaverse.github.io/admiral/reference/derive_var_obs_number.html" class="external-link">admiral::derive_var_obs_number()</a></code> based on the observation
+<code><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_var_obs_number.html">admiral::derive_var_obs_number()</a></code> based on the observation
 number within the dataset, additionally merge on <code>PARAM</code>,
 <code>PARCAT1</code> and <code>PARCAT2</code> using the earlier lookup
 table.</p>
@@ -287,27 +288,27 @@ table.</p>
 <code class="sourceCode R"><span><span class="co">## Get ASEQ and PARAM  ----</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># Calculate ASEQ</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_var_obs_number.html" class="external-link">derive_var_obs_number</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_var_obs_number.html">derive_var_obs_number</a></span><span class="op">(</span></span>
 <span>    new_var <span class="op">=</span> <span class="va">ASEQ</span>,</span>
-<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/get_admiral_option.html" class="external-link">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,</span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>,</span>
 <span>    order <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">ADT</span>, <span class="va">AVISITN</span>, <span class="va">VISITNUM</span><span class="op">)</span>,</span>
 <span>    check_type <span class="op">=</span> <span class="st">"error"</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># Derive PARAM</span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span>dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">param_lookup</span>, <span class="op">-</span><span class="va">QSTESTCD</span><span class="op">)</span>, by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span>dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">param_lookup</span>, <span class="op">-</span><span class="va">QSTESTCD</span><span class="op">)</span>, by_vars <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="adslvars">Add ADSL Variables<a class="anchor" aria-label="anchor" href="#adslvars"></a>
 </h3>
 <p>Once analysis variables have been programmed, variables from ADSL
 which are required should be merged on to the dataset using
-<code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">admiral::derive_vars_merged</a></code>.</p>
+<code><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_vars_merged.html">admiral::derive_vars_merged</a></code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add all ADSL variables</span></span>
 <span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_merged.html" class="external-link">derive_vars_merged</a></span><span class="op">(</span></span>
-<span>    dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/negate_vars.html" class="external-link">negate_vars</a></span><span class="op">(</span><span class="va">adsl_vars</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/get_admiral_option.html" class="external-link">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/derive_vars_merged.html">derive_vars_merged</a></span><span class="op">(</span></span>
+<span>    dataset_add <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/negate_vars.html">negate_vars</a></span><span class="op">(</span><span class="va">adsl_vars</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    by_vars <span class="op">=</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
