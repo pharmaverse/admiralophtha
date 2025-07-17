@@ -16,7 +16,9 @@ Authors@R: c(
     person("Lucy", "Palmen", , "lucy.palmen@roche.com", role = "aut"),
     person("Nandini", "R Thampi", , "nandini.rajendhiran@novartis.com", role = "aut"),
     person("Aldrich", "Salva", , "salva.aldrich@gene.com", role = "aut"),
-    person("Steven", "Ting", , "steven.ting@cytel.com", role = "aut")
+    person("Steven", "Ting", , "steven.ting@cytel.com", role = "aut"),
+    person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
+    person("Novartis AG", role = c("cph", "fnd"))
   )
 Description: Aids the programming of Clinical Data Standards Interchange
     Consortium (CDISC) compliant Ophthalmology Analysis Data Model (ADaM)
