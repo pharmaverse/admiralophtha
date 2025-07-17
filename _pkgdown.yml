@@ -20,6 +20,9 @@ authors:
   Novartis AG:
     html: "<a href='https://www.gsk.com/'><img src='man/figures/novartis_logo.svg' height='20' alt='Novartis logo' /></a>"
     href: https://www.novartis.com/
+  footer:
+    roles: [aut]
+    text: "Developed by"
 
 development:
   mode: auto
