@@ -15,10 +15,10 @@ repo:
 
 authors:
   F. Hoffmann-La Roche AG:
-    html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.svg' height='34' alt='Roche logo' /></a>"
+    html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.png' height='34' alt='Roche logo' /></a>"
     href: https://www.roche.com/
   Novartis AG:
-    html: "<a href='https://www.gsk.com/'><img src='man/figures/novartis_logo.svg' height='20' alt='Novartis logo' /></a>"
+    html: "<a href='https://www.gsk.com/'><img src='man/figures/novartis_logo.png' height='20' alt='Novartis logo' /></a>"
     href: https://www.novartis.com/
   footer:
     roles: [aut]
