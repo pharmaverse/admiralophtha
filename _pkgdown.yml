@@ -22,7 +22,7 @@ authors:
     href: https://www.novartis.com/
   footer:
     roles: [aut]
-    text: "Developed by"
+    text: "Developed by F. Hoffmann-La Roche AG, Novartis AG,"
 
 development:
   mode: auto
