@@ -38,5 +38,11 @@ Authors:
   \item Steven Ting \email{steven.ting@cytel.com}
 }
 
+Other contributors:
+\itemize{
+  \item F. Hoffmann-La Roche AG [copyright holder, funder]
+  \item Novartis AG [copyright holder, funder]
+}
+
 }
 \keyword{internal}
