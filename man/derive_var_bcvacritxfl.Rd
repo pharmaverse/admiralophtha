@@ -15,31 +15,67 @@ derive_var_bcvacritxfl(
 )
 }
 \arguments{
-\item{dataset}{Input dataset containing BCVA data (usually ADBCVA).}
+\item{dataset}{Input dataset containing BCVA data (usually ADBCVA).
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
-(usually \code{CHG} or \code{AVAL}).}
+(usually \code{CHG} or \code{AVAL}).
 
-\item{bcva_ranges}{List containing one or more numeric vectors of length 2. For each
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Default value}{none}
+}}
+
+\item{bcva_ranges}{List of numeric vectors. For each
 vector \code{c(a,b)} in \code{bcva_ranges}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
 with the condition: \verb{a <=  crit_var <= b}. If criterion flags of that type are not
-required, then leave as NULL.}
+required, then leave as \code{NULL}.
+
+\describe{
+\item{Permitted values}{a list containing one or more numeric vectors, each of length two. E.g.
+\verb{list(c(1, 2), c(3, 4)}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{bcva_uplims}{List containing one or more numeric elements. For each
 element a in \code{bcva_uplims}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
 with the condition: \code{crit_var <= a}. If criterion flags of that type are not
-required, then leave as NULL.}
+required, then leave as \code{NULL}.
+
+\describe{
+\item{Permitted values}{a list containing one or more numeric scalars. E.g. \code{list(2, -4)}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{bcva_lowlims}{List containing one or more numeric elements. For each
 element b in \code{bcva_lowlims}, a pair of variables \code{CRITx}, \code{CRITxFL} is created
 with the condition: \code{crit_var >= b}. If criterion flags of that type are not required,
-then leave as NULL.}
+then leave as \code{NULL}.
 
-\item{additional_text}{string containing additional text to append to \code{CRITx}}
+\describe{
+\item{Permitted values}{a list containing one or more numeric scalars. E.g. \code{list(2, -4)}}
+\item{Default value}{\code{NULL}}
+}}
+
+\item{additional_text}{string containing additional text to append to \code{CRITx}.
+
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{\code{""}}
+}}
 
 \item{critxfl_index}{positive integer detailing the first value of x to use
 in \code{CRITxFL}. If not supplied, the function takes the first available value of
-x, counting up from x = 1.}
+x, counting up from x = 1.
+
+\describe{
+\item{Permitted values}{a positive integer, e.g. \code{2} or \code{5}}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input BCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.

@@ -16,29 +16,70 @@ derive_var_bcvacritxfl_util(
 )
 }
 \arguments{
-\item{dataset}{Input dataset (usually ADBCVA).}
+\item{dataset}{Input dataset (usually ADBCVA).
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
 \item{crit_var}{Variable with respect to which \code{CRITx}/\code{CRITxFL} are derived
-(usually \code{CHG} or \code{AVAL}).}
+(usually \code{CHG} or \code{AVAL}).
 
-\item{critx_text}{String containing the text for \code{CRITx} variable.}
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Default value}{none}
+}}
+
+\item{critx_text}{String containing the text for \code{CRITx} variable.
+
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{none}
+}}
 
 \item{critxfl_cond}{String containing R code detailing the criterion to be satisfied
-for \code{CRITxFL} variable to be equal to "Y".}
+for \code{CRITxFL} variable to be equal to "Y".
 
-\item{counter}{Integer detailing the value of x to use in \code{CRITxFL}.}
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one, containing
+evaluable R code, e.g. \code{"AVAL < 2"}}
+\item{Default value}{none}
+}}
 
-\item{bcva_range}{Numeric vector of length two detailing lower and upper change in
+\item{counter}{Integer detailing the value of x to use in \code{CRITxFL}.
+
+\describe{
+\item{Permitted values}{a positive integer, e.g. \code{2} or \code{5}}
+\item{Default value}{none}
+}}
+
+\item{bcva_range}{Numeric vector detailing lower and upper change in
 BCVA limits (\code{bcva_range} will be called in \code{critxfl_cond} if the criterion
-stipulates that change in BCVA lie inside some range).}
+stipulates that change in BCVA lie inside some range).
+
+\describe{
+\item{Permitted values}{a numeric vector of length two, e.g. \code{c(1, 2)}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{bcva_uplim}{Numeric value detailing highest change in BCVA limit (\code{bcva_uplim}
 will be called in \code{critxfl_cond} if the criterion stipulates that change in BCVA
-lie below some upper limit).}
+lie below some upper limit).
+
+\describe{
+\item{Permitted values}{a numeric value, e.g. \code{2}, \code{-5}, \code{1.4}}
+\item{Default value}{\code{NULL}}
+}}
 
 \item{bcva_lowlim}{Numeric value detailing lowest change in BCVA limit (\code{bcva_lowlim}
 will be called in \code{critxfl_cond} if the criterion stipulates that change in BCVA
-lie above some lower limit).}
+lie above some lower limit).
+
+\describe{
+\item{Permitted values}{a numeric value, e.g. \code{2}, \code{-5}, \code{1.4}}
+\item{Default value}{\code{NULL}}
+}}
 }
 \value{
 The input BCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.

@@ -7,18 +7,33 @@
 derive_var_afeye(dataset, loc_var, lat_var, loc_vals = "EYE")
 }
 \arguments{
-\item{dataset}{Input dataset
+\item{dataset}{Input dataset.
 
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use \code{dataset} instead.}
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
-\item{loc_var}{Location variable}
+\item{loc_var}{Location variable, usually \code{XXLOC}.
 
-\item{lat_var}{Laterality variable}
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Default value}{none}
+}}
 
-\item{loc_vals}{\code{xxLOC} values for which \code{AFEYE} is derived
+\item{lat_var}{Laterality variable, usually \code{XXLAT}.
 
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please simply ensure \code{xxLAT} values are
-contained in \code{c("LEFT", "RIGHT", "BILATERAL")}.}
+\describe{
+\item{Permitted values}{an unquoted symbol, e.g., \code{AVAL}}
+\item{Default value}{none}
+}}
+
+\item{loc_vals}{\code{xxLOC} values for which \code{AFEYE} is derived.
+
+\describe{
+\item{Permitted values}{a character vector, e.g. \code{c("EYE", "RETINA")}}
+\item{Default value}{\code{"EYE"}}
+}}
 }
 \value{
 The input occurrence dataset with Affected Eye (\code{AFEYE}) added.
