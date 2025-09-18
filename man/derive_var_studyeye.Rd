@@ -7,14 +7,29 @@
 derive_var_studyeye(dataset_adsl, dataset_sc, sctestcd_value = "FOCID")
 }
 \arguments{
-\item{dataset_adsl}{ADSL input dataset}
+\item{dataset_adsl}{ADSL input dataset.
 
-\item{dataset_sc}{SC input dataset}
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
 
-\item{sctestcd_value}{\code{SCTESTCD} value flagging Study Eye selection records. Default: "FOCID".}
+\item{dataset_sc}{SC input dataset.
+
+\describe{
+\item{Permitted values}{a dataset, i.e., a \code{data.frame} or tibble}
+\item{Default value}{none}
+}}
+
+\item{sctestcd_value}{\code{SCTESTCD} value flagging Study Eye selection records.
+
+\describe{
+\item{Permitted values}{a character scalar, i.e., a character vector of length one}
+\item{Default value}{\code{"FOCID"}}
+}}
 }
 \value{
-The input ADSL dataset with an additional column named \code{STUDYEYE}
+The input ADSL dataset with an additional column named \code{STUDYEYE}.
 }
 \description{
 Derive Study Eye (\code{STUDYEYE}) in the ADSL dataset

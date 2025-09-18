@@ -1,3 +1,11 @@
+# admiralophtha (development version)
+
+## Updates to Documentation
+
+- Started using custom `{admiral}` roclet, resulting in cleared "Permitted" and "Default" values in function documentation. (#277)
+
+- Removed erroneous deprecation badges for `dataset` and `loc_vals` arguments of `derive_var_afeye()`. (#278)
+
 # admiralophtha 1.3.0
 
 ## Updates to Templates
@@ -10,7 +18,7 @@
  
 - Updated ADOE template to showcase the mapping of IOP parameters, as well as the derivation of parameters for the difference between pre and post-dose IOP. (#260)
 
-- Added a citation for the source of the Visual Functioning Questionnaire (VFQ) to the ADVFQ template, vignette and test dataset documentation.
+- Added a citation for the source of the Visual Functioning Questionnaire (VFQ) to the ADVFQ template, vignette and test dataset documentation. (#243)
 
 ## Various
 

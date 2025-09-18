@@ -2,9 +2,12 @@
 #'
 #' Derive Study Eye (`STUDYEYE`) in the ADSL dataset
 #'
-#' @param dataset_adsl ADSL input dataset
-#' @param dataset_sc SC input dataset
-#' @param sctestcd_value `SCTESTCD` value flagging Study Eye selection records. Default: "FOCID".
+#' @param dataset_adsl ADSL input dataset.
+#' @permitted [dataset]
+#' @param dataset_sc SC input dataset.
+#' @permitted [dataset]
+#' @param sctestcd_value `SCTESTCD` value flagging Study Eye selection records.
+#' @permitted [char_scalar]
 #'
 #' @details
 #' Study Eye is derived in ADSL using the "Study Eye selection" records
@@ -12,7 +15,7 @@
 #'
 #' @author Edoardo Mancini
 #'
-#' @return The input ADSL dataset with an additional column named `STUDYEYE`
+#' @return The input ADSL dataset with an additional column named `STUDYEYE`.
 #' @keywords der_adsl
 #' @export
 #'

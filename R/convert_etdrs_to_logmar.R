@@ -2,10 +2,13 @@
 #'
 #' Convert ETDRS score to LogMAR units
 #'
-#' @param value object containing ETDRS score to convert to logMAR
+#' @param value object containing ETDRS score to convert to logMAR.
+#' @permitted [num]
 #'
 #' @details
-#' ETDRS value converted to logMAR as logMAR = -0.02 * ETDRS + 1.7
+#' ETDRS value converted to logMAR as:
+#'
+#' \deqn{logMAR = -0.02 * ETDRS + 1.7}
 #'
 #' Source for conversion formula:
 #' Beck, R.W., et al. A computerized method of visual acuity testing.
@@ -14,7 +17,7 @@
 #'
 #' @author Rachel Linacre
 #'
-#' @return The input value converted converted to logMAR units
+#' @return The input value converted converted to logMAR units.
 #' @keywords utils_fmt
 #' @export
 #'

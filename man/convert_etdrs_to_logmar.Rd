@@ -7,16 +7,23 @@
 convert_etdrs_to_logmar(value)
 }
 \arguments{
-\item{value}{object containing ETDRS score to convert to logMAR}
+\item{value}{object containing ETDRS score to convert to logMAR.
+
+\describe{
+\item{Permitted values}{a numeric value, e.g. \code{2}, \code{-5}, \code{1.4}}
+\item{Default value}{none}
+}}
 }
 \value{
-The input value converted converted to logMAR units
+The input value converted converted to logMAR units.
 }
 \description{
 Convert ETDRS score to LogMAR units
 }
 \details{
-ETDRS value converted to logMAR as logMAR = -0.02 * ETDRS + 1.7
+ETDRS value converted to logMAR as:
+
+\deqn{logMAR = -0.02 * ETDRS + 1.7}
 
 Source for conversion formula:
 Beck, R.W., et al. A computerized method of visual acuity testing.
