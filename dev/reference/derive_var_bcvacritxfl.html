@@ -13,7 +13,7 @@ dataset containing BCVA records"><meta property="og:image" content="https://phar
 
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ dataset containing BCVA records"><meta property="og:image" content="https://phar
 
     <div class="ref-description section level2">
     <p><a href="https://lifecycle.r-lib.org/articles/stages.html#superseded" class="external-link"><img src="figures/lifecycle-superseded.svg" alt="[Superseded]"></a> The <code>derive_var_bcvacritxfl()</code>
-function has been superseded in favor of <code><a href="https://pharmaverse.github.io/admiral/reference/derive_vars_crit_flag.html" class="external-link">admiral::derive_vars_crit_flag()</a></code>.</p>
+function has been superseded in favor of <code><a href="https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html">admiral::derive_vars_crit_flag()</a></code>.</p>
 <p>Adds a criterion variables <code>CRITx</code> and their corresponding flags <code>CRITxFL</code> to a
 dataset containing BCVA records</p>
     </div>
@@ -74,43 +74,100 @@ dataset containing BCVA records</p>
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>Input dataset containing BCVA data (usually ADBCVA).</p></dd>
+<dd><p>Input dataset containing BCVA data (usually ADBCVA).</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-crit-var">crit_var<a class="anchor" aria-label="anchor" href="#arg-crit-var"></a></dt>
 <dd><p>Variable with respect to which <code>CRITx</code>/<code>CRITxFL</code> are derived
-(usually <code>CHG</code> or <code>AVAL</code>).</p></dd>
+(usually <code>CHG</code> or <code>AVAL</code>).</p>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-bcva-ranges">bcva_ranges<a class="anchor" aria-label="anchor" href="#arg-bcva-ranges"></a></dt>
-<dd><p>List containing one or more numeric vectors of length 2. For each
+<dd><p>List of numeric vectors. For each
 vector <code>c(a,b)</code> in <code>bcva_ranges</code>, a pair of variables <code>CRITx</code>, <code>CRITxFL</code> is created
 with the condition: <code>a &lt;=  crit_var &lt;= b</code>. If criterion flags of that type are not
-required, then leave as NULL.</p></dd>
+required, then leave as <code>NULL</code>.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a list containing one or more numeric vectors, each of length two. E.g.
+<code>list(c(1, 2), c(3, 4)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-bcva-uplims">bcva_uplims<a class="anchor" aria-label="anchor" href="#arg-bcva-uplims"></a></dt>
 <dd><p>List containing one or more numeric elements. For each
 element a in <code>bcva_uplims</code>, a pair of variables <code>CRITx</code>, <code>CRITxFL</code> is created
 with the condition: <code>crit_var &lt;= a</code>. If criterion flags of that type are not
-required, then leave as NULL.</p></dd>
+required, then leave as <code>NULL</code>.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a list containing one or more numeric scalars. E.g. <code>list(2, -4)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-bcva-lowlims">bcva_lowlims<a class="anchor" aria-label="anchor" href="#arg-bcva-lowlims"></a></dt>
 <dd><p>List containing one or more numeric elements. For each
 element b in <code>bcva_lowlims</code>, a pair of variables <code>CRITx</code>, <code>CRITxFL</code> is created
 with the condition: <code>crit_var &gt;= b</code>. If criterion flags of that type are not required,
-then leave as NULL.</p></dd>
+then leave as <code>NULL</code>.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a list containing one or more numeric scalars. E.g. <code>list(2, -4)</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-additional-text">additional_text<a class="anchor" aria-label="anchor" href="#arg-additional-text"></a></dt>
-<dd><p>string containing additional text to append to <code>CRITx</code></p></dd>
+<dd><p>string containing additional text to append to <code>CRITx</code>.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a character scalar, i.e., a character vector of length one</p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>""</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-critxfl-index">critxfl_index<a class="anchor" aria-label="anchor" href="#arg-critxfl-index"></a></dt>
 <dd><p>positive integer detailing the first value of x to use
 in <code>CRITxFL</code>. If not supplied, the function takes the first available value of
-x, counting up from x = 1.</p></dd>
+x, counting up from x = 1.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a positive integer, e.g. <code>2</code> or <code>5</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>NULL</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
@@ -178,10 +235,10 @@ as <code>NA</code>.</p>
 <span class="r-in"><span>  <span class="st">"XXX001"</span>, <span class="st">"P01"</span>, <span class="st">"WEEK 6"</span>, <span class="st">"AVERAGE"</span>, <span class="st">"SBCVA"</span>, <span class="fl">3</span>, <span class="op">-</span><span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/restrict_derivation.html" class="external-link">restrict_derivation</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/restrict_derivation.html">restrict_derivation</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">adbcva2</span>,</span></span>
 <span class="r-in"><span>  derivation <span class="op">=</span> <span class="va">derive_var_bcvacritxfl</span>,</span></span>
-<span class="r-in"><span>  args <span class="op">=</span> <span class="fu"><a href="https://pharmaverse.github.io/admiral/reference/params.html" class="external-link">params</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  args <span class="op">=</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/params.html">params</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    crit_var <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">CHG</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    bcva_ranges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    bcva_lowlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span></span>
@@ -210,7 +267,7 @@ as <code>NA</code>.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Edoardo Mancini, Ritika Aggarwal, Jane Gao, William Holmes, Josie Jackson, Sonali Jain, Yuki Matsunaga, Gordon Miller, Rachel Linacre, Lucy Palmen, Nandini R Thampi, Aldrich Salva, Steven Ting.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, Novartis AG, Edoardo Mancini, Ritika Aggarwal, Jane Gao, William Holmes, Josie Jackson, Sonali Jain, Yuki Matsunaga, Gordon Miller, Rachel Linacre, Lucy Palmen, Nandini R Thampi, Aldrich Salva, Steven Ting.</p>
 </div>
 
 <div class="pkgdown-footer-right">

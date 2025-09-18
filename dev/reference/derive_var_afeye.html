@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,22 +57,51 @@
 
 
 <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
-<dd><p>Input dataset</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please use <code>dataset</code> instead.</p></dd>
+<dd><p>Input dataset.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a dataset, i.e., a <code>data.frame</code> or tibble</p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-loc-var">loc_var<a class="anchor" aria-label="anchor" href="#arg-loc-var"></a></dt>
-<dd><p>Location variable</p></dd>
+<dd><p>Location variable, usually <code>XXLOC</code>.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-lat-var">lat_var<a class="anchor" aria-label="anchor" href="#arg-lat-var"></a></dt>
-<dd><p>Laterality variable</p></dd>
+<dd><p>Laterality variable, usually <code>XXLAT</code>.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>an unquoted symbol, e.g., <code>AVAL</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p>none</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-loc-vals">loc_vals<a class="anchor" aria-label="anchor" href="#arg-loc-vals"></a></dt>
-<dd><p><code>xxLOC</code> values for which <code>AFEYE</code> is derived</p>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Please simply ensure <code>xxLAT</code> values are
-contained in <code>c("LEFT", "RIGHT", "BILATERAL")</code>.</p></dd>
+<dd><p><code>xxLOC</code> values for which <code>AFEYE</code> is derived.</p>
+<dl><dt>Permitted values</dt>
+<dd><p>a character vector, e.g. <code>c("EYE", "RETINA")</code></p></dd>
+
+<dt>Default value</dt>
+<dd><p><code>"EYE"</code></p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
@@ -158,7 +187,7 @@ Eye. This assumes Study Eye has already been added from ADSL.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Edoardo Mancini, Ritika Aggarwal, Jane Gao, William Holmes, Josie Jackson, Sonali Jain, Yuki Matsunaga, Gordon Miller, Rachel Linacre, Lucy Palmen, Nandini R Thampi, Aldrich Salva, Steven Ting.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, Novartis AG, Edoardo Mancini, Ritika Aggarwal, Jane Gao, William Holmes, Josie Jackson, Sonali Jain, Yuki Matsunaga, Gordon Miller, Rachel Linacre, Lucy Palmen, Nandini R Thampi, Aldrich Salva, Steven Ting.</p>
 </div>
 
 <div class="pkgdown-footer-right">
