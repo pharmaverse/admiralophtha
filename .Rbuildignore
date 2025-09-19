@@ -4,7 +4,7 @@
 ^pkgdown$
 ^_pkgdown\.yml$
 ^.github$
-^.lintr$
+^.lintr.R$
 ^docs$
 ^Meta$
 ^codecov\.yml$

@@ -198,7 +198,7 @@ derive_var_bcvacritxfl <- function(dataset,
   # Identify first value of x to be used for CRITx/CRITxFL
   if (is.null(critxfl_index)) {
     # Find largest index of CRITxFL already present in the dataset
-    critxfl_vars <- names(dataset)[grepl("^CRIT.*FL$", names(dataset))]
+    critxfl_vars <- names(dataset)[grepl("^CRIT.*FL$", names(dataset))] # nolint
 
     if (length(critxfl_vars) > 0) {
       max_critxfl_num <- critxfl_vars %>%
