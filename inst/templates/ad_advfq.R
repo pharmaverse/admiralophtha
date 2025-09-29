@@ -185,7 +185,7 @@ advfq_dtdy <- qs %>%
   )
 
 advfq_aval <- advfq_dtdy %>%
-  ## Add PARAMCD for original parameters only ----
+  ## Add PARAMCD for original parameters only - PARCATx and PARAM will be added later ----
 derive_vars_merged_lookup(
   dataset_add = param_lookup_original,
   new_vars = exprs(PARAMCD),
