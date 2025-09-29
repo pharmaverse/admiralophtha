@@ -10,8 +10,8 @@ vignette: >
   
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-collapse = TRUE,
-comment = "#>"
+  collapse = TRUE,
+  comment = "#>"
 )
 ```
 
@@ -127,7 +127,7 @@ param_lookup_original <- tribble(
     PARAM = str_remove(QSTEST, "VFQ1-"),
     PARCAT1 = "VFQ-25 INTERVIEWER ADMINISTERED",
     PARCAT2 = "Original Items"
-  ) %>% 
+  ) %>%
   select(QSTESTCD, QSTEST, PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 
 ## Transformed parameters ----
@@ -176,7 +176,7 @@ param_lookup_transformed <- tribble(
   mutate(
     PARCAT1 = "VFQ-25 INTERVIEWER ADMINISTERED",
     PARCAT2 = "Transformed - Original Items"
-  ) %>% 
+  ) %>%
   select(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 
 ## Composite parameters ----
@@ -212,7 +212,7 @@ param_lookup_composite <- tribble(
   mutate(
     PARCAT1 = "VFQ-25 INTERVIEWER ADMINISTERED",
     PARCAT2 = "Derived Scale"
-  ) %>% 
+  ) %>%
   select(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 ```
 
@@ -222,7 +222,7 @@ param_lookup_composite <- tribble(
 dataset_vignette(
   param_lookup_original,
   display_vars = exprs(QSTESTCD, QSTEST, PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
-) 
+)
 ```
 
 #### Transformed records
@@ -251,11 +251,11 @@ adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 advfq <- qs %>%
   ## merge on ADSL vars ----
-derive_vars_merged(
-  dataset_add = adsl,
-  new_vars = adsl_vars,
-  by_vars = get_admiral_option("subject_keys")
-)
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = get_admiral_option("subject_keys")
+  )
 ```
 
 Now we can derive the analysis date (`ADT`) and analysis relative day (`ADY`) variables. These derivations are study-specific and so the ones below are just samples - the user is again invited to consult the vignette on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) for details on this topic.
@@ -263,10 +263,10 @@ Now we can derive the analysis date (`ADT`) and analysis relative day (`ADY`) va
 ```{r, eval = TRUE}
 advfq <- advfq %>%
   ## analysis dates ADT, ADY ----
-derive_vars_dt(
-  new_vars_prefix = "A",
-  dtc = QSDTC
-) %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = QSDTC
+  ) %>%
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = exprs(ADT)
@@ -312,8 +312,8 @@ Here's what the data for the "Near Activities" and "Distance Activities" questio
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advfq %>% 
-    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("VFQ105", "VFQ106", "VFQ107", "VFQ108", "VFQ109", "VFQ114")) %>% 
+  advfq %>%
+    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("VFQ105", "VFQ106", "VFQ107", "VFQ108", "VFQ109", "VFQ114")) %>%
     arrange(USUBJID, AVISITN, PARAMCD),
   display_vars = exprs(USUBJID, QSTEST, AVISIT, PARAMCD, AVAL, AVALC)
 )
@@ -334,10 +334,10 @@ derive_summary_records(
   filter_add = QSTESTCD == "<some parameter>" & !is.na(AVAL),
   set_values_to = exprs(
     AVAL = compute_scale(
-      source = AVAL, 
-      source_range = <some source range>, 
-      target_range = c(0, 100), 
-      flip_direction = <TRUE or FALSE>
+      source = AVAL,
+      source_range = c(1, 5), # or some other range, e.g. c(1,6), depending on the parameter
+      target_range = c(0, 100),
+      flip_direction = TRUE # or FALSE, depending on the parameter
     ),
     PARAMCD = "QR01"
   )
@@ -381,9 +381,9 @@ advfq <- advfq %>%
         filter_add = QSTESTCD == "VFQ101" & !is.na(AVAL),
         set_values_to = exprs(
           AVAL = compute_scale(
-            source = AVAL, 
-            source_range = c(1, 5), 
-            target_range = c(0, 100), 
+            source = AVAL,
+            source_range = c(1, 5),
+            target_range = c(0, 100),
             flip_direction = TRUE
           ),
           PARAMCD = "QR01"
@@ -393,9 +393,9 @@ advfq <- advfq %>%
         filter_add = QSTESTCD == "VFQ102" & !is.na(AVAL),
         set_values_to = exprs(
           AVAL = compute_scale(
-            source = AVAL, 
-            source_range = c(1, 6), 
-            target_range = c(0, 100), 
+            source = AVAL,
+            source_range = c(1, 6),
+            target_range = c(0, 100),
             flip_direction = TRUE
           ),
           PARAMCD = "QR02"
@@ -407,9 +407,9 @@ advfq <- advfq %>%
         filter_add = QSTESTCD == "VFQ115C" & !is.na(AVAL),
         set_values_to = exprs(
           AVAL = compute_scale(
-            source = AVAL, 
-            source_range = c(1, 5), 
-            target_range = c(0, 100), 
+            source = AVAL,
+            source_range = c(1, 5),
+            target_range = c(0, 100),
             flip_direction = TRUE
           ),
           PARAMCD = "QR15C"
@@ -427,9 +427,9 @@ advfq <- advfq %>%
         filter_add = QSTESTCD == "VFQ119" & !is.na(AVAL),
         set_values_to = exprs(
           AVAL = compute_scale(
-            source = AVAL, 
-            source_range = c(1, 5), 
-            target_range = c(0, 100), 
+            source = AVAL,
+            source_range = c(1, 5),
+            target_range = c(0, 100),
             flip_direction = FALSE
           ),
           PARAMCD = "QR19"
@@ -755,12 +755,12 @@ Here's what some of the transformed records look like for one patient's first tw
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advfq %>% 
+  advfq %>%
     filter(
-      USUBJID %in% c("01-701-1034"), 
-      PARAMCD %in% c("VFQ101", "VFQ102", "VFQ119", "QR01", "QR02", "QR19"), 
+      USUBJID %in% c("01-701-1034"),
+      PARAMCD %in% c("VFQ101", "VFQ102", "VFQ119", "QR01", "QR02", "QR19"),
       AVISIT %in% c("Baseline", "Week 12")
-    ) %>% 
+    ) %>%
     arrange(USUBJID, AVISITN, PARAMCD),
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, AVAL)
 )
@@ -812,8 +812,8 @@ Here's what the base item composite scores by category look like for the "Near A
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advfq %>% 
-    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("QR05", "QR06", "QR07", "QR08", "QR09", "QR14", "QSBNA", "QSBDA")) %>% 
+  advfq %>%
+    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("QR05", "QR06", "QR07", "QR08", "QR09", "QR14", "QSBNA", "QSBDA")) %>%
     arrange(USUBJID, AVISITN, PARAMCD),
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL)
 )
@@ -877,12 +877,12 @@ Here's what the overall composite records using the base and composite items for
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advfq %>% 
+  advfq %>%
     filter(
-      USUBJID %in% c("01-701-1034"), 
+      USUBJID %in% c("01-701-1034"),
       (PARCAT5 == "VFQ-39" & str_sub(PARAMCD, 1, 3) == "QSO" & PARCAT4 != "General Health") | PARAMCD == "QOCSCORE",
       AVISIT == "Baseline"
-    ) %>% 
+    ) %>%
     arrange(USUBJID, AVISITN, PARAMCD),
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL)
 )
