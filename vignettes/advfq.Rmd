@@ -739,7 +739,7 @@ advfq <- advfq %>%
 
 We can then add the `PARAM` and `PARCATx` variables for both the original and transformed records by merging with the relevant lookup tables.
 
-```{r. eval = TRUE}
+```{r eval = TRUE}
 # Add PARAM, PARCAT vars ----
 advfq <- advfq %>%
   derive_vars_merged_lookup(
