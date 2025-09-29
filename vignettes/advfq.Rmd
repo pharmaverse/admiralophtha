@@ -53,7 +53,7 @@ library(stringr)
 
 * [Reading in data and setting up lookup tables](#setup_lookup)
 * [Initial set up and mapping the raw records](#mapping_raw)
-* [Deriving the transformed records](#deriving_transformed) 
+* [Deriving the transformed parameters](#deriving_transformed) 
 * [Deriving the composite parameters](#deriving_composite)
 * [Final steps](#final_steps) 
 * [Example Script](#example) 
@@ -73,7 +73,7 @@ qs <- qs_ophtha
 
 Next, it will prove useful to set up lookup tables ahead of time for the `PARAM`/`PARAMCD` and `PARCATx` variables for the original, transformed and composite parameters. This is so that when the latter two are derived later in the script, we can simply assign `PARAMCD` and then perform a merge (by `PARAMCD`) with the lookup tables to associate to them the `PARAM` and the `PARCATx` variables as well.
 
-For convenience, we set up three separate lookup tables. You can peruse how the tables are structured below - for the full set up code, please visit the [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R) template.
+For convenience, we set up three separate lookup tables. You can peruse how the tables are structured below - for the full set up code, please visit the [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R) template. There is a special importance for the contents of `PARCAT4` since this determines the categories which are then averaged within the [composite parameters](#deriving_composite).
 
 ```{r, eval=TRUE, echo=FALSE} 
 ## Original parameters (note PARAM, PARAMCD are identical to QSTEST, QSTESTCD) ----
@@ -308,18 +308,18 @@ advfq <- advfq %>%
   )
 ```
 
-Here's what the data for the "Near Activities" and "Distance Activities" quesitons looks like for one patient's first to visits:
+Here's what the data for the "Near Activities" and "Distance Activities" questions looks like for one patient's first two visits:
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advfq %>% 
-    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("VFQ105", "VFQ106", "VFQ107", "VFQ108", "VFQ109")) %>% 
+    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("VFQ105", "VFQ106", "VFQ107", "VFQ108", "VFQ109", "VFQ114")) %>% 
     arrange(USUBJID, AVISITN, PARAMCD),
   display_vars = exprs(USUBJID, QSTEST, AVISIT, PARAMCD, AVAL, AVALC)
 )
 ```
 
-## Deriving the transformed records {#deriving_transformed}
+## Deriving the transformed parameters {#deriving_transformed}
 
 Now we are ready to derive the transformed records. Excluding 15C (see later down this section), all of these are derived by re-scaling a single original record. As such, the prototypical code which can be used to derive them is a call to `derive_summary_records()` which is structured as follows:
 
@@ -765,6 +765,59 @@ dataset_vignette(
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, AVAL)
 )
 ```
+
+## Deriving the composite parameters {#deriving_composite}
+
+### Composite scores by category
+
+With the now-derived transformed parameters (identifiable through `PARCAT2 == "Transformed - Original Items"`), we have every question measured on the same scale and can now derive the composite parameters. These are essentially just means across categories of questions, with the category being determined by the contents of `PARCAT4`. The VFQ questionnaire dictates that for each category, two different composite parameters should be derived: one including just the base items of the questionnaire (`PARCAT5 == "Base Item"`) and the other one also including any optional items. As such, below we derive the composite parameters in two stages, first constructing `advfq_qsb` for the base item composite means, and then `advfq_qso` for the composite means, including all items. Note that the `dataset` argument is not passed to `derive_summary_records()`, meaning the output dataset contains only the new composite parameters. This is so that we can then use `derive_vars_merged_lookup()` to add on the `PARCATx` and `PARAM` variables for these new records. At the end, we append the new records to the existing `advfq` using `bind_rows()`.
+
+```{r, eval = TRUE}
+advfq_qsb <- derive_summary_records(
+  dataset_add = advfq,
+  filter_add = PARCAT2 == "Transformed - Original Items" & PARCAT5 == "Base Item" & !is.na(AVAL),
+  by_vars = c(
+    get_admiral_option("subject_keys"),
+    exprs(!!!adsl_vars, AVISIT, AVISITN, ADT, ADY, PARCAT4)
+  ),
+  set_values_to = exprs(AVAL = mean(AVAL))
+) %>%
+  derive_vars_merged_lookup(
+    dataset_add = filter(param_lookup_composite, str_starts(PARAMCD, "QSB")),
+    new_vars = exprs(PARAMCD, PARAM, PARCAT1, PARCAT2, PARCAT3, PARCAT5),
+    by_vars = exprs(PARCAT4)
+  )
+
+advfq_qso <- derive_summary_records(
+  dataset_add = advfq,
+  filter_add = PARCAT2 == "Transformed - Original Items" & !is.na(AVAL),
+  by_vars = c(
+    get_admiral_option("subject_keys"),
+    exprs(!!!adsl_vars, AVISIT, AVISITN, ADT, ADY, PARCAT4)
+  ),
+  set_values_to = exprs(AVAL = mean(AVAL))
+) %>%
+  derive_vars_merged_lookup(
+    dataset_add = filter(param_lookup_composite, str_starts(PARAMCD, "QSO")),
+    new_vars = exprs(PARAMCD, PARAM, PARCAT1, PARCAT2, PARCAT3, PARCAT5),
+    by_vars = exprs(PARCAT4)
+  )
+
+advfq <- bind_rows(advfq, advfq_qsb, advfq_qso)
+```
+
+Here's what the base item composite records look like for the "Near Activities" and "Distance Activities" categories for one patient's first two visits:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advfq %>% 
+    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("QR05", "QR06", "QR07", "QR08", "QR09", "QR14", "QSBNA", "QSBDA")) %>% 
+    arrange(USUBJID, AVISITN, PARAMCD),
+  display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL)
+)
+```
+
+### Overall composite scores
 
 ## Example Script {#example}
 
