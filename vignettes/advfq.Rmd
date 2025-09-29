@@ -34,7 +34,7 @@ The records in ADVFQ can be categorized in four groups:
 1. The __original__/__raw__ records coming from VFQ itself. Not all of these items are measured on the same scale.
 1. The __transformed__ records, which are in a one-to-one correspondence with the original records and serve the recode the latter on the same 0 - 100 scale.
 1. The __composite scores by category__, which are means of all the transformed records from within a category, e.g. "Near activities score".
-1. The __overall composite scores__, which are means of all the transformed records from within combined groups of categories.
+1. The __overall composite scores__, which are means of the composite scores.
 
 ## Required Packages
 
@@ -55,7 +55,7 @@ library(stringr)
 * [Initial set up and mapping the raw records](#mapping_raw)
 * [Deriving the transformed parameters](#deriving_transformed) 
 * [Deriving the composite parameters](#deriving_composite)
-* [Final steps](#final_steps) 
+* [Further Derivations of Standard BDS Variables](#further)
 * [Example Script](#example) 
 
 ## Reading in data and setting up lookup tables {#setup_lookup}
@@ -242,7 +242,7 @@ dataset_vignette(
   display_vars = exprs(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 )
 ```
-## Initial set up and mapping the raw recordsQ {#mapping_raw} 
+## Initial set up and mapping the raw records {#mapping_raw} 
 
 We can now start setting up ADVFQ by taking `qs` and merging on some ADSL variables which are needed for BDS derivations later down the line. Note that there is no need to merge on the whole ADSL dataset immediately as in so doing we would be needlessly increasing the size of the working dataset; the rest of the variables will be merged on at the end. 
 
@@ -770,7 +770,9 @@ dataset_vignette(
 
 ### Composite scores by category
 
-With the now-derived transformed parameters (identifiable through `PARCAT2 == "Transformed - Original Items"`), we have every question measured on the same scale and can now derive the composite parameters. These are essentially just means across categories of questions, with the category being determined by the contents of `PARCAT4`. The VFQ questionnaire dictates that for each category, two different composite parameters should be derived: one including just the base items of the questionnaire (`PARCAT5 == "Base Item"`) and the other one also including any optional items. As such, below we derive the composite parameters in two stages, first constructing `advfq_qsb` for the base item composite means, and then `advfq_qso` for the composite means, including all items. Note that the `dataset` argument is not passed to `derive_summary_records()`, meaning the output dataset contains only the new composite parameters. This is so that we can then use `derive_vars_merged_lookup()` to add on the `PARCATx` and `PARAM` variables for these new records. At the end, we append the new records to the existing `advfq` using `bind_rows()`.
+With the now-derived transformed parameters (identifiable through `PARCAT2 == "Transformed - Original Items"`), we have every question measured on the same scale and can now derive the composite parameters. These are essentially just means across categories of questions, with the category being determined by the contents of `PARCAT4`. The VFQ questionnaire dictates that for each category, two different composite parameters should be derived: one including just the base items of the questionnaire (`PARCAT5 == "Base Item"`) and the other one also including any optional items. As such, below we derive the composite parameters in two stages, first constructing `advfq_qsb` for the base item composite means, and then `advfq_qso` for the composite means, including all items. 
+
+Note that the `dataset` argument is not passed to `derive_summary_records()`, meaning the output dataset contains only the new composite parameters. Also, this time we use `PARCAT4` as a by-variable, meaning that the new composite scores are assigned the same value of `PARCAT4` (e.g. "Distance Activities") as the records that were used to constitute them. Then, we can then use `derive_vars_merged_lookup()` to add on the `PARCATx` (excluding `PARCAT4`) and `PARAM`/`PARAMCD` variables for these new records. At the end, we append the new records to the existing `advfq` using `bind_rows()`.
 
 ```{r, eval = TRUE}
 advfq_qsb <- derive_summary_records(
@@ -806,7 +808,7 @@ advfq_qso <- derive_summary_records(
 advfq <- bind_rows(advfq, advfq_qsb, advfq_qso)
 ```
 
-Here's what the base item composite records look like for the "Near Activities" and "Distance Activities" categories for one patient's first two visits:
+Here's what the base item composite scores by category look like for the "Near Activities" and "Distance Activities" categories for one patient's first two visits:
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -819,9 +821,79 @@ dataset_vignette(
 
 ### Overall composite scores
 
+Finally, for the overall composite scores, we take all the newly-derived composite parameters, excluding "General Health", and create:
+
+* An average record (`PARAMCD == "QBCSCORE"`) using only the base items composite scores;
+* An average record (`PARAMCD == "QOCSCORE"`) using the composite scores from all items, including the optional items.
+
+As was done for the [transformed parameters](#deriving_transformed) do this in a single call to `call_derivation()`, since the only difference between the two derivations is the `filter_add` and `set_values_to` arguments.
+
+```{r, eval = TRUE}
+advfq <- advfq %>%
+  call_derivation(
+    derivation = derive_summary_records,
+    dataset_add = advfq,
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(!!!adsl_vars, AVISIT, AVISITN, ADT, ADY)
+    ),
+    variable_params = list(
+      params(
+        # Use Base Items only
+        filter_add = PARCAT5 == "VFQ-25" & str_sub(PARAMCD, 1, 3) == "QSB" & PARCAT4 != "General Health" & !is.na(AVAL),
+        set_values_to = exprs(
+          AVAL = mean(AVAL),
+          PARAMCD = "QBCSCORE"
+        )
+      ),
+      params(
+        # Use optional items items only
+        filter_add = PARCAT5 == "VFQ-39" & str_sub(PARAMCD, 1, 3) == "QSO" & PARCAT4 != "General Health" & !is.na(AVAL),
+        set_values_to = exprs(
+          AVAL = mean(AVAL),
+          PARAMCD = "QOCSCORE"
+        )
+      )
+    )
+  )
+```
+
+We then assign `PARAM`/`PARAMCD` and `PARCATx` for these new overall composite records by merging with the relevant lookup table, and append them to `advfq`.
+
+```{r, eval = TRUE}
+# Map PARAM, PARCAT1 through 5 -----
+advfq <- advfq %>%
+  filter(str_detect(PARAMCD, "SCORE")) %>%
+  select(-PARAM, -starts_with("PARCAT")) %>%
+  derive_vars_merged_lookup(
+    dataset_add = param_lookup_composite,
+    new_vars = exprs(PARAM, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5),
+    by_vars = exprs(PARAMCD)
+  ) %>%
+  rbind(advfq %>% filter(!str_detect(PARAMCD, "SCORE")))
+```
+
+Here's what the overall composite records using the base and composite items for one patient's baseline visit:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advfq %>% 
+    filter(
+      USUBJID %in% c("01-701-1034"), 
+      (PARCAT5 == "VFQ-39" & str_sub(PARAMCD, 1, 3) == "QSO" & PARCAT4 != "General Health") | PARAMCD == "QOCSCORE",
+      AVISIT == "Baseline"
+    ) %>% 
+    arrange(USUBJID, AVISITN, PARAMCD),
+  display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL)
+)
+```
+
+## Further Derivations of Standard BDS Variables {#further}
+
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADVFQ. 
+
 ## Example Script {#example}
 
 ADaM | Sample Code 
 ---- | -------------- 
 ADVFQ | [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R)
-

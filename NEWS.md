@@ -1,6 +1,12 @@
 # admiralophtha (development version)
 
+## Updates to Templates
+
+- The `ADVFQ` template was reviewed and modernized to be more in line with VFQ guidance. (#261)
+
 ## Updates to Documentation
+
+- The `ADVFQ` vignette was reviewed and modernized to be more in line with VFQ guidance. (#261)
 
 - Started using custom `{admiral}` roclet, resulting in cleared "Permitted" and "Default" values in function documentation. (#277)
 

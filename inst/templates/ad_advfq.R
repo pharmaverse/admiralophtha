@@ -587,6 +587,7 @@ advfq_qs2 <- advfq_qs1 %>%
     ),
     variable_params = list(
       params(
+        # Use base items only
         filter_add = PARCAT5 == "VFQ-25" & str_sub(PARAMCD, 1, 3) == "QSB" & PARCAT4 != "General Health" & !is.na(AVAL),
         set_values_to = exprs(
           AVAL = mean(AVAL),
@@ -594,6 +595,7 @@ advfq_qs2 <- advfq_qs1 %>%
         )
       ),
       params(
+        # Use optional items only
         filter_add = PARCAT5 == "VFQ-39" & str_sub(PARAMCD, 1, 3) == "QSO" & PARCAT4 != "General Health" & !is.na(AVAL),
         set_values_to = exprs(
           AVAL = mean(AVAL),
