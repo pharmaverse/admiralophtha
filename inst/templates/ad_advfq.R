@@ -173,9 +173,9 @@ advfq_dtdy <- qs %>%
     dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = get_admiral_option("subject_keys")
-) %>%
+  ) %>%
   ## analysis dates ADT, ADY ----
- derive_vars_dt(
+  derive_vars_dt(
     new_vars_prefix = "A",
     dtc = QSDTC
   ) %>%
@@ -186,17 +186,17 @@ advfq_dtdy <- qs %>%
 
 advfq_aval <- advfq_dtdy %>%
   ## Add PARAMCD for original parameters only - PARCATx and PARAM will be added later ----
-derive_vars_merged_lookup(
-  dataset_add = param_lookup_original,
-  new_vars = exprs(PARAMCD),
-  by_vars = exprs(QSTESTCD)
-) %>%
+  derive_vars_merged_lookup(
+    dataset_add = param_lookup_original,
+    new_vars = exprs(PARAMCD),
+    by_vars = exprs(QSTESTCD)
+  ) %>%
   ## Calculate AVAL and AVALC and derive BASETYPE ----
-mutate(
-  AVAL = QSSTRESN,
-  AVALC = QSORRES,
-  BASETYPE = "LAST PERIOD 01"
-)
+  mutate(
+    AVAL = QSSTRESN,
+    AVALC = QSORRES,
+    BASETYPE = "LAST PERIOD 01"
+  )
 
 # Get visit info ----
 # See also the "Visit and Period Variables" vignette
