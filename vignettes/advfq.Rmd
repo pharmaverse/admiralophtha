@@ -7,11 +7,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+collapse = TRUE,
+comment = "#>"
 )
 ```
 
@@ -20,8 +20,8 @@ knitr::opts_chunk$set(
 This article describes creating an ADVFQ ADaM with Visual Functioning Questionnaire
 data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are absent, and the user is invited to consult the aforementioned article for guidance.
 
- **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
- otherwise specified.* 
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
+otherwise specified.* 
 
 The full, open-source VFQ questionnaire can be accessed [here](https://www.nei.nih.gov/learn-about-eye-health/outreach-resources/outreach-materials/visual-function-questionnaire-25).
 
@@ -243,10 +243,83 @@ dataset_vignette(
   display_vars = exprs(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 )
 ```
+## Initial set up of ADVFQ {#setup} 
 
+We can now start setting up ADVFQ by taking `qs` and merging on some ADSL variables which are needed for BDS derivations later down the line. Note that there is no need to merge on the whole ADSL dataset immediately as in so doing we would be needlessly increasing the size of the working dataset; the rest of the variables will be merged on at the end. 
+
+```{r, eval = TRUE}
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
+
+advfq <- qs %>%
+  ## merge on ADSL vars ----
+derive_vars_merged(
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by_vars = get_admiral_option("subject_keys")
+)
+```
+
+Now we can derive the analysis date (`ADT`) and analysis relative day (`ADY`) variables. These derivations are study-specific and so the ones below are just samples - the user is again invited to consult the vignette on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) for details on this topic.
+
+```{r, eval = TRUE}
+advfq <- advfq %>%
+  ## analysis dates ADT, ADY ----
+derive_vars_dt(
+  new_vars_prefix = "A",
+  dtc = QSDTC
+) %>%
+  derive_vars_dy(
+    reference_date = TRTSDT,
+    source_vars = exprs(ADT)
+  )
+```
+
+Next, we can assign `PARAMCD` for the original parameters by merging with the `param_lookup_original` table we set up earlier. Using `derive_vars_merged_lookup()` allows us to get console-level feedback that all the `QSTESTCD`s have been mapped. We can also derive `AVAL`, `AVALC` and `BASETYPE` for the original records with a simple `mutate()` statement, and then `AVISIT` and `AVISITN` with study-specific logic.
+
+```{r, eval = TRUE}
+advfq <- advfq %>%
+  ## Add PARAMCD for original parameters only ----
+  derive_vars_merged_lookup(
+    dataset_add = param_lookup_original,
+    new_vars = exprs(PARAMCD),
+    by_vars = exprs(QSTESTCD)
+  ) %>%
+  ## Calculate AVAL and AVALC and derive BASETYPE ----
+  mutate(
+    AVAL = QSSTRESN,
+    AVALC = QSORRES,
+    BASETYPE = "LAST PERIOD 01"
+  ) %>%
+  # Derive Visits ----
+  mutate(
+    AVISIT = case_when(
+      str_detect(VISIT, "DAY 1") ~ "Baseline",
+      !is.na(VISIT) ~ str_to_title(VISIT),
+      TRUE ~ NA_character_
+    ),
+    AVISITN = case_when(
+      VISIT == "BASELINE" ~ "0",
+      str_detect(VISIT, "WEEK") ~ VISIT %>%
+        str_replace("WEEK", "") %>%
+        str_trim(),
+      TRUE ~ NA
+    ),
+  )
+```
+
+Here's what the data for the first three questions looks like for one patient only:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advfq %>% 
+    filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("VFQ101", "VFQ102", "VFQ103")) %>% 
+    arrange(USUBJID, AVISITN, PARAMCD),
+  display_vars = exprs(USUBJID, QSTESTCD, AVISIT, PARAMCD, AVAL, AVALC)
+)
+```
 ## Example Script {#example}
 
 ADaM | Sample Code 
- ---- | -------------- 
+---- | -------------- 
 ADVFQ | [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R)
 

@@ -185,7 +185,7 @@ advfq_dtdy <- qs %>%
   )
 
 advfq_aval <- advfq_dtdy %>%
-  ## Add PARAMCD for original parameters only - add PARAM etc later ----
+  ## Add PARAMCD for original parameters only ----
 derive_vars_merged_lookup(
   dataset_add = param_lookup_original,
   new_vars = exprs(PARAMCD),
@@ -198,9 +198,30 @@ mutate(
   BASETYPE = "LAST PERIOD 01"
 )
 
+# Get visit info ----
+# See also the "Visit and Period Variables" vignette
+# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html)
+advfq_visit <- advfq_aval %>%
+  # Derive Timing
+  mutate(
+    AVISIT = case_when(
+      # If VISIT=DAY 1 then set to Baseline, study specific
+      str_detect(VISIT, "DAY 1") ~ "Baseline",
+      !is.na(VISIT) ~ str_to_title(VISIT),
+      TRUE ~ NA_character_
+    ),
+    AVISITN = case_when(
+      VISIT == "BASELINE" ~ "0",
+      str_detect(VISIT, "WEEK") ~ VISIT %>%
+        str_replace("WEEK", "") %>%
+        str_trim(),
+      TRUE ~ NA
+    ),
+  )
+
 # Derive transformed derived parameters ----
 
-advfq_qr_pre <- advfq_aval %>%
+advfq_qr_pre <- advfq_visit %>%
   # Set up temporary flag to be used for QR15C derivation later. The flag identifies
   # visits where QSTESTCD == "VFQ115C" does not exist, for which a different derivation
   # of QR15C is required
@@ -222,8 +243,7 @@ advfq_qr <- advfq_qr_pre %>%
     dataset_add = .,
     by_vars = c(
       get_admiral_option("subject_keys"),
-      # VISIT, VISITNUM included below but user can set back to missing once AVISIT, AVISITN are derived
-      exprs(!!!adsl_vars, PARAMCD, VISIT, VISITNUM, ADT, ADY)
+      exprs(!!!adsl_vars, PARAMCD, AVISIT, AVISITN, ADT, ADY)
     ),
     variable_params = list(
       params(
@@ -529,8 +549,7 @@ advfq_qsb <- derive_summary_records(
   filter_add = PARCAT2 == "Transformed - Original Items" & PARCAT5 == "Base Item" & !is.na(AVAL),
   by_vars = c(
     get_admiral_option("subject_keys"),
-    # VISIT, VISITNUM included below but user can set back to missing once AVISIT, AVISITN are derived
-    exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, PARCAT4)
+    exprs(!!!adsl_vars, AVISIT, AVISITN, ADT, ADY, PARCAT4)
   ),
   set_values_to = exprs(AVAL = mean(AVAL))
 ) %>%
@@ -545,8 +564,7 @@ advfq_qso <- derive_summary_records(
   filter_add = PARCAT2 == "Transformed - Original Items" & !is.na(AVAL),
   by_vars = c(
     get_admiral_option("subject_keys"),
-    # VISIT, VISITNUM included below but user can set back to missing once AVISIT, AVISITN are derived
-    exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY, PARCAT4)
+    exprs(!!!adsl_vars, AVISIT, AVISITN, ADT, ADY, PARCAT4)
   ),
   set_values_to = exprs(AVAL = mean(AVAL))
 ) %>%
@@ -565,8 +583,7 @@ advfq_qs2 <- advfq_qs1 %>%
     dataset_add = advfq_qs1,
     by_vars = c(
       get_admiral_option("subject_keys"),
-      # VISIT, VISITNUM included below but user can set back to missing once AVISIT, AVISITN are derived
-      exprs(!!!adsl_vars, VISIT, VISITNUM, ADT, ADY)
+      exprs(!!!adsl_vars, AVISIT, AVISITN, ADT, ADY)
     ),
     variable_params = list(
       params(
@@ -597,28 +614,7 @@ advfq_qs2a <- advfq_qs2 %>%
   ) %>%
   rbind(advfq_qs2 %>% filter(!str_detect(PARAMCD, "SCORE")))
 
-# Get visit info ----
-# See also the "Visit and Period Variables" vignette
-# (https://pharmaverse.github.io/admiral/cran-release/articles/visits_periods.html)
-advfq_visit <- advfq_qs2a %>%
-  # Derive Timing
-  mutate(
-    AVISIT = case_when(
-      # If VISIT=DAY 1 then set to Baseline, study specific
-      str_detect(VISIT, "DAY 1") ~ "Baseline",
-      !is.na(VISIT) ~ str_to_title(VISIT),
-      TRUE ~ NA_character_
-    ),
-    AVISITN = case_when(
-      VISIT == "BASELINE" ~ "0",
-      str_detect(VISIT, "WEEK") ~ VISIT %>%
-        str_replace("WEEK", "") %>%
-        str_trim(),
-      TRUE ~ NA
-    ),
-  )
-
-advfq_ontrt <- advfq_visit %>%
+advfq_ontrt <- advfq_qs2a %>%
   # Calculate ONTRTFL ----
   derive_var_ontrtfl(
     start_date = ADT,
@@ -634,7 +630,7 @@ advfq_blfl <- advfq_ontrt %>%
     derivation = derive_var_extreme_flag,
     args = params(
       by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD)),
-      order = exprs(ADT, VISITNUM, QSSEQ),
+      order = exprs(ADT, AVISITN, QSSEQ),
       new_var = ABLFL,
       mode = "last"
     ),
@@ -673,7 +669,7 @@ advfq_aseq <- advfq_anlflag %>%
   derive_var_obs_number(
     new_var = ASEQ,
     by_vars = get_admiral_option("subject_keys"),
-    order = exprs(PARAMCD, ADT, AVISITN, VISITNUM),
+    order = exprs(PARAMCD, ADT, AVISITN),
     check_type = "error"
   )
 
