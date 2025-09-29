@@ -737,6 +737,20 @@ advfq <- advfq %>%
   )
 ```
 
+We can then add the `PARAM` and `PARCATx` variables for both the original and transformed records by merging with the relevant lookup tables.
+
+```{r. eval = TRUE}
+# Add PARAM, PARCAT vars ----
+advfq <- advfq %>%
+  derive_vars_merged_lookup(
+    dataset_add = rbind(
+      param_lookup_original %>% select(-QSTEST, -QSTESTCD),
+      param_lookup_transformed
+    ),
+    by_vars = exprs(PARAMCD)
+  )
+```
+
 Here's what some of the transformed records look like for one patient's first two visits:
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -748,7 +762,7 @@ dataset_vignette(
       AVISIT %in% c("Baseline", "Week 12")
     ) %>% 
     arrange(USUBJID, AVISITN, PARAMCD),
-  display_vars = exprs(USUBJID, AVISIT, PARAMCD, AVAL)
+  display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, AVAL)
 )
 ```
 
