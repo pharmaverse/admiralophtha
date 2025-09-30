@@ -756,7 +756,7 @@ dataset_vignette(
       PARAMCD %in% c("VFQ101", "VFQ102", "VFQ119", "QR01", "QR02", "QR19"),
       AVISIT %in% c("Baseline", "Week 12")
     ) %>%
-    arrange(USUBJID, AVISITN, PARAMCD) %>% 
+    arrange(USUBJID, AVISITN, PARAMCD) %>%
     select(USUBJID, AVISIT, PARAM, PARAMCD, AVAL),
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, AVAL)
 )
@@ -810,7 +810,7 @@ Here's what the Base item composite scores by category look like for the "Near A
 dataset_vignette(
   advfq %>%
     filter(USUBJID %in% c("01-701-1034"), PARAMCD %in% c("QR05", "QR06", "QR07", "QR08", "QR09", "QR14", "QSBNA", "QSBDA")) %>%
-    arrange(USUBJID, AVISITN, PARAMCD) %>% 
+    arrange(USUBJID, AVISITN, PARAMCD) %>%
     select(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL),
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL)
 )
@@ -881,7 +881,7 @@ dataset_vignette(
       (PARCAT5 == "VFQ-39" & str_sub(PARAMCD, 1, 3) == "QSO" & PARCAT4 != "General Health") | PARAMCD == "QOCSCORE",
       AVISIT == "Baseline"
     ) %>%
-    arrange(USUBJID, AVISITN, PARAMCD) %>% 
+    arrange(USUBJID, AVISITN, PARAMCD) %>%
     select(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL),
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, PARCAT4, AVAL)
 )
