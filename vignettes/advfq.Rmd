@@ -18,12 +18,12 @@ knitr::opts_chunk$set(
 # Introduction
 
 This article describes creating an ADVFQ ADaM with Visual Functioning Questionnaire
-data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are mostly absent, and the user is invited to consult the aforementioned article for guidance.
-
-**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
-otherwise specified.* 
+data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are mostly absent, and the user is invited to consult the aforementioned article for guidance. 
 
 The full, open-source VFQ questionnaire can be accessed [here](https://www.nei.nih.gov/learn-about-eye-health/outreach-resources/outreach-materials/visual-function-questionnaire-25).
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
+otherwise specified. Also, some of the example datasets in this vignette contain more records than are displayed by default, but the number of displayed records can be expanded using the selectors at the bottom.* 
 
 ## Dataset Contents
 
@@ -31,10 +31,10 @@ The full, open-source VFQ questionnaire can be accessed [here](https://www.nei.n
 
 The records in ADVFQ can be categorized in four groups:
 
-1. The __original__/__raw__ records coming from the VFQ itself. Importantly, not all of these items are measured on the same scale.
+1. The __original__/__raw__ records coming from the VFQ itself. These include both the "Base" items in the standard VFQ-25 and the "Optional" items which can be added to form the VFQ-39. Importantly, not all of the items are measured on the same scale.
 1. The __transformed__ records, which are in a one-to-one correspondence with the original records and serve to recode the latter on the same 0 - 100 scale.
-1. The __composite scores by category__, which are means of all the transformed records from within a category, e.g. "Near activities score".
-1. The __overall composite scores__, which are means of the composite scores, either including the composite parameters or not.
+1. The __composite scores by category__, which are means of all the transformed records from within a category, e.g. "Near activities score". These composite scores can be calculated including or excluding the Optional items.
+1. The __overall composite scores__, which are means of the composite scores, again including or excluding the Optional items.
 
 ## Required Packages
 
@@ -71,9 +71,9 @@ adsl <- admiral_adsl
 qs <- qs_ophtha
 ```
 
-Next, it will prove useful to set up lookup tables ahead of time for the `PARAM`/`PARAMCD` and `PARCATx` variables for the original, transformed and composite parameters. This is so that when the latter two are derived later in the script, we can simply assign `PARAMCD` (or one of the `PARCAT`s) and then perform a merge with the lookup tables to associate to them the remaining variables as well.
+Next, it will prove useful to set up lookup tables ahead of time for the `PARAM`/`PARAMCD` and `PARCATx` variables for the original, transformed and composite parameters. This is so that when the latter two are derived later in the script, we can simply assign `PARAMCD` (or one of the `PARCAT`s) and then perform a merge with the lookup tables to associate to them the remaining variables as well. __Please note that the mappings described through these lookup tables may vary from company to company - this is just what `{admiralophtha}` suggests.__
 
-For convenience, we set up three separate lookup tables. You can peruse how the tables are structured below - for the full set up code, please visit the [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R) template. There is a special importance for the contents of `PARCAT4` since this determines the categories which are then averaged within the [composite parameters](#deriving_composite).
+For convenience, we suggest setting up three separate lookup tables. You can peruse how the tables are structured below - for the full set up code, please visit the [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R) template. There is a special importance for the contents of `PARCAT4` since this determines the categories which are then averaged within the [composite parameters](#deriving_composite). You can differentiate the Base Items from the Optional ones using `PARCAT5`, and the original, transformed and composite parameters using `PARCAT2`.
 
 ```{r, eval=TRUE, echo=FALSE} 
 ## Original parameters (note PARAM, PARAMCD are identical to QSTEST, QSTESTCD) ----
@@ -327,22 +327,22 @@ derive_summary_records(
     get_admiral_option("subject_keys"),
     exprs(!!!adsl_vars, PARAMCD, AVISIT, AVISITN, ADT, ADY)
   ),
-  filter_add = QSTESTCD == "<some parameter>" & !is.na(AVAL),
+  filter_add = QSTESTCD == "VFQ1xx" & !is.na(AVAL),
   set_values_to = exprs(
     AVAL = compute_scale(
       source = AVAL,
-      source_range = c(1, 5), # or some other range, e.g. c(1,6), depending on the parameter
+      source_range = c(1, 5), # or some other range, e.g. c(1, 6), depending on the parameter
       target_range = c(0, 100),
       flip_direction = TRUE # or FALSE, depending on the parameter
     ),
-    PARAMCD = "QR01"
+    PARAMCD = "QRxx"
   )
 )
 ```
 
-The function `compute_scale()` is a helper function from `{admiral}` which performs the re-scaling. The user will need to specify the `source_range` (i.e. the range of possible values for the original record) and whether or not to `flip_direction` (i.e. whether higher values of the original record correspond to better or worse outcomes). Note that both the `source_range` and `flip_direction` *will* change across parameters - for instance, the source range is `c(1, 5)` for `PARAMCD == "VFQ101"` but `c(1, 6)` for `PARAMCD == "VFQ102"`.
+The function `compute_scale()` is a helper function from `{admiral}` which performs the re-scaling. You will need to specify the `source_range` (i.e. the range of possible values for the original record) and whether or not to `flip_direction` (i.e. whether higher values of the original record correspond to better or worse outcomes). Note that both the `source_range` and `flip_direction` *will* change across parameters - for instance, the source range is `c(1, 5)` for `PARAMCD == "VFQ101"` but `c(1, 6)` for `PARAMCD == "VFQ102"`.
 
-For question 15C we have to be a little more careful as the derivation depends on whether or not question 15C was asked at that visit. If it was, then we can derive the transformed record as normal. However, if it wasn't, then we have to check the response to question 15B - if the response to 15B indicates that the patient has never driven or given up driving (i.e. `QSTRESN == 1`), then we set the transformed record to 0; otherwise, we do not derive a transformed record for that visit. To do this, we can set up a temporary flag variable using `derive_var_merged_exist_flag()` to identify visits where question 15C was not asked, and then use that flag in the derivation of the transformed record for 15C.
+For question 15C we have to be a little more careful as the derivation depends on whether or not question 15C was asked at that visit. If it was, then we can derive the transformed record as normal. However, if it wasn't, then we have to check the response to question 15B - if the response to 15B indicates that the patient has never driven or given up driving (i.e. `QSSTRESN == 1`), then we set the transformed record to 0; otherwise, we do not derive a transformed record for that visit. To do this, we can set up a temporary flag variable using `derive_var_merged_exist_flag()` to identify visits where question 15C was not asked, and then use that flag in the derivation of the transformed record for 15C.
 
 ```{r, eval = TRUE}
 advfq <- advfq %>%
@@ -394,6 +394,7 @@ advfq <- advfq %>%
           PARAMCD = "QR02"
         )
       ),
+      # < ... more params() calls for other parameters ... >
       # For QR15C, do it in two parts
       # first in the case where QSTESTCD == "VFQ115C" is present at that visit
       params(
@@ -416,6 +417,7 @@ advfq <- advfq %>%
           PARAMCD = "QR15C"
         )
       ),
+      # < ... more params() calls for other parameters ... >
       params(
         filter_add = QSTESTCD == "VFQ119" & !is.na(AVAL),
         set_values_to = exprs(
@@ -428,6 +430,7 @@ advfq <- advfq %>%
           PARAMCD = "QR19"
         )
       )
+      # < ... more params() calls for other parameters ... >
     )
   )
 ```
@@ -753,7 +756,8 @@ dataset_vignette(
       PARAMCD %in% c("VFQ101", "VFQ102", "VFQ119", "QR01", "QR02", "QR19"),
       AVISIT %in% c("Baseline", "Week 12")
     ) %>%
-    arrange(USUBJID, AVISITN, PARAMCD),
+    arrange(USUBJID, AVISITN, PARAMCD) %>% 
+    select(USUBJID, AVISIT, PARAM, PARAMCD, AVAL),
   display_vars = exprs(USUBJID, AVISIT, PARAM, PARAMCD, AVAL)
 )
 ```
@@ -762,7 +766,7 @@ dataset_vignette(
 
 ### Composite scores by category
 
-With the now-derived transformed parameters (identifiable through `PARCAT2 == "Transformed - Original Items"`), we have every question measured on the same scale and can now derive the composite parameters. These are essentially just means across categories of questions, with the category being determined by the contents of `PARCAT4`. The VFQ questionnaire dictates that for each category, two different composite parameters should be derived: one including just the base items of the questionnaire (`PARCAT5 == "Base Item"`) and the other one also including any optional items. As such, below we derive the composite parameters in two stages, first constructing `advfq_qsb` for the base item-only composite means, and then `advfq_qso` for the means including all items. 
+With the now-derived transformed parameters (identifiable through `PARCAT2 == "Transformed - Original Items"`), we have every question measured on the same scale and can derive the composite parameters. These are essentially just means across categories of questions, with the category being determined by the contents of `PARCAT4`. The VFQ guidelines dictate that for each category, two different composite parameters should be derived: one including just the Base items of the questionnaire (`PARCAT5 == "Base Item"`) and the other one also including any Optional items. As such, below we derive the composite parameters in two stages, first constructing `advfq_qsb` for the Base item-only composite means, and then `advfq_qso` for the means including all items. 
 
 Note that the `dataset` argument is not passed to `derive_summary_records()`, meaning the output datasets contain only the new composite parameters. Also, this time we use `PARCAT4` as a by-variable, meaning that the new composite scores are assigned the same value of `PARCAT4` (e.g. "Distance Activities") as the records that were used to constitute them. Then, we can then use `derive_vars_merged_lookup()` to add on the `PARCATx` (excluding `PARCAT4`) and `PARAM`/`PARAMCD` variables for these new records. At the end, we append the new records to the existing `advfq` using `bind_rows()`.
 
@@ -800,7 +804,7 @@ advfq_qso <- derive_summary_records(
 advfq <- bind_rows(advfq, advfq_qsb, advfq_qso)
 ```
 
-Here's what the base item composite scores by category look like for the "Near Activities" and "Distance Activities" categories for one patient's first two visits:
+Here's what the Base item composite scores by category look like for the "Near Activities" and "Distance Activities" categories for one patient's first two visits:
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -815,8 +819,8 @@ dataset_vignette(
 
 Finally, for the overall composite scores, we take all the newly-derived composite parameters, excluding "General Health", and create:
 
-* An averaged record (`PARAMCD == "QBCSCORE"`) using the composite scores that were calculated with base items only;
-* An averaged record (`PARAMCD == "QOCSCORE"`) using the composite scores that were calculated with base and optional items.
+* An averaged record (`PARAMCD == "QBCSCORE"`) using the composite scores that were calculated with Base items only;
+* An averaged record (`PARAMCD == "QOCSCORE"`) using the composite scores that were calculated with Base and Optional items.
 
 As was done for the [transformed parameters](#deriving_transformed), we do this in a single call to `call_derivation()`, since the only difference between the two derivations is the `filter_add` and `set_values_to` arguments.
 
@@ -866,7 +870,7 @@ advfq <- advfq %>%
   rbind(advfq %>% filter(!str_detect(PARAMCD, "SCORE")))
 ```
 
-Here's what the overall composite records using the base and composite items for one patient's baseline visit:
+Here's what the overall composite records using the Base and Optional items for one patient's baseline visit:
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
