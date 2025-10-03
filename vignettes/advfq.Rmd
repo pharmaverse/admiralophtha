@@ -433,7 +433,7 @@ advfq <- advfq %>%
         )
       )
     )
-  ) %>% 
+  ) %>%
   select(-TEMP_VFQ115C_FL)
 ```
 

@@ -5,7 +5,7 @@
 \alias{admiralophtha_advfq}
 \title{Visual Function Questionnaire Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 972 rows and 94 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 972 rows and 93 columns.
 }
 \source{
 Derived from the ADSL and QS datasets using \code{{admiral}}, \code{{admiralophtha}}  and the
