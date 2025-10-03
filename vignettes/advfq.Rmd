@@ -315,7 +315,7 @@ dataset_vignette(
 
 ## Deriving the Transformed Parameters {#deriving_transformed}
 
-Now we are ready to derive the transformed parameters. Excluding 15C (see later down this section), all of these are derived by re-scaling a single original record. As such, the prototypical code which can be used to derive them is a call to `derive_summary_records()` which is structured as follows:
+Now we are ready to derive the transformed parameters. Excluding 15C (see later down this section), all of these are derived by re-scaling a single original record. As such, the prototypical code which can be used to derive them is a call to `derive_extreme_records()` which is structured as follows:
 
 ```{r, eval = FALSE}
 derive_summary_records(
@@ -378,7 +378,7 @@ We can then derive the transformed records, including the special handling for 1
 ```{r, eval = TRUE}
 advfq <- advfq %>%
   call_derivation(
-    derivation = derive_summary_records,
+    derivation = derive_extreme_records,
     dataset = .,
     dataset_add = .,
     by_vars = c(
