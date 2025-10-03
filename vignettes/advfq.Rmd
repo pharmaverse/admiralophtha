@@ -31,7 +31,7 @@ otherwise specified. Also, some of the example datasets in this vignette contain
 
 The records in ADVFQ can be categorized in four groups:
 
-1. The __original__/__raw__ records coming from the VFQ itself. These include both the "Base" items in the standard VFQ-25 and the "Optional" items which can be added to form the VFQ-39. Importantly, not all of the items are measured on the same scale.
+1. The __original__/__raw__ records coming from the VFQ itself. These include both the Base items in the standard VFQ-25 and the Optional items which can be added to form the VFQ-39. Importantly, not all of the items are measured on the same scale.
 1. The __transformed__ records, which are in a one-to-one correspondence with the original records and serve to recode the latter on the same 0 - 100 scale.
 1. The __composite scores by category__, which are means of all the transformed records from within a category, e.g. "Near activities score". These composite scores can be calculated including or excluding the Optional items.
 1. The __overall composite scores__, which are means of the composite scores, again including or excluding the Optional items.
@@ -51,14 +51,14 @@ library(stringr)
 
 # Programming Workflow
 
-* [Reading in data and setting up lookup tables](#setup_lookup)
-* [Initial set up and mapping the raw records](#mapping_raw)
-* [Deriving the transformed parameters](#deriving_transformed) 
-* [Deriving the composite parameters](#deriving_composite)
+* [Reading In Data and Setting Up Lookup Tables](#setup_lookup)
+* [Initial Set Up and Mapping the Raw Records](#mapping_raw)
+* [Deriving the Transformed Parameters](#deriving_transformed) 
+* [Deriving the Composite Parameters](#deriving_composite)
 * [Further Derivations of Standard BDS Variables](#further)
 * [Example Script](#example) 
 
-## Reading in data and setting up lookup tables {#setup_lookup}
+## Reading In Data and Setting Up Lookup Tables {#setup_lookup}
 
 To start, all datasets needed for the creation of the VFQ analysis dataset
 should be read into the environment. For the purpose of demonstration we shall use the `{pharmaversesdtm}` `qs_ophtha` and the `{admiral}` ADSL test datasets. Note that the former only contains VFQ records.
@@ -216,7 +216,7 @@ param_lookup_composite <- tribble(
   select(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 ```
 
-#### Original items (`param_lookup_original`)
+#### Original Items (`param_lookup_original`)
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -225,7 +225,7 @@ dataset_vignette(
 )
 ```
 
-#### Transformed records
+#### Transformed Records (`param_lookup_transformed`)
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -234,7 +234,7 @@ dataset_vignette(
 )
 ```
 
-#### Composite records
+#### Composite Records (`param_lookup_composite`)
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -242,7 +242,7 @@ dataset_vignette(
   display_vars = exprs(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 )
 ```
-## Initial set up and mapping the raw records {#mapping_raw} 
+## Deriving the Transformed Parameters {#mapping_raw} 
 
 We can now start setting up ADVFQ by taking `qs` and merging on some ADSL variables which are needed for BDS derivations later down the line. Note that there is no need to merge on the whole ADSL dataset immediately as in so doing we would be needlessly increasing the size of the working dataset; the rest of the variables can be merged on at the end. 
 
@@ -290,15 +290,13 @@ advfq <- advfq %>%
   ) %>%
   mutate(
     AVISIT = case_when(
-      str_detect(VISIT, "DAY 1") ~ "Baseline",
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
     AVISITN = case_when(
-      VISIT == "BASELINE" ~ "0",
-      str_detect(VISIT, "WEEK") ~ VISIT %>%
-        str_replace("WEEK", "") %>%
-        str_trim(),
+      AVISIT == "Baseline" ~ 1,
+      AVISIT == "Week 12" ~ 12,
+      AVISIT == "Week 24" ~ 24,
       TRUE ~ NA
     ),
   )
@@ -315,7 +313,7 @@ dataset_vignette(
 )
 ```
 
-## Deriving the transformed parameters {#deriving_transformed}
+## Deriving the Transformed Parameters {#deriving_transformed}
 
 Now we are ready to derive the transformed parameters. Excluding 15C (see later down this section), all of these are derived by re-scaling a single original record. As such, the prototypical code which can be used to derive them is a call to `derive_summary_records()` which is structured as follows:
 
@@ -340,7 +338,25 @@ derive_summary_records(
 )
 ```
 
-The function `compute_scale()` is a helper function from `{admiral}` which performs the re-scaling. You will need to specify the `source_range` (i.e. the range of possible values for the original record) and whether or not to `flip_direction` (i.e. whether higher values of the original record correspond to better or worse outcomes). Note that both the `source_range` and `flip_direction` *will* change across parameters - for instance, the source range is `c(1, 5)` for `PARAMCD == "VFQ101"` but `c(1, 6)` for `PARAMCD == "VFQ102"`.
+The function `transform_range()` is a helper function from `{admiral}` which performs the re-scaling. You will need to specify the `source_range` (i.e. the range of possible values for the original record) and whether or not to `flip_direction` (i.e. whether higher values of the original record correspond to better or worse outcomes). Note that both the `source_range` and `flip_direction` *will* change across parameters - for instance, the source range is `c(1, 5)` for `PARAMCD == "VFQ101"` but `c(1, 6)` for `PARAMCD == "VFQ102"`. As such it is useful to group all parameters (excluding 15C, for which a different approach will be needed) based on which transformation they require; in so doing the transformations for each group can be done together. 
+
+```{r, eval = TRUE}
+range1to5_flip_params <- c(
+  "VFQ101", "VFQ103", "VFQ104", "VFQ105", "VFQ106", "VFQ107", "VFQ108",
+  "VFQ109", "VFQ110", "VFQ111", "VFQ112", "VFQ113", "VFQ114", "VFQ116",
+  "VFQ116A", "VFQ1A03", "VFQ1A04", "VFQ1A05", "VFQ1A06", "VFQ1A07",
+  "VFQ1A08", "VFQ1A09"
+)
+
+range1to6_flip_params <- c("VFQ102")
+
+range1to5_noflip_params <- c(
+  "VFQ117", "VFQ118", "VFQ119", "VFQ120", "VFQ121", "VFQ122", "VFQ123",
+  "VFQ124", "VFQ125", "VFQ1A11A", "VFQ1A11B", "VFQ1A12", "VFQ1A13"
+)
+
+range0to10_noflip_params <- c("VFQ1A01", "VFQ1A02")
+```
 
 For question 15C we have to be a little more careful as the derivation depends on whether or not question 15C was asked at that visit. If it was, then we can derive the transformed record as normal. However, if it wasn't, then we have to check the response to question 15B - if the response to 15B indicates that the patient has never driven or given up driving (i.e. `QSSTRESN == 1`), then we set the transformed record to 0; otherwise, we do not derive a transformed record for that visit. To do this, we can set up a temporary flag variable using `derive_var_merged_exist_flag()` to identify visits where question 15C was not asked, and then use that flag in the derivation of the transformed record for 15C.
 
@@ -357,9 +373,9 @@ advfq <- advfq %>%
   )
 ```
 
-We can then derive the transformed records, including the special handling for 15C, in a single call to `call_derivation()`, since each call to `derive_summary_records()` contains the same assignment of `dataset`, `dataset_add` and `by_vars` and then only differs in the `filter_add` and `set_values_to` arguments. Here is a shortened version of this call, including only a select few parameters. For the full call, please see the [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R) template.
+We can then derive the transformed records, including the special handling for 15C, in a single call to `call_derivation()`, since each call to `derive_extreme_records()` contains the same assignment of `dataset`, `dataset_add`, `by_vars` and `keep_source_vars`, then only differs in the `filter_add` and `set_values_to` arguments. Each list passed to `variable_params` performs the transformation for one of the groups of parameters set up above, including dynamical generation of the `PARAMCD`, though 15C is done separately. Note that we set `keep_source_vars = adsl_vars` to ensure SDTM records do not get populated for derived parameters.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 advfq <- advfq %>%
   call_derivation(
     derivation = derive_summary_records,
@@ -367,45 +383,44 @@ advfq <- advfq %>%
     dataset_add = .,
     by_vars = c(
       get_admiral_option("subject_keys"),
-      exprs(!!!adsl_vars, PARAMCD, AVISIT, AVISITN, ADT, ADY)
+      exprs(PARAMCD, AVISIT, AVISITN, ADT, ADY)
     ),
+    keep_source_vars = adsl_vars,
     variable_params = list(
       params(
-        filter_add = QSTESTCD == "VFQ101" & !is.na(AVAL),
+        filter_add = QSTESTCD %in% range1to5_flip_params & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(
-            source = AVAL,
-            source_range = c(1, 5),
-            target_range = c(0, 100),
-            flip_direction = TRUE
-          ),
-          PARAMCD = "QR01"
+          AVAL = transform_range(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
         )
       ),
       params(
-        filter_add = QSTESTCD == "VFQ102" & !is.na(AVAL),
+        filter_add = QSTESTCD %in% range1to6_flip_params & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(
-            source = AVAL,
-            source_range = c(1, 6),
-            target_range = c(0, 100),
-            flip_direction = TRUE
-          ),
-          PARAMCD = "QR02"
+          AVAL = transform_range(source = AVAL, source_range = c(1, 6), target_range = c(0, 100), flip_direction = TRUE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
         )
       ),
-      # < ... more params() calls for other parameters ... >
+      params(
+        filter_add = QSTESTCD %in% range1to5_noflip_params & !is.na(AVAL),
+        set_values_to = exprs(
+          AVAL = transform_range(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
+        )
+      ),
+      params(
+        filter_add = QSTESTCD %in% range0to10_noflip_params & !is.na(AVAL),
+        set_values_to = exprs(
+          AVAL = transform_range(source = AVAL, source_range = c(0, 10), target_range = c(0, 100), flip_direction = FALSE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
+        )
+      ),
       # For QR15C, do it in two parts
       # first in the case where QSTESTCD == "VFQ115C" is present at that visit
       params(
         filter_add = QSTESTCD == "VFQ115C" & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(
-            source = AVAL,
-            source_range = c(1, 5),
-            target_range = c(0, 100),
-            flip_direction = TRUE
-          ),
+          AVAL = transform_range(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
           PARAMCD = "QR15C"
         )
       ),
@@ -416,321 +431,10 @@ advfq <- advfq %>%
           AVAL = 0,
           PARAMCD = "QR15C"
         )
-      ),
-      # < ... more params() calls for other parameters ... >
-      params(
-        filter_add = QSTESTCD == "VFQ119" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(
-            source = AVAL,
-            source_range = c(1, 5),
-            target_range = c(0, 100),
-            flip_direction = FALSE
-          ),
-          PARAMCD = "QR19"
-        )
-      )
-      # < ... more params() calls for other parameters ... >
-    )
-  )
-```
-
-```{r, eval = TRUE, include = FALSE}
-advfq <- advfq %>%
-  call_derivation(
-    derivation = derive_summary_records,
-    dataset = .,
-    dataset_add = .,
-    by_vars = c(
-      get_admiral_option("subject_keys"),
-      exprs(!!!adsl_vars, PARAMCD, AVISIT, AVISITN, ADT, ADY)
-    ),
-    variable_params = list(
-      params(
-        filter_add = QSTESTCD == "VFQ101" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR01"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ102" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 6), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR02"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ103" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR03"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ104" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR04"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ105" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR05"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ106" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR06"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ107" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR07"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ108" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR08"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ109" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR09"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ110" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR10"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ111" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR11"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ112" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR12"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ113" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR13"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ114" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR14"
-        )
-      ),
-      # For QR15C, do it in two parts
-      # first in the case where QSTESTCD == "VFQ115C" is present at that visit
-      params(
-        filter_add = QSTESTCD == "VFQ115C" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR15C"
-        )
-      ),
-      # second in the case where QSTESTCD == "VFQ115C" is not present at that visit
-      params(
-        filter_add = TEMP_VFQ115C_FL == "N" & QSTESTCD == "VFQ115B" & AVAL == 1,
-        set_values_to = exprs(
-          AVAL = 0,
-          PARAMCD = "QR15C"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ116" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR16"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ116A" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR16A"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ117" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR17"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ118" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR18"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ119" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR19"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ120" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR20"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ121" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR21"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ122" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR22"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ123" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR23"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ124" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR24"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ125" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR25"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A01" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(0, 10), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QRA01"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A02" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(0, 10), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QRA02"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A03" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA03"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A04" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA04"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A05" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA05"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A06" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA06"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A07" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA07"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A08" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA08"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A09" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA09"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A11A" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A11A"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A11B" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A11B"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A12" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A12"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A13" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A13"
-        )
       )
     )
-  )
+  ) %>% 
+  select(-TEMP_VFQ115C_FL)
 ```
 
 We can then add the `PARAM` and `PARCATy` variables for both the original and transformed records by merging with the relevant lookup tables.
@@ -762,9 +466,9 @@ dataset_vignette(
 )
 ```
 
-## Deriving the composite parameters {#deriving_composite}
+## Deriving the Composite Parameters {#deriving_composite}
 
-### Composite scores by category
+### Composite Scores by Category
 
 With the now-derived transformed parameters (identifiable through `PARCAT2 == "Transformed - Original Items"`), we have every question measured on the same scale and can derive the composite parameters. These are essentially just means across categories of questions, with the category being determined by the contents of `PARCAT4`. The VFQ guidelines dictate that for each category, two different composite parameters should be derived: one including just the Base items of the questionnaire (`PARCAT5 == "Base Item"`) and the other one also including any Optional items. As such, below we derive the composite parameters in two stages, first constructing `advfq_qsb` for the Base item-only composite means, and then `advfq_qso` for the means including all items. 
 
@@ -816,7 +520,7 @@ dataset_vignette(
 )
 ```
 
-### Overall composite scores
+### Overall Composite Scores
 
 Finally, for the overall composite scores, we take all the newly-derived composite parameters, excluding "General Health", and create:
 

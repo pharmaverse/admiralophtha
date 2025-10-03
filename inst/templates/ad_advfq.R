@@ -205,21 +205,36 @@ advfq_visit <- advfq_aval %>%
   # Derive Timing
   mutate(
     AVISIT = case_when(
-      # If VISIT=DAY 1 then set to Baseline, study specific
-      str_detect(VISIT, "DAY 1") ~ "Baseline",
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
     AVISITN = case_when(
-      VISIT == "BASELINE" ~ "0",
-      str_detect(VISIT, "WEEK") ~ VISIT %>%
-        str_replace("WEEK", "") %>%
-        str_trim(),
+      AVISIT == "Baseline" ~ 1,
+      AVISIT == "Week 12" ~ 12,
+      AVISIT == "Week 24" ~ 24,
       TRUE ~ NA
     ),
   )
 
 # Derive transformed derived parameters ----
+
+## Divide parameters into groups based on what transformation will be required ----
+# Note: 15C treated separately (see below)
+range1to5_flip_params <- c(
+  "VFQ101", "VFQ103", "VFQ104", "VFQ105", "VFQ106", "VFQ107", "VFQ108",
+  "VFQ109", "VFQ110", "VFQ111", "VFQ112", "VFQ113", "VFQ114", "VFQ116",
+  "VFQ116A", "VFQ1A03", "VFQ1A04", "VFQ1A05", "VFQ1A06", "VFQ1A07",
+  "VFQ1A08", "VFQ1A09"
+)
+
+range1to6_flip_params <- c("VFQ102")
+
+range1to5_noflip_params <- c(
+  "VFQ117", "VFQ118", "VFQ119", "VFQ120", "VFQ121", "VFQ122", "VFQ123",
+  "VFQ124", "VFQ125", "VFQ1A11A", "VFQ1A11B", "VFQ1A12", "VFQ1A13"
+)
+
+range0to10_noflip_params <- c("VFQ1A01", "VFQ1A02")
 
 advfq_qr_pre <- advfq_visit %>%
   # Set up temporary flag to be used for QR15C derivation later. The flag identifies
@@ -238,110 +253,41 @@ advfq_qr_pre <- advfq_visit %>%
 # Need new block here as TEMP_VFQ115C_FL needs to be part of dataset_add
 advfq_qr <- advfq_qr_pre %>%
   call_derivation(
-    derivation = derive_summary_records,
+    derivation = derive_extreme_records,
     dataset = .,
     dataset_add = .,
     by_vars = c(
       get_admiral_option("subject_keys"),
-      exprs(!!!adsl_vars, PARAMCD, AVISIT, AVISITN, ADT, ADY)
+      exprs(PARAMCD, AVISIT, AVISITN, ADT, ADY)
     ),
+    keep_source_vars = adsl_vars,
     variable_params = list(
       params(
-        filter_add = QSTESTCD == "VFQ101" & !is.na(AVAL),
+        filter_add = QSTESTCD %in% range1to5_flip_params & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR01"
+          AVAL = transform_range(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
         )
       ),
       params(
-        filter_add = QSTESTCD == "VFQ102" & !is.na(AVAL),
+        filter_add = QSTESTCD %in% range1to6_flip_params & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 6), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR02"
+          AVAL = transform_range(source = AVAL, source_range = c(1, 6), target_range = c(0, 100), flip_direction = TRUE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
         )
       ),
       params(
-        filter_add = QSTESTCD == "VFQ103" & !is.na(AVAL),
+        filter_add = QSTESTCD %in% range1to5_noflip_params & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR03"
+          AVAL = transform_range(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
         )
       ),
       params(
-        filter_add = QSTESTCD == "VFQ104" & !is.na(AVAL),
+        filter_add = QSTESTCD %in% range0to10_noflip_params & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR04"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ105" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR05"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ106" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR06"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ107" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR07"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ108" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR08"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ109" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR09"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ110" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR10"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ111" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR11"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ112" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR12"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ113" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR13"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ114" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR14"
+          AVAL = transform_range(source = AVAL, source_range = c(0, 10), target_range = c(0, 100), flip_direction = FALSE),
+          PARAMCD = str_replace(QSTESTCD, "VFQ1", "QR")
         )
       ),
       # For QR15C, do it in two parts
@@ -349,7 +295,7 @@ advfq_qr <- advfq_qr_pre %>%
       params(
         filter_add = QSTESTCD == "VFQ115C" & !is.na(AVAL),
         set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
+          AVAL = transform_range(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
           PARAMCD = "QR15C"
         )
       ),
@@ -360,177 +306,10 @@ advfq_qr <- advfq_qr_pre %>%
           AVAL = 0,
           PARAMCD = "QR15C"
         )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ116" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR16"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ116A" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QR16A"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ117" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR17"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ118" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR18"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ119" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR19"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ120" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR20"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ121" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR21"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ122" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR22"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ123" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR23"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ124" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR24"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ125" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR25"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A01" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(0, 10), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QRA01"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A02" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(0, 10), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QRA02"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A03" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA03"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A04" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA04"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A05" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA05"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A06" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA06"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A07" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA07"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A08" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA08"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A09" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = TRUE),
-          PARAMCD = "QRA09"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A11A" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A11A"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A11B" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A11B"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A12" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A12"
-        )
-      ),
-      params(
-        filter_add = QSTESTCD == "VFQ1A13" & !is.na(AVAL),
-        set_values_to = exprs(
-          AVAL = compute_scale(source = AVAL, source_range = c(1, 5), target_range = c(0, 100), flip_direction = FALSE),
-          PARAMCD = "QR1A13"
-        )
       )
     )
-  )
+  ) %>%
+  select(-TEMP_VFQ115C_FL)
 
 # Add PARAM, PARCAT vars ----
 advfq_qr_parcats <- advfq_qr %>%
