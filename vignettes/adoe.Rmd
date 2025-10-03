@@ -43,9 +43,9 @@ library(stringr)
 # Programming Workflow
 
 * [Initial Set Up of ADOE ](#setup)
-* [Further Derivations of Standard BDS Variables](#further)
 * [Assigning `PARAM`/`PARAMCD` and `AVISIT/AVISITN`](#param_avisit)
-* {Creating IOP pre to post-dose difference derived parameter](#parameters)
+* [Creating IOP pre to post-dose difference derived parameter](#parameters)
+* [Further Derivations of Standard BDS Variables](#further)
 * [Example Script](#example)
 
 ## Initial set up of ADOE {#setup}

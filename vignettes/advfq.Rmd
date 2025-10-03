@@ -71,7 +71,7 @@ adsl <- admiral_adsl
 qs <- qs_ophtha
 ```
 
-Next, it will prove useful to set up lookup tables ahead of time for the `PARAM`/`PARAMCD` and `PARCATx` variables for the original, transformed and composite parameters. This is so that when the latter two are derived later in the script, we can simply assign `PARAMCD` (or one of the `PARCAT`s) and then perform a merge with the lookup tables to associate to them the remaining variables as well. __Please note that the mappings described through these lookup tables may vary from company to company - this is just what `{admiralophtha}` suggests.__
+Next, it will prove useful to set up lookup tables ahead of time for the `PARAM`/`PARAMCD` and `PARCATy` variables for the original, transformed and composite parameters. This is so that when the latter two are derived later in the script, we can simply assign `PARAMCD` (or one of the `PARCATy`s) and then perform a merge with the lookup tables to associate to them the remaining variables as well. __Please note that the mappings described through these lookup tables may vary from company to company - this is just what `{admiralophtha}` suggests.__
 
 For convenience, we suggest setting up three separate lookup tables. You can peruse how the tables are structured below - for the full set up code, please visit the [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R) template. There is a special importance for the contents of `PARCAT4` since this determines the categories which are then averaged within the [composite parameters](#deriving_composite). You can differentiate the Base Items from the Optional ones using `PARCAT5`, and the original, transformed and composite parameters using `PARCAT2`.
 
@@ -216,7 +216,7 @@ param_lookup_composite <- tribble(
   select(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 ```
 
-#### Original items
+#### Original items (`param_lookup_original`)
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -271,13 +271,13 @@ advfq <- advfq %>%
   )
 ```
 
-Next, we can assign `PARAMCD` for the original parameters by merging with the `param_lookup_original` table we set up earlier. Using `derive_vars_merged_lookup()` allows us to get console-level feedback that all the `QSTESTCD`s have been mapped. We only add `PARAMCD` for now, and will derive `PARCATx` and `PARAM` later - again to avoid carrying forward too many variables. 
+Next, we can assign `PARAMCD` for the original parameters by merging with the `param_lookup_original` table we set up earlier. Using `derive_vars_merged_lookup()` allows us to get console-level feedback that all the `QSTESTCD`s have been mapped. We only add `PARAMCD` for now, and will derive `PARCATy` and `PARAM` later - again to avoid carrying forward too many variables. 
 
 We can also derive `AVAL`, `AVALC` and `BASETYPE` for the original records with a simple `mutate()` statement, and then `AVISIT` and `AVISITN` with study-specific logic.
 
 ```{r, eval = TRUE}
 advfq <- advfq %>%
-  ## Add PARAMCD for original parameters only - PARCATx and PARAM will be added later
+  ## Add PARAMCD for original parameters only - PARCATy and PARAM will be added later
   derive_vars_merged_lookup(
     dataset_add = param_lookup_original,
     new_vars = exprs(PARAMCD),
@@ -733,7 +733,7 @@ advfq <- advfq %>%
   )
 ```
 
-We can then add the `PARAM` and `PARCATx` variables for both the original and transformed records by merging with the relevant lookup tables.
+We can then add the `PARAM` and `PARCATy` variables for both the original and transformed records by merging with the relevant lookup tables.
 
 ```{r eval = TRUE}
 advfq <- advfq %>%
@@ -768,7 +768,7 @@ dataset_vignette(
 
 With the now-derived transformed parameters (identifiable through `PARCAT2 == "Transformed - Original Items"`), we have every question measured on the same scale and can derive the composite parameters. These are essentially just means across categories of questions, with the category being determined by the contents of `PARCAT4`. The VFQ guidelines dictate that for each category, two different composite parameters should be derived: one including just the Base items of the questionnaire (`PARCAT5 == "Base Item"`) and the other one also including any Optional items. As such, below we derive the composite parameters in two stages, first constructing `advfq_qsb` for the Base item-only composite means, and then `advfq_qso` for the means including all items. 
 
-Note that the `dataset` argument is not passed to `derive_summary_records()`, meaning the output datasets contain only the new composite parameters. Also, this time we use `PARCAT4` as a by-variable, meaning that the new composite scores are assigned the same value of `PARCAT4` (e.g. "Distance Activities") as the records that were used to constitute them. Then, we can then use `derive_vars_merged_lookup()` to add on the `PARCATx` (excluding `PARCAT4`) and `PARAM`/`PARAMCD` variables for these new records. At the end, we append the new records to the existing `advfq` using `bind_rows()`.
+Note that the `dataset` argument is not passed to `derive_summary_records()`, meaning the output datasets contain only the new composite parameters. Also, this time we use `PARCAT4` as a by-variable, meaning that the new composite scores are assigned the same value of `PARCAT4` (e.g. "Distance Activities") as the records that were used to constitute them. Then, we can then use `derive_vars_merged_lookup()` to add on the `PARCATy` (excluding `PARCAT4`) and `PARAM`/`PARAMCD` variables for these new records. At the end, we append the new records to the existing `advfq` using `bind_rows()`.
 
 ```{r, eval = TRUE}
 advfq_qsb <- derive_summary_records(
@@ -857,7 +857,7 @@ advfq <- advfq %>%
   )
 ```
 
-We then assign `PARAM`/`PARAMCD` and `PARCATx` for these new overall composite records by merging with the relevant lookup table, and append them to `advfq`.
+We then assign `PARAM`/`PARAMCD` and `PARCATy` for these new overall composite records by merging with the relevant lookup table, and append them to `advfq`.
 
 ```{r, eval = TRUE}
 advfq <- advfq %>%
