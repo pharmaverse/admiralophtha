@@ -427,9 +427,15 @@ advfq_change <- advfq_blfl %>%
     new_var = BASE
   ) %>%
   ## Calculate CHG ----
-  derive_var_chg() %>%
+  restrict_derivation(
+    derivation = derive_var_chg,
+    filter = AVISITN > 1
+  ) %>%
   ## Calculate PCHG ----
-  derive_var_pchg()
+  restrict_derivation(
+    derivation = derive_var_chg,
+    filter = AVISITN > 1
+  )
 
 ## ANL01FL: Flag last result within an AVISIT for post-baseline records ----
 advfq_anlflag <- advfq_change %>%
