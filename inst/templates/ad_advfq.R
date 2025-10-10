@@ -433,7 +433,7 @@ advfq_change <- advfq_blfl %>%
   ) %>%
   ## Calculate PCHG ----
   restrict_derivation(
-    derivation = derive_var_chg,
+    derivation = derive_var_pchg,
     filter = AVISITN > 1
   )
 
