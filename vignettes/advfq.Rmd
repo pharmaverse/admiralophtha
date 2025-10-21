@@ -242,7 +242,7 @@ dataset_vignette(
   display_vars = exprs(PARAM, PARAMCD, PARCAT1, PARCAT2, PARCAT3, PARCAT4, PARCAT5)
 )
 ```
-## Deriving the Transformed Parameters {#mapping_raw} 
+## Initial Set Up and Mapping the Raw Records {#mapping_raw} 
 
 We can now start setting up ADVFQ by taking `qs` and merging on some ADSL variables which are needed for BDS derivations later down the line. Note that there is no need to merge on the whole ADSL dataset immediately as in so doing we would be needlessly increasing the size of the working dataset; the rest of the variables can be merged on at the end. 
 
@@ -318,16 +318,12 @@ dataset_vignette(
 Now we are ready to derive the transformed parameters. Excluding 15C (see later down this section), all of these are derived by re-scaling a single original record. As such, the prototypical code which can be used to derive them is a call to `derive_extreme_records()` which is structured as follows:
 
 ```{r, eval = FALSE}
-derive_summary_records(
+derive_extreme_records(
   dataset = advfq,
   dataset_add = advfq,
-  by_vars = c(
-    get_admiral_option("subject_keys"),
-    exprs(!!!adsl_vars, PARAMCD, AVISIT, AVISITN, ADT, ADY)
-  ),
   filter_add = QSTESTCD == "VFQ1xx" & !is.na(AVAL),
   set_values_to = exprs(
-    AVAL = compute_scale(
+    AVAL = transform_range(
       source = AVAL,
       source_range = c(1, 5), # or some other range, e.g. c(1, 6), depending on the parameter
       target_range = c(0, 100),
