@@ -43,6 +43,8 @@ library(stringr)
 # Programming Workflow
 
 * [Initial Set Up of ADOE ](#setup)
+* [Assigning `PARAM`/`PARAMCD` and `AVISIT/AVISITN`](#param_avisit)
+* [Creating IOP pre to post-dose difference derived parameter](#parameters)
 * [Further Derivations of Standard BDS Variables](#further)
 * [Example Script](#example)
 
@@ -138,7 +140,7 @@ adoe <- adoe %>%
   )
 ```
 
-## Creating IOP pre to post-dose difference derived parameter {#params}
+## Creating IOP pre to post-dose difference derived parameter {#parameters}
 
 Two derived parameters of interest are the difference between pre and post-dose IOP in each eye at each visit. These records can be added with two calls to `derive_param_computed()`. Since the calls are very similar, they can be executed in one code block using `call_derivation()` - please see the [Higher Order Functions vignette](https://pharmaverse.github.io/admiral/articles/higher_order.html) for more details. 
 
