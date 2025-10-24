@@ -13,6 +13,11 @@ repo:
     issue: https://github.com/pharmaverse/admiralophtha/issues/
     user: https://github.com/
 
+home:
+  links:
+  - text: 🌍 {admiral} ecosytem 🌍
+    href: https://pharmaverse.org/e2eclinical/adam/
+
 authors:
   F. Hoffmann-La Roche AG:
     html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.png' height='34' alt='Roche logo' /></a>"

@@ -1,15 +1,17 @@
 <!-- Please do not edit the README.md file as it is auto-generated after PR merges. Only edit the README.Rmd file -->
 <!-- To test this in your feature branch use code: rmarkdown::render("README.Rmd", output_format ="md_document") -->
 
-# Admiral Extension for Ophthalmology <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
+# admiralophtha <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
-
-[<img src="http://pharmaverse.org/shields/admiralophtha.svg">](https://pharmaverse.org)
-[![Test
-Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiralophtha/actions/workflows/code-coverage.yml)
-
+[![pharmaverse admiralophtha Badge](http://pharmaverse.org/shields/admiralophtha.svg)](https://pharmaverse.org)
+[![CRAN status](https://www.r-pkg.org/badges/version/admiralophtha)](https://CRAN.R-project.org/package=admiralophtha)
+[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/main/test-coverage.svg)](https://raw.githubusercontent.com/pharmaverse/admiralophtha/badges/main/test-coverage.svg)
 <!-- badges: end -->
+
+Ophthalmology extension package for ADaM in R Asset Library `{admiral}`.
+
+*Explore all the other packages in the [{admiral} ecosystem](https://pharmaverse.org/e2eclinical/adam/) to learn more about ADaM programming in R.*
 
 ## Purpose
 
