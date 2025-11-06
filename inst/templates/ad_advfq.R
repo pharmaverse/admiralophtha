@@ -250,7 +250,7 @@ advfq_qr_pre <- advfq_visit %>%
   )
 
 # Need new block here as TEMP_VFQ115C_FL needs to be part of dataset_add
-advfq_qr_nobyvar <- advfq_qr_pre %>%
+advfq_qr <- advfq_qr_pre %>%
   call_derivation(
     derivation = derive_extreme_records,
     dataset = .,
@@ -470,7 +470,7 @@ advfq_adsl <- advfq_aseq %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-admiralophtha_advfq1 <- advfq_adsl
+admiralophtha_advfq <- advfq_adsl
 
 # ---- Save output ----
 
