@@ -1,0 +1,264 @@
+# Creating ADOE
+
+## Introduction
+
+This article describes creating an ADOE ADaM with Ophthalmology Exam
+Analysis data for ophthalmology endpoints. It is to be used in
+conjunction with the article on [creating a BDS dataset from
+SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html).
+As such, derivations and processes that are not specific to ADOE are
+absent, and the user is invited to consult the aforementioned article
+for guidance.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input
+unless otherwise specified.*
+
+### Dataset Contents
+
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) suggests
+to populate ADOE with general miscellaneous ophthalmology parameters.
+Any efficacy endpoint-related parameters (eg. BCVA tests) should be
+placed in separate datasets (eg. ADBCVA).
+
+### Required Packages
+
+The examples of this vignette require the following packages.
+
+``` r
+library(dplyr)
+library(admiral)
+library(pharmaversesdtm)
+library(admiraldev)
+library(admiralophtha)
+library(stringr)
+```
+
+## Programming Workflow
+
+- [Initial Set Up of ADOE](#setup)
+- [Assigning `PARAM`/`PARAMCD` and `AVISIT/AVISITN`](#param_avisit)
+- [Creating IOP pre to post-dose difference derived
+  parameter](#parameters)
+- [Further Derivations of Standard BDS Variables](#further)
+- [Example Script](#example)
+
+### Initial set up of ADOE
+
+As with all BDS ADaM datasets, one should start from the OE SDTM, where
+only the general ophthalmology records are of interest. For the purposes
+of the next two sections, we shall be using the
+[admiral](https://pharmaverse.github.io/admiral/) OE and ADSL test data.
+We will also require a lookup table for the mapping of parameter codes.
+
+**Note**: to simulate an ophthalmology study, we add a randomly
+generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will
+already have been derived using
+[`derive_var_studyeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_studyeye.md).
+
+``` r
+data("oe_ophtha")
+data("admiral_adsl")
+
+# Add STUDYEYE to ADSL to simulate an ophtha dataset
+adsl <- admiral_adsl %>%
+  as.data.frame() %>%
+  mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
+  convert_blanks_to_na()
+
+oe <- convert_blanks_to_na(oe_ophtha)
+
+# Lookup table
+
+# nolint start
+param_lookup <- tibble::tribble(
+  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SCSUBTH", "Study Eye Center Subfield Thickness (um)", 1,
+  "CSUBTH", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FCSUBTH", "Fellow Eye Center Subfield Thickness (um)", 2,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Study Eye", "SDRSSR", "Study Eye Diabetic Retinopathy Severity", 3,
+  "DRSSR", "OPHTHALMIC ASSESSMENTS", "SD-OCT CST SINGLE FORM", "Fellow Eye", "FDRSSR", "Fellow Eye Diabetic Retinopathy Severity", 4,
+  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "Study Eye", "SIOP", "Study Eye IOP (mmHg)", 5,
+  "IOP", "INTRAOCULAR PRESSURE", NA_character_, "Fellow Eye", "FIOP", "Fellow Eye IOP (mmHg)", 6
+)
+# nolint end
+```
+
+Following this setup, the programmer can start constructing ADOE. The
+first step is to subset OE to only general ophthalmology parameters.
+Then, one can merge the resulting dataset with ADSL. This is required
+for two reasons: firstly, `STUDYEYE` is crucial in the mapping of
+`AFEYE` and `PARAMCD`’s. Secondly, the treatment start date (`TRTSDT`)
+is also a prerequisite for the derivation of variables such as Analysis
+Day (`ADY`).
+
+``` r
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
+
+adoe <- oe %>%
+  filter(
+    OETESTCD %in% c("CSUBTH", "DRSSR", "IOP")
+  ) %>%
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = get_admiral_option("subject_keys")
+  )
+```
+
+The next item of business is to derive `AVAL`, `AVALU`, and `DTYPE`. In
+this example, due to the small number of parameters their derivation is
+trivial. `AFEYE` is also created in this step using the function
+[`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_afeye.md).
+To determine the affected eye, this function compares `OELAT` to the
+`STUDYEYE` variable created from the previous step.
+
+``` r
+adoe <- adoe %>%
+  # Calculate AVAL, AVALC, AVALU and DTYPE
+  mutate(
+    AVAL = OESTRESN,
+    AVALC = OESTRESC,
+    AVALU = OESTRESU,
+    DTYPE = NA_character_
+  ) %>%
+  # Derive AFEYE needed for PARAMCD derivation
+  derive_var_afeye(loc_var = OELOC, lat_var = OELAT, loc_vals = c("EYE", "RETINA"))
+```
+
+### Assigning `PARAM`/`PARAMCD` and `AVISIT/AVISITN`
+
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_merged.html)
+from [admiral](https://pharmaverse.github.io/admiral/) and the lookup
+table `param_lookup` generated above. `AVISIT`, `AVISITN` and related
+timepoint variables can also be derived soon after, though their
+derivation is generally study-specific. A simple option is included
+below; please consult the
+[admiral](https://pharmaverse.github.io/admiral/) [BDS findings
+vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html#timing)
+for a more detailed discussion.
+
+``` r
+adoe <- adoe %>%
+  # Add PARAM, PARAMCD from lookup table
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars = exprs(PARAM, PARAMCD),
+    by_vars = exprs(OETESTCD, AFEYE)
+  ) %>%
+  # Derive visit, baseline flag info and BASETYPE
+  mutate(
+    ATPTN = OETPTNUM,
+    ATPT = OETPT,
+    AVISIT = case_when(
+      str_detect(VISIT, "SCREEN") ~ "Screening",
+      !is.na(VISIT) ~ str_to_title(VISIT),
+      TRUE ~ NA_character_
+    ),
+    AVISITN = round(VISITNUM, 0),
+    ABLFL = if_else(AVISIT == "Baseline", "Y", NA_character_)
+    # In actual studies, ABLFL derivation will likely be more nuanced
+    # and leverage derive_var_extreme_flag()
+  )
+```
+
+### Creating IOP pre to post-dose difference derived parameter
+
+Two derived parameters of interest are the difference between pre and
+post-dose IOP in each eye at each visit. These records can be added with
+two calls to
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_param_computed.html).
+Since the calls are very similar, they can be executed in one code block
+using
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/call_derivation.html) -
+please see the [Higher Order Functions
+vignette](https://pharmaverse.github.io/admiral/articles/higher_order.html)
+for more details.
+
+``` r
+adoe <- adoe %>%
+  # Add derived parameter for difference between pre and post dose IOP
+  call_derivation(
+    derivation = derive_param_computed,
+    by_vars = c(get_admiral_option("subject_keys"), !!adsl_vars, exprs(AVISIT, AVISITN)),
+    variable_params = list(
+      # Study eye
+      params(
+        parameters = exprs(
+          SIOPPRE = PARAMCD == "SIOP" & ATPT == "PRE-DOSE",
+          SIOPPOST = PARAMCD == "SIOP" & ATPT == "POST-DOSE"
+        ),
+        set_values_to = exprs(
+          PARAMCD = "SIOPCHG",
+          PARAM = "Study Eye IOP Pre to Post Dose Diff (mmHg)",
+          PARAMN = 9,
+          AVAL = AVAL.SIOPPOST - AVAL.SIOPPRE,
+          AVALC = as.character(AVAL)
+        )
+      ),
+      # Fellow eye
+      params(
+        parameters = exprs(
+          FIOPPRE = PARAMCD == "FIOP" & ATPT == "PRE-DOSE",
+          FIOPPOST = PARAMCD == "FIOP" & ATPT == "POST-DOSE"
+        ),
+        set_values_to = exprs(
+          PARAMCD = "FIOPCHG",
+          PARAM = "Fellow Eye IOP Pre to Post Dose Diff (mmHg)",
+          PARAMN = 10,
+          AVAL = AVAL.FIOPPOST - AVAL.FIOPPRE,
+          AVALC = as.character(AVAL)
+        )
+      )
+    )
+  )
+```
+
+Note that within the call to
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_param_computed.html),
+the `parameters` argument has been used to pass an expression that
+uniquely identifies which records are the pre-dose IOP and which are the
+post-dose IOP using the timepoint variable `OETPT`, because all IOP
+records are mapped to `PARAMCD = "SIOP"` or `PARAMCD = "FIOP"`. Users
+may need to update this expression if their study-specific collection or
+mapping differs from this standard.
+
+Additionally, it should be noted that for the `SIOPCHG` and `FIOPCHG`
+derived parameters, it is generally recommended not to populate `BASE`,
+`CHG` and `PCHG` as they are difficult/confusing to interpret. This can
+be simply achieved in one step, as the derivation of
+[`derive_var_base()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_var_base.html)
+can be placed inside of
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/restrict_derivation.html)
+with a filter added to exclude these parameters. Then, `BASE` will be
+set to `NA` for `SIOPCHG` and `FIOPCHG`, so later calls to
+[`derive_var_chg()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_var_chg.html)
+and
+[`derive_var_pchg()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_var_pchg.html)
+do not need any changes.
+
+``` r
+adoe <- adoe %>%
+  # Calculate BASE (do not derive for IOP change params)
+  restrict_derivation(
+    derivation = derive_var_base,
+    args = params(
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT)),
+      source_var = AVAL,
+      new_var = BASE
+    ),
+    filter = !PARAMCD %in% c("SIOPCHG", "FIOPCHG")
+  )
+```
+
+### Further Derivations of Standard BDS Variables
+
+The user is invited to consult the article on [creating a BDS dataset
+from
+SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+to learn how to add standard BDS variables to ADOE.
+
+### Example Script
+
+| ADaM | Sample Code                                                                                  |
+|------|----------------------------------------------------------------------------------------------|
+| ADOE | [ad_adoe.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R) |
