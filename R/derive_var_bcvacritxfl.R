@@ -263,5 +263,5 @@ derive_var_bcvacritxfl <- function(dataset,
     counter <- counter + 1
   }
 
-  return(dataset)
+  dataset
 }
