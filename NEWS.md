@@ -6,6 +6,10 @@
 
 ## Updates to Documentation
 
+- The "Ask AI" widget was added to the bottom right of each page. It enables users to ask questions about `{admiralophtha}` and the
+rest of the `{admiral}` ecosystem and receive answers from an LLM. It is trained on the documentation of all `{admiral}` packages
+and provided by [kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
+
 - The `ADVFQ` vignette was reviewed and modernized to be more in line with VFQ guidance. (#261)
 
 - Started using custom `{admiral}` roclet, resulting in cleared "Permitted" and "Default" values in function documentation. (#277)
