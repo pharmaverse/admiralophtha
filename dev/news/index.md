@@ -10,6 +10,16 @@
 
 ### Updates to Documentation
 
+- The “Ask AI” widget was added to the bottom right of each page. It
+  enables users to ask questions about
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) and the
+  rest of the [admiral](https://pharmaverse.github.io/admiral/)
+  ecosystem and receive answers from an LLM. It is trained on the
+  documentation of all [admiral](https://pharmaverse.github.io/admiral/)
+  packages and provided by
+  [kapa.ai](https://docs.kapa.ai/kapa-for-open-source).
+  ([\#2887](https://github.com/pharmaverse/admiralophtha/issues/2887))
+
 - The `ADVFQ` vignette was reviewed and modernized to be more in line
   with VFQ guidance.
   ([\#261](https://github.com/pharmaverse/admiralophtha/issues/261))
