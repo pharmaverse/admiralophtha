@@ -85,8 +85,10 @@ lie above some lower limit).
 The input BCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_bcvacritxfl_util()}
-function has been superseded in favor of \code{admiral::derive_vars_crit_flag()}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_bcvacritxfl_util()}
+function has been deprecated in favor of \code{admiral::derive_vars_crit_flag()} - please see
+the \href{https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags}{criterion flag section of the ADBCVA vignette}
+for more details.
 
 Helper function for \code{derive_var_bcvacritxfl()} that adds a criterion variable \code{CRITx} and
 its corresponding flag \code{CRITxFL} to a dataset containing BCVA records
@@ -100,9 +102,13 @@ necessary to supply at least one of these three arguments.
 NOTE: if \code{crit_var} is equal to NA, then the resulting criterion flag is also marked
 as \code{NA}.
 }
+\seealso{
+Other deprecated: 
+\code{\link{derive_var_bcvacritxfl}()}
+}
 \author{
 Edoardo Mancini
 }
-\concept{superseded}
+\concept{deprecated}
+\keyword{deprecated}
 \keyword{internal}
-\keyword{superseded}

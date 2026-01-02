@@ -81,8 +81,10 @@ x, counting up from x = 1.
 The input BCVA dataset with additional column pairs\code{CRITx}, \code{CRITxFL}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}} The \code{derive_var_bcvacritxfl()}
-function has been superseded in favor of \code{admiral::derive_vars_crit_flag()}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_bcvacritxfl()}
+function has been deprecated in favor of \code{admiral::derive_vars_crit_flag()} - please see
+the \href{https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags}{criterion flag section of the ADBCVA vignette}
+for more details.
 
 Adds a criterion variables \code{CRITx} and their corresponding flags \code{CRITxFL} to a
 dataset containing BCVA records
@@ -143,8 +145,13 @@ restrict_derivation(
 )
 
 }
+\seealso{
+Other deprecated: 
+\code{\link{derive_var_bcvacritxfl_util}()}
+}
 \author{
 Edoardo Mancini
 }
+\concept{deprecated}
+\keyword{deprecated}
 \keyword{der_ophtha}
-\keyword{superseded}
