@@ -3,7 +3,8 @@
 #' @description
 #' `r lifecycle::badge("deprecated")` The `derive_var_bcvacritxfl_util()`
 #' function has been deprecated in favor of `admiral::derive_vars_crit_flag()` - please see
-#' the [criterion flag section of the ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+#' the [criterion flag section of the
+#' ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
 #' for more details.
 #'
 #' Helper function for `derive_var_bcvacritxfl()` that adds a criterion variable `CRITx` and
@@ -59,7 +60,6 @@ derive_var_bcvacritxfl_util <- function(dataset,
                                         bcva_range = NULL,
                                         bcva_uplim = NULL,
                                         bcva_lowlim = NULL) {
-
   deprecate_inform(
     when = "1.4.0",
     what = "admiralophtha::derive_var_bcvacritxfl_util()",
@@ -101,7 +101,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' @description
 #' `r lifecycle::badge("deprecated")` The `derive_var_bcvacritxfl()`
 #' function has been deprecated in favor of `admiral::derive_vars_crit_flag()` - please see
-#' the [criterion flag section of the ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+#' the [criterion flag section of the
+#' ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
 #' for more details.
 #'
 #' Adds a criterion variables `CRITx` and their corresponding flags `CRITxFL` to a
@@ -204,7 +205,6 @@ derive_var_bcvacritxfl <- function(dataset,
                                    bcva_lowlims = NULL,
                                    additional_text = "",
                                    critxfl_index = NULL) {
-
   deprecate_inform(
     when = "1.4.0",
     what = "admiralophtha::derive_var_bcvacritxfl()",
