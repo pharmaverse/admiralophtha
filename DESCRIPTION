@@ -61,7 +61,8 @@ Suggests:
     spelling,
     testthat (>= 3.0.0),
     tibble,
-    usethis
+    usethis,
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

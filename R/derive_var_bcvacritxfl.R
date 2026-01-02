@@ -60,17 +60,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
                                         bcva_range = NULL,
                                         bcva_uplim = NULL,
                                         bcva_lowlim = NULL) {
-  deprecate_inform(
-    when = "1.4.0",
-    what = "admiralophtha::derive_var_bcvacritxfl_util()",
-    with = "admiral::derive_vars_crit_flag()",
-    details = c(
-      i = "See admiralophtha's guidance on creating BCVA criterion flags here:
-      https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags",
-      x = "This message will turn into a warning with release of admiralophtha 1.5.0."
-    ),
-    id = "deprecate_bcva"
-  )
+
+  # Note: no deprecate_inform() call here as this is an internal function only.
 
   # Input checks
   assert_vars(crit_var)
@@ -213,8 +204,7 @@ derive_var_bcvacritxfl <- function(dataset,
       i = "See admiralophtha's guidance on creating BCVA criterion flags here:
       https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags",
       x = "This message will turn into a warning with release of admiralophtha 1.5.0."
-    ),
-    id = "deprecate_bcva"
+    )
   )
 
   # Input checks
