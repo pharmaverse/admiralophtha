@@ -60,7 +60,6 @@ derive_var_bcvacritxfl_util <- function(dataset,
                                         bcva_range = NULL,
                                         bcva_uplim = NULL,
                                         bcva_lowlim = NULL) {
-
   # Note: no deprecate_inform() call here as this is an internal function only.
 
   # Input checks
