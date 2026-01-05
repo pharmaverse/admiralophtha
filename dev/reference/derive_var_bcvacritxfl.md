@@ -1,8 +1,11 @@
 # Adds `CRITx`/`CRITxFL` pairs to BCVA dataset
 
-**\[superseded\]** The `derive_var_bcvacritxfl()` function has been
-superseded in favor of
-[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html).
+**\[deprecated\]** The `derive_var_bcvacritxfl()` function has been
+deprecated in favor of
+[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html) -
+please see the [criterion flag section of the ADBCVA
+vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+for more details.
 
 Adds a criterion variables `CRITx` and their corresponding flags
 `CRITxFL` to a dataset containing BCVA records
@@ -131,6 +134,11 @@ of the elements in `bcva_ranges`, `bcva_uplims` and `bcva_lowlims`.
 NOTE: if `crit_var` is equal to `NA`, then the resulting criterion flag
 is also marked as `NA`.
 
+## See also
+
+Other deprecated:
+[`derive_var_bcvacritxfl_util()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl_util.md)
+
 ## Author
 
 Edoardo Mancini
@@ -160,6 +168,11 @@ derive_var_bcvacritxfl(
   bcva_lowlims = list(8),
   additional_text = ""
 )
+#> `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.4.0.
+#> ℹ Please use `admiral::derive_vars_crit_flag()` instead.
+#> ℹ See admiralophtha's guidance on creating BCVA criterion flags here:
+#>   https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags
+#> ✖ This message will turn into a warning with release of admiralophtha 1.5.0.
 #> # A tibble: 6 × 18
 #>   STUDYID USUBJID AVISIT   BASETYPE PARAMCD   CHG CRIT1    CRIT1FL CRIT2 CRIT2FL
 #>   <chr>   <chr>   <chr>    <chr>    <chr>   <dbl> <chr>    <chr>   <chr> <chr>  

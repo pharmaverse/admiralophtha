@@ -2,6 +2,31 @@
 
 ## admiralophtha (development version)
 
+### Breaking Changes
+
+- The following functions are entering the next phase of the
+  [deprecation
+  process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
+
+  **Phase 1 (message)**
+
+  - [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
+    and its internal utility function
+    [`derive_var_bcvacritxfl_util()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl_util.md).
+    Users are invited to use
+    [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html) -
+    please see the [criterion flag section of the ADBCVA
+    vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+    for more details. Each deprecation phase for this function will only
+    last six months (i.e. one release cycle).
+    ([\#282](https://github.com/pharmaverse/admiralophtha/issues/282))
+
+  **Phase 2 (warning)**
+
+  **Phase 3 (error)**
+
+  **Phase 4 (removed)**
+
 ### Updates to Templates
 
 - The `ADVFQ` template was reviewed and modernized to be more in line

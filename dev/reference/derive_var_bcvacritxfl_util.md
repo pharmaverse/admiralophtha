@@ -1,8 +1,11 @@
 # Add `CRITx`/`CRITxFL` pair to BCVA dataset
 
-**\[superseded\]** The `derive_var_bcvacritxfl_util()` function has been
-superseded in favor of
-[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html).
+**\[deprecated\]** The `derive_var_bcvacritxfl_util()` function has been
+deprecated in favor of
+[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html) -
+please see the [criterion flag section of the ADBCVA
+vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+for more details.
 
 Helper function for
 [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
@@ -144,6 +147,11 @@ some upper limit; `crit_var <= a`; (3) value is above some lower limit;
 function; for (2), `bcva_uplim`; for (3) `bcva_lowlim`. It is necessary
 to supply at least one of these three arguments. NOTE: if `crit_var` is
 equal to NA, then the resulting criterion flag is also marked as `NA`.
+
+## See also
+
+Other deprecated:
+[`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
 
 ## Author
 

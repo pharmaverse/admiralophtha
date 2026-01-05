@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0.9006</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,18 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="admiralophtha-development-version">admiralophtha (development version)<a class="anchor" aria-label="anchor" href="#admiralophtha-development-version"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>
+<p>The following functions are entering the next phase of the <a href="https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation" class="external-link">deprecation process</a>:</p>
+<p><strong>Phase 1 (message)</strong></p>
+<ul><li>
+<code><a href="../reference/derive_var_bcvacritxfl.html">derive_var_bcvacritxfl()</a></code> and its internal utility function <code><a href="../reference/derive_var_bcvacritxfl_util.html">derive_var_bcvacritxfl_util()</a></code>. Users are invited to use <code><a href="https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html">admiral::derive_vars_crit_flag()</a></code> - please see the <a href="https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags">criterion flag section of the ADBCVA vignette</a> for more details. Each deprecation phase for this function will only last six months (i.e. one release cycle). (<a href="https://github.com/pharmaverse/admiralophtha/issues/282" class="external-link">#282</a>)</li>
+</ul><p><strong>Phase 2 (warning)</strong></p>
+<p><strong>Phase 3 (error)</strong></p>
+<p><strong>Phase 4 (removed)</strong></p>
+</li>
+</ul></div>
 <div class="section level3">
 <h3 id="updates-to-templates-development-version">Updates to Templates<a class="anchor" aria-label="anchor" href="#updates-to-templates-development-version"></a></h3>
 <ul><li>The <code>ADVFQ</code> template was reviewed and modernized to be more in line with VFQ guidance. (<a href="https://github.com/pharmaverse/admiralophtha/issues/261" class="external-link">#261</a>)</li>

@@ -57,9 +57,9 @@ library(admiral)
 library(admiraldev)
 #> 
 #> Attaching package: ‘admiraldev’
-#> The following objects are masked from ‘package:dplyr’:
+#> The following object is masked from ‘package:dplyr’:
 #> 
-#>     anti_join, filter_if, inner_join, left_join
+#>     filter_if
 
 adbcva <- tribble(
   ~STUDYID, ~USUBJID, ~AVAL,

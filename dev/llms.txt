@@ -92,7 +92,7 @@ Derivation Functions helpful for building the Ophtha datasets
 (e.g. adoe, adbcva)
 
 - [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
-  **\[superseded\]** :
+  **\[deprecated\]** :
 
   Adds `CRITx`/`CRITxFL` pairs to BCVA dataset
 
