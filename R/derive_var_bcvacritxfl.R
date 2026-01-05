@@ -1,8 +1,11 @@
 #' Add `CRITx`/`CRITxFL` pair to BCVA dataset
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_bcvacritxfl_util()`
-#' function has been superseded in favor of `admiral::derive_vars_crit_flag()`.
+#' `r lifecycle::badge("deprecated")` The `derive_var_bcvacritxfl_util()`
+#' function has been deprecated in favor of `admiral::derive_vars_crit_flag()` - please see
+#' the [criterion flag section of the
+#' ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+#' for more details.
 #'
 #' Helper function for `derive_var_bcvacritxfl()` that adds a criterion variable `CRITx` and
 #' its corresponding flag `CRITxFL` to a dataset containing BCVA records
@@ -46,8 +49,8 @@
 #'
 #' @return The input BCVA dataset with additional columns `CRITx`, `CRITxFL`.
 #'
-#' @family superseded
-#' @keywords internal superseded
+#' @family deprecated
+#' @keywords internal deprecated
 
 derive_var_bcvacritxfl_util <- function(dataset,
                                         crit_var,
@@ -57,6 +60,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
                                         bcva_range = NULL,
                                         bcva_uplim = NULL,
                                         bcva_lowlim = NULL) {
+  # Note: no deprecate_inform() call here as this is an internal function only.
+
   # Input checks
   assert_vars(crit_var)
   assert_data_frame(dataset, required_vars = c(exprs(STUDYID, USUBJID), crit_var))
@@ -84,8 +89,11 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' Adds `CRITx`/`CRITxFL` pairs to BCVA dataset
 #'
 #' @description
-#' `r lifecycle::badge("superseded")` The `derive_var_bcvacritxfl()`
-#' function has been superseded in favor of `admiral::derive_vars_crit_flag()`.
+#' `r lifecycle::badge("deprecated")` The `derive_var_bcvacritxfl()`
+#' function has been deprecated in favor of `admiral::derive_vars_crit_flag()` - please see
+#' the [criterion flag section of the
+#' ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+#' for more details.
 #'
 #' Adds a criterion variables `CRITx` and their corresponding flags `CRITxFL` to a
 #' dataset containing BCVA records
@@ -127,7 +135,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' @author Edoardo Mancini
 #'
 #' @return The input BCVA dataset with additional column pairs`CRITx`, `CRITxFL`.
-#' @keywords der_ophtha superseded
+#' @keywords der_ophtha deprecated
+#' @family deprecated
 #' @export
 #'
 #' @examples
@@ -186,6 +195,17 @@ derive_var_bcvacritxfl <- function(dataset,
                                    bcva_lowlims = NULL,
                                    additional_text = "",
                                    critxfl_index = NULL) {
+  deprecate_inform(
+    when = "1.4.0",
+    what = "admiralophtha::derive_var_bcvacritxfl()",
+    with = "admiral::derive_vars_crit_flag()",
+    details = c(
+      i = "See admiralophtha's guidance on creating BCVA criterion flags here:
+      https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags",
+      x = "This message will turn into a warning with release of admiralophtha 1.5.0."
+    )
+  )
+
   # Input checks
   assert_vars(crit_var)
   assert_data_frame(dataset, required_vars = crit_var)

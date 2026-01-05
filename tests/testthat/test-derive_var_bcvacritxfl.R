@@ -1,5 +1,8 @@
 ## Test 1: Criterion flags derived correctly ----
 test_that("derive_var_bcvacritxfl Test 1: Criterion flags derived correctly", {
+  testthat::local_edition(3)
+  withr::local_options(lifecycle_verbosity = "warning")
+
   expected_output1 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~CHG, ~CRIT1, ~CRIT1FL, ~CRIT2,
     ~CRIT2FL, ~CRIT3, ~CRIT3FL, ~CRIT4, ~CRIT4FL,
@@ -17,23 +20,28 @@ test_that("derive_var_bcvacritxfl Test 1: Criterion flags derived correctly", {
     "N", "CHG <= 10", "N", "CHG >= 8", "Y"
   )
 
-  actual_output1 <- derive_var_bcvacritxfl(
-    dataset = expected_output1 %>% select(-starts_with("CRIT")),
-    crit_var = exprs(CHG),
-    bcva_ranges = list(c(0, 5)),
-    bcva_uplims = list(-3, 10),
-    bcva_lowlims = list(8),
-    additional_text = ""
+  expect_snapshot(
+    actual_output1 <- derive_var_bcvacritxfl(
+      dataset = expected_output1 %>% select(-starts_with("CRIT")),
+      crit_var = exprs(CHG),
+      bcva_ranges = list(c(0, 5)),
+      bcva_uplims = list(-3, 10),
+      bcva_lowlims = list(8),
+      additional_text = ""
+    )
   )
 
   expect_equal(
     actual_output1,
-    expected_output1,
+    expected_output1
   )
 })
 
 ## Test 2: Correct appending in CRITx of additional text ----
 test_that("derive_var_bcvacritxfl Test 2: Correct appending in CRITx of additional text", {
+  testthat::local_edition(3)
+  withr::local_options(lifecycle_verbosity = "warning")
+
   expected_output2 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL, ~CHG, ~CRIT1, ~CRIT1FL,
     "XXX001", "P01", 6, 3, "4 <= AVAL <= 7 (transformed)", "Y",
@@ -44,22 +52,27 @@ test_that("derive_var_bcvacritxfl Test 2: Correct appending in CRITx of addition
     "XXX001", "P03", 0, 2, "4 <= AVAL <= 7 (transformed)", "N"
   )
 
-  actual_output2 <- derive_var_bcvacritxfl(
-    dataset = expected_output2 %>% select(-starts_with("CRIT")),
-    crit_var = exprs(AVAL),
-    bcva_ranges = list(c(4, 7)),
-    additional_text = " (transformed)"
+  expect_snapshot(
+    actual_output2 <- derive_var_bcvacritxfl(
+      dataset = expected_output2 %>% select(-starts_with("CRIT")),
+      crit_var = exprs(AVAL),
+      bcva_ranges = list(c(4, 7)),
+      additional_text = " (transformed)"
+    )
   )
 
   expect_equal(
     actual_output2,
-    expected_output2,
+    expected_output2
   )
 })
 
 
 ## Test 3: Correct CRITx index when critxfl_index not supplied ----
 test_that("derive_var_bcvacritxfl Test 3: Correct CRITx index when critxfl_index not supplied", {
+  testthat::local_edition(3)
+  withr::local_options(lifecycle_verbosity = "warning")
+
   expected_output3 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL, ~CHG, ~CRIT1, ~CRIT1FL, ~CRIT2, ~CRIT2FL,
     "XXX001", "P01", 6, 3, "4 <= AVAL <= 7", "Y", "AVAL >= 5", "Y",
@@ -70,20 +83,25 @@ test_that("derive_var_bcvacritxfl Test 3: Correct CRITx index when critxfl_index
     "XXX001", "P03", 0, 2, "4 <= AVAL <= 7", "N", "AVAL >= 5", "N"
   )
 
-  actual_output3 <- derive_var_bcvacritxfl(
-    dataset = expected_output3 %>% select(-starts_with("CRIT2")),
-    crit_var = exprs(AVAL),
-    bcva_lowlims = list(c(5))
+  expect_snapshot(
+    actual_output3 <- derive_var_bcvacritxfl(
+      dataset = expected_output3 %>% select(-starts_with("CRIT2")),
+      crit_var = exprs(AVAL),
+      bcva_lowlims = list(c(5))
+    )
   )
 
   expect_equal(
     actual_output3,
-    expected_output3,
+    expected_output3
   )
 })
 
 ## Test 4: Correct CRITx index when critxfl_index is supplied ----
 test_that("derive_var_bcvacritxfl Test 4: Correct CRITx index when critxfl_index is supplied", {
+  testthat::local_edition(3)
+  withr::local_options(lifecycle_verbosity = "warning")
+
   expected_output4 <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL, ~CHG, ~CRIT12, ~CRIT12FL,
     "XXX001", "P01", 6, 3, "AVAL <= 1", "N",
@@ -94,15 +112,17 @@ test_that("derive_var_bcvacritxfl Test 4: Correct CRITx index when critxfl_index
     "XXX001", "P03", 0, 2, "AVAL <= 1", "Y"
   )
 
-  actual_output4 <- derive_var_bcvacritxfl(
-    dataset = expected_output4 %>% select(-starts_with("CRIT2")),
-    crit_var = exprs(AVAL),
-    bcva_uplims = list(c(1)),
-    critxfl_index = 12
+  expect_snapshot(
+    actual_output4 <- derive_var_bcvacritxfl(
+      dataset = expected_output4 %>% select(-starts_with("CRIT2")),
+      crit_var = exprs(AVAL),
+      bcva_uplims = list(c(1)),
+      critxfl_index = 12
+    )
   )
 
   expect_equal(
     actual_output4,
-    expected_output4,
+    expected_output4
   )
 })

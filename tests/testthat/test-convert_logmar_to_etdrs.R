@@ -7,6 +7,6 @@ test_that("convert_logmar_to_etdrs Test 1: LogMAR converted correctly", {
 
   expect_equal(
     actual_output,
-    expected_output,
+    expected_output
   )
 })
