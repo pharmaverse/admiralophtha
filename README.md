@@ -1,6 +1,3 @@
-<!-- Please do not edit the README.md file as it is auto-generated after PR merges. Only edit the README.Rmd file -->
-<!-- To test this in your feature branch use code: rmarkdown::render("README.Rmd", output_format ="md_document") -->
-
 # admiralophtha <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
@@ -69,6 +66,6 @@ developer community:
 | Month / Year     | Package Version               |                          
 | ---------------- | ----------------------------- |
 |                  |                               |                                          
-| January 2025     | `{admiralophtha}` v. 1.2.0    |
+| ~January 2026    | `{admiralophtha}` v. 1.4.0    |
 |                  |                               | 
-| June 2025        | `{admiralophtha}` v. 1.3.0    |
+| ~June 2026       | `{admiralophtha}` v. 1.5.0    |
