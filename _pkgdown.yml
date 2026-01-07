@@ -20,6 +20,7 @@ template:
       data-consent-screen-accept-button-text="Allow tracking"
       data-consent-screen-reject-button-text="No, thanks"
       data-modal-example-questions="Tell me a little about the {admiralophtha} package., How can I convert from LogMAR to ETDRS score using {admiralophtha}?"
+      data-modal-search-placeholder="Ask me a question about {admiralophtha} or the {admiral} ecosystem..."
       data-modal-z-index="9999"
       ></script>
 search:
