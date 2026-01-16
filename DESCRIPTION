@@ -35,9 +35,9 @@ BugReports: https://github.com/pharmaverse/admiralophtha/issues/
 Depends: 
     R (>= 4.1)
 Imports:
-    admiral (>= 1.1.1),
-    admiraldev (>= 1.1.0),
-    dplyr (>= 1.0.5),
+    admiral (>= 1.4.0),
+    admiraldev (>= 1.4.0),
+    dplyr (>= 1.1.1),
     hms (>= 0.5.3),
     lifecycle (>= 0.1.0),
     lubridate (>= 1.7.4),
