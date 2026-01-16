@@ -26,7 +26,7 @@ use `{admiralophtha}`.
 
 The contents of `{admiralophtha}` can be broadly divided into three categories:
 
-- **Derivations** (i.e. functions): these follow the same conventions as `{admiral}` but are focused to ophthalmology-specific needs. Please see the Reference page for more details.
+- **Derivations** (i.e. functions): these follow the same conventions as `{admiral}` but are focused on ophthalmology-specific needs. Please see the Reference page for more details.
 - **ADaM Templates**: these showcase ways to apply `{admiral}`, `{admiralophtha}` and Tidyverse functions to create ophthalmology-specific ADaMs. You can see the available templates in `{admiralophtha}` by running: `list_all_templates(package = "admiralophtha")` in the console.
 - **User Guides** (i.e. vignettes): these are documentation pages which walk users through each step of a template, or discuss other ophthalmology-specific topics such as ophthalmology standards. Please see the User Guides section for more details.
 
