@@ -22,15 +22,17 @@ guide. This extension package follows the same main idea and conventions, and re
 functions from `{admiral}`, so it is important to thoroughly understand these to be able to
 use `{admiralophtha}`.
 
-# Derivations
+# What does {admiralophtha} offer?
 
-The most important functions in `{admiralophtha}` are the
-[derivations](../reference/index.html). Again these follow the same
-conventions as `{admiral}` but are focused to ophthalmology-specific needs.
+The contents of `{admiralophtha}` can be broadly divided into three categories:
+
+- **Derivations** (i.e. functions): these follow the same conventions as `{admiral}` but are focused on ophthalmology-specific needs. Please see the Reference page for more details.
+- **ADaM Templates**: these showcase ways to apply `{admiral}`, `{admiralophtha}` and Tidyverse functions to create ophthalmology-specific ADaMs. You can see the available templates in `{admiralophtha}` by running: `list_all_templates(package = "admiralophtha")` in the console.
+- **User Guides** (i.e. vignettes): these are documentation pages which walk users through each step of a template, or discuss other ophthalmology-specific topics such as ophthalmology standards. Please see the User Guides section for more details.
 
 # Starting a Script
 
-For the ophthalmology ADaM data structures, an overview of the flow and example function calls
+For the ophthalmology ADaM datasets, an overview of the flow and example function calls
 for the most common steps are provided by the following vignettes:
 
 - [Creating ADBCVA](adbcva.html)
@@ -41,43 +43,3 @@ for the most common steps are provided by the following vignettes:
 
 Support is provided via the [admiral Slack
 channel](https://pharmaverse.slack.com/).
-
-<!-- This article is in the process of being written. Please use the `{admiralonco}` "Get Started"  -->
-<!-- page (commented out at the moment) as a basis. -->
-
-<!-- # Derivations -->
-
-<!-- The most important functions in `{admiralonco}` are the -->
-<!-- [derivations](../reference/index.html#section-derivations). Again these follow the same -->
-<!-- conventions as `{admiral}` but are focused to oncology-specific needs. -->
-
-<!-- # Starting a Script -->
-
-<!-- For the oncology ADaM data structures, an overview of the flow and example function calls -->
-<!-- for the most common steps are provided by the following vignettes: -->
-
-<!-- - [Creating ADRS](adrs.html) -->
-<!-- - [Creating ADTTE](adtte.html) -->
-
-<!-- `{admiralonco}` also provides template R scripts as a starting point. They can be -->
-<!-- created by calling `use_ad_template()` from {admiral}, e.g., -->
-
-<!-- ```{r} -->
-<!-- library(admiral) -->
-<!-- ``` -->
-
-<!-- there used to be some code calling `use_ad_template here (see corresponding admiralonco file) -->
-<!-- but it was removed as commenting it out errored the file for some reason. Upond development,  -->
-<!-- feel free to locate the code again and paste it in in order to modify it. -->
-
-<!-- A list of all available templates can be obtained by `list_all_templates()` -->
-<!-- from {admiral}: -->
-
-<!-- ```{r} -->
-<!-- list_all_templates(package = "admiralonco") -->
-<!-- ``` -->
-
-<!-- # Support -->
-
-<!-- Support is provided via the [admiral Slack -->
-<!-- channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269). -->
