@@ -11,7 +11,7 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 Derived from the ADSL and QS datasets using \code{{admiral}}, \code{{admiralophtha}}  and the
 \href{https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R}{ADVFQ template}.
 The full, open-source VFQ questionnaire can be accessed
-\href{https://www.nei.nih.gov/learn-about-eye-health/outreach-resources/outreach-materials/visual-function-questionnaire-25}{here}.
+\href{https://www.nei.nih.gov/about/education-and-outreach/outreach-materials/visual-function-questionnaire-25}{here}.
 }
 \usage{
 admiralophtha_advfq
