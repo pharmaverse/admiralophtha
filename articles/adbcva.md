@@ -1,0 +1,385 @@
+# Creating ADBCVA
+
+## Introduction
+
+This article describes creating an ADBCVA ADaM with Best-Corrected
+Visual Acuity (BCVA) data for ophthalmology endpoints. It is to be used
+in conjunction with the article on [creating a BDS dataset from
+SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html).
+As such, derivations and processes that are not specific to ADBCVA are
+absent, and the user is invited to consult the aforementioned article
+for guidance.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input
+unless otherwise specified.*
+
+### Dataset Contents
+
+As the name ADBCVA implies,
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) suggests
+to populate ADBCVA solely with BCVA records from the OE SDTM.
+
+### Required Packages
+
+The examples of this vignette require the following packages.
+
+``` r
+library(dplyr)
+library(admiral)
+library(pharmaversesdtm)
+library(admiraldev)
+library(admiralophtha)
+```
+
+## Programming Workflow
+
+- [Initial Set Up of ADBCVA](#setup)
+- [Deriving LogMAR Score Parameters](#logmar)
+- [Further Derivations of Standard BDS Variables](#further)
+- [Deriving Analysis Value Categories for Snellen Scores](#avalcats)
+- [Deriving Criterion Flags for BCVA Change](#critflags)
+- [Additional Notes](#notes)
+- [Example Script](#example)
+
+### Initial set up of ADBCVA
+
+As with all BDS ADaM datasets, one should start from the OE SDTM, where
+only the BCVA records are of interest. For the purposes of the next two
+sections, we shall be using the
+[admiral](https://pharmaverse.github.io/admiral/) OE and ADSL test data.
+We will also require a lookup table for the mapping of parameter codes.
+An SBCVA and FBCVA definition expression is created first - this
+expression can also be stored within another (sourced) program.
+
+**Note**: to simulate an ophthalmology study, we add a randomly
+generated `STUDYEYE` variable to ADSL, but in practice `STUDYEYE` will
+already have been derived using
+[`derive_var_studyeye()`](https://pharmaverse.github.io/admiralophtha/reference/derive_var_studyeye.md).
+
+``` r
+data("oe_ophtha")
+data("admiral_adsl")
+
+# Add STUDYEYE to ADSL to simulate an ophtha dataset
+adsl <- admiral_adsl %>%
+  as.data.frame() %>%
+  mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
+  convert_blanks_to_na()
+
+oe <- convert_blanks_to_na(oe_ophtha) %>%
+  ungroup()
+
+# Lookup table
+param_lookup <- tibble::tribble(
+  ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Study Eye", "SBCVA", "Study Eye Visual Acuity Score (letters)", 1, # nolint
+  "VACSCORE", "BEST CORRECTED VISUAL ACUITY", "OVERALL EVALUATION", "Fellow Eye", "FBCVA", "Fellow Eye Visual Acuity Score (letters)", 2, # nolint
+)
+
+# SBCVA and FBCVA definition list
+definition_bcva <- exprs(
+  ~PARAMCD, ~condition, ~AVALCA1N, ~AVALCAT1,
+  "SBCVA", AVAL >= 0 & AVAL <= 3, 1000, "< 20/800",
+  "FBCVA", AVAL >= 0 & AVAL <= 3, 1000, "< 20/800",
+  "SBCVA", AVAL >= 4 & AVAL <= 8, 800, "20/800",
+  "FBCVA", AVAL >= 4 & AVAL <= 8, 800, "20/800",
+  "SBCVA", AVAL >= 9 & AVAL <= 13, 640, "20/640",
+  "FBCVA", AVAL >= 9 & AVAL <= 13, 640, "20/640",
+  "SBCVA", AVAL >= 14 & AVAL <= 18, 500, "20/500",
+  "FBCVA", AVAL >= 14 & AVAL <= 18, 500, "20/500",
+  "SBCVA", AVAL >= 19 & AVAL <= 23, 400, "20/400",
+  "FBCVA", AVAL >= 19 & AVAL <= 23, 400, "20/400",
+  "SBCVA", AVAL >= 24 & AVAL <= 28, 320, "20/320",
+  "FBCVA", AVAL >= 24 & AVAL <= 28, 320, "20/320",
+  "SBCVA", AVAL >= 29 & AVAL <= 33, 250, "20/250",
+  "FBCVA", AVAL >= 29 & AVAL <= 33, 250, "20/250",
+  "SBCVA", AVAL >= 34 & AVAL <= 38, 200, "20/200",
+  "FBCVA", AVAL >= 34 & AVAL <= 38, 200, "20/200",
+  "SBCVA", AVAL >= 39 & AVAL <= 43, 160, "20/160",
+  "FBCVA", AVAL >= 39 & AVAL <= 43, 160, "20/160",
+  "SBCVA", AVAL >= 44 & AVAL <= 48, 125, "20/125",
+  "FBCVA", AVAL >= 44 & AVAL <= 48, 125, "20/125",
+  "SBCVA", AVAL >= 49 & AVAL <= 53, 100, "20/100",
+  "FBCVA", AVAL >= 49 & AVAL <= 53, 100, "20/100",
+  "SBCVA", AVAL >= 54 & AVAL <= 58, 80, "20/80",
+  "FBCVA", AVAL >= 54 & AVAL <= 58, 80, "20/80",
+  "SBCVA", AVAL >= 59 & AVAL <= 63, 63, "20/63",
+  "FBCVA", AVAL >= 59 & AVAL <= 63, 63, "20/63",
+  "SBCVA", AVAL >= 64 & AVAL <= 68, 50, "20/50",
+  "FBCVA", AVAL >= 64 & AVAL <= 68, 50, "20/50",
+  "SBCVA", AVAL >= 69 & AVAL <= 73, 40, "20/40",
+  "FBCVA", AVAL >= 69 & AVAL <= 73, 40, "20/40",
+  "SBCVA", AVAL >= 74 & AVAL <= 78, 32, "20/32",
+  "FBCVA", AVAL >= 74 & AVAL <= 78, 32, "20/32",
+  "SBCVA", AVAL >= 79 & AVAL <= 83, 25, "20/25",
+  "FBCVA", AVAL >= 79 & AVAL <= 83, 25, "20/25",
+  "SBCVA", AVAL >= 84 & AVAL <= 88, 20, "20/20",
+  "FBCVA", AVAL >= 84 & AVAL <= 88, 20, "20/20",
+  "SBCVA", AVAL >= 89 & AVAL <= 93, 16, "20/16",
+  "FBCVA", AVAL >= 89 & AVAL <= 93, 16, "20/16",
+  "SBCVA", AVAL >= 94 & AVAL <= 97, 12, "20/12",
+  "FBCVA", AVAL >= 94 & AVAL <= 97, 12, "20/12",
+  "SBCVA", AVAL >= 98, 1, "> 20/12",
+  "FBCVA", AVAL >= 98, 1, "> 20/12"
+)
+```
+
+Following this setup, the programmer can start constructing ADBCVA. The
+first step is to subset OE to only BCVA parameters and merge with ADSL.
+This is required for two reasons: firstly, `STUDYEYE` is crucial in the
+mapping of `AFEYE` and `PARAMCD`’s. Secondly, the treatment start date
+(`TRTSDT`) is also a prerequisite for the derivation of variables such
+as Analysis Day (`ADY`).
+
+``` r
+adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
+
+adbcva <- oe %>%
+  filter(
+    OETESTCD %in% c("VACSCORE")
+  ) %>%
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = get_admiral_option("subject_keys")
+  )
+```
+
+The next item of business is to derive `AVAL`, `AVALU`, and `DTYPE`. In
+this example, due to the small number of parameters their derivation is
+trivial. `AFEYE` is also created in this step using the function
+[`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/reference/derive_var_afeye.md).
+
+``` r
+adbcva <- adbcva %>%
+  mutate(
+    AVAL = OESTRESN,
+    AVALU = "letters",
+    DTYPE = NA_character_
+  ) %>%
+  derive_var_afeye(loc_var = OELOC, lat_var = OELAT)
+```
+
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_merged.html)
+from [admiral](https://pharmaverse.github.io/admiral/) and the lookup
+table `param_lookup` generated above.
+
+``` r
+adbcva <- adbcva %>%
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars = exprs(PARAM, PARAMCD),
+    by_vars = exprs(OETESTCD, AFEYE),
+    filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
+  )
+```
+
+### Deriving LogMAR Score Parameters
+
+Often ADBCVA datasets contain derived records for BCVA in LogMAR units.
+This can easily be achieved as follows using
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_param_computed.html).
+The conversion of units is done using
+[`convert_etdrs_to_logmar()`](https://pharmaverse.github.io/admiralophtha/reference/convert_etdrs_to_logmar.md).
+Two separate calls are required due to the parameters being split by
+study and fellow eye. Once these extra parameters are added, all the
+records that will be in the end dataset are now present, so `AVALC` and
+day/date variables such as `ADY` and `ADT` can be derived.
+
+``` r
+adbcva <- adbcva %>%
+  derive_param_computed(
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)
+    ),
+    parameters = c("SBCVA"),
+    set_values_to = exprs(
+      AVAL = convert_etdrs_to_logmar(AVAL.SBCVA),
+      PARAMCD = "SBCVALOG",
+      PARAM = "Study Eye Visual Acuity LogMAR Score",
+      DTYPE = NA_character_,
+      AVALU = "LogMAR"
+    )
+  ) %>%
+  derive_param_computed(
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)
+    ),
+    parameters = c("FBCVA"),
+    set_values_to = exprs(
+      AVAL = convert_etdrs_to_logmar(AVAL.FBCVA),
+      PARAMCD = "FBCVALOG",
+      PARAM = "Fellow Eye Visual Acuity LogMAR Score",
+      DTYPE = NA_character_,
+      AVALU = "LogMAR"
+    )
+  ) %>%
+  mutate(AVALC = as.character(AVAL)) %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = OEDTC,
+    flag_imputation = "none"
+  ) %>%
+  derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
+```
+
+Importantly, the above calls to
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_param_computed.html)
+list the SDTM variables `VISIT`, `VISITNUM`, `OEDY` and `OEDTC` as
+`by_vars` for the function. This is because they will be necessary to
+derive ADaM variables such as `AVISIT` and `ADY` in successive steps.
+Once all the ADaM variables which require them are derived, the SDTM
+variables should be set to missing for the derived records, as per ADaM
+standards:
+
+``` r
+adbcva <- adbcva %>%
+  mutate(
+    VISIT = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, VISIT),
+    VISITNUM = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, VISITNUM),
+    OEDY = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA, OEDY),
+    OEDTC = ifelse(PARAMCD %in% c("SBCVALOG", "FBCVALOG"), NA_character_, OEDTC)
+  )
+```
+
+### Further Derivations of Standard BDS Variables
+
+The user is invited to consult the article on [creating a BDS dataset
+from
+SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+to learn how to add standard BDS variables to ADBCVA. Henceforth, for
+the purposes of this article, the following sections use the ADBCVA
+dataset generated by the corresponding
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) template
+program as a starting point.
+
+**Note**: This dataset already comes with some criterion flags and
+analysis value categorisation variables, so for illustration purposes
+these are removed.
+
+``` r
+data("admiralophtha_adbcva")
+
+adbcva <- admiralophtha_adbcva %>%
+  select(-starts_with("CRIT"), -starts_with("AVALCA"))
+```
+
+### Deriving Analysis Value Categories for Snellen Scores
+
+Some ophthalmology studies may desire to subdivide BCVA records
+according to which Snellen category they fall into (eg, 20/320, 20/100,
+20/20 etc). The [admiral](https://pharmaverse.github.io/admiral/)
+AVALCAT derivation function
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_cat.html)
+can be used to derive `AVALCA1N` and `AVALCAT1` based on `PARAMCD` and
+`condition` in the SBCVA and FBCVA definition expression.
+
+``` r
+adbcva <- adbcva %>%
+  derive_vars_cat(
+    definition = definition_bcva,
+    by_vars = exprs(PARAMCD)
+  )
+```
+
+The resulting output is shown below (limited to the first patient only):
+
+### Deriving Criterion Flags for BCVA Change
+
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) suggests
+the use of criterion flag variable pairs (`CRITx`/`CRITxFL`) to program
+BCVA endpoints such as *Avoiding a loss of x letters* or *Gain of y
+letters* or *Gain of between x and y letters* (relative to baseline or
+other basetypes). The [admiral](https://pharmaverse.github.io/admiral/)
+function
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_crit_flag.html)
+can be used to derive all these criterion pairs by listing the criterion
+number, condition such as:
+
+- `CHG` value lying inside a range, `CHG >= a & CHG <= b`
+- `CHG` value below an upper limit, `CHG <= a`
+- `CHG` value above a lower limit, `CHG => b`
+
+and their corresponding description of the criterion. If `values_yn` is
+set to TRUE, the `CRITxFL` variable is assigned “Y” when the condition
+is true, “N” when the condition is false, and NA when the condition is
+NA. If not set to TRUE, `CRITxFL` is assigned “Y” when the condition is
+true and NA otherwise.
+
+and their corresponding description of the criterion. If `values_yn` is
+set to `TRUE`, the `CRITxFL` variable is assigned `"Y"` when the
+condition is satisfied, `"N"` when the condition is not satisfied, and
+`NA` when there is not enough information to determine whether the
+condition is satisfied. If `values_yn` is not set to `TRUE`, `CRITxFL`
+is assigned `"Y"` when the condition is satisfied and `NA` otherwise.
+
+For illustrative purposes, let’s suppose that the endpoints of interest
+are:
+
+- *Gain of between 5 and 10 letters relative to baseline*
+  (`5 <= CHG <= 10`)
+- *Gain of 25 letters or fewer relative to baseline* (`CHG <= 25`)
+- *Loss of 5 letters or more relative to baseline* (`CHG <= -5`)
+- *Gain of 15 letters or more relative to baseline* (`CHG >= 15`)
+- *Loss of 10 letters or fewer relative to baseline* (`CHG >= -10`).
+
+Then, the following call will implement criterion variable/flag pairs
+for the endpoints above. The base function we are using is
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_crit_flag.html).
+We wrap this function inside of
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/call_derivation.html)
+so as to derive all the criterion variable/flag pairs in one call.
+Additionally, we also wrap everything inside of
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/restrict_derivation.html)
+to ensure the criterion flags are only derived for the right `PARAMCD`
+values (`"SBCVA"` and `"FBCVA"`).
+
+``` r
+adbcva <- adbcva %>%
+  restrict_derivation(
+    derivation = call_derivation,
+    filter = PARAMCD %in% c("SBCVA", "FBCVA"),
+    args = params(
+      derivation = derive_vars_crit_flag,
+      variable_params = list(
+        params(crit_nr = 1, condition = CHG >= 0 & CHG <= 5, description = "0 <= CHG <= 5"),
+        params(crit_nr = 2, condition = CHG >= -5 & CHG <= -1, description = "-5 <= CHG <= -1"),
+        params(crit_nr = 3, condition = CHG >= 10 & CHG <= 15, description = "10 <= CHG <= 15"),
+        params(crit_nr = 4, condition = CHG <= -20, description = "CHG <= -20"),
+        params(crit_nr = 5, condition = CHG <= 5, description = "CHG <= 5"),
+        params(crit_nr = 6, condition = CHG <= 10, description = "CHG <= 10"),
+        params(crit_nr = 7, condition = CHG >= -15, description = "CHG >= -15"),
+        params(crit_nr = 8, condition = CHG >= 15, description = "CHG >= 15")
+      ),
+      values_yn = TRUE
+    )
+  ) %>%
+  arrange(USUBJID, DOMAIN, PARAMCD)
+```
+
+The resulting output is shown below (limited to the first patient only):
+
+### Additional Notes
+
+- When interpreting endpoints such as *Loss of 5 letters or fewer
+  relative to baseline*, it is implicitly assumed in this article that
+  this also includes the case where letters are *gained*, so that the
+  inequality reads `CHG >= -5`. If this is not the case, i.e. one wishes
+  to exclude cases of letter gains, then the inequality of interest
+  would instead be `-5 <= CHG <= -1`.
+
+- This vignette extensively showcases the use of
+  [`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_crit_flag.html)
+  to derive criterion variable/flag pairs applied to the variable `CHG`
+  with the associated argument `condition` for the criterion. The
+  function can also be used to create criterion flag relative to other
+  variables (e.g. `condition = exprs(AVAL > 10)` for `AVAL`).
+
+### Example Script
+
+| ADaM   | Sample Code                                                                                      |
+|--------|--------------------------------------------------------------------------------------------------|
+| ADBCVA | [ad_adbcva.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adbcva.R) |

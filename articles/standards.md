@@ -1,0 +1,103 @@
+# Ophthalmology Standards
+
+## Introduction
+
+Ophthalmology is a hugely diverse therapeutic area, where endpoints and
+conventions can differ from study to study - let alone across companies.
+Notwithstanding this, there exist cases where alignment is possible;
+this page indexes the occurrences in which
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) suggests
+the adoption of a certain standard way of doing things.
+
+Applying the standards below is by no means mandatory, but will help in
+leveraging the tools (templates, functions, etc.) provided by
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) as well as
+lower the barrier of entry for programming in your study. Additionally,
+this page can function as guidance for programmers starting to dip their
+feet in ophthalmology ADaM programming.
+
+### Dataset Subdivision
+
+Due to the aforementioned high complexity and diversity of ophthalmology
+data, it is discouraged to funnel *all* records from the OE SDTM dataset
+into a single ADOE dataset, as this will result in an overly complicated
+program/dataset pair.
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) instead
+suggests the following partition:
+
+- ADOE for general miscellaneous ophthalmology tests not used for
+  efficacy programming.
+- ADBCVA for BCVA data only - these will almost always constitute a
+  primary or secondary endpoint and so will require endpoint-related
+  programming such as criterion flags.
+- Any other endpoints for which specific efficacy programming may be
+  required should have their own ADaM dataset (e.g. for intraocular
+  pressure data, ADIOP).
+- ADVFQ for Visual Functioning Questionnaire data.
+
+Subdividing the ADaM datasets in a study as above will ensure that
+wherever custom efficacy programming is required, this will
+automatically be limited to the data of interest. For instance, if a
+study has various endpoints of the form *Gain of between x and y letters
+relative to baseline* (or similar) then each will likely require a
+criterion variable/flag pair (see the [Criterion Flag](#criterion)
+section for more detail). If the BCVA data were stored in ADOE, then
+these criterion variable/flag pairs would be blank and irrelevant for
+most of the data in the dataset, save for the BCVA records. Conversely,
+collecting the BCVA data in ADBCVA ensures the criterion variable/flag
+pairs are more relevant, and the resulting dataset is more readable.
+
+### Criterion Flags
+
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) suggests
+the use of criterion variable/flag pairs `CRITx/CRITxFL` where possible
+for endpoint programming. If implemented correctly, this is a very
+transparent approach as the condition for `CRITxFL` can be clearly
+encoded in `CRITx`, without having to view any documentation. When
+appropriate, the condition in `CRITx` should be represented
+programmatically rather than in words to reduce possibility of
+confusion. For instance, for an endpoint such as *Gain of between x and
+y letters relative to baseline*, one would set
+`CRIT1 = "x <= CHG <= y"`.
+
+**Note**: Though allowable according to ADaM standards, it is generally
+discouraged to use the same criterion flag/variable pair for more than
+one criterion across multiple parameters in an ADaM dataset, as this
+renders the dataset confusing to scrutinise.
+
+For BCVA change endpoints,
+[admiral](https://pharmaverse.github.io/admiral/) provides the function
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_crit_flag.html)
+to add them en masse.
+
+### Affected Eye Derivation
+
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) function
+`derive_var_afeye` follows the standard derivation:
+
+Set to “BOTH EYES” when Study Eye Selection \[`ADSL.STUDYEYE`\] is not
+missing, and Laterality \[`xxLAT`\] is equal to “BILATERAL”. Else set to
+“STUDY EYE” when Study Eye Selection \[`ADSL.STUDYEYE`\] is either
+“RIGHT” or “LEFT”, and matches Laterality \[`xxLAT`\] for the
+observation record. Else set to “STUDY EYE” when Study Eye Selection
+\[`ADSL.STUDYEYE`\] is “BILATERAL”, and Laterality \[`xxLAT`\] is not
+missing for the observation record. Else set to “FELLOW EYE” when Study
+Eye Selection \[`ADSL.STUDYEYE`\] is either “RIGHT” or “LEFT”, and
+\[`xxLAT`\] is not missing and does not match Laterality \[`xxLAT`\] for
+the observation record. Else set to null.
+
+If the standard values of Location \[`xxLOC`\] = “EYE” and Laterality
+\[`xxLAT`\] = “LEFT”, “RIGHT”, “BILATERAL” are not the same for your
+study this can be updated as inputs in the function, otherwise this is
+also expected for `AFEYE` to be derived, and a warning will be returned
+if any other values are found.
+
+### Differences between pre and post-dose IOP
+
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) suggests
+to calculate the differences between pre and post-dose IOP as two new
+derived parameters (study and fellow eyes) please see the [ADOE
+vignette](https://pharmaverse.github.io/admiralophtha/articles/adoe.html)
+and
+[template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R)
+for more details.

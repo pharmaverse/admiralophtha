@@ -1,0 +1,54 @@
+# Get Started
+
+## Introduction
+
+As this is a package extension, if you are new to
+[admiral](https://pharmaverse.github.io/admiral/) then the best place to
+first start reading would be this [Get
+Started](https://pharmaverse.github.io/admiral/articles/admiral.html)
+guide. This extension package follows the same main idea and
+conventions, and re-uses many functions from
+[admiral](https://pharmaverse.github.io/admiral/), so it is important to
+thoroughly understand these to be able to use
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/).
+
+## What does {admiralophtha} offer?
+
+The contents of
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) can be
+broadly divided into three categories:
+
+- **Derivations** (i.e. functions): these follow the same conventions as
+  [admiral](https://pharmaverse.github.io/admiral/) but are focused on
+  ophthalmology-specific needs. Please see the Reference page for more
+  details.
+- **ADaM Templates**: these showcase ways to apply
+  [admiral](https://pharmaverse.github.io/admiral/),
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) and
+  Tidyverse functions to create ophthalmology-specific ADaMs. You can
+  see the available templates in
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) by
+  running: `list_all_templates(package = "admiralophtha")` in the
+  console.
+- **User Guides** (i.e. vignettes): these are documentation pages which
+  walk users through each step of a template, or discuss other
+  ophthalmology-specific topics such as ophthalmology standards. Please
+  see the User Guides section for more details.
+
+## Starting a Script
+
+For the ophthalmology ADaM datasets, an overview of the flow and example
+function calls for the most common steps are provided by the following
+vignettes:
+
+- [Creating
+  ADBCVA](https://pharmaverse.github.io/admiralophtha/articles/adbcva.md)
+- [Creating
+  ADOE](https://pharmaverse.github.io/admiralophtha/articles/adoe.md)
+- [Creating
+  ADVFQ](https://pharmaverse.github.io/admiralophtha/articles/advfq.md)
+
+## Support
+
+Support is provided via the [admiral Slack
+channel](https://pharmaverse.slack.com/).
