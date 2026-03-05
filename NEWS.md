@@ -21,7 +21,7 @@
 <details>
 <summary>Developer Notes</summary>
 
-* Updated `{lintr}` configurations to use central configurations from `{admiraldev}`. (#280)
+* Updated `.github/common.yml` to add new PR website workflow, accessible by placing the keyword "[create website]" in PR titles. (#295)
 
 </details>
 
