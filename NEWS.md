@@ -39,6 +39,8 @@ and provided by [kapa.ai](https://docs.kapa.ai/kapa-for-open-source). (#2887)
 
 * Updated `{lintr}` configurations to use central configurations from `{admiraldev}`. (#280)
 
+* Updated `.github/common.yml` to add new PR website workflow, accessible by placing the keyword "[create website]" in PR titles. (#295)
+
 </details>
 
 # admiralophtha 1.3.0
