@@ -1,3 +1,30 @@
+# admiralophtha (development version)
+
+## Breaking Changes
+
+- The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
+
+  **Phase 1 (message)**
+  
+  **Phase 2 (warning)**
+
+  **Phase 3 (error)**
+
+  **Phase 4 (removed)**
+
+## Updates to Templates
+
+## Updates to Documentation
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+
+* Updated `{lintr}` configurations to use central configurations from `{admiraldev}`. (#280)
+
+</details>
+
 # admiralophtha 1.4.0
 
 ## Breaking Changes
