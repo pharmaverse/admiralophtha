@@ -62,7 +62,9 @@ Suggests:
     testthat (>= 3.0.0),
     tibble,
     usethis,
-    withr
+    withr,
+    DT,
+    htmltools
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
