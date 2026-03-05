@@ -24,10 +24,9 @@
 
 Developer Notes
 
-- Updated [lintr](https://lintr.r-lib.org) configurations to use central
-  configurations from
-  [admiraldev](https://pharmaverse.github.io/admiraldev/).
-  ([\#280](https://github.com/pharmaverse/admiralophtha/issues/280))
+- Updated `.github/common.yml` to add new PR website workflow,
+  accessible by placing the keyword “\[create website\]” in PR titles.
+  ([\#295](https://github.com/pharmaverse/admiralophtha/issues/295))
 
 ## admiralophtha 1.4.0
 
