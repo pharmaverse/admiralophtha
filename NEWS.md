@@ -1,3 +1,30 @@
+# admiralophtha (development version)
+
+## Breaking Changes
+
+- The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation): 
+
+  **Phase 1 (message)**
+  
+  **Phase 2 (warning)**
+
+  **Phase 3 (error)**
+
+  **Phase 4 (removed)**
+
+## Updates to Templates
+
+## Updates to Documentation
+
+## Various
+
+<details>
+<summary>Developer Notes</summary>
+
+* Updated `.github/common.yml` to add new PR website workflow, accessible by placing the keyword "[create website]" in PR titles. (#295)
+
+</details>
+
 # admiralophtha 1.4.0
 
 ## Breaking Changes
