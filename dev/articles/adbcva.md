@@ -161,7 +161,7 @@ adbcva <- adbcva %>%
 ```
 
 Moving forwards, `PARAM` and `PARAMCD` can be assigned using
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_merged.html)
+[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_vars_merged.html)
 from [admiral](https://pharmaverse.github.io/admiral/) and the lookup
 table `param_lookup` generated above.
 
@@ -179,7 +179,7 @@ adbcva <- adbcva %>%
 
 Often ADBCVA datasets contain derived records for BCVA in LogMAR units.
 This can easily be achieved as follows using
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_param_computed.html).
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_param_computed.html).
 The conversion of units is done using
 [`convert_etdrs_to_logmar()`](https://pharmaverse.github.io/admiralophtha/dev/reference/convert_etdrs_to_logmar.md).
 Two separate calls are required due to the parameters being split by
@@ -227,7 +227,7 @@ adbcva <- adbcva %>%
 ```
 
 Importantly, the above calls to
-[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_param_computed.html)
+[`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_param_computed.html)
 list the SDTM variables `VISIT`, `VISITNUM`, `OEDY` and `OEDTC` as
 `by_vars` for the function. This is because they will be necessary to
 derive ADaM variables such as `AVISIT` and `ADY` in successive steps.
@@ -273,7 +273,7 @@ Some ophthalmology studies may desire to subdivide BCVA records
 according to which Snellen category they fall into (eg, 20/320, 20/100,
 20/20 etc). The [admiral](https://pharmaverse.github.io/admiral/)
 AVALCAT derivation function
-[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_cat.html)
+[`derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_vars_cat.html)
 can be used to derive `AVALCA1N` and `AVALCAT1` based on `PARAMCD` and
 `condition` in the SBCVA and FBCVA definition expression.
 
@@ -295,7 +295,7 @@ BCVA endpoints such as *Avoiding a loss of x letters* or *Gain of y
 letters* or *Gain of between x and y letters* (relative to baseline or
 other basetypes). The [admiral](https://pharmaverse.github.io/admiral/)
 function
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html)
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_vars_crit_flag.html)
 can be used to derive all these criterion pairs by listing the criterion
 number, condition such as:
 
@@ -328,12 +328,12 @@ are:
 
 Then, the following call will implement criterion variable/flag pairs
 for the endpoints above. The base function we are using is
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html).
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_vars_crit_flag.html).
 We wrap this function inside of
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/call_derivation.html)
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/call_derivation.html)
 so as to derive all the criterion variable/flag pairs in one call.
 Additionally, we also wrap everything inside of
-[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/restrict_derivation.html)
+[`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/restrict_derivation.html)
 to ensure the criterion flags are only derived for the right `PARAMCD`
 values (`"SBCVA"` and `"FBCVA"`).
 
@@ -372,7 +372,7 @@ The resulting output is shown below (limited to the first patient only):
   would instead be `-5 <= CHG <= -1`.
 
 - This vignette extensively showcases the use of
-  [`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html)
+  [`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_vars_crit_flag.html)
   to derive criterion variable/flag pairs applied to the variable `CHG`
   with the associated argument `condition` for the criterion. The
   function can also be used to create criterion flag relative to other

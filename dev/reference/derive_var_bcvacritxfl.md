@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `derive_var_bcvacritxfl()` function has been
 deprecated in favor of
-[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.3.1/cran-release/reference/derive_vars_crit_flag.html) -
+[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/derive_vars_crit_flag.html) -
 please see the [criterion flag section of the ADBCVA
 vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
 for more details.

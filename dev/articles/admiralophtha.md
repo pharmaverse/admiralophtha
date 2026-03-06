@@ -12,20 +12,34 @@ conventions, and re-uses many functions from
 thoroughly understand these to be able to use
 [admiralophtha](https://pharmaverse.github.io/admiralophtha/).
 
-## Derivations
+## What does {admiralophtha} offer?
 
-The most important functions in
-[admiralophtha](https://pharmaverse.github.io/admiralophtha/) are the
-[derivations](https://pharmaverse.github.io/admiralophtha/dev/reference/index.md).
-Again these follow the same conventions as
-[admiral](https://pharmaverse.github.io/admiral/) but are focused to
-ophthalmology-specific needs.
+The contents of
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) can be
+broadly divided into three categories:
+
+- **Derivations** (i.e. functions): these follow the same conventions as
+  [admiral](https://pharmaverse.github.io/admiral/) but are focused on
+  ophthalmology-specific needs. Please see the Reference page for more
+  details.
+- **ADaM Templates**: these showcase ways to apply
+  [admiral](https://pharmaverse.github.io/admiral/),
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) and
+  Tidyverse functions to create ophthalmology-specific ADaMs. You can
+  see the available templates in
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) by
+  running: `list_all_templates(package = "admiralophtha")` in the
+  console.
+- **User Guides** (i.e. vignettes): these are documentation pages which
+  walk users through each step of a template, or discuss other
+  ophthalmology-specific topics such as ophthalmology standards. Please
+  see the User Guides section for more details.
 
 ## Starting a Script
 
-For the ophthalmology ADaM data structures, an overview of the flow and
-example function calls for the most common steps are provided by the
-following vignettes:
+For the ophthalmology ADaM datasets, an overview of the flow and example
+function calls for the most common steps are provided by the following
+vignettes:
 
 - [Creating
   ADBCVA](https://pharmaverse.github.io/admiralophtha/dev/articles/adbcva.md)

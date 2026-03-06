@@ -45,12 +45,12 @@ Source:
 Mancini E, Aggarwal R, Gao J, Holmes W, Jackson J, Jain S, Matsunaga Y,
 Miller G, Linacre R, Palmen L, R Thampi N, Salva A, Ting S (2026).
 *admiralophtha: ADaM in R Asset Library - Ophthalmology*. R package
-version 1.3.0.9007, <https://pharmaverse.github.io/admiralophtha/>.
+version 1.4.0.9000, <https://pharmaverse.github.io/admiralophtha/>.
 
     @Manual{,
       title = {admiralophtha: ADaM in R Asset Library - Ophthalmology},
       author = {Edoardo Mancini and Ritika Aggarwal and Jane Gao and William Holmes and Josie Jackson and Sonali Jain and Yuki Matsunaga and Gordon Miller and Rachel Linacre and Lucy Palmen and Nandini {R Thampi} and Aldrich Salva and Steven Ting},
       year = {2026},
-      note = {R package version 1.3.0.9007},
+      note = {R package version 1.4.0.9000},
       url = {https://pharmaverse.github.io/admiralophtha/},
     }

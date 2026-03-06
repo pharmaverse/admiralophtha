@@ -19,7 +19,7 @@ Derived from the ADSL and QS datasets using `{admiral}`,
 `{admiralophtha}` and the [ADVFQ
 template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R).
 The full, open-source VFQ questionnaire can be accessed
-[here](https://www.nei.nih.gov/learn-about-eye-health/outreach-resources/outreach-materials/visual-function-questionnaire-25).
+[here](https://www.nei.nih.gov/about/education-and-outreach/outreach-materials/visual-function-questionnaire-25).
 
 ## See also
 
