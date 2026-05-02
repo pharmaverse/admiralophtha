@@ -25,6 +25,13 @@
 
 </details>
 
+# admiralophtha 1.4.1
+
+## Updates to Documentation
+
+- A new vignette "Explore ADaM Templates" was added to the "Get Started" menu.
+It displays the `{admiralophtha}` templates. (#297)
+
 # admiralophtha 1.4.0
 
 ## Breaking Changes
