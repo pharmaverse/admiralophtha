@@ -103,8 +103,8 @@ NOTE: if \code{crit_var} is equal to NA, then the resulting criterion flag is al
 as \code{NA}.
 }
 \seealso{
-Other deprecated: 
-\code{\link{derive_var_bcvacritxfl}()}
+Other deprecated:
+\code{\link[=derive_var_bcvacritxfl]{derive_var_bcvacritxfl()}}
 }
 \author{
 Edoardo Mancini

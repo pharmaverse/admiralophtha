@@ -24,18 +24,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Ritika Aggarwal \email{ritika.aggarwal@novartis.com}
-  \item Jane Gao \email{jane.gao@roche.com}
-  \item William Holmes \email{william.holmes@roche.com}
-  \item Josie Jackson \email{josie.jackson@roche.com}
-  \item Sonali Jain \email{sonali.jain@novartis.com}
+  \item Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Yuki Matsunaga \email{yuki.matsunaga@novartis.com}
-  \item Gordon Miller \email{gordon.miller@roche.com}
-  \item Rachel Linacre \email{rachel.linacre@roche.com}
-  \item Lucy Palmen \email{lucy.palmen@roche.com}
-  \item Nandini R Thampi \email{nandini.rajendhiran@novartis.com}
-  \item Aldrich Salva \email{salva.aldrich@gene.com}
-  \item Steven Ting \email{steven.ting@cytel.com}
 }
 
 Other contributors:

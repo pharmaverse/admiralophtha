@@ -146,8 +146,8 @@ restrict_derivation(
 
 }
 \seealso{
-Other deprecated: 
-\code{\link{derive_var_bcvacritxfl_util}()}
+Other deprecated:
+\code{\link[=derive_var_bcvacritxfl_util]{derive_var_bcvacritxfl_util()}}
 }
 \author{
 Edoardo Mancini
