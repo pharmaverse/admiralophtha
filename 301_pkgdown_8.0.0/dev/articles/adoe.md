@@ -134,7 +134,7 @@ timepoint variables can also be derived soon after, though their
 derivation is generally study-specific. A simple option is included
 below; please consult the
 [admiral](https://pharmaverse.github.io/admiral/) [BDS findings
-vignette](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html#timing)
+vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing)
 for a more detailed discussion.
 
 ``` r
@@ -254,7 +254,7 @@ adoe <- adoe %>%
 
 The user is invited to consult the article on [creating a BDS dataset
 from
-SDTM](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html)
+SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
 to learn how to add standard BDS variables to ADOE.
 
 ### Example Script

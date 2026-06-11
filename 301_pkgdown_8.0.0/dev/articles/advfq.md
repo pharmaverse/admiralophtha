@@ -131,7 +131,7 @@ Now we can derive the analysis date (`ADT`) and analysis relative day
 (`ADY`) variables. These derivations are study-specific and so the ones
 below are just examples - the user is again invited to consult the
 vignette on [creating a BDS dataset from
-SDTM](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html)
+SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
 for details on this topic.
 
 ``` r
