@@ -114,7 +114,7 @@ adoe <- adoe %>%
 
 ## Assigning `PARAM`/`PARAMCD` and `AVISIT/AVISITN` {#param_avisit}
 
-Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above. `AVISIT`, `AVISITN` and related timepoint variables can also be derived soon after, though their derivation is generally study-specific. A simple option is included below; please consult the `{admiral}` [BDS findings vignette](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html#timing) for a more detailed discussion.
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above. `AVISIT`, `AVISITN` and related timepoint variables can also be derived soon after, though their derivation is generally study-specific. A simple option is included below; please consult the `{admiral}` [BDS findings vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing) for a more detailed discussion.
 
 ```{r}
 adoe <- adoe %>%
@@ -212,7 +212,7 @@ adoe <- adoe %>%
 
 ## Further Derivations of Standard BDS Variables {#further}
 
-The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
 
 ## Example Script {#example}
 
