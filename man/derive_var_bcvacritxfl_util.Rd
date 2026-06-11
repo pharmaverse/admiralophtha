@@ -85,7 +85,8 @@ lie above some lower limit).
 The input BCVA dataset with additional columns \code{CRITx}, \code{CRITxFL}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The \code{derive_var_bcvacritxfl_util()}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+The \code{derive_var_bcvacritxfl_util()}
 function has been deprecated in favor of \code{admiral::derive_vars_crit_flag()} - please see
 the \href{https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags}{criterion flag section of the ADBCVA vignette}
 for more details.
