@@ -168,11 +168,11 @@ derive_var_bcvacritxfl(
   bcva_lowlims = list(8),
   additional_text = ""
 )
-#> `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.4.0.
+#> Warning: `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.5.0.
 #> ℹ Please use `admiral::derive_vars_crit_flag()` instead.
 #> ℹ See admiralophtha's guidance on creating BCVA criterion flags here:
 #>   https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags
-#> ✖ This message will turn into a warning with release of admiralophtha 1.5.0.
+#> ✖ This message will turn into an error with the release of admiralophtha 1.6.0.
 #> # A tibble: 6 × 18
 #>   STUDYID USUBJID AVISIT   BASETYPE PARAMCD   CHG CRIT1    CRIT1FL CRIT2 CRIT2FL
 #>   <chr>   <chr>   <chr>    <chr>    <chr>   <dbl> <chr>    <chr>   <chr> <chr>  

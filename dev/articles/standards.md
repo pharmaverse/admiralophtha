@@ -73,7 +73,8 @@ to add them en masse.
 ### Affected Eye Derivation
 
 [admiralophtha](https://pharmaverse.github.io/admiralophtha/) function
-`derive_var_afeye` follows the standard derivation:
+[`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_afeye.md)
+follows the standard derivation:
 
 Set to “BOTH EYES” when Study Eye Selection \[`ADSL.STUDYEYE`\] is not
 missing, and Laterality \[`xxLAT`\] is equal to “BILATERAL”. Else set to

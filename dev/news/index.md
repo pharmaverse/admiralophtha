@@ -12,6 +12,17 @@
 
   **Phase 2 (warning)**
 
+  - [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
+    and its internal utility function
+    [`derive_var_bcvacritxfl_util()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl_util.md).
+    Users are invited to use
+    [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_crit_flag.html) -
+    please see the [criterion flag section of the ADBCVA
+    vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+    for more details. Each deprecation phase for this function will only
+    last six months (i.e. one release cycle).
+    ([\#282](https://github.com/pharmaverse/admiralophtha/issues/282))
+
   **Phase 3 (error)**
 
   **Phase 4 (removed)**
@@ -19,6 +30,13 @@
 ### Updates to Templates
 
 ### Updates to Documentation
+
+- A night mode option has been added to the
+  [admiral](https://pharmaverse.github.io/admiral/) website. This can be
+  be toggled using the sun/moon icon in the top right corner of the
+  navigation bar. Tooltips have also been set up for each of the icons
+  on the navigation bar.
+  ([\#299](https://github.com/pharmaverse/admiralophtha/issues/299))
 
 ### Various
 
@@ -34,6 +52,11 @@ Developer Notes
 - Consolidated developer list to active developers only, and moved
   inactive developers to README Acknowledgments.
   ([\#294](https://github.com/pharmaverse/admiralophtha/issues/294))
+
+- - Clickable links to personal websites or GitHub profiles were added
+    in the home page sidebar for every
+    [admiral](https://pharmaverse.github.io/admiral/) author.
+    ([\#299](https://github.com/pharmaverse/admiralophtha/issues/299))
 
 ## admiralophtha 1.4.0
 
