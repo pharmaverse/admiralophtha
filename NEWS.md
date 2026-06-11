@@ -23,6 +23,11 @@
 
 * Updated `.github/common.yml` to add new PR website workflow, accessible by placing the keyword "[create website]" in PR titles. (#295)
 
+* Updated to `{roxygen2}` 8.0.0. (#301)
+
+* Consolidated developer list to active developers only, and moved inactive developers to README Acknowledgments. (#294)
+
+
 </details>
 
 # admiralophtha 1.4.0

@@ -69,3 +69,11 @@ developer community:
 | ~January 2026    | `{admiralophtha}` v. 1.4.0    |
 |                  |                               | 
 | ~June 2026       | `{admiralophtha}` v. 1.5.0    |
+
+# Acknowledgments
+
+Along with the authors and contributors, thanks to the following people for
+their work on the package:
+
+Ritika Aggarwal, Jane Gao, William Holmes, Josie Jackson, Sonali Jain, Rachel Linacre, 
+Gordon Miller, Lucy Palmen, Aldrich Salva, Nandini R Thampi, Steven Ting.
