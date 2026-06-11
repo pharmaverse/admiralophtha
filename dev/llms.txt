@@ -69,6 +69,15 @@ developer community:
 |               |                                                                        |
 | ~June 2026    | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.5.0 |
 
+# Acknowledgments
+
+Along with the authors and contributors, thanks to the following people
+for their work on the package:
+
+Ritika Aggarwal, Jane Gao, William Holmes, Josie Jackson, Sonali Jain,
+Rachel Linacre, Gordon Miller, Lucy Palmen, Aldrich Salva, Nandini R
+Thampi, Steven Ting.
+
 # Package index
 
 ### ADSL-specific
@@ -108,7 +117,7 @@ Derivation Functions helpful for building the Ophtha datasets
 ## Example Datasets
 
 You can run
-[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.4.1/cran-release/reference/use_ad_template.html)
+[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/use_ad_template.html)
 to produce additional datasets
 
 - [`admiralophtha_adbcva`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adbcva.md)
