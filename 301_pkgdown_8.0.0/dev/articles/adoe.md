@@ -5,7 +5,7 @@
 This article describes creating an ADOE ADaM with Ophthalmology Exam
 Analysis data for ophthalmology endpoints. It is to be used in
 conjunction with the article on [creating a BDS dataset from
-SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html).
+SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html).
 As such, derivations and processes that are not specific to ADOE are
 absent, and the user is invited to consult the aforementioned article
 for guidance.
@@ -134,7 +134,7 @@ timepoint variables can also be derived soon after, though their
 derivation is generally study-specific. A simple option is included
 below; please consult the
 [admiral](https://pharmaverse.github.io/admiral/) [BDS findings
-vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html#timing)
+vignette](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html#timing)
 for a more detailed discussion.
 
 ``` r
@@ -171,7 +171,7 @@ Since the calls are very similar, they can be executed in one code block
 using
 [`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/call_derivation.html) -
 please see the [Higher Order Functions
-vignette](https://pharmaverse.github.io/admiral/articles/higher_order.html)
+vignette](https://pharmaverse.github.io/admiral/cran-release/articles/higher_order.html)
 for more details.
 
 ``` r
@@ -254,11 +254,11 @@ adoe <- adoe %>%
 
 The user is invited to consult the article on [creating a BDS dataset
 from
-SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+SDTM](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html)
 to learn how to add standard BDS variables to ADOE.
 
 ### Example Script
 
-| ADaM | Sample Code                                                                                  |
-|------|----------------------------------------------------------------------------------------------|
-| ADOE | [ad_adoe.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R) |
+| ADaM | Sample Code                                          |
+|------|------------------------------------------------------|
+| ADOE | `use_ad_template("adoe", package = "admiralophtha")` |

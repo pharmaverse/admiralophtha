@@ -93,7 +93,7 @@
 </h2>
 <p>This article describes creating an ADVFQ ADaM with Visual Functioning
 Questionnaire data for ophthalmology endpoints. It is to be used in
-conjunction with the article on <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html" class="external-link">creating
+conjunction with the article on <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html" class="external-link">creating
 a BDS dataset from SDTM</a>. As such, derivations and processes that are
 not specific to ADVFQ are mostly absent, and the user is invited to
 consult the aforementioned article for guidance.</p>
@@ -228,7 +228,7 @@ can be merged on at the end.</p>
 <p>Now we can derive the analysis date (<code>ADT</code>) and analysis
 relative day (<code>ADY</code>) variables. These derivations are
 study-specific and so the ones below are just examples - the user is
-again invited to consult the vignette on <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html" class="external-link">creating
+again invited to consult the vignette on <a href="https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html" class="external-link">creating
 a BDS dataset from SDTM</a> for details on this topic.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advfq</span> <span class="op">&lt;-</span> <span class="va">advfq</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -611,7 +611,7 @@ items for one patient’s baseline visit:</p>
 <div class="section level3">
 <h3 id="further">Further Derivations of Standard BDS Variables<a class="anchor" aria-label="anchor" href="#further"></a>
 </h3>
-<p>The user is invited to consult the article on <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html" class="external-link">creating
+<p>The user is invited to consult the article on <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html" class="external-link">creating
 a BDS dataset from SDTM</a> to learn how to add standard BDS variables
 to ADVFQ.</p>
 </div>
@@ -619,17 +619,13 @@ to ADVFQ.</p>
 <h3 id="example">Example Script<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
 <table class="table">
-<colgroup>
-<col width="22%">
-<col width="77%">
-</colgroup>
 <thead><tr class="header">
 <th>ADaM</th>
 <th>Sample Code</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td>ADVFQ</td>
-<td><a href="https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R" class="external-link">ad_advfq.R</a></td>
+<td><code>use_ad_template("advfq", package = "admiralophtha")</code></td>
 </tr></tbody>
 </table>
 </div>

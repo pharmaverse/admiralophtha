@@ -93,7 +93,7 @@
 </h2>
 <p>This article describes creating an ADOE ADaM with Ophthalmology Exam
 Analysis data for ophthalmology endpoints. It is to be used in
-conjunction with the article on <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html" class="external-link">creating
+conjunction with the article on <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html" class="external-link">creating
 a BDS dataset from SDTM</a>. As such, derivations and processes that are
 not specific to ADOE are absent, and the user is invited to consult the
 aforementioned article for guidance.</p>
@@ -219,7 +219,7 @@ assigned using <code><a href="https:/pharmaverse.github.io/admiral/v1.4.2/cran-r
 generated above. <code>AVISIT</code>, <code>AVISITN</code> and related
 timepoint variables can also be derived soon after, though their
 derivation is generally study-specific. A simple option is included
-below; please consult the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html#timing" class="external-link">BDS
+below; please consult the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> <a href="https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html#timing" class="external-link">BDS
 findings vignette</a> for a more detailed discussion.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adoe</span> <span class="op">&lt;-</span> <span class="va">adoe</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -251,7 +251,7 @@ findings vignette</a> for a more detailed discussion.</p>
 post-dose IOP in each eye at each visit. These records can be added with
 two calls to <code><a href="https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_param_computed.html">derive_param_computed()</a></code>. Since the calls are
 very similar, they can be executed in one code block using
-<code><a href="https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/call_derivation.html">call_derivation()</a></code> - please see the <a href="https://pharmaverse.github.io/admiral/articles/higher_order.html" class="external-link">Higher
+<code><a href="https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/call_derivation.html">call_derivation()</a></code> - please see the <a href="https://pharmaverse.github.io/admiral/cran-release/articles/higher_order.html" class="external-link">Higher
 Order Functions vignette</a> for more details.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adoe</span> <span class="op">&lt;-</span> <span class="va">adoe</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -326,7 +326,7 @@ need any changes.</p>
 <div class="section level3">
 <h3 id="further">Further Derivations of Standard BDS Variables<a class="anchor" aria-label="anchor" href="#further"></a>
 </h3>
-<p>The user is invited to consult the article on <a href="https://pharmaverse.github.io/admiral/articles/bds_finding.html" class="external-link">creating
+<p>The user is invited to consult the article on <a href="https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html" class="external-link">creating
 a BDS dataset from SDTM</a> to learn how to add standard BDS variables
 to ADOE.</p>
 </div>
@@ -334,17 +334,13 @@ to ADOE.</p>
 <h3 id="example">Example Script<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
 <table class="table">
-<colgroup>
-<col width="22%">
-<col width="77%">
-</colgroup>
 <thead><tr class="header">
 <th>ADaM</th>
 <th>Sample Code</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td>ADOE</td>
-<td><a href="https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R" class="external-link">ad_adoe.R</a></td>
+<td><code>use_ad_template("adoe", package = "admiralophtha")</code></td>
 </tr></tbody>
 </table>
 </div>

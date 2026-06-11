@@ -5,7 +5,7 @@
 This article describes creating an ADVFQ ADaM with Visual Functioning
 Questionnaire data for ophthalmology endpoints. It is to be used in
 conjunction with the article on [creating a BDS dataset from
-SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html).
+SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html).
 As such, derivations and processes that are not specific to ADVFQ are
 mostly absent, and the user is invited to consult the aforementioned
 article for guidance.
@@ -131,7 +131,7 @@ Now we can derive the analysis date (`ADT`) and analysis relative day
 (`ADY`) variables. These derivations are study-specific and so the ones
 below are just examples - the user is again invited to consult the
 vignette on [creating a BDS dataset from
-SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+SDTM](https://pharmaverse.github.io/admiral/articles/cran-release/bds_finding.html)
 for details on this topic.
 
 ``` r
@@ -534,11 +534,11 @@ items for one patient’s baseline visit:
 
 The user is invited to consult the article on [creating a BDS dataset
 from
-SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
+SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html)
 to learn how to add standard BDS variables to ADVFQ.
 
 ### Example Script
 
-| ADaM  | Sample Code                                                                                    |
-|-------|------------------------------------------------------------------------------------------------|
-| ADVFQ | [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R) |
+| ADaM  | Sample Code                                           |
+|-------|-------------------------------------------------------|
+| ADVFQ | `use_ad_template("advfq", package = "admiralophtha")` |
