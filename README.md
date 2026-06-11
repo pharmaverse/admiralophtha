@@ -65,9 +65,7 @@ developer community:
 
 | Month / Year     | Package Version               |                          
 | ---------------- | ----------------------------- |
-|                  |                               |                                          
 | ~January 2026    | `{admiralophtha}` v. 1.4.0    |
-|                  |                               | 
 | ~June 2026       | `{admiralophtha}` v. 1.5.0    |
 
 # Acknowledgments
