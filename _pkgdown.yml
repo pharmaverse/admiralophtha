@@ -4,7 +4,7 @@ template:
   bootstrap: 5
   light-switch: true
   params:
-   bootswatch: flatly
+    bootswatch: flatly
   includes:
     css: pkgdown/extra.css
     in_header: |

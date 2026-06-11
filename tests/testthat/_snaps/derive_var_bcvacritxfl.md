@@ -9,7 +9,7 @@
       `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.5.0.
       i Please use `admiral::derive_vars_crit_flag()` instead.
       i See admiralophtha's guidance on creating BCVA criterion flags here: https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags
-      x This message will turn into an error with release of admiralophtha 1.6.0.
+      x This message will turn into an error with the release of admiralophtha 1.6.0.
 
 # derive_var_bcvacritxfl Test 2: Correct appending in CRITx of additional text
 
@@ -22,7 +22,7 @@
       `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.5.0.
       i Please use `admiral::derive_vars_crit_flag()` instead.
       i See admiralophtha's guidance on creating BCVA criterion flags here: https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags
-      x This message will turn into an error with release of admiralophtha 1.6.0.
+      x This message will turn into an error with the release of admiralophtha 1.6.0.
 
 # derive_var_bcvacritxfl Test 3: Correct CRITx index when critxfl_index not supplied
 
@@ -34,7 +34,7 @@
       `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.5.0.
       i Please use `admiral::derive_vars_crit_flag()` instead.
       i See admiralophtha's guidance on creating BCVA criterion flags here: https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags
-      x This message will turn into an error with release of admiralophtha 1.6.0.
+      x This message will turn into an error with the release of admiralophtha 1.6.0.
 
 # derive_var_bcvacritxfl Test 4: Correct CRITx index when critxfl_index is supplied
 
@@ -47,5 +47,5 @@
       `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.5.0.
       i Please use `admiral::derive_vars_crit_flag()` instead.
       i See admiralophtha's guidance on creating BCVA criterion flags here: https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags
-      x This message will turn into an error with release of admiralophtha 1.6.0.
+      x This message will turn into an error with the release of admiralophtha 1.6.0.
 

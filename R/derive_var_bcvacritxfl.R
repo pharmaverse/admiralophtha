@@ -204,7 +204,7 @@ derive_var_bcvacritxfl <- function(dataset,
     details = c(
       i = "See admiralophtha's guidance on creating BCVA criterion flags here:
       https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags",
-      x = "This message will turn into an error with release of admiralophtha 1.6.0."
+      x = "This message will turn into an error with the release of admiralophtha 1.6.0."
     )
   )
 
