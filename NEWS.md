@@ -7,6 +7,10 @@
   **Phase 1 (message)**
   
   **Phase 2 (warning)**
+  
+  - `derive_var_bcvacritxfl()` and its internal utility function `derive_var_bcvacritxfl_util()`. Users are invited to use
+  `admiral::derive_vars_crit_flag()` - please see the [criterion flag section of the ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags) 
+  for more details. Each deprecation phase for this function will only last six months (i.e. one release cycle). (#282)
 
   **Phase 3 (error)**
 
@@ -16,6 +20,9 @@
 
 ## Updates to Documentation
 
+- A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
+of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#299)
+
 ## Various
 
 <details>
@@ -23,6 +30,11 @@
 
 * Updated `.github/common.yml` to add new PR website workflow, accessible by placing the keyword "[create website]" in PR titles. (#295)
 
+* Updated to `{roxygen2}` 8.0.0. (#301)
+
+* Consolidated developer list to active developers only, and moved inactive developers to README Acknowledgments. (#294)
+
+* - Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#299)
 </details>
 
 # admiralophtha 1.4.1

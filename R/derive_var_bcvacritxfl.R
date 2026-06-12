@@ -1,7 +1,8 @@
 #' Add `CRITx`/`CRITxFL` pair to BCVA dataset
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")` The `derive_var_bcvacritxfl_util()`
+#' `r lifecycle::badge("deprecated")`
+#' The `derive_var_bcvacritxfl_util()`
 #' function has been deprecated in favor of `admiral::derive_vars_crit_flag()` - please see
 #' the [criterion flag section of the
 #' ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
@@ -89,7 +90,8 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' Adds `CRITx`/`CRITxFL` pairs to BCVA dataset
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")` The `derive_var_bcvacritxfl()`
+#' `r lifecycle::badge("deprecated")`
+#' The `derive_var_bcvacritxfl()`
 #' function has been deprecated in favor of `admiral::derive_vars_crit_flag()` - please see
 #' the [criterion flag section of the
 #' ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
@@ -195,14 +197,14 @@ derive_var_bcvacritxfl <- function(dataset,
                                    bcva_lowlims = NULL,
                                    additional_text = "",
                                    critxfl_index = NULL) {
-  deprecate_inform(
-    when = "1.4.0",
+  deprecate_warn(
+    when = "1.5.0",
     what = "admiralophtha::derive_var_bcvacritxfl()",
     with = "admiral::derive_vars_crit_flag()",
     details = c(
       i = "See admiralophtha's guidance on creating BCVA criterion flags here:
       https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags",
-      x = "This message will turn into a warning with release of admiralophtha 1.5.0."
+      x = "This message will turn into an error with the release of admiralophtha 1.6.0."
     )
   )
 

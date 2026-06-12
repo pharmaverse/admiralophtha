@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 # Introduction
 
 This article describes creating an ADVFQ ADaM with Visual Functioning Questionnaire
-data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are mostly absent, and the user is invited to consult the aforementioned article for guidance. 
+data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html). As such, derivations and processes that are not specific to ADVFQ are mostly absent, and the user is invited to consult the aforementioned article for guidance. 
 
 The full, open-source VFQ questionnaire can be accessed [here](https://www.nei.nih.gov/about/education-and-outreach/outreach-materials/visual-function-questionnaire-25).
 
@@ -256,7 +256,7 @@ advfq <- qs %>%
   )
 ```
 
-Now we can derive the analysis date (`ADT`) and analysis relative day (`ADY`) variables. These derivations are study-specific and so the ones below are just examples - the user is again invited to consult the vignette on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) for details on this topic.
+Now we can derive the analysis date (`ADT`) and analysis relative day (`ADY`) variables. These derivations are study-specific and so the ones below are just examples - the user is again invited to consult the vignette on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) for details on this topic.
 
 ```{r, eval = TRUE}
 advfq <- advfq %>%
@@ -613,10 +613,10 @@ dataset_vignette(
 
 ## Further Derivations of Standard BDS Variables {#further}
 
-The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADVFQ. 
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADVFQ. 
 
 ## Example Script {#example}
 
 ADaM | Sample Code 
 ---- | -------------- 
-ADVFQ | [ad_advfq.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_advfq.R)
+ADVFQ | `use_ad_template("advfq", package = "admiralophtha")`
