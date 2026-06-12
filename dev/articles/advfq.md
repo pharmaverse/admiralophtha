@@ -148,7 +148,7 @@ advfq <- advfq %>%
 
 Next, we can assign `PARAMCD` for the original parameters by merging
 with the `param_lookup_original` table we set up earlier. Using
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_merged_lookup.html)
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html)
 allows us to get console-level feedback that all the `QSTESTCD`s have
 been mapped. We only add `PARAMCD` for now, and will derive `PARCATy`
 and `PARAM` later - again to avoid carrying forward too many variables.
@@ -195,7 +195,7 @@ Now we are ready to derive the transformed parameters. Excluding 15C
 (see later down this section), all of these are derived by re-scaling a
 single original record. As such, the prototypical code which can be used
 to derive them is a call to
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_extreme_records.html)
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_extreme_records.html)
 which is structured as follows:
 
 ``` r
@@ -216,7 +216,7 @@ derive_extreme_records(
 ```
 
 The function
-[`transform_range()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/transform_range.html)
+[`transform_range()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/transform_range.html)
 is a helper function from
 [admiral](https://pharmaverse.github.io/admiral/) which performs the
 re-scaling. You will need to specify the `source_range` (i.e. the range
@@ -256,7 +256,7 @@ response to 15B indicates that the patient has never driven or given up
 driving (i.e. `QSSTRESN == 1`), then we set the transformed record to 0;
 otherwise, we do not derive a transformed record for that visit. To do
 this, we can set up a temporary flag variable using
-[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_var_merged_exist_flag.html)
+[`derive_var_merged_exist_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_merged_exist_flag.html)
 to identify visits where question 15C was not asked, and then use that
 flag in the derivation of the transformed record for 15C.
 
@@ -275,9 +275,9 @@ advfq <- advfq %>%
 
 We can then derive the transformed records, including the special
 handling for 15C, in a single call to
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/call_derivation.html),
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html),
 since each call to
-[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_extreme_records.html)
+[`derive_extreme_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_extreme_records.html)
 contains the same assignment of `dataset`, `dataset_add` and
 `keep_source_vars`, then only differs in the `filter_add` and
 `set_values_to` arguments. Each list passed to `variable_params`
@@ -410,13 +410,13 @@ item-only composite means, and then `advfq_qso` for the means including
 all items.
 
 Note that the `dataset` argument is not passed to
-[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_summary_records.html),
+[`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_summary_records.html),
 meaning the output datasets contain only the new composite parameters.
 Also, this time we use `PARCAT4` as a by-variable, meaning that the new
 composite scores are assigned the same value of `PARCAT4`
 (e.g. “Distance Activities”) as the records that were used to constitute
 them. Then, we can then use
-[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_merged_lookup.html)
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html)
 to add on the `PARCATy` (excluding `PARCAT4`) and `PARAM`/`PARAMCD`
 variables for these new records. At the end, we append the new records
 to the existing `advfq` using
@@ -474,7 +474,7 @@ composite parameters, excluding “General Health”, and create:
 
 As was done for the [transformed parameters](#deriving_transformed), we
 do this in a single call to
-[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/call_derivation.html),
+[`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html),
 since the only difference between the two derivations is the
 `filter_add` and `set_values_to` arguments.
 

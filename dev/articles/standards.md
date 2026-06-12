@@ -67,7 +67,7 @@ renders the dataset confusing to scrutinise.
 
 For BCVA change endpoints,
 [admiral](https://pharmaverse.github.io/admiral/) provides the function
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_crit_flag.html)
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html)
 to add them en masse.
 
 ### Affected Eye Derivation

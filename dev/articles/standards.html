@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/admiralophtha.html">Get Started</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-get-started" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Get Started</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-get-started">
+<li><a class="dropdown-item" href="../articles/admiralophtha.html">Get Started</a></li>
+    <li><a class="dropdown-item" href="../articles/templates.html">Explore ADaM Templates 🧭</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-user-guides" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">User Guides</button>
@@ -165,7 +171,7 @@ it is generally discouraged to use the same criterion flag/variable pair
 for more than one criterion across multiple parameters in an ADaM
 dataset, as this renders the dataset confusing to scrutinise.</p>
 <p>For BCVA change endpoints, <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> provides the
-function <code><a href="https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_crit_flag.html">derive_vars_crit_flag()</a></code> to add them en masse.</p>
+function <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html">derive_vars_crit_flag()</a></code> to add them en masse.</p>
 </div>
 <div class="section level3">
 <h3 id="affected-eye-derivation">Affected Eye Derivation<a class="anchor" aria-label="anchor" href="#affected-eye-derivation"></a>

@@ -12,5 +12,7 @@
   ADVFQ](https://pharmaverse.github.io/admiralophtha/dev/articles/advfq.md):
 - [Ophthalmology
   Standards](https://pharmaverse.github.io/admiralophtha/dev/articles/standards.md):
+- [Explore the admiralophtha ADaM
+  Templates](https://pharmaverse.github.io/admiralophtha/dev/articles/templates.md):
 - [Previous Versions of
   Website](https://pharmaverse.github.io/admiralophtha/dev/articles/website-versions.md):

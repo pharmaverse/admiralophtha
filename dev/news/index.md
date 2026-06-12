@@ -16,7 +16,7 @@
     and its internal utility function
     [`derive_var_bcvacritxfl_util()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl_util.md).
     Users are invited to use
-    [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_crit_flag.html) -
+    [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html) -
     please see the [criterion flag section of the ADBCVA
     vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
     for more details. Each deprecation phase for this function will only
@@ -58,6 +58,16 @@ Developer Notes
     [admiral](https://pharmaverse.github.io/admiral/) author.
     ([\#299](https://github.com/pharmaverse/admiralophtha/issues/299))
 
+## admiralophtha 1.4.1
+
+### Updates to Documentation
+
+- A new vignette “Explore ADaM Templates” was added to the “Get Started”
+  menu. It displays the
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/)
+  templates.
+  ([\#297](https://github.com/pharmaverse/admiralophtha/issues/297))
+
 ## admiralophtha 1.4.0
 
 ### Breaking Changes
@@ -72,7 +82,7 @@ Developer Notes
     and its internal utility function
     [`derive_var_bcvacritxfl_util()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl_util.md).
     Users are invited to use
-    [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_crit_flag.html) -
+    [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html) -
     please see the [criterion flag section of the ADBCVA
     vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
     for more details. Each deprecation phase for this function will only
@@ -132,7 +142,7 @@ Developer Notes
 
 - Improved model derivation of criterion flag/variable pairs in `ADBCVA`
   template by showcasing use of
-  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/restrict_derivation.html)
+  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html)
   in combination with `call-derivation()`.
   ([\#267](https://github.com/pharmaverse/admiralophtha/issues/267))
 
@@ -140,7 +150,7 @@ Developer Notes
 
 - Improved model derivation of criterion flag/variable pairs in `ADBCVA`
   vignette by showcasing use of
-  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/restrict_derivation.html)
+  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html)
   in combination with `call-derivation()`.
   ([\#267](https://github.com/pharmaverse/admiralophtha/issues/267))
 
@@ -164,26 +174,26 @@ Developer Notes
 ### Updates to Templates
 
 - Replaced the function `derive_var_bcvacrtixfl()` with the new function
-  [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_crit_flag.html)
+  [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html)
   for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA
   template. The function `derive_var_bcvacrtixfl()` is now superseded.
   ([\#247](https://github.com/pharmaverse/admiralophtha/issues/247))
 
 - Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1`
   derivations to use new function
-  [`admiral::derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_cat.html).
+  [`admiral::derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_cat.html).
   ([\#244](https://github.com/pharmaverse/admiralophtha/issues/244)) \##
   Updates to Documentation
 
 - Replaced the function `derive_var_bcvacrtixfl()` with the new function
-  [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_crit_flag.html)
+  [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html)
   for the derivation of `SBCVA` and `FBCVA` criterion flags in ADBCVA
   vignette. The function `derive_var_bcvacrtixfl()` is now superseded.
   ([\#247](https://github.com/pharmaverse/admiralophtha/issues/247))
 
 - Within the ADBCVA vignette, updated `AVALCA1N` and `AVALCAT1`
   derivations to use new function
-  [`admiral::derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_cat.html).
+  [`admiral::derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_cat.html).
   ([\#244](https://github.com/pharmaverse/admiralophtha/issues/244))
 
 ### Updates to Functions
@@ -225,7 +235,7 @@ Developer Notes
 ### Updates to Templates
 
 - Removed `analysis_value` argument in the calls to
-  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_param_computed.html)
+  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html)
   in ADBCVA template in line with the deprecation of this argument in
   the new version of [admiral](https://pharmaverse.github.io/admiral/).
   Variable values for parameters of interest are now all populated
@@ -233,7 +243,7 @@ Developer Notes
   ([\#207](https://github.com/pharmaverse/admiralophtha/issues/207)).
 
 - Modified calls to
-  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_summary_records.html)
+  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_summary_records.html)
   in ADVFQ template in line with the updates to this function in the new
   version of the [admiral](https://pharmaverse.github.io/admiral/)
   package. The `filter` argument is now renamed to `filter_add`, the
@@ -249,7 +259,7 @@ Developer Notes
   ([\#203](https://github.com/pharmaverse/admiralophtha/issues/203)).
 
 - Removed `analysis_value` argument in the calls to
-  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_param_computed.html)
+  [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html)
   in ADBCVA vignette in line with the deprecation of this argument in
   the new version of [admiral](https://pharmaverse.github.io/admiral/).
   Variable values for parameters of interest are now all populated
@@ -257,7 +267,7 @@ Developer Notes
   ([\#207](https://github.com/pharmaverse/admiralophtha/issues/207)).
 
 - Modified calls to
-  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_summary_records.html)
+  [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_summary_records.html)
   in ADVFQ vignette in line with the updates to this function in the new
   version of the [admiral](https://pharmaverse.github.io/admiral/)
   package. The `filter` argument is now renamed to `filter_add`, the
@@ -296,7 +306,7 @@ Developer Notes
   so that criterion flags can be derived with respect to any variable.
   Also removed arguments `paramcds` and `basetype` as their function can
   be achieved using
-  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/restrict_derivation.html)
+  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html)
   from [admiral](https://pharmaverse.github.io/admiral/). This also
   required renaming of argument `dataset_adbcva` to `dataset`
   ([\#119](https://github.com/pharmaverse/admiralophtha/issues/119)).
@@ -307,7 +317,7 @@ Developer Notes
 ### Updates to Templates
 
 - Updated ADBCVA template’s calls to use
-  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/restrict_derivation.html)
+  [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html)
   in calls to
   [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
   and also to showcase use of `crit_var` argument of
@@ -320,7 +330,7 @@ Developer Notes
   ([\#184](https://github.com/pharmaverse/admiralophtha/issues/184)).
 
 - Switched out `derive_var_merged_cat()` for
-  [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/derive_vars_merged.html)
+  [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged.html)
   in the function
   [`derive_var_studyeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_studyeye.md)
   due to deprecation of the former in favor of the latter in

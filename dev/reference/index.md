@@ -37,7 +37,7 @@ Derivation Functions helpful for building the Ophtha datasets
 ## Example Datasets
 
 You can run
-[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.4.2/cran-release/reference/use_ad_template.html)
+[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/use_ad_template.html)
 to produce additional datasets
 
 - [`admiralophtha_adbcva`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adbcva.md)
