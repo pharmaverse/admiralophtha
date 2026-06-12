@@ -2,17 +2,19 @@ url: https://pharmaverse.github.io/admiralophtha
 
 template:
   bootstrap: 5
+  light-switch: true
   params:
     bootswatch: flatly
   includes:
-    in_header:
+    css: pkgdown/extra.css
+    in_header: |
       <script
       async
       src="https://widget.kapa.ai/kapa-widget.bundle.js"
       data-website-id="2c7249cc-f1dc-4a63-8674-6ecbcb34d95c"
       data-project-name="admiral"
       data-project-color="#2c3e50"
-      data-project-logo="https://pharmaverse.github.io/admiralophtha/logo.png"
+      data-project-logo="https://pharmaverse.github.io/admiral/cran-release/logo.png"
       data-consent-required="true"
       data-user-analytics-cookie-enabled="true"
       data-consent-screen-title="Help us improve our AI assistant"
@@ -23,6 +25,22 @@ template:
       data-modal-search-placeholder="Ask me a question about {admiralophtha} or the {admiral} ecosystem..."
       data-modal-z-index="9999"
       ></script>
+
+      <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Select all navbar links that have an aria-label
+        var navLinks = document.querySelectorAll('.navbar-nav .nav-link[aria-label]');
+
+        navLinks.forEach(function (link) {
+          // Initialize Bootstrap 5 Tooltip
+          link.setAttribute('title', link.getAttribute('aria-label'));
+          new bootstrap.Tooltip(link, {
+            placement: 'bottom', // Tooltip appears below the icon
+            trigger: 'hover'
+          });
+        });
+      });
+      </script>
 search:
   exclude: ['news/index.html']
 repo:
@@ -38,6 +56,10 @@ home:
     href: https://pharmaverse.org/e2eclinical/adam/
 
 authors:
+  Edoardo Mancini:
+    href: https://manciniedoardo.github.io/
+  Yuki Matsunaga:
+    href: https://github.com/ukey1025
   F. Hoffmann-La Roche AG:
     html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.png' height='34' alt='Roche logo' /></a>"
     href: https://www.roche.com/
@@ -54,20 +76,10 @@ development:
 news:
   cran_dates: false
 reference:
-
-#- title: Derivations for Adding Variables
-#- subtitle: All ADaMs
-#- contents:
-#  - has_keyword("der_gen")
 - subtitle: ADSL-specific
   desc: Derivation Functions helpful for building the ADSL dataset
 - contents:
   - has_keyword("der_adsl")
-#- subtitle: BDS-specific
-#  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
-#- contents:
-#  - has_keyword("der_bds_gen")
-#  - has_keyword("der_bds_findings")
 - subtitle: OCCDS-specific
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
@@ -82,55 +94,16 @@ reference:
 - subtitle: Utilities for Formatting Observations
 - contents:
   - has_keyword("utils_fmt")
-#- subtitle: Utilities for Dataset Checking
-#- contents:
-#  - has_keyword('utils_ds_chk')
-#- subtitle: Utilities used within Derivation Functions
-#- contents:
-#  - has_keyword('utils_help')
-#- subtitle: Utilities for Filtering Observations
-#- contents:
-#  - has_keyword('utils_fil')
-#- subtitle: Utilities used for Date Imputation
-#- contents:
-#  - has_keyword('utils_impute')
-#- subtitle: Utilities used for Examples and Template Scripts
-#- contents:
-#  - has_keyword('utils_examples')
-
-
-#- title: Computations
-#  desc: Computations expect vectors as input and return a vector
-#  contents:
-#  - has_keyword('computation')
-
 
 - title: Example Datasets
   desc: You can run `admiral::use_ad_template()` to produce additional datasets
   contents:
   - has_keyword('datasets')
 
-#- title: Other Keywords
-#- subtitle: Timing
-#  desc: Function related to timing, e.g., deriving dates, imputing dates, converting dates, deriving duration, ...
-#  contents:
-#  - has_keyword('timing')
-
-#- subtitle: Source Specifications
-#  desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
-#  contents:
-#  - has_keyword('source_specifications')
-
-#- subtitle: Pre-Defined Time-to-Event Sources
-#  desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
-#  contents:
-#  - has_keyword('tte_source')
-
-
 navbar:
   structure:
     left: [getstarted, reference, articles, news, versions]
-    right: [search, slack, history, newissue, github]
+    right: [search, slack, history, newissue, github, lightswitch]
   components:
     getstarted:
       text: Get Started
@@ -153,15 +126,11 @@ navbar:
         href: articles/adbcva.html
       - text: Creating ADVFQ
         href: articles/advfq.html
-    history:
-      icon: fa-history
-      href: articles/website-versions.html
-      aria-label: Previous Release Websites
     slack:
       icon: fa-slack
       href: https://pharmaverse.slack.com/
-      aria-label: Slack
+      aria-label: Join the pharmaverse Slack!
     newissue:
       icon: fa-bug
       href: https://github.com/pharmaverse/admiralophtha/issues/new/choose
-      aria-label: New Issue
+      aria-label: Report an issue

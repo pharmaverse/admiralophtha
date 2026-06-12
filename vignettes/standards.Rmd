@@ -43,7 +43,7 @@ For BCVA change endpoints, `{admiral}` provides the function `derive_vars_crit_f
 
 
 ## Affected Eye Derivation
-`{admiralophtha}` function `derive_var_afeye` follows the standard derivation:
+`{admiralophtha}` function `derive_var_afeye()` follows the standard derivation:
 
 Set to "BOTH EYES" when Study Eye Selection [`ADSL.STUDYEYE`] is not missing, and Laterality [`xxLAT`] is equal to "BILATERAL".
 Else set to "STUDY EYE" when Study Eye Selection [`ADSL.STUDYEYE`] is either "RIGHT" or "LEFT", and matches Laterality [`xxLAT`] for the observation record.

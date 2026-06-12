@@ -18,7 +18,7 @@ library(admiraldev)
 
 # Introduction
 
-This article describes creating an ADOE ADaM with Ophthalmology Exam Analysis data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html). As such, derivations and processes that are not specific to ADOE are absent, and the user is invited to consult the aforementioned article for guidance.
+This article describes creating an ADOE ADaM with Ophthalmology Exam Analysis data for ophthalmology endpoints. It is to be used in conjunction with the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html). As such, derivations and processes that are not specific to ADOE are absent, and the user is invited to consult the aforementioned article for guidance.
 
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
 otherwise specified.*
@@ -114,7 +114,7 @@ adoe <- adoe %>%
 
 ## Assigning `PARAM`/`PARAMCD` and `AVISIT/AVISITN` {#param_avisit}
 
-Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above. `AVISIT`, `AVISITN` and related timepoint variables can also be derived soon after, though their derivation is generally study-specific. A simple option is included below; please consult the `{admiral}` [BDS findings vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html#timing) for a more detailed discussion.
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above. `AVISIT`, `AVISITN` and related timepoint variables can also be derived soon after, though their derivation is generally study-specific. A simple option is included below; please consult the `{admiral}` [BDS findings vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing) for a more detailed discussion.
 
 ```{r}
 adoe <- adoe %>%
@@ -142,7 +142,7 @@ adoe <- adoe %>%
 
 ## Creating IOP pre to post-dose difference derived parameter {#parameters}
 
-Two derived parameters of interest are the difference between pre and post-dose IOP in each eye at each visit. These records can be added with two calls to `derive_param_computed()`. Since the calls are very similar, they can be executed in one code block using `call_derivation()` - please see the [Higher Order Functions vignette](https://pharmaverse.github.io/admiral/articles/higher_order.html) for more details. 
+Two derived parameters of interest are the difference between pre and post-dose IOP in each eye at each visit. These records can be added with two calls to `derive_param_computed()`. Since the calls are very similar, they can be executed in one code block using `call_derivation()` - please see the [Higher Order Functions vignette](https://pharmaverse.github.io/admiral/cran-release/articles/higher_order.html) for more details. 
 
 ```{r}
 adoe <- adoe %>%
@@ -212,11 +212,11 @@ adoe <- adoe %>%
 
 ## Further Derivations of Standard BDS Variables {#further}
 
-The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
+The user is invited to consult the article on [creating a BDS dataset from SDTM](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html) to learn how to add standard BDS variables to ADOE. 
 
 ## Example Script {#example}
 
 ADaM | Sample Code 
 ---- | -------------- 
-ADOE | [ad_adoe.R](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R)
+ADOE | `use_ad_template("adoe", package = "admiralophtha")`
 
