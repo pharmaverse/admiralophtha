@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 # Introduction
 
 As this is a package extension, if you are new to `{admiral}` then the best place to first start
-reading would be this [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html)
+reading would be this [Get Started](https://pharmaverse.github.io/admiral/cran-release/articles/admiral.html)
 guide. This extension package follows the same main idea and conventions, and re-uses many
 functions from `{admiral}`, so it is important to thoroughly understand these to be able to
 use `{admiralophtha}`.

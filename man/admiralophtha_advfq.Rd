@@ -20,7 +20,7 @@ admiralophtha_advfq
 An example Visual Function Questionnaire (VFQ) analysis dataset
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{admiralophtha_adbcva}},
 \code{\link{admiralophtha_adoe}}
 }
