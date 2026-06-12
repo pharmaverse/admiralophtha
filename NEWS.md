@@ -1,4 +1,4 @@
-# admiralophtha (development version)
+# admiralophtha 1.5.0
 
 ## Breaking Changes
 
@@ -18,12 +18,13 @@ process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.
 
   **Phase 4 (removed)**
 
-## Updates to Templates
-
 ## Updates to Documentation
 
 - A night mode option has been added to the `{admiral}` website. This can be be toggled using the sun/moon icon in the top right corner 
 of the navigation bar. Tooltips have also been set up for each of the icons on the navigation bar. (#299)
+
+- A new vignette "Explore ADaM Templates" was added to the "Get Started" menu.
+It displays the `{admiralophtha}` templates. (#297)
 
 ## Various
 
