@@ -40,6 +40,7 @@ Suggests:
     devtools,
     diffdf,
     DT,
+    here,
     htmltools,
     knitr,
     lintr,

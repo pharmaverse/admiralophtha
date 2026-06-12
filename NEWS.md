@@ -37,6 +37,13 @@ of the navigation bar. Tooltips have also been set up for each of the icons on t
 * - Clickable links to personal websites or GitHub profiles were added in the home page sidebar for every `{admiral}` author. (#299)
 </details>
 
+# admiralophtha 1.4.1
+
+## Updates to Documentation
+
+- A new vignette "Explore ADaM Templates" was added to the "Get Started" menu.
+It displays the `{admiralophtha}` templates. (#297)
+
 # admiralophtha 1.4.0
 
 ## Breaking Changes
