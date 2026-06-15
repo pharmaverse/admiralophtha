@@ -96,56 +96,6 @@ elements in \code{bcva_ranges}, \code{bcva_uplims} and \code{bcva_lowlims}.
 NOTE: if \code{crit_var} is equal to \code{NA}, then the resulting criterion flag is also marked
 as \code{NA}.
 }
-\examples{
-library(tibble)
-library(admiral)
-library(admiraldev)
-
-adbcva1 <- tribble(
-  ~STUDYID, ~USUBJID, ~AVISIT, ~BASETYPE, ~PARAMCD, ~CHG,
-  "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 0,
-  "XXX001", "P01", "WEEK 2", "LAST", "FBCVA", 2,
-  "XXX001", "P02", "BASELINE", "LAST", "SBCVA", -13,
-  "XXX001", "P02", "WEEK 2", "LAST", "FBCVA", 5,
-  "XXX001", "P03", "BASELINE", "LAST", "SBCVA", NA,
-  "XXX001", "P03", "WEEK 2", "LAST", "FBCVA", 17
-)
-
-derive_var_bcvacritxfl(
-  dataset = adbcva1,
-  crit_var = exprs(CHG),
-  bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
-  bcva_uplims = list(5, 10),
-  bcva_lowlims = list(8),
-  additional_text = ""
-)
-
-adbcva2 <- tribble(
-  ~STUDYID, ~USUBJID, ~AVISIT, ~BASETYPE, ~PARAMCD, ~AVAL, ~CHG,
-  "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 4, NA,
-  "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 6, NA,
-  "XXX001", "P01", "AVERAGE BASELINE", "AVERAGE", "SBCVA", 5, NA,
-  "XXX001", "P01", "WEEK 2", "LAST", "SBCVA", -3, NA,
-  "XXX001", "P01", "WEEK 4", "LAST", "SBCVA", -10, NA,
-  "XXX001", "P01", "WEEK 6", "LAST", "SBCVA", 12, NA,
-  "XXX001", "P01", "WEEK 2", "AVERAGE", "SBCVA", -2, -7,
-  "XXX001", "P01", "WEEK 4", "AVERAGE", "SBCVA", 6, 1,
-  "XXX001", "P01", "WEEK 6", "AVERAGE", "SBCVA", 3, -2
-)
-
-restrict_derivation(
-  adbcva2,
-  derivation = derive_var_bcvacritxfl,
-  args = params(
-    crit_var = exprs(CHG),
-    bcva_ranges = list(c(0, 5), c(-10, 0)),
-    bcva_lowlims = list(5),
-    additional_text = " (AVERAGE)"
-  ),
-  filter = PARAMCD \%in\% c("SBCVA", "FBCVA") & BASETYPE == "AVERAGE"
-)
-
-}
 \seealso{
 Other deprecated:
 \code{\link[=derive_var_bcvacritxfl_util]{derive_var_bcvacritxfl_util()}}
