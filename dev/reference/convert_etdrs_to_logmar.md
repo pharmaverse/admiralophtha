@@ -36,6 +36,10 @@ Source for conversion formula: Beck, R.W., et al. A computerized method
 of visual acuity testing. American Journal of Ophthalmology, 135(2),
 pp.194-205. doi:https://doi.org/10.1016/s0002-9394(02)01825-1.
 
+## See also
+
+[`convert_logmar_to_etdrs()`](https://pharmaverse.github.io/admiralophtha/dev/reference/convert_logmar_to_etdrs.md)
+
 ## Author
 
 Rachel Linacre
@@ -54,24 +58,17 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 library(admiral)
-library(admiraldev)
-#> 
-#> Attaching package: ‘admiraldev’
-#> The following object is masked from ‘package:dplyr’:
-#> 
-#>     filter_if
-#> The following object is masked from ‘package:base’:
-#> 
-#>     %notin%
 
-adbcva <- tribble(
-  ~STUDYID, ~USUBJID, ~AVAL,
-  "XXX001", "P01", 5,
-  "XXX001", "P02", 10,
-  "XXX001", "P03", 15,
-  "XXX001", "P04", 20,
-  "XXX001", "P05", 25
+oe <- tribble(
+  ~STUDYID, ~USUBJID, ~OETESTCD, ~OEMETHOD, ~OESTRESN,
+  "XXX001", "P01", "VACSCORE", "logMAR EYE CHART", 1.08,
+  "XXX001", "P02", "VACSCORE", "logMAR EYE CHART", 1.66,
+  "XXX001", "P03", "VACSCORE", "logMAR EYE CHART", 1.60,
+  "XXX001", "P04", "VACSCORE", "ETDRS EYE CHART", 57,
+  "XXX001", "P05", "VACSCORE", "ETDRS EYE CHART", 62
 )
 
-adbcva <- adbcva %>% mutate(AVAL = convert_etdrs_to_logmar(AVAL))
+adbcva <- oe %>%
+  filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "ETDRS EYE CHART") %>%
+  mutate(OESTRESN = convert_etdrs_to_logmar(OESTRESN))
 ```

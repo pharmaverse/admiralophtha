@@ -21,13 +21,13 @@ Source:
 [`DESCRIPTION`](https://github.com/pharmaverse/admiralophtha/blob/main/DESCRIPTION)
 
 Mancini E, Matsunaga Y (2026). *admiralophtha: ADaM in R Asset Library -
-Ophthalmology*. R package version 1.4.0.9003,
+Ophthalmology*. R package version 1.5.0.9000,
 <https://pharmaverse.github.io/admiralophtha/>.
 
     @Manual{,
       title = {admiralophtha: ADaM in R Asset Library - Ophthalmology},
       author = {Edoardo Mancini and Yuki Matsunaga},
       year = {2026},
-      note = {R package version 1.4.0.9003},
+      note = {R package version 1.5.0.9000},
       url = {https://pharmaverse.github.io/admiralophtha/},
     }

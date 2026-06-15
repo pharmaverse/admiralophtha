@@ -64,8 +64,8 @@ developer community:
 
 | Month / Year  | Package Version                                                        |
 |---------------|------------------------------------------------------------------------|
-| ~January 2026 | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.4.0 |
-| ~June 2026    | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.5.0 |
+| ~January 2027 | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.6.0 |
+| ~June 2027    | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.7.0 |
 
 # Acknowledgments
 

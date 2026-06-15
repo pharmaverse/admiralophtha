@@ -12,6 +12,30 @@
 
   **Phase 2 (warning)**
 
+  **Phase 3 (error)**
+
+  **Phase 4 (removed)**
+
+### Updates to Templates
+
+### Updates to Documentation
+
+### Various
+
+Developer Notes
+
+## admiralophtha 1.5.0
+
+### Breaking Changes
+
+- The following functions are entering the next phase of the
+  [deprecation
+  process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
+
+  **Phase 1 (message)**
+
+  **Phase 2 (warning)**
+
   - [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
     and its internal utility function
     [`derive_var_bcvacritxfl_util()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl_util.md).
@@ -27,8 +51,6 @@
 
   **Phase 4 (removed)**
 
-### Updates to Templates
-
 ### Updates to Documentation
 
 - A night mode option has been added to the
@@ -37,6 +59,12 @@
   navigation bar. Tooltips have also been set up for each of the icons
   on the navigation bar.
   ([\#299](https://github.com/pharmaverse/admiralophtha/issues/299))
+
+- A new vignette “Explore ADaM Templates” was added to the “Get Started”
+  menu. It displays the
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/)
+  templates.
+  ([\#297](https://github.com/pharmaverse/admiralophtha/issues/297))
 
 ### Various
 
@@ -57,16 +85,6 @@ Developer Notes
     in the home page sidebar for every
     [admiral](https://pharmaverse.github.io/admiral/) author.
     ([\#299](https://github.com/pharmaverse/admiralophtha/issues/299))
-
-## admiralophtha 1.4.1
-
-### Updates to Documentation
-
-- A new vignette “Explore ADaM Templates” was added to the “Get Started”
-  menu. It displays the
-  [admiralophtha](https://pharmaverse.github.io/admiralophtha/)
-  templates.
-  ([\#297](https://github.com/pharmaverse/admiralophtha/issues/297))
 
 ## admiralophtha 1.4.0
 
@@ -182,8 +200,9 @@ Developer Notes
 - Within the ADBCVA template, updated `AVALCA1N` and `AVALCAT1`
   derivations to use new function
   [`admiral::derive_vars_cat()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_cat.html).
-  ([\#244](https://github.com/pharmaverse/admiralophtha/issues/244)) \##
-  Updates to Documentation
+  ([\#244](https://github.com/pharmaverse/admiralophtha/issues/244))
+
+### Updates to Documentation
 
 - Replaced the function `derive_var_bcvacrtixfl()` with the new function
   [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html)
@@ -206,7 +225,7 @@ Developer Notes
   - The argument `dataset_occ`
   - The argument `lat_vals`
 
-## admiralophtha 1.1.0.
+## admiralophtha 1.1.0
 
 ### Updates to Functions
 
@@ -227,8 +246,8 @@ Developer Notes
   rather than explicitly quoting key variables such as `STUDYID` and
   `USUBJID`. For instance, a line such as
   `by_vars = exprs(STUDYID, USUBJID)` would be replaced by
-  `by_vars = get_admiral_option("subject_keys")`
-  ([\#226](https://github.com/pharmaverse/admiralophtha/issues/226)).
+  `by_vars = get_admiral_option("subject_keys")`.
+  ([\#226](https://github.com/pharmaverse/admiralophtha/issues/226))
 
 ## admiralophtha 1.0.0
 
@@ -239,8 +258,8 @@ Developer Notes
   in ADBCVA template in line with the deprecation of this argument in
   the new version of [admiral](https://pharmaverse.github.io/admiral/).
   Variable values for parameters of interest are now all populated
-  through the `set_values_to` argument
-  ([\#207](https://github.com/pharmaverse/admiralophtha/issues/207)).
+  through the `set_values_to` argument.
+  ([\#207](https://github.com/pharmaverse/admiralophtha/issues/207))
 
 - Modified calls to
   [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_summary_records.html)
@@ -248,23 +267,23 @@ Developer Notes
   version of the [admiral](https://pharmaverse.github.io/admiral/)
   package. The `filter` argument is now renamed to `filter_add`, the
   argument `dataset_add` is now always specified and the variable values
-  are now all populated through the `set_values_to` argument
-  ([\#204](https://github.com/pharmaverse/admiralophtha/issues/204)).
+  are now all populated through the `set_values_to` argument.
+  ([\#204](https://github.com/pharmaverse/admiralophtha/issues/204))
 
 ### Updates to Documentation
 
 - Added release date for
   [admiralophtha](https://pharmaverse.github.io/admiralophtha/) 1.0 to
-  the front page
-  ([\#203](https://github.com/pharmaverse/admiralophtha/issues/203)).
+  the front page.
+  ([\#203](https://github.com/pharmaverse/admiralophtha/issues/203))
 
 - Removed `analysis_value` argument in the calls to
   [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html)
   in ADBCVA vignette in line with the deprecation of this argument in
   the new version of [admiral](https://pharmaverse.github.io/admiral/).
   Variable values for parameters of interest are now all populated
-  through the `set_values_to` argument
-  ([\#207](https://github.com/pharmaverse/admiralophtha/issues/207)).
+  through the `set_values_to` argument.
+  ([\#207](https://github.com/pharmaverse/admiralophtha/issues/207))
 
 - Modified calls to
   [`derive_summary_records()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_summary_records.html)
@@ -272,8 +291,8 @@ Developer Notes
   version of the [admiral](https://pharmaverse.github.io/admiral/)
   package. The `filter` argument is now renamed to `filter_add`, the
   argument `dataset_add` is now always specified and the variable values
-  are now all populated through the `set_values_to` argument
-  ([\#204](https://github.com/pharmaverse/admiralophtha/issues/204)).
+  are now all populated through the `set_values_to` argument.
+  ([\#204](https://github.com/pharmaverse/admiralophtha/issues/204))
 
 ### Updates to Functions
 
@@ -291,11 +310,11 @@ Developer Notes
 
 ### Various
 
-- Website now has button/links to Slack channel and GitHub Issues
-  ([\#206](https://github.com/pharmaverse/admiralophtha/issues/206)).
+- Website now has button/links to Slack channel and GitHub Issues.
+  ([\#206](https://github.com/pharmaverse/admiralophtha/issues/206))
 
-- Test coverage is now improved to 100%
-  ([\#217](https://github.com/pharmaverse/admiralophtha/issues/217)).
+- Test coverage is now improved to 100%.
+  ([\#217](https://github.com/pharmaverse/admiralophtha/issues/217))
 
 ## admiralophtha 0.3.0
 
@@ -308,11 +327,11 @@ Developer Notes
   be achieved using
   [`restrict_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html)
   from [admiral](https://pharmaverse.github.io/admiral/). This also
-  required renaming of argument `dataset_adbcva` to `dataset`
-  ([\#119](https://github.com/pharmaverse/admiralophtha/issues/119)).
+  required renaming of argument `dataset_adbcva` to `dataset`.
+  ([\#119](https://github.com/pharmaverse/admiralophtha/issues/119))
 
-- Added `AFEYE` derivation and description to ADOE Vignette
-  ([\#165](https://github.com/pharmaverse/admiralophtha/issues/165)).
+- Added `AFEYE` derivation and description to ADOE Vignette.
+  ([\#165](https://github.com/pharmaverse/admiralophtha/issues/165))
 
 ### Updates to Templates
 
@@ -321,46 +340,47 @@ Developer Notes
   in calls to
   [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
   and also to showcase use of `crit_var` argument of
-  [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
-  ([\#119](https://github.com/pharmaverse/admiralophtha/issues/119)).
+  [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md).
+  ([\#119](https://github.com/pharmaverse/admiralophtha/issues/119))
 
 - Switched out all references to `admiral.test` for references to
   `pharmaversesdtm` in ADOE and ADBCVA templates, and updated code to
-  refer to `oe_ophtha` accordingly
-  ([\#184](https://github.com/pharmaverse/admiralophtha/issues/184)).
+  refer to `oe_ophtha` accordingly.
+  ([\#184](https://github.com/pharmaverse/admiralophtha/issues/184))
 
 - Switched out `derive_var_merged_cat()` for
   [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged.html)
   in the function
   [`derive_var_studyeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_studyeye.md)
   due to deprecation of the former in favor of the latter in
-  [admiral](https://pharmaverse.github.io/admiral/)([\#119](https://github.com/pharmaverse/admiralophtha/issues/119)).
+  [admiral](https://pharmaverse.github.io/admiral/).
+  ([\#119](https://github.com/pharmaverse/admiralophtha/issues/119))
 
 - `OECAT` and `OESCAT` have been added to the lookup tables in the ADOE
-  and ADBCVA templates
-  ([\#189](https://github.com/pharmaverse/admiralophtha/issues/189)).
+  and ADBCVA templates.
+  ([\#189](https://github.com/pharmaverse/admiralophtha/issues/189))
 
 ### Updates to Documentation
 
 - Added a reference for the ETDRS to LogMAR conversion done by
   [`convert_etdrs_to_logmar()`](https://pharmaverse.github.io/admiralophtha/dev/reference/convert_etdrs_to_logmar.md)
   and
-  [`convert_logmar_to_etdrs()`](https://pharmaverse.github.io/admiralophtha/dev/reference/convert_logmar_to_etdrs.md)
-  ([\#136](https://github.com/pharmaverse/admiralophtha/issues/136)).
+  [`convert_logmar_to_etdrs()`](https://pharmaverse.github.io/admiralophtha/dev/reference/convert_logmar_to_etdrs.md).
+  ([\#136](https://github.com/pharmaverse/admiralophtha/issues/136))
 
 - `OECAT` and `OESCAT` have been added to the lookup tables in the ADOE
-  and ADBCVA vignettes
-  ([\#189](https://github.com/pharmaverse/admiralophtha/issues/189)).
+  and ADBCVA vignettes.
+  ([\#189](https://github.com/pharmaverse/admiralophtha/issues/189))
 
-- All function and variable names on the website are in backquotes
-  ([\#173](https://github.com/pharmaverse/admiralophtha/issues/173)).
+- All function and variable names on the website are in backquotes.
+  ([\#173](https://github.com/pharmaverse/admiralophtha/issues/173))
 
 ### Updates to Data
 
 - Removed `admiralophtha_ex` and `admiralophtha_qs` from the package, as
-  they now reside in `pharmaversesdtm`, where they are now names
-  `ex_ophtha` and `qs_ophtha` respectively
-  ([\#184](https://github.com/pharmaverse/admiralophtha/issues/184)).
+  they now reside in `pharmaversesdtm`, where they are now named
+  `ex_ophtha` and `qs_ophtha` respectively.
+  ([\#184](https://github.com/pharmaverse/admiralophtha/issues/184))
 
 ## admiralophtha 0.2.0
 
@@ -369,88 +389,86 @@ Developer Notes
 - Added new parameter `loc_vals` to function
   [`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_afeye.md)
   to allow users to specify values of `xxLOC` for which `AFEYE` is
-  derived (issue
-  [\#163](https://github.com/pharmaverse/admiralophtha/issues/163)).
+  derived.
+  ([\#163](https://github.com/pharmaverse/admiralophtha/issues/163))
 
 - Updated function
   [`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_afeye.md)
-  to resolve bug when `STUDYEYE` is ‘Bilateral’ (issue
-  [\#134](https://github.com/pharmaverse/admiralophtha/issues/134)).
+  to resolve bug when `STUDYEYE` is ‘Bilateral’.
+  ([\#134](https://github.com/pharmaverse/admiralophtha/issues/134))
 
 - Added new parameter `lat_vals` to function
   [`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_afeye.md)
-  to allow users to specify values of `xxLAT` for which `AFEYE` is
-  derived, as well as issuing warnings when unexpected values are found
-  (issue
-  [\#174](https://github.com/pharmaverse/admiralophtha/issues/174)).
+  to allow users to specify value s of `xxLAT` for which `AFEYE` is
+  derived, as well as issuing warnings when unexpected values are found.
+  ([\#174](https://github.com/pharmaverse/admiralophtha/issues/174))
 
 ### Updates to Templates
 
-- Updated ADOE to refer to `OESTRESU` for `AVALU` creation (issue
-  [\#139](https://github.com/pharmaverse/admiralophtha/issues/139)).
+- Updated ADOE to refer to `OESTRESU` for `AVALU` creation.
+  ([\#139](https://github.com/pharmaverse/admiralophtha/issues/139))
 
 - Updated ADOE and ADBCVA `PARAM` mapping to include units where
-  applicable (issue
-  [\#139](https://github.com/pharmaverse/admiralophtha/issues/139)).
+  applicable.
+  ([\#139](https://github.com/pharmaverse/admiralophtha/issues/139))
 
 - Updated ADOE, ADVFQ and ADBCVA for the unique intermediate dataset
   name to avoid overwriting, corrected the link for Visit and Period
-  variables Vignette in ADVFQ (issue
-  [\#128](https://github.com/pharmaverse/admiralophtha/issues/128)).
+  variables Vignette in ADVFQ.
+  ([\#128](https://github.com/pharmaverse/admiralophtha/issues/128))
 
 - Corrected values of `DTYPE`, `VISIT`, `VISITNUM`, `OEDY`, `OEDTC` for
-  derived parameters in ADBCVA template (issue
-  [\#137](https://github.com/pharmaverse/admiralophtha/issues/137)).
+  derived parameters in ADBCVA template.
+  ([\#137](https://github.com/pharmaverse/admiralophtha/issues/137))
 
-- Updated ADBCVA and ADOE templates to include `AFEYE` (issue
-  [\#133](https://github.com/pharmaverse/admiralophtha/issues/133)).
+- Updated ADBCVA and ADOE templates to include `AFEYE`.
+  ([\#133](https://github.com/pharmaverse/admiralophtha/issues/133))
 
 ### Updates to Site
 
 - Added a “Report a bug” link to
-  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) website
-  (issue
-  [\#127](https://github.com/pharmaverse/admiralophtha/issues/127)).
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) website.
+  ([\#127](https://github.com/pharmaverse/admiralophtha/issues/127))
 
-- Fixed bug where the search bar didn’t work for some searches (issue
-  [\#141](https://github.com/pharmaverse/admiralophtha/issues/141)).
+- Fixed bug where the search bar didn’t work for some searches.
+  ([\#141](https://github.com/pharmaverse/admiralophtha/issues/141))
 
 ## admiralophtha 0.1.0
 
 ### New Features
 
-- Added a function to derive the variable `STUDYEYE` in ADSL (issue
-  [\#9](https://github.com/pharmaverse/admiralophtha/issues/9)).
+- Added a function to derive the variable `STUDYEYE` in ADSL.
+  ([\#9](https://github.com/pharmaverse/admiralophtha/issues/9))
 
-- Added a function to derive the variable `AFEYE` in Occurrence datasets
-  (issue
-  [\#10](https://github.com/pharmaverse/admiralophtha/issues/10)).
+- Added a function to derive the variable `AFEYE` in Occurrence
+  datasets.
+  ([\#10](https://github.com/pharmaverse/admiralophtha/issues/10))
 
-- Added a function to derive the criterion flags in ADBCVA (issue
-  [\#49](https://github.com/pharmaverse/admiralophtha/issues/49)).
+- Added a function to derive the criterion flags in ADBCVA.
+  ([\#49](https://github.com/pharmaverse/admiralophtha/issues/49))
 
-- Added a function to convert LogMAR scores to ETDRS scores (issue
-  [\#50](https://github.com/pharmaverse/admiralophtha/issues/50)).
+- Added a function to convert LogMAR scores to ETDRS scores.
+  ([\#50](https://github.com/pharmaverse/admiralophtha/issues/50))
 
-- Added a function to convert ETDRS scores to LogMAR scores (issue
-  [\#50](https://github.com/pharmaverse/admiralophtha/issues/50)).
+- Added a function to convert ETDRS scores to LogMAR scores.
+  ([\#50](https://github.com/pharmaverse/admiralophtha/issues/50))
 
 - Created ophthalmology-specific test data for the EX SDTM domain,
   stored in
   [admiralophtha](https://pharmaverse.github.io/admiralophtha/) package
-  and accessible by calling `data(admiralophtha_ex)` (issue
-  [\#36](https://github.com/pharmaverse/admiralophtha/issues/36)).
+  and accessible by calling `data(admiralophtha_ex)`.
+  ([\#36](https://github.com/pharmaverse/admiralophtha/issues/36))
 
 - Created ophthalmology-specific test data for the SC and OE SDTM
   domains, stored in [admiral](https://pharmaverse.github.io/admiral/)
   package and accessible by calling `data(admiral_sc)` or
-  `data(admiral_oe)` (issues
-  [\#11](https://github.com/pharmaverse/admiralophtha/issues/11) and
-  [\#13](https://github.com/pharmaverse/admiralophtha/issues/13)).
+  `data(admiral_oe)`.
+  ([\#11](https://github.com/pharmaverse/admiralophtha/issues/11),
+  [\#13](https://github.com/pharmaverse/admiralophtha/issues/13))
 
 - Updated AE and QS test datasets in
   [admiral](https://pharmaverse.github.io/admiral/) to include
   ophthalmology-specific variables and records, such as laterality
-  variables in AE and VFQ records in QS (issues
-  [\#12](https://github.com/pharmaverse/admiralophtha/issues/12) and
-  [\#52](https://github.com/pharmaverse/admiralophtha/issues/52)).
+  variables in AE and VFQ records in QS.
+  ([\#12](https://github.com/pharmaverse/admiralophtha/issues/12),
+  [\#52](https://github.com/pharmaverse/admiralophtha/issues/52))
