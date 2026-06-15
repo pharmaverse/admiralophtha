@@ -1,5 +1,5 @@
 ## Test 1: Correct deprecation message for derive_var_bcvacritxfl_util ----
-test_that("derive_var_bcvacritxfl_util Test 1: Correct deprecation message for derive_var_bcvacritxfl_util", {
+test_that("derive_var_bcvacritxfl_util Test 1: Correct deprecation message for derive_var_bcvacritxfl_util", { # nolint
   expect_snapshot(
     error = TRUE,
     derive_var_bcvacritxfl_util(
@@ -7,7 +7,6 @@ test_that("derive_var_bcvacritxfl_util Test 1: Correct deprecation message for d
       crit_var = exprs(AVAL)
     )
   )
-
 })
 
 ## Test 2: Correct deprecation message for derive_var_bcvacritxfl ----
