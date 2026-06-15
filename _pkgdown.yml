@@ -1,6 +1,7 @@
 url: https://pharmaverse.github.io/admiralophtha
 
 template:
+  math-rendering: mathjax
   bootstrap: 5
   light-switch: true
   params:
@@ -81,11 +82,11 @@ reference:
 - contents:
   - has_keyword("der_adsl")
 - subtitle: OCCDS-specific
-  desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
+  desc: Derivation Functions helpful for building the OCCDS datasets (e.g. ADAE, ADCM, ADMH)
 - contents:
   - has_keyword("der_occds")
 - subtitle: Ophtha-specific
-  desc: Derivation Functions helpful for building the Ophtha datasets (e.g. adoe, adbcva)
+  desc: Derivation Functions helpful for building the Ophtha datasets (e.g. ADOE, ADBCVA)
 - contents:
   - has_keyword("der_ophtha")
 
