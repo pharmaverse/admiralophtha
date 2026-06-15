@@ -61,30 +61,15 @@ derive_var_bcvacritxfl_util <- function(dataset,
                                         bcva_range = NULL,
                                         bcva_uplim = NULL,
                                         bcva_lowlim = NULL) {
-  # Note: no deprecate_inform() call here as this is an internal function only.
-
-  # Input checks
-  assert_vars(crit_var)
-  assert_data_frame(dataset, required_vars = c(exprs(STUDYID, USUBJID), crit_var))
-  assert_character_vector(critx_text)
-  assert_character_vector(critxfl_cond)
-  assert_integer_scalar(counter)
-  if (!is.null(bcva_range)) assert_numeric_vector(bcva_range)
-  if (!is.null(bcva_uplim)) assert_integer_scalar(bcva_uplim)
-  if (!is.null(bcva_lowlim)) assert_integer_scalar(bcva_lowlim)
-
-  critx_name <- paste0("CRIT", counter)
-  critxfl_name <- paste0(critx_name, "FL")
-
-  dataset %>%
-    mutate(
-      !!critx_name := critx_text,
-      !!critxfl_name := case_when(
-        eval(parse(text = critxfl_cond)) ~ "Y",
-        is.na(!!!crit_var) ~ NA_character_,
-        TRUE ~ "N"
-      )
+  deprecate_stop(
+    when = "1.5.0",
+    what = "admiralophtha::derive_var_bcvacritxfl_util()",
+    with = "admiral::derive_vars_crit_flag()",
+    details = c(
+      i = "See admiralophtha's guidance on creating BCVA criterion flags here:
+      https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags"
     )
+  )
 }
 
 #' Adds `CRITx`/`CRITxFL` pairs to BCVA dataset
@@ -141,55 +126,6 @@ derive_var_bcvacritxfl_util <- function(dataset,
 #' @family deprecated
 #' @export
 #'
-#' @examples
-#' library(tibble)
-#' library(admiral)
-#' library(admiraldev)
-#'
-#' adbcva1 <- tribble(
-#'   ~STUDYID, ~USUBJID, ~AVISIT, ~BASETYPE, ~PARAMCD, ~CHG,
-#'   "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 0,
-#'   "XXX001", "P01", "WEEK 2", "LAST", "FBCVA", 2,
-#'   "XXX001", "P02", "BASELINE", "LAST", "SBCVA", -13,
-#'   "XXX001", "P02", "WEEK 2", "LAST", "FBCVA", 5,
-#'   "XXX001", "P03", "BASELINE", "LAST", "SBCVA", NA,
-#'   "XXX001", "P03", "WEEK 2", "LAST", "FBCVA", 17
-#' )
-#'
-#' derive_var_bcvacritxfl(
-#'   dataset = adbcva1,
-#'   crit_var = exprs(CHG),
-#'   bcva_ranges = list(c(0, 5), c(-5, -1), c(10, 15)),
-#'   bcva_uplims = list(5, 10),
-#'   bcva_lowlims = list(8),
-#'   additional_text = ""
-#' )
-#'
-#' adbcva2 <- tribble(
-#'   ~STUDYID, ~USUBJID, ~AVISIT, ~BASETYPE, ~PARAMCD, ~AVAL, ~CHG,
-#'   "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 4, NA,
-#'   "XXX001", "P01", "BASELINE", "LAST", "SBCVA", 6, NA,
-#'   "XXX001", "P01", "AVERAGE BASELINE", "AVERAGE", "SBCVA", 5, NA,
-#'   "XXX001", "P01", "WEEK 2", "LAST", "SBCVA", -3, NA,
-#'   "XXX001", "P01", "WEEK 4", "LAST", "SBCVA", -10, NA,
-#'   "XXX001", "P01", "WEEK 6", "LAST", "SBCVA", 12, NA,
-#'   "XXX001", "P01", "WEEK 2", "AVERAGE", "SBCVA", -2, -7,
-#'   "XXX001", "P01", "WEEK 4", "AVERAGE", "SBCVA", 6, 1,
-#'   "XXX001", "P01", "WEEK 6", "AVERAGE", "SBCVA", 3, -2
-#' )
-#'
-#' restrict_derivation(
-#'   adbcva2,
-#'   derivation = derive_var_bcvacritxfl,
-#'   args = params(
-#'     crit_var = exprs(CHG),
-#'     bcva_ranges = list(c(0, 5), c(-10, 0)),
-#'     bcva_lowlims = list(5),
-#'     additional_text = " (AVERAGE)"
-#'   ),
-#'   filter = PARAMCD %in% c("SBCVA", "FBCVA") & BASETYPE == "AVERAGE"
-#' )
-#'
 derive_var_bcvacritxfl <- function(dataset,
                                    crit_var,
                                    bcva_ranges = NULL,
@@ -197,93 +133,13 @@ derive_var_bcvacritxfl <- function(dataset,
                                    bcva_lowlims = NULL,
                                    additional_text = "",
                                    critxfl_index = NULL) {
-  deprecate_warn(
+  deprecate_stop(
     when = "1.5.0",
     what = "admiralophtha::derive_var_bcvacritxfl()",
     with = "admiral::derive_vars_crit_flag()",
     details = c(
       i = "See admiralophtha's guidance on creating BCVA criterion flags here:
-      https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags",
-      x = "This message will turn into an error with the release of admiralophtha 1.6.0."
+      https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags"
     )
   )
-
-  # Input checks
-  assert_vars(crit_var)
-  assert_data_frame(dataset, required_vars = crit_var)
-  assert_character_scalar(additional_text)
-  assert_integer_scalar(critxfl_index, optional = TRUE)
-  if (!is.null(bcva_ranges)) lapply(bcva_ranges, assert_numeric_vector)
-  if (!is.null(bcva_uplims)) lapply(bcva_uplims, assert_numeric_vector)
-  if (!is.null(bcva_lowlims)) lapply(bcva_lowlims, assert_numeric_vector)
-
-  # Identify first value of x to be used for CRITx/CRITxFL
-  if (is.null(critxfl_index)) {
-    # Find largest index of CRITxFL already present in the dataset
-    critxfl_vars <- names(dataset)[grepl("^CRIT.*FL$", names(dataset))] # nolint
-
-    if (length(critxfl_vars) > 0) {
-      max_critxfl_num <- critxfl_vars %>%
-        str_extract("[[:digit:]]+") %>%
-        as.numeric() %>%
-        max()
-    } else {
-      max_critxfl_num <- 0
-    }
-    # Start making CRITx, CRITxFL from next available index
-    counter <- max_critxfl_num + 1
-  } else {
-    counter <- critxfl_index
-  }
-
-  # Get string containing crit_var's name
-  crit_var_char <- vars2chr(crit_var)
-
-  # Construct CRITx/CRITxFL pairs
-  for (bcva_range in bcva_ranges) {
-    dataset <- derive_var_bcvacritxfl_util(
-      dataset,
-      crit_var = crit_var,
-      critx_text = paste0(
-        bcva_range[1], " <= ", crit_var_char,
-        " <= ", bcva_range[2], additional_text
-      ),
-      critxfl_cond = paste0(
-        "!is.na(", crit_var_char, ") & bcva_range[1] <= ",
-        crit_var_char, " & ", crit_var_char, " <= bcva_range[2]"
-      ),
-      counter = counter,
-      bcva_range = bcva_range
-    )
-
-    counter <- counter + 1
-  }
-
-  for (bcva_uplim in bcva_uplims) {
-    dataset <- derive_var_bcvacritxfl_util(
-      dataset,
-      crit_var = crit_var,
-      critx_text = paste0(crit_var_char, " <= ", bcva_uplim, additional_text),
-      critxfl_cond = paste0("!is.na(", crit_var_char, ") & ", crit_var_char, " <= bcva_uplim[1]"),
-      counter = counter,
-      bcva_uplim = bcva_uplim
-    )
-
-    counter <- counter + 1
-  }
-
-  for (bcva_lowlim in bcva_lowlims) {
-    dataset <- derive_var_bcvacritxfl_util(
-      dataset,
-      crit_var = crit_var,
-      critx_text = paste0(crit_var_char, " >= ", bcva_lowlim, additional_text),
-      critxfl_cond = paste0("!is.na(", crit_var_char, ") & ", crit_var_char, " >= bcva_lowlim[1]"),
-      counter = counter,
-      bcva_lowlim = bcva_lowlim
-    )
-
-    counter <- counter + 1
-  }
-
-  dataset
 }

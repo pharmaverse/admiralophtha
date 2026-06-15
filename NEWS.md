@@ -10,6 +10,11 @@ process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.
   **Phase 2 (warning)**
   
   **Phase 3 (error)**
+  
+  - `derive_var_bcvacritxfl()` and its internal utility function `derive_var_bcvacritxfl_util()`. Users are invited to use
+  `admiral::derive_vars_crit_flag()` - please see the [criterion flag section of the 
+  ADBCVA vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags) 
+  for more details. Each deprecation phase for this function will only last six months (i.e. one release cycle). (#282)
 
   **Phase 4 (removed)**
   
