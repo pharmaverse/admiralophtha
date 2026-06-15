@@ -14,6 +14,17 @@
 
   **Phase 3 (error)**
 
+  - [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl.md)
+    and its internal utility function
+    [`derive_var_bcvacritxfl_util()`](https://pharmaverse.github.io/admiralophtha/dev/reference/derive_var_bcvacritxfl_util.md).
+    Users are invited to use
+    [`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html) -
+    please see the [criterion flag section of the ADBCVA
+    vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
+    for more details. Each deprecation phase for this function will only
+    last six months (i.e. one release cycle).
+    ([\#282](https://github.com/pharmaverse/admiralophtha/issues/282))
+
   **Phase 4 (removed)**
 
 ### Updates to Templates
