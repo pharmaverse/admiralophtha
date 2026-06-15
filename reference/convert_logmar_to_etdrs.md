@@ -36,6 +36,10 @@ Source for conversion formula: Beck, R.W., et al. A computerized method
 of visual acuity testing. American Journal of Ophthalmology, 135(2),
 pp.194-205. doi:https://doi.org/10.1016/s0002-9394(02)01825-1.
 
+## See also
+
+[`convert_etdrs_to_logmar()`](https://pharmaverse.github.io/admiralophtha/reference/convert_etdrs_to_logmar.md)
+
 ## Author
 
 Nandini R Thampi
@@ -53,7 +57,7 @@ oe <- tribble(
   "XXX001", "P02", "VACSCORE", "logMAR EYE CHART", 1.66,
   "XXX001", "P03", "VACSCORE", "logMAR EYE CHART", 1.60,
   "XXX001", "P04", "VACSCORE", "ETDRS EYE CHART", 57,
-  "XXX001", "P05", "VACSCORE", "ETDRS EYE CHART", 1
+  "XXX001", "P05", "VACSCORE", "ETDRS EYE CHART", 62
 )
 
 adbcva <- oe %>%

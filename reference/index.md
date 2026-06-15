@@ -9,8 +9,8 @@ Derivation Functions helpful for building the ADSL dataset
 
 ### OCCDS-specific
 
-Derivation Functions helpful for building the OCCDS datasets (e.g. adae,
-adcm, admh)
+Derivation Functions helpful for building the OCCDS datasets (e.g. ADAE,
+ADCM, ADMH)
 
 - [`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/reference/derive_var_afeye.md)
   : Derive Affected Eye
@@ -18,7 +18,7 @@ adcm, admh)
 ### Ophtha-specific
 
 Derivation Functions helpful for building the Ophtha datasets
-(e.g. adoe, adbcva)
+(e.g. ADOE, ADBCVA)
 
 - [`derive_var_bcvacritxfl()`](https://pharmaverse.github.io/admiralophtha/reference/derive_var_bcvacritxfl.md)
   **\[deprecated\]** :
@@ -37,7 +37,7 @@ Derivation Functions helpful for building the Ophtha datasets
 ## Example Datasets
 
 You can run
-[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/use_ad_template.html)
+[`admiral::use_ad_template()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/use_ad_template.html)
 to produce additional datasets
 
 - [`admiralophtha_adbcva`](https://pharmaverse.github.io/admiralophtha/reference/admiralophtha_adbcva.md)

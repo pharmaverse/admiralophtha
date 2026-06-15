@@ -67,13 +67,14 @@ renders the dataset confusing to scrutinise.
 
 For BCVA change endpoints,
 [admiral](https://pharmaverse.github.io/admiral/) provides the function
-[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_crit_flag.html)
+[`derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html)
 to add them en masse.
 
 ### Affected Eye Derivation
 
 [admiralophtha](https://pharmaverse.github.io/admiralophtha/) function
-`derive_var_afeye` follows the standard derivation:
+[`derive_var_afeye()`](https://pharmaverse.github.io/admiralophtha/reference/derive_var_afeye.md)
+follows the standard derivation:
 
 Set to “BOTH EYES” when Study Eye Selection \[`ADSL.STUDYEYE`\] is not
 missing, and Laterality \[`xxLAT`\] is equal to “BILATERAL”. Else set to

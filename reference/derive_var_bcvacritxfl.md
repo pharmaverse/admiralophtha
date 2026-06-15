@@ -2,7 +2,7 @@
 
 **\[deprecated\]** The `derive_var_bcvacritxfl()` function has been
 deprecated in favor of
-[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.4.0/cran-release/reference/derive_vars_crit_flag.html) -
+[`admiral::derive_vars_crit_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_crit_flag.html) -
 please see the [criterion flag section of the ADBCVA
 vignette](https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags)
 for more details.
@@ -149,6 +149,14 @@ Edoardo Mancini
 library(tibble)
 library(admiral)
 library(admiraldev)
+#> 
+#> Attaching package: ‘admiraldev’
+#> The following object is masked from ‘package:dplyr’:
+#> 
+#>     filter_if
+#> The following object is masked from ‘package:base’:
+#> 
+#>     %notin%
 
 adbcva1 <- tribble(
   ~STUDYID, ~USUBJID, ~AVISIT, ~BASETYPE, ~PARAMCD, ~CHG,
@@ -168,11 +176,11 @@ derive_var_bcvacritxfl(
   bcva_lowlims = list(8),
   additional_text = ""
 )
-#> `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.4.0.
+#> Warning: `derive_var_bcvacritxfl()` was deprecated in admiralophtha 1.5.0.
 #> ℹ Please use `admiral::derive_vars_crit_flag()` instead.
 #> ℹ See admiralophtha's guidance on creating BCVA criterion flags here:
 #>   https://pharmaverse.github.io/admiralophtha/articles/adbcva.html#critflags
-#> ✖ This message will turn into a warning with release of admiralophtha 1.5.0.
+#> ✖ This message will turn into an error with the release of admiralophtha 1.6.0.
 #> # A tibble: 6 × 18
 #>   STUDYID USUBJID AVISIT   BASETYPE PARAMCD   CHG CRIT1    CRIT1FL CRIT2 CRIT2FL
 #>   <chr>   <chr>   <chr>    <chr>    <chr>   <dbl> <chr>    <chr>   <chr> <chr>  
