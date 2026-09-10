@@ -19,6 +19,7 @@ An example Best Corrected Visual Acuity (BCVA) analysis dataset
 }
 \seealso{
 Other datasets:
+\code{\link{admiralophtha_adga}},
 \code{\link{admiralophtha_adoe}},
 \code{\link{admiralophtha_advfq}}
 }
