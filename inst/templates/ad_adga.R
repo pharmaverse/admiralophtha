@@ -21,6 +21,9 @@ data("oe_ophtha")
 data("admiral_adsl")
 
 # Add STUDYEYE to ADSL to simulate an ophtha dataset
+# Set seed to ensure reproducible STUDYEYE assignment across runs
+set.seed(1234)
+
 adsl <- admiral_adsl %>%
   as.data.frame() %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
@@ -35,8 +38,8 @@ oe <- convert_blanks_to_na(oe_ophtha) %>%
 # nolint start
 param_lookup <- tibble::tribble(
   ~OETESTCD, ~OECAT, ~OESCAT, ~AFEYE, ~PARAMCD, ~PARAM, ~PARAMN,
-  "AREA", "OPHTHALMIC ASSESSMENTS", NA_character_, "Study Eye", "SAREAFAF", "Study Eye GA Area measured by FAF(mm2)", 1,
-  "AREA", "OPHTHALMIC ASSESSMENTS", NA_character_, "Fellow Eye", "FAREAFAF", "Fellow Eye GA Area measured by FAF(mm2)", 2,
+  "AREA", "OPHTHALMIC ASSESSMENTS", NA_character_, "Study Eye", "SAREAFAF", "Study Eye GA Area measured by FAF (mm2)", 1,
+  "AREA", "OPHTHALMIC ASSESSMENTS", NA_character_, "Fellow Eye", "FAREAFAF", "Fellow Eye GA Area measured by FAF (mm2)", 2,
   "GAFLOC", "OPHTHALMIC ASSESSMENTS", NA_character_, "Study Eye", "SGAFOCAL", "Study Eye GA Lesion Focality", 3,
   "GAFLOC", "OPHTHALMIC ASSESSMENTS", NA_character_, "Fellow Eye", "FGAFOCAL", "Fellow Eye GA Lesion Focality", 4
 )
@@ -50,8 +53,7 @@ adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 adga_adslvar <- oe %>%
   # Keep only GA related OE parameters
     filter(
-    OETESTCD %in% c("AREA", "GAFLOC"),
-    !is.na(OESTRESC)
+    OETESTCD %in% c("AREA", "GAFLOC")
     ) %>%
   # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
@@ -63,7 +65,11 @@ adga_adslvar <- oe %>%
 adga_aval <- adga_adslvar %>%
   # Calculate AVAL, AVALC, AVALU and DTYPE
   mutate(
-    AVAL = OESTRESN,
+    AVAL = case_when(
+      OETESTCD == "GAFLOC" & OESTRESC == "S" ~ 1,
+      OETESTCD == "GAFLOC" & OESTRESC == "NS" ~ 2,
+      TRUE ~ OESTRESN
+    ),
     AVALC = OESTRESC,
     AVALU = OESTRESU,
     DTYPE = NA_character_
@@ -77,6 +83,44 @@ adga_param <- adga_aval %>%
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD, PARAMN),
     by_vars = exprs(OETESTCD, AFEYE)
+  ) %>%
+  # Add derived parameters for Square Root Transformed GA Area measured by FAF
+  call_derivation(
+    derivation = derive_param_computed,
+    by_vars = c(get_admiral_option("subject_keys"),
+                exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)),
+    variable_params = list(
+      # Study eye
+      params(
+        parameters = exprs(
+          # Users may need to update this code to identify the correct records to use.
+          SESQRT = PARAMCD == "SAREAFAF"
+        ),
+        set_values_to = exprs(
+          PARAMCD = "SSQRTFAF",
+          PARAM = "Study Eye Square Root Transformed GA Area measured by FAF (mm)",
+          PARAMN = 5,
+          AVAL = sqrt(AVAL.SESQRT),
+          AVALC = as.character(AVAL),
+          AVALU = "mm",
+       )
+      ),
+      # Fellow eye
+      params(
+        parameters = exprs(
+          # Users may need to update this code to identify the correct records to use.
+          FESQRT = PARAMCD == "FAREAFAF"
+        ),
+        set_values_to = exprs(
+          PARAMCD = "FSQRTFAF",
+          PARAM = "Fellow Eye Square Root Transformed GA Area measured by FAF (mm)",
+          PARAMN = 6,
+          AVAL = sqrt(AVAL.FESQRT),
+          AVALC = as.character(AVAL),
+          AVALU = "mm",
+        )
+      )
+    )
   ) %>%
   # Calculate ADT, ADY
   derive_vars_dt(
@@ -100,37 +144,8 @@ adga_visit <- adga_param %>%
     BASETYPE = "LAST"
   )
 
-adga_derive <- adga_visit %>%
-  # Add PARAM, PARAMCD for square root transformed parameters
-  filter(PARAMCD %in% c("SAREAFAF", "FAREAFAF")) %>%
-  rename(aval = AVAL) %>%
-  mutate(
-    PARAMCD = case_when(
-      PARAMCD == "SAREAFAF"  ~ "SSQRTFAF",
-      PARAMCD == "FAREAFAF"  ~ "FSQRTFAF"
-    ),
-    PARAM = case_when(
-      PARAMCD == "SSQRTFAF"  ~ "Study Eye Square Root Transformed GA Area measured by FAF(mm)",
-      PARAMCD == "FSQRTFAF"  ~ "Fellow Eye Square Root Transformed GA Area measured by FAF(mm)"
-    ),
-    PARAMN = case_when(
-      PARAMCD == "SSQRTFAF"  ~ 5,
-      PARAMCD == "FSQRTFAF"  ~ 6
-    ),
-    AVAL = sqrt(aval),
-    AVALU = "mm"
-  ) %>%
-  select(-aval)
-
-# Combine all parameters
-adga_comb <- bind_rows(
-  adga_visit,
-  adga_derive
-) %>%
-  arrange(USUBJID, PARAMN, AVISITN)
-
 # Derive Treatment flags
-adga_trtflag <- adga_comb %>%
+adga_trtflag <- adga_visit %>%
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
@@ -184,7 +199,7 @@ adga_vstflag <- adga_trtflag %>%
       new_var = WORS01FL,
       mode = "last"
     ),
-    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & PARAMCD %in% c("SSQRTFAF", "FSQRTFAF")
+    filter = !is.na(AVISITN) & (ONTRTFL == "Y" | ABLFL == "Y") & PARAMCD %in% c("SSQRTFAF", "FSQRTFAF", "FAREAFAF", "SAREAFAF")
   )
 
 # Derive baseline information
@@ -197,9 +212,9 @@ adga_change <- adga_vstflag %>%
       source_var = AVAL,
       new_var = BASE
     ),
-    filter = !PARAMCD %in% c("SIOPCHG", "FIOPCHG")
+    filter = !PARAMCD %in% c("SGAFOCAL", "FGAFOCAL")
   ) %>%
-  # Calculate BASEC (do not derive for GA Lesion Focality params)
+  # Calculate BASEC
   restrict_derivation(
     derivation = derive_var_base,
     args = params(
@@ -207,7 +222,7 @@ adga_change <- adga_vstflag %>%
       source_var = AVALC,
       new_var = BASEC
     ),
-    filter = !PARAMCD %in% c("SGAFOCAL", "FGAFOCAL")
+    filter = PARAMCD %in% c("SGAFOCAL", "FGAFOCAL", "SSQRTFAF", "FSQRTFAF", "FAREAFAF", "SAREAFAF")
   ) %>%
   # Calculate CHG (not derived for GA Lesion Focality params as BASE is NA)
   derive_var_chg() %>%
@@ -244,4 +259,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
-save(admiralophtha_adga, file = file.path(dir, "adga.rda"), compress = "bzip2")
+save(admiralophtha_adga, file = file.path("data", "admiralophtha_adga.rda"), compress = "bzip2")
