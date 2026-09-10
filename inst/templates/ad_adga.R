@@ -52,9 +52,9 @@ adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P, STUDYEYE)
 
 adga_adslvar <- oe %>%
   # Keep only GA related OE parameters
-    filter(
+  filter(
     OETESTCD %in% c("AREA", "GAFLOC")
-    ) %>%
+  ) %>%
   # Join ADSL with OE (need TRTSDT and STUDYEYE for ADY, AFEYE, and PARAMCD derivation)
   derive_vars_merged(
     dataset_add = adsl,
@@ -87,8 +87,10 @@ adga_param <- adga_aval %>%
   # Add derived parameters for Square Root Transformed GA Area measured by FAF
   call_derivation(
     derivation = derive_param_computed,
-    by_vars = c(get_admiral_option("subject_keys"),
-                exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)),
+    by_vars = c(
+      get_admiral_option("subject_keys"),
+      exprs(VISIT, VISITNUM, OEDY, OEDTC, AFEYE, !!!adsl_vars)
+    ),
     variable_params = list(
       # Study eye
       params(
@@ -103,7 +105,7 @@ adga_param <- adga_aval %>%
           AVAL = sqrt(AVAL.SESQRT),
           AVALC = as.character(AVAL),
           AVALU = "mm",
-       )
+        )
       ),
       # Fellow eye
       params(
