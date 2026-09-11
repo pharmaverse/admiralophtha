@@ -1,6 +1,6 @@
 # Name: ADGA
 #
-# Label: Geographic Atrophy  Analysis Dataset
+# Label: Geographic Atrophy Analysis Dataset
 #
 # Input: adsl, oe
 
@@ -79,7 +79,7 @@ adga_aval <- adga_adslvar %>%
 
 adga_param <- adga_aval %>%
   # Add PARAM, PARAMCD, PARAMN
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD, PARAMN),
     by_vars = exprs(OETESTCD, AFEYE)
@@ -94,10 +94,8 @@ adga_param <- adga_aval %>%
     variable_params = list(
       # Study eye
       params(
-        parameters = exprs(
-          # Users may need to update this code to identify the correct records to use.
-          SESQRT = PARAMCD == "SAREAFAF"
-        ),
+        # Users may need to update this code to identify the correct records to use.
+        parameters = exprs(SESQRT = PARAMCD == "SAREAFAF"),
         set_values_to = exprs(
           PARAMCD = "SSQRTFAF",
           PARAM = "Study Eye Square Root Transformed GA Area measured by FAF (mm)",
@@ -105,14 +103,13 @@ adga_param <- adga_aval %>%
           AVAL = sqrt(AVAL.SESQRT),
           AVALC = as.character(AVAL),
           AVALU = "mm",
+          DTYPE = "SQRT"
         )
       ),
       # Fellow eye
       params(
-        parameters = exprs(
-          # Users may need to update this code to identify the correct records to use.
-          FESQRT = PARAMCD == "FAREAFAF"
-        ),
+        # Users may need to update this code to identify the correct records to use.
+        parameters = exprs(FESQRT = PARAMCD == "FAREAFAF"),
         set_values_to = exprs(
           PARAMCD = "FSQRTFAF",
           PARAM = "Fellow Eye Square Root Transformed GA Area measured by FAF (mm)",
@@ -120,6 +117,7 @@ adga_param <- adga_aval %>%
           AVAL = sqrt(AVAL.FESQRT),
           AVALC = as.character(AVAL),
           AVALU = "mm",
+          DTYPE = "SQRT"
         )
       )
     )
@@ -261,4 +259,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
-save(admiralophtha_adga, file = file.path("data", "admiralophtha_adga.rda"), compress = "bzip2")
+save(admiralophtha_adga, file = file.path(dir, "adga.rda"), compress = "bzip2")
