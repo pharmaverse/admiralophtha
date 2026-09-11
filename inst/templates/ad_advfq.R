@@ -482,4 +482,4 @@ if (!file.exists(dir)) {
   # Create the folder
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
 }
-save(admiralophtha_advfq, file = file.path(dir, "admiralophtha_advfq.rda"), compress = "bzip2")
+save(admiralophtha_advfq, file = file.path(dir, "advfq.rda"), compress = "bzip2")
