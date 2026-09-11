@@ -25,4 +25,5 @@ The full, open-source VFQ questionnaire can be accessed
 
 Other datasets:
 [`admiralophtha_adbcva`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adbcva.md),
+[`admiralophtha_adga`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adga.md),
 [`admiralophtha_adoe`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adoe.md)

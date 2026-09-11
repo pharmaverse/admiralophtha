@@ -29,6 +29,13 @@
 
 ### Updates to Templates
 
+- Added new template `ADGA` to enhance
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) to
+  include geographic atrophy indication
+  ([\#298](https://github.com/pharmaverse/admiralophtha/issues/298))
+- Updated typo in the `ADVFQ` template
+  ([\#298](https://github.com/pharmaverse/admiralophtha/issues/298))
+
 ### Updates to Documentation
 
 ### Various

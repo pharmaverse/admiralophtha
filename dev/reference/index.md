@@ -42,6 +42,8 @@ to produce additional datasets
 
 - [`admiralophtha_adbcva`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adbcva.md)
   : Best Corrected Visual Acuity Analysis Dataset
+- [`admiralophtha_adga`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adga.md)
+  : Geographic Atrophy Analysis Dataset
 - [`admiralophtha_adoe`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adoe.md)
   : Ophthalmology Exam Analysis Dataset
 - [`admiralophtha_advfq`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_advfq.md)

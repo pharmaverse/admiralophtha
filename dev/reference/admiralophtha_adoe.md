@@ -23,4 +23,5 @@ template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/
 
 Other datasets:
 [`admiralophtha_adbcva`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adbcva.md),
+[`admiralophtha_adga`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_adga.md),
 [`admiralophtha_advfq`](https://pharmaverse.github.io/admiralophtha/dev/reference/admiralophtha_advfq.md)
