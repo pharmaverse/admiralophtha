@@ -19,6 +19,10 @@ process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.
   **Phase 4 (removed)**
   
 ## Updates to Templates
+
+- Added new template `ADGA` to enhance `{admiralophtha}` to include geographic atrophy indication (#298)
+- Updated typo in the `ADVFQ` template (#298)
+
   
 ## Updates to Documentation
 

@@ -34,3 +34,14 @@
 #' [ADOE template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adoe.R).
 #'
 "admiralophtha_adoe"
+
+#' Geographic Atrophy Analysis Dataset
+#'
+#' An example Geographic Atrophy analysis dataset
+#' @keywords datasets
+#' @family datasets
+#' @source
+#' Derived from the OE and ADSL datasets using `{admiral}`, `{admiralophtha}` and the
+#' [ADGA template](https://github.com/pharmaverse/admiralophtha/blob/main/inst/templates/ad_adga.R).
+#'
+"admiralophtha_adga"
