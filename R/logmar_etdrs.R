@@ -90,7 +90,7 @@ convert_etdrs_to_logmar <- function(value) {
 #'   filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "LOGMAR EYE CHART") %>%
 #'   mutate(OESTRESN = convert_logmar_to_etdrs(OESTRESN))
 #'
-#'   print(adbcva)
+#' print(adbcva)
 convert_logmar_to_etdrs <- function(value) {
   assert_numeric_vector(value)
   85 - value / 0.02
