@@ -26,6 +26,8 @@ process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.
   
 ## Updates to Documentation
 
+- Improved examples for `ETDRS`/`LogMAR` conversion functions. (#307)
+
 ## Various
 
 <details>

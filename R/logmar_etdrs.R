@@ -39,9 +39,9 @@
 #'
 #' adbcva <- oe %>%
 #'   filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "ETDRS EYE CHART") %>%
-#'   mutate(OESTRESN = convert_etdrs_to_logmar(OESTRESN))
+#'   mutate(AVAL_LOGMAR = convert_etdrs_to_logmar(OESTRESN))
 #'
-#' print(adbcva)
+#' adbcva
 convert_etdrs_to_logmar <- function(value) {
   assert_numeric_vector(value)
   -0.02 * value + 1.7
@@ -88,9 +88,9 @@ convert_etdrs_to_logmar <- function(value) {
 #'
 #' adbcva <- oe %>%
 #'   filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "LOGMAR EYE CHART") %>%
-#'   mutate(OESTRESN = convert_logmar_to_etdrs(OESTRESN))
+#'   mutate(AVAL_ETDRS = convert_logmar_to_etdrs(OESTRESN))
 #'
-#' print(adbcva)
+#' adbcva
 convert_logmar_to_etdrs <- function(value) {
   assert_numeric_vector(value)
   85 - value / 0.02

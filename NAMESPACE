@@ -5,155 +5,179 @@ export(convert_logmar_to_etdrs)
 export(derive_var_afeye)
 export(derive_var_bcvacritxfl)
 export(derive_var_studyeye)
-importFrom(admiral,derive_param_computed)
-importFrom(admiral,derive_vars_merged)
-importFrom(admiral,get_admiral_option)
-importFrom(admiral,params)
-importFrom(admiral,restrict_derivation)
-importFrom(admiraldev,assert_character_scalar)
-importFrom(admiraldev,assert_character_vector)
-importFrom(admiraldev,assert_data_frame)
-importFrom(admiraldev,assert_integer_scalar)
-importFrom(admiraldev,assert_numeric_vector)
-importFrom(admiraldev,assert_symbol)
-importFrom(admiraldev,assert_vars)
-importFrom(admiraldev,expect_dfs_equal)
-importFrom(admiraldev,expr_c)
-importFrom(admiraldev,vars2chr)
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_cols)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,case_when)
-importFrom(dplyr,coalesce)
-importFrom(dplyr,desc)
-importFrom(dplyr,distinct)
-importFrom(dplyr,ends_with)
-importFrom(dplyr,filter)
-importFrom(dplyr,full_join)
-importFrom(dplyr,group_by)
-importFrom(dplyr,if_else)
-importFrom(dplyr,mutate)
-importFrom(dplyr,mutate_at)
-importFrom(dplyr,mutate_if)
-importFrom(dplyr,n)
-importFrom(dplyr,n_distinct)
-importFrom(dplyr,na_if)
-importFrom(dplyr,pull)
-importFrom(dplyr,rename)
-importFrom(dplyr,rename_at)
-importFrom(dplyr,row_number)
-importFrom(dplyr,select)
-importFrom(dplyr,slice)
-importFrom(dplyr,starts_with)
-importFrom(dplyr,summarise)
-importFrom(dplyr,summarise_at)
-importFrom(dplyr,tibble)
-importFrom(dplyr,transmute)
-importFrom(dplyr,ungroup)
-importFrom(dplyr,union)
-importFrom(dplyr,vars)
+importFrom(admiral,
+  derive_param_computed,
+  derive_vars_cat,
+  derive_vars_merged,
+  get_admiral_option,
+  params,
+  restrict_derivation
+)
+importFrom(admiraldev,
+  assert_character_scalar,
+  assert_character_vector,
+  assert_data_frame,
+  assert_integer_scalar,
+  assert_numeric_vector,
+  assert_symbol,
+  assert_vars,
+  deprecate_inform,
+  expect_dfs_equal,
+  expr_c,
+  vars2chr
+)
+importFrom(dplyr,
+  arrange,
+  bind_cols,
+  bind_rows,
+  case_when,
+  coalesce,
+  desc,
+  distinct,
+  ends_with,
+  filter,
+  full_join,
+  group_by,
+  if_else,
+  mutate,
+  mutate_at,
+  mutate_if,
+  n,
+  n_distinct,
+  na_if,
+  pull,
+  rename,
+  rename_at,
+  row_number,
+  select,
+  slice,
+  starts_with,
+  summarise,
+  summarise_at,
+  tibble,
+  transmute,
+  ungroup,
+  union,
+  vars
+)
 importFrom(hms,as_hms)
-importFrom(lifecycle,deprecate_stop)
-importFrom(lifecycle,deprecate_warn)
-importFrom(lifecycle,deprecated)
-importFrom(lubridate,"%--%")
-importFrom(lubridate,as_datetime)
-importFrom(lubridate,ceiling_date)
-importFrom(lubridate,date)
-importFrom(lubridate,days)
-importFrom(lubridate,duration)
-importFrom(lubridate,floor_date)
-importFrom(lubridate,hours)
-importFrom(lubridate,is.Date)
-importFrom(lubridate,is.instant)
-importFrom(lubridate,minutes)
-importFrom(lubridate,time_length)
-importFrom(lubridate,weeks)
-importFrom(lubridate,years)
-importFrom(lubridate,ymd)
-importFrom(lubridate,ymd_hms)
+importFrom(lifecycle,
+  deprecate_stop,
+  deprecate_warn,
+  deprecated
+)
+importFrom(lubridate,
+  "%--%",
+  as_datetime,
+  ceiling_date,
+  date,
+  days,
+  duration,
+  floor_date,
+  hours,
+  is.Date,
+  is.instant,
+  minutes,
+  time_length,
+  weeks,
+  years,
+  ymd,
+  ymd_hms
+)
 importFrom(magrittr,"%>%")
-importFrom(purrr,compose)
-importFrom(purrr,every)
-importFrom(purrr,flatten)
-importFrom(purrr,keep)
-importFrom(purrr,map)
-importFrom(purrr,map2)
-importFrom(purrr,map_chr)
-importFrom(purrr,map_if)
-importFrom(purrr,map_lgl)
-importFrom(purrr,modify_at)
-importFrom(purrr,modify_if)
-importFrom(purrr,reduce)
-importFrom(purrr,transpose)
-importFrom(purrr,walk)
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(rlang,abort)
-importFrom(rlang,arg_match)
-importFrom(rlang,as_function)
-importFrom(rlang,as_string)
-importFrom(rlang,call2)
-importFrom(rlang,call_name)
-importFrom(rlang,caller_env)
-importFrom(rlang,current_env)
-importFrom(rlang,enexpr)
-importFrom(rlang,enquo)
-importFrom(rlang,eval_bare)
-importFrom(rlang,eval_tidy)
-importFrom(rlang,expr)
-importFrom(rlang,expr_interp)
-importFrom(rlang,expr_label)
-importFrom(rlang,exprs)
-importFrom(rlang,f_lhs)
-importFrom(rlang,f_rhs)
-importFrom(rlang,inform)
-importFrom(rlang,is_bare_formula)
-importFrom(rlang,is_call)
-importFrom(rlang,is_character)
-importFrom(rlang,is_formula)
-importFrom(rlang,is_integerish)
-importFrom(rlang,is_logical)
-importFrom(rlang,is_quosure)
-importFrom(rlang,is_quosures)
-importFrom(rlang,is_symbol)
-importFrom(rlang,new_formula)
-importFrom(rlang,parse_expr)
-importFrom(rlang,parse_exprs)
-importFrom(rlang,quo)
-importFrom(rlang,quo_get_env)
-importFrom(rlang,quo_get_expr)
-importFrom(rlang,quo_is_call)
-importFrom(rlang,quo_is_missing)
-importFrom(rlang,quo_is_null)
-importFrom(rlang,quo_is_symbol)
-importFrom(rlang,quo_set_env)
-importFrom(rlang,quo_squash)
-importFrom(rlang,quo_text)
-importFrom(rlang,quos)
-importFrom(rlang,set_names)
-importFrom(rlang,sym)
-importFrom(rlang,syms)
-importFrom(rlang,type_of)
-importFrom(rlang,warn)
-importFrom(stringr,str_c)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_extract)
-importFrom(stringr,str_glue)
-importFrom(stringr,str_remove)
-importFrom(stringr,str_remove_all)
-importFrom(stringr,str_replace)
-importFrom(stringr,str_to_lower)
-importFrom(stringr,str_to_title)
-importFrom(stringr,str_to_upper)
-importFrom(stringr,str_trim)
-importFrom(tidyr,drop_na)
-importFrom(tidyr,nest)
-importFrom(tidyr,pivot_longer)
-importFrom(tidyr,pivot_wider)
-importFrom(tidyr,unnest)
-importFrom(tidyselect,all_of)
-importFrom(tidyselect,contains)
-importFrom(tidyselect,vars_select)
-importFrom(utils,capture.output)
-importFrom(utils,str)
+importFrom(purrr,
+  compose,
+  every,
+  flatten,
+  keep,
+  map,
+  map2,
+  map_chr,
+  map_if,
+  map_lgl,
+  modify_at,
+  modify_if,
+  reduce,
+  transpose,
+  walk
+)
+importFrom(rlang,
+  ":=",
+  .data,
+  abort,
+  arg_match,
+  as_function,
+  as_string,
+  call2,
+  call_name,
+  caller_env,
+  current_env,
+  enexpr,
+  enquo,
+  eval_bare,
+  eval_tidy,
+  expr,
+  expr_interp,
+  expr_label,
+  exprs,
+  f_lhs,
+  f_rhs,
+  inform,
+  is_bare_formula,
+  is_call,
+  is_character,
+  is_formula,
+  is_integerish,
+  is_logical,
+  is_quosure,
+  is_quosures,
+  is_symbol,
+  new_formula,
+  parse_expr,
+  parse_exprs,
+  quo,
+  quo_get_env,
+  quo_get_expr,
+  quo_is_call,
+  quo_is_missing,
+  quo_is_null,
+  quo_is_symbol,
+  quo_set_env,
+  quo_squash,
+  quo_text,
+  quos,
+  set_names,
+  sym,
+  syms,
+  type_of,
+  warn
+)
+importFrom(stringr,
+  str_c,
+  str_detect,
+  str_extract,
+  str_glue,
+  str_remove,
+  str_remove_all,
+  str_replace,
+  str_to_lower,
+  str_to_title,
+  str_to_upper,
+  str_trim
+)
+importFrom(tidyr,
+  drop_na,
+  nest,
+  pivot_longer,
+  pivot_wider,
+  unnest
+)
+importFrom(tidyselect,
+  all_of,
+  contains,
+  vars_select
+)
+importFrom(utils,
+  capture.output,
+  str
+)
