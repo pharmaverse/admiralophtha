@@ -47,6 +47,8 @@ oe <- tribble(
 adbcva <- oe \%>\%
   filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "ETDRS EYE CHART") \%>\%
   mutate(OESTRESN = convert_etdrs_to_logmar(OESTRESN))
+
+print(adbcva)
 }
 \seealso{
 \code{\link[=convert_logmar_to_etdrs]{convert_logmar_to_etdrs()}}
