@@ -70,12 +70,12 @@ oe <- tribble(
 
 adbcva <- oe %>%
   filter(OETESTCD == "VACSCORE" & toupper(OEMETHOD) == "ETDRS EYE CHART") %>%
-  mutate(OESTRESN = convert_etdrs_to_logmar(OESTRESN))
+  mutate(AVAL_LOGMAR = convert_etdrs_to_logmar(OESTRESN))
 
-print(adbcva)
-#> # A tibble: 2 × 5
-#>   STUDYID USUBJID OETESTCD OEMETHOD        OESTRESN
-#>   <chr>   <chr>   <chr>    <chr>              <dbl>
-#> 1 XXX001  P04     VACSCORE ETDRS EYE CHART     0.56
-#> 2 XXX001  P05     VACSCORE ETDRS EYE CHART     0.46
+adbcva
+#> # A tibble: 2 × 6
+#>   STUDYID USUBJID OETESTCD OEMETHOD        OESTRESN AVAL_LOGMAR
+#>   <chr>   <chr>   <chr>    <chr>              <dbl>       <dbl>
+#> 1 XXX001  P04     VACSCORE ETDRS EYE CHART       57        0.56
+#> 2 XXX001  P05     VACSCORE ETDRS EYE CHART       62        0.46
 ```
