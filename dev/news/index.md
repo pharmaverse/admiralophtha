@@ -38,6 +38,9 @@
 
 ### Updates to Documentation
 
+- Improved examples for `ETDRS`/`LogMAR` conversion functions.
+  ([\#307](https://github.com/pharmaverse/admiralophtha/issues/307))
+
 ### Various
 
 Developer Notes
