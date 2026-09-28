@@ -26,6 +26,7 @@ Authors:
 \itemize{
   \item Edoardo Mancini \email{edoardo.mancini@roche.com} (\href{https://orcid.org/0009-0006-4899-8641}{ORCID})
   \item Yuki Matsunaga \email{yuki.matsunaga@novartis.com}
+  \item Pavankumar Bhagat \email{Pavankumar.Bhagat@boehringer-ingelheim.com}
 }
 
 Other contributors:

@@ -15,8 +15,13 @@ BDS
 Biologics
 CDISC
 ETDRS
+FAF
+FAREAFAF
 FBCVA
+FGAFOCAL
 FOCID
+GA
+GAFLOC
 Hoffmann
 LLM
 Laterality
@@ -24,8 +29,10 @@ LogMAR
 ORCID
 QS
 Recoded
+SAREAFAF
 SBCVA
 SDTM
+SGAFOCAL
 Snellen
 Thampi
 Tidyverse
