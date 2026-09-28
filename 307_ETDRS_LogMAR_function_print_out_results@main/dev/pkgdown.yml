@@ -1,0 +1,15 @@
+pandoc: 3.1.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  adbcva: adbcva.html
+  admiralophtha: admiralophtha.html
+  adoe: adoe.html
+  advfq: advfq.html
+  standards: standards.html
+  articles/templates: templates.html
+  articles/website-versions: website-versions.html
+last_built: 2026-09-28T13:33Z
+urls:
+  reference: https:/pharmaverse.github.io/admiralophtha/307_ETDRS_LogMAR_function_print_out_results@main/reference
+  article: https:/pharmaverse.github.io/admiralophtha/307_ETDRS_LogMAR_function_print_out_results@main/articles
