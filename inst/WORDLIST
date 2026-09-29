@@ -15,8 +15,13 @@ BDS
 Biologics
 CDISC
 ETDRS
+FAF
+FAREAFAF
 FBCVA
+FGAFOCAL
 FOCID
+GA
+GAFLOC
 Hoffmann
 LLM
 Laterality
@@ -24,8 +29,10 @@ LogMAR
 ORCID
 QS
 Recoded
+SAREAFAF
 SBCVA
 SDTM
+SGAFOCAL
 Snellen
 Thampi
 Tidyverse
@@ -41,6 +48,7 @@ crtflag
 doi
 eg
 et
+focality
 funder
 https
 intraocular
@@ -48,6 +56,7 @@ kapa
 laterality
 logMAR
 masse
+multifocal
 pharmaverse
 programmatically
 recode

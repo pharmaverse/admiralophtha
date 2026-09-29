@@ -31,6 +31,7 @@ Due to the aforementioned high complexity and diversity of ophthalmology data, i
 * ADBCVA for BCVA data only - these will almost always constitute a primary or secondary endpoint and so will require endpoint-related programming such as criterion flags.
 * Any other endpoints for which specific efficacy programming may be required should have their own ADaM dataset (e.g. for intraocular pressure data, ADIOP).
 * ADVFQ for Visual Functioning Questionnaire data.
+* ADGA for geographic atrophy data.
 
 Subdividing the ADaM datasets in a study as above will ensure that wherever custom efficacy programming is required, this will automatically be limited to the data of interest. For instance, if a study has various  endpoints of the form *Gain of between x and y letters relative to baseline* (or similar) then each will likely require a criterion variable/flag pair (see the [Criterion Flag](#criterion) section for more detail). If the BCVA data were stored in ADOE, then these criterion variable/flag pairs would be blank and irrelevant for most of the data in the dataset, save for the BCVA records. Conversely, collecting the BCVA data in ADBCVA ensures the criterion variable/flag pairs are more relevant, and the resulting dataset is more readable.
 

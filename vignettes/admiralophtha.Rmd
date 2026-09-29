@@ -38,6 +38,7 @@ for the most common steps are provided by the following vignettes:
 - [Creating ADBCVA](adbcva.html)
 - [Creating ADOE](adoe.html)
 - [Creating ADVFQ](advfq.html)
+- [Creating ADGA](adga.html)
 
 # Support
 

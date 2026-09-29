@@ -61,6 +61,8 @@ authors:
     href: https://manciniedoardo.github.io/
   Yuki Matsunaga:
     href: https://github.com/ukey1025
+  Pavankumar Bhagat:
+    href: https://github.com/pavan-bhagat
   F. Hoffmann-La Roche AG:
     html: "<a href='https://www.roche.com/'><img src='man/figures/roche_logo.png' height='34' alt='Roche logo' /></a>"
     href: https://www.roche.com/
@@ -127,6 +129,8 @@ navbar:
         href: articles/adbcva.html
       - text: Creating ADVFQ
         href: articles/advfq.html
+      - text: Creating ADGA
+        href: articles/adga.html
     slack:
       icon: fa-slack
       href: https://pharmaverse.slack.com/
