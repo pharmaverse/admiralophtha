@@ -7,7 +7,7 @@
 
 - **[Yuki Matsunaga](https://github.com/ukey1025)**. Author.
 
-- **Pavankumar Bhagat**. Author.
+- **[Pavankumar Bhagat](https://github.com/pavan-bhagat)**. Author.
 
 - **[](https://www.roche.com/)[![Roche
   logo](reference/figures/roche_logo.png)](https://www.roche.com/)**.
