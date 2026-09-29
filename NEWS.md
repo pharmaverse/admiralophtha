@@ -28,6 +28,8 @@ process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.
 
 - A new vignette "ADGA" was added to enhance `{admiralophtha}` to include geographic atrophy indication. (#313)
 
+- Improved examples for `ETDRS`/`LogMAR` conversion functions. (#307)
+
 ## Various
 
 <details>
