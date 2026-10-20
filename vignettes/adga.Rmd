@@ -122,9 +122,11 @@ adga <- adga %>%
 
 ## Creating Square Root Transformed GA Area measured by FAF derived parameter {#sqrt}
 
-Next, `PARAM`, `PARAMCD` and `PARAMN` can be assigned using `derive_vars_merged_lookup()` from `{admiral}` and the lookup table `param_lookup` generated above. ADGA datasets often contain square root transformed GA records for FAF with units as millimeters (`mm`). In GA studies, square-root transformed lesion area is commonly used to reduce the dependence of lesion growth on baseline lesion size. Therefore, additional derived parameters are often included in ADGA representing the square root of the measured lesion area. These derived parameters can be created using a single call to   `call_derivation()` with `derive_param_computed()`. Using a single call is more efficient because the same grouping variables and source data are used for both study-eye and fellow-eye derivations. The parameter specifications differ only in the source parameter (`SAREAFAF` versus `FAREAFAF`), assigned parameter metadata (`PARAM`, `PARAMCD`, and `PARAMN`) and derived results (`AVAL`, and `AVALC`).
+Next, `PARAM`, `PARAMCD` and `PARAMN` can be assigned using `derive_vars_merged_lookup()` from `{admiral}` and the lookup table `param_lookup` generated above. ADGA datasets often contain square root transformed GA records for FAF with units as millimeters (`mm`). In GA studies, square-root transformed lesion area is commonly used to reduce the dependence of lesion growth on baseline lesion size. Therefore, additional derived parameters are often included in ADGA representing the square root of the measured lesion area. 
 
-Note that the original lesion area measurements are recorded in square millimeters (`mm²`). Applying the square-root transformation changes the units from square millimeters (`mm²`) to millimeters (`mm`), since SQRT(`mm²`) = `mm`. Therefore, the derived parameters use `mm` as the analysis unit (`AVALU`).
+These derived parameters can be created using a single call to   `call_derivation()` with `derive_param_computed()`. Using a single call is more efficient because the same grouping variables and source data are used for both study-eye and fellow-eye derivations. The parameter specifications differ only in the source parameter (`SAREAFAF` versus `FAREAFAF`), assigned parameter metadata (`PARAM`, `PARAMCD`, and `PARAMN`) and derived results (`AVAL`, and `AVALC`).
+
+Note that the original lesion area measurements are recorded in square millimeters (`mm²`). Applying the square-root transformation changes the units from square millimeters (`mm²`) to millimeters (`mm`), since sqrt(`mm²`) = `mm`. Therefore, the derived parameters use `mm` as the analysis unit (`AVALU`).
 
 Once these extra parameters are added, all the records that will be in the end dataset are now present, so day/date variables such as `ADY` and `ADT` can be derived.
 
@@ -242,7 +244,7 @@ adga <- adga %>%
       new_var = BASEC
     ),
     filter = PARAMCD %in% c("SGAFOCAL", "FGAFOCAL", "SSQRTFAF", "FSQRTFAF", "FAREAFAF", "SAREAFAF")
-  ) 
+  )
 ```
 
 ## Further Derivations of Standard BDS Variables {#further}
