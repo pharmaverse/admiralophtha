@@ -174,8 +174,9 @@ Variables</a></li>
 where only records related to geographic atrophy are of interest. For
 the purposes of the next two sections, we shall be using the
 <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> OE and ADSL test data. We will also require a
-lookup table for the mapping of parameter codes. An SAREAFAF, FAREAFAF,
-SGAFOCAL and FGAFOCAL definition expression is created first - this
+lookup table for the mapping of parameter codes. An
+<code>SAREAFAF</code>, <code>FAREAFAF</code>, <code>SGAFOCAL</code> and
+<code>FGAFOCAL</code> definition expression is created first - this
 expression can also be stored within another (sourced) program.</p>
 <p><strong>Note</strong>: to simulate an ophthalmology study, we add a
 randomly generated <code>STUDYEYE</code> variable to ADSL, but in
@@ -194,12 +195,11 @@ practice <code>STUDYEYE</code> will already have been derived using
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYEYE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LEFT"</span>, <span class="st">"RIGHT"</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">oe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">oe_ophtha</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">oe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">oe_ophtha</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- Lookup tables ----</span></span>
 <span></span>
-<span><span class="co"># Assign PARAMCD, PARAM, andPARAMN</span></span>
+<span><span class="co"># Assign PARAMCD, PARAM, and PARAMN</span></span>
 <span><span class="co"># nolint start</span></span>
 <span><span class="va">param_lookup</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">OETESTCD</span>, <span class="op">~</span><span class="va">OECAT</span>, <span class="op">~</span><span class="va">OESCAT</span>, <span class="op">~</span><span class="va">AFEYE</span>, <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">PARAM</span>, <span class="op">~</span><span class="va">PARAMN</span>,</span>
@@ -236,7 +236,7 @@ variables such as Analysis Day (<code>ADY</code>).</p>
 <code>DTYPE</code>. In this example, derivation for <code>AVALC</code>
 is trivial, whereas for lesion focality, <code>AVAL</code> is derived
 using a combination of OE character standard results and decoded to 1
-for S(single), and 2 for NS(multifocal). <code>AFEYE</code> is also
+for S(single), and 2 for NS (multifocal). <code>AFEYE</code> is also
 created in this step using the function
 <code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -262,14 +262,32 @@ parameter<a class="anchor" aria-label="anchor" href="#sqrt"></a>
 <p>Next, <code>PARAM</code>, <code>PARAMCD</code> and
 <code>PARAMN</code> can be assigned using
 <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html">derive_vars_merged_lookup()</a></code> from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and
-the lookup table <code>param_lookup</code> generated above. Often ADGA
-datasets contain square root transformed GA records for FAF with units
-as mm. This can easily be achieved as follows using
-<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html">derive_param_computed()</a></code>. Two separate calls are required
-due to the parameters being split by study and fellow eye. Once these
-extra parameters are added, all the records that will be in the end
-dataset are now present, so day/date variables such as <code>ADY</code>
-and <code>ADT</code> can be derived.</p>
+the lookup table <code>param_lookup</code> generated above. ADGA
+datasets often contain square root transformed GA records for FAF with
+units as millimeters (<code>mm</code>). In GA studies, square-root
+transformed lesion area is commonly used to reduce the dependence of
+lesion growth on baseline lesion size. Therefore, additional derived
+parameters are often included in ADGA representing the square root of
+the measured lesion area. These derived parameters can be created using
+a single call to <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html">call_derivation()</a></code> with
+<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html">derive_param_computed()</a></code>. Using a single call is more
+efficient because the same grouping variables and source data are used
+for both study-eye and fellow-eye derivations. The parameter
+specifications differ only in the source parameter
+(<code>SAREAFAF</code> versus <code>FAREAFAF</code>), assigned parameter
+metadata (<code>PARAM</code>, <code>PARAMCD</code>, and
+<code>PARAMN</code>) and derived results (<code>AVAL</code>, and
+<code>AVALC</code>).</p>
+<p>Note that the original lesion area measurements are recorded in
+square millimeters (<code>mm²</code>). Applying the square-root
+transformation changes the units from square millimeters
+(<code>mm²</code>) to millimeters (<code>mm</code>), since
+SQRT(<code>mm²</code>) = <code>mm</code>. Therefore, the derived
+parameters use <code>mm</code> as the analysis unit
+(<code>AVALU</code>).</p>
+<p>Once these extra parameters are added, all the records that will be
+in the end dataset are now present, so day/date variables such as
+<code>ADY</code> and <code>ADT</code> can be derived.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adga</span> <span class="op">&lt;-</span> <span class="va">adga</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># Add PARAM, PARAMCD, PARAMN</span></span>
@@ -339,18 +357,44 @@ related timepoint variables can be derived soon after, though their
 derivation is generally study-specific. A simple option is included
 below; please consult the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing" class="external-link">BDS
 findings vignette</a> for a more detailed discussion.</p>
-<div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:auto;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;01-701-1028&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Baseline&quot;,&quot;Week 4&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;FAREAFAF&quot;,&quot;FGAFOCAL&quot;,&quot;FSQRTFAF&quot;,&quot;SAREAFAF&quot;,&quot;SGAFOCAL&quot;,&quot;SSQRTFAF&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1\" data-max=\"31.029568\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028"],["Baseline","Baseline","Baseline","Baseline","Baseline","Baseline","Week 4","Week 4","Week 4","Week 4","Week 4","Week 4"],["FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF","FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF"],[10.554957,31.029568,1,2,5.570419014760021,3.248839331207377,3.103899,28.483511,1,2,5.336994566232947,1.761788579824492]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>USUBJID<\/th>\n      <th>AVISIT<\/th>\n      <th>PARAMCD<\/th>\n      <th>AVAL<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":[],"visible":false},{"className":"dt-right","targets":3},{"name":"USUBJID","targets":0},{"name":"AVISIT","targets":1},{"name":"PARAMCD","targets":2},{"name":"AVAL","targets":3}],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"<Bfr<\"dt-scroll\"t>ipl>","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>Additionally, it should be noted that for the <code>SGAFOCAL</code>
-and <code>FGAFOCAL</code> parameters, it is generally recommended not to
-populate <code>BASE</code>, <code>CHG</code> and <code>PCHG</code> as
-they contain character result. This can be simply achieved in one step,
-as the derivation of <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_base.html">derive_var_base()</a></code> can be placed inside
-of <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html">restrict_derivation()</a></code> with a filter added to exclude
-these parameters. Then, <code>BASE</code> will be set to <code>NA</code>
-for <code>SGAFOCAL</code> and <code>FGAFOCAL</code>, so later calls to
-<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_chg.html">derive_var_chg()</a></code> and <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_pchg.html">derive_var_pchg()</a></code> do not
-need any changes.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adga</span> <span class="op">&lt;-</span> <span class="va">adga</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Derive visit info and BASETYPE</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    ATPTN <span class="op">=</span> <span class="va">OETPTNUM</span>,</span>
+<span>    ATPT <span class="op">=</span> <span class="va">OETPT</span>,</span>
+<span>    AVISIT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">VISIT</span>, <span class="st">"SCREEN"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Screening"</span>,</span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html" class="external-link">str_to_title</a></span><span class="op">(</span><span class="va">VISIT</span><span class="op">)</span>,</span>
+<span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    AVISITN <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">VISITNUM</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    ABLFL <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">AVISIT</span> <span class="op">==</span> <span class="st">"Baseline"</span>, <span class="st">"Y"</span>, <span class="cn">NA_character_</span><span class="op">)</span></span>
+<span>    <span class="co"># In actual studies, ABLFL derivation will likely be more nuanced</span></span>
+<span>    <span class="co"># and leverage derive_var_extreme_flag()</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:auto;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;01-701-1028&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Baseline&quot;,&quot;Week 4&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;FAREAFAF&quot;,&quot;FGAFOCAL&quot;,&quot;FSQRTFAF&quot;,&quot;SAREAFAF&quot;,&quot;SGAFOCAL&quot;,&quot;SSQRTFAF&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1\" data-max=\"31.029568\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028"],["Baseline","Baseline","Baseline","Baseline","Baseline","Baseline","Week 4","Week 4","Week 4","Week 4","Week 4","Week 4"],["FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF","FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF"],[10.554957,31.029568,1,2,5.570419014760021,3.248839331207377,3.103899,28.483511,1,2,5.336994566232947,1.761788579824492]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>USUBJID<\/th>\n      <th>AVISIT<\/th>\n      <th>PARAMCD<\/th>\n      <th>AVAL<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":[],"visible":false},{"className":"dt-right","targets":3},{"name":"USUBJID","targets":0},{"name":"AVISIT","targets":1},{"name":"PARAMCD","targets":2},{"name":"AVAL","targets":3}],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"<Bfr<\"dt-scroll\"t>ipl>","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>Additionally, it should be noted that <code>SGAFOCAL</code> and
+<code>FGAFOCAL</code> represent categorical assessments of lesion
+focality. Although these parameters are mapped to numeric values in
+<code>AVAL</code> for consistency with ADaM conventions, deriving
+numeric change metrics such as <code>CHG</code> and <code>PCHG</code> is
+generally not meaningful. Therefore, <code>BASE</code> is not derived
+for these parameters.</p>
+<p>However, baseline character values may still be clinically
+informative. For this reason, <code>BASEC</code> can be derived from
+<code>AVALC</code> for <code>SGAFOCAL</code> and <code>FGAFOCAL</code>,
+alongside the area-based FAF parameters. This can be achieved by using
+<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html">restrict_derivation()</a></code> to selectively apply
+<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_base.html">derive_var_base()</a></code> based on parameter type. In the example
+below, <code>BASE</code> is derived only for parameters where numeric
+change-from-baseline analyses are appropriate, while
+<code>SGAFOCAL</code> and <code>FGAFOCAL</code> are excluded. Since
+<code>BASE</code> remains missing for <code>SGAFOCAL</code> and
+<code>FGAFOCAL</code>, subsequent calls to <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_chg.html">derive_var_chg()</a></code>
+<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_pchg.html">derive_var_pchg()</a></code> will automatically leave <code>CHG</code>
+and <code>PCHG</code> missing for these parameters.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adga</span> <span class="op">&lt;-</span> <span class="va">adga</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># Calculate BASE (do not derive for GA Lesion Focality params)</span></span>
 <span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html">restrict_derivation</a></span><span class="op">(</span></span>
@@ -361,14 +405,24 @@ need any changes.</p>
 <span>      new_var <span class="op">=</span> <span class="va">BASE</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    filter <span class="op">=</span> <span class="op">!</span><span class="va">PARAMCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SGAFOCAL"</span>, <span class="st">"FGAFOCAL"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Calculate BASEC</span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html">restrict_derivation</a></span><span class="op">(</span></span>
+<span>    derivation <span class="op">=</span> <span class="va">derive_var_base</span>,</span>
+<span>    args <span class="op">=</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/params.html">params</a></span><span class="op">(</span></span>
+<span>      by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>, <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">ATPT</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      source_var <span class="op">=</span> <span class="va">AVALC</span>,</span>
+<span>      new_var <span class="op">=</span> <span class="va">BASEC</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    filter <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SGAFOCAL"</span>, <span class="st">"FGAFOCAL"</span>, <span class="st">"SSQRTFAF"</span>, <span class="st">"FSQRTFAF"</span>, <span class="st">"FAREAFAF"</span>, <span class="st">"SAREAFAF"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> </span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="further">Further Derivations of Standard BDS Variables<a class="anchor" aria-label="anchor" href="#further"></a>
 </h3>
 <p>The user is invited to consult the article on <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html" class="external-link">creating
 a BDS dataset from SDTM</a> to learn how to add standard BDS variables
-to ADGA</p>
+to ADGA.</p>
 </div>
 <div class="section level3">
 <h3 id="example">Example Script<a class="anchor" aria-label="anchor" href="#example"></a>

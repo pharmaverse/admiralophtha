@@ -14,7 +14,7 @@
   Copyright holder, funder.
 
 - **[](https://www.novartis.com/)[![Novartis
-  logo](reference/figures/novartis_logo.png)](https://www.gsk.com/)**.
+  logo](reference/figures/novartis_logo.png)](https://www.novartis.com/)**.
   Copyright holder, funder.
 
 ## Citation
