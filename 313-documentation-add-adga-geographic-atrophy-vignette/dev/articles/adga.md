@@ -147,8 +147,9 @@ root transformed GA records for FAF with units as millimeters (`mm`). In
 GA studies, square-root transformed lesion area is commonly used to
 reduce the dependence of lesion growth on baseline lesion size.
 Therefore, additional derived parameters are often included in ADGA
-representing the square root of the measured lesion area. These derived
-parameters can be created using a single call to
+representing the square root of the measured lesion area.
+
+These derived parameters can be created using a single call to
 [`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html)
 with
 [`derive_param_computed()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html).
@@ -162,7 +163,7 @@ parameter (`SAREAFAF` versus `FAREAFAF`), assigned parameter metadata
 Note that the original lesion area measurements are recorded in square
 millimeters (`mm²`). Applying the square-root transformation changes the
 units from square millimeters (`mm²`) to millimeters (`mm`), since
-SQRT(`mm²`) = `mm`. Therefore, the derived parameters use `mm` as the
+sqrt(`mm²`) = `mm`. Therefore, the derived parameters use `mm` as the
 analysis unit (`AVALU`).
 
 Once these extra parameters are added, all the records that will be in
@@ -301,7 +302,7 @@ adga <- adga %>%
       new_var = BASEC
     ),
     filter = PARAMCD %in% c("SGAFOCAL", "FGAFOCAL", "SSQRTFAF", "FSQRTFAF", "FAREAFAF", "SAREAFAF")
-  ) 
+  )
 ```
 
 ### Further Derivations of Standard BDS Variables

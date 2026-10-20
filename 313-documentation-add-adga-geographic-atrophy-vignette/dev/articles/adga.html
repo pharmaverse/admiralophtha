@@ -268,8 +268,9 @@ units as millimeters (<code>mm</code>). In GA studies, square-root
 transformed lesion area is commonly used to reduce the dependence of
 lesion growth on baseline lesion size. Therefore, additional derived
 parameters are often included in ADGA representing the square root of
-the measured lesion area. These derived parameters can be created using
-a single call to <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html">call_derivation()</a></code> with
+the measured lesion area.</p>
+<p>These derived parameters can be created using a single call to
+<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html">call_derivation()</a></code> with
 <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html">derive_param_computed()</a></code>. Using a single call is more
 efficient because the same grouping variables and source data are used
 for both study-eye and fellow-eye derivations. The parameter
@@ -282,7 +283,7 @@ metadata (<code>PARAM</code>, <code>PARAMCD</code>, and
 square millimeters (<code>mm²</code>). Applying the square-root
 transformation changes the units from square millimeters
 (<code>mm²</code>) to millimeters (<code>mm</code>), since
-SQRT(<code>mm²</code>) = <code>mm</code>. Therefore, the derived
+sqrt(<code>mm²</code>) = <code>mm</code>. Therefore, the derived
 parameters use <code>mm</code> as the analysis unit
 (<code>AVALU</code>).</p>
 <p>Once these extra parameters are added, all the records that will be
@@ -415,7 +416,7 @@ and <code>PCHG</code> missing for these parameters.</p>
 <span>      new_var <span class="op">=</span> <span class="va">BASEC</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    filter <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SGAFOCAL"</span>, <span class="st">"FGAFOCAL"</span>, <span class="st">"SSQRTFAF"</span>, <span class="st">"FSQRTFAF"</span>, <span class="st">"FAREAFAF"</span>, <span class="st">"SAREAFAF"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> </span></code></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="further">Further Derivations of Standard BDS Variables<a class="anchor" aria-label="anchor" href="#further"></a>
