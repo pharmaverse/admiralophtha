@@ -143,6 +143,68 @@ format as input unless otherwise specified.</em></p>
 populate ADGA solely with GA records from the OE SDTM.</p>
 </div>
 <div class="section level3">
+<h3 id="acronyms">Acronyms<a class="anchor" aria-label="anchor" href="#acronyms"></a>
+</h3>
+<p>This vignette uses several ophthalmology-specific abbreviations
+related to Geographic Atrophy (GA) imaging. The table below summarizes
+the most commonly used terms.</p>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="85%">
+</colgroup>
+<thead><tr class="header">
+<th>Acronym</th>
+<th>Definition</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>ADGA</td>
+<td>Geographic Atrophy Analysis Dataset</td>
+</tr>
+<tr class="even">
+<td>FAF</td>
+<td>Fundus Autofluorescence</td>
+</tr>
+<tr class="odd">
+<td>GA</td>
+<td>Geographic Atrophy</td>
+</tr>
+<tr class="even">
+<td>GAFLOC</td>
+<td>GA Foveal Location</td>
+</tr>
+<tr class="odd">
+<td>SGAFOCAL</td>
+<td>Study Eye GA Lesion Focality</td>
+</tr>
+<tr class="even">
+<td>FGAFOCAL</td>
+<td>Fellow Eye GA Lesion Focality</td>
+</tr>
+<tr class="odd">
+<td>SAREAFAF</td>
+<td>Study Eye GA Area Measured by FAF</td>
+</tr>
+<tr class="even">
+<td>FAREAFAF</td>
+<td>Fellow Eye GA Area Measured by FAF</td>
+</tr>
+<tr class="odd">
+<td>SSQRTFAF</td>
+<td>Square Root Transformed Study Eye GA Area Measured by FAF</td>
+</tr>
+<tr class="even">
+<td>FSQRTFAF</td>
+<td>Square Root Transformed Fellow Eye GA Area Measured by FAF</td>
+</tr>
+</tbody>
+</table>
+<p>The parameter names used throughout this vignette follow the
+nomenclature adopted by <a href="https://pharmaverse.github.io/admiralophtha/" class="external-link">admiralophtha</a> examples, where the
+prefixes S and F denote the study eye and fellow eye, respectively.</p>
+</div>
+<div class="section level3">
 <h3 id="required-packages">Required Packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
 </h3>
 <p>The examples of this vignette require the following packages.</p>
@@ -163,6 +225,8 @@ populate ADGA solely with GA records from the OE SDTM.</p>
 <li><a href="#sqrt">Creating Square Root Transformed GA Area measured by
 FAF derived parameter</a></li>
 <li><a href="#avisit">Assigning <code>AVISIT/AVISITN</code></a></li>
+<li><a href="#wors01fl">Deriving Worst Post-Baseline Assessment
+Flag</a></li>
 <li><a href="#further">Further Derivations of Standard BDS
 Variables</a></li>
 <li><a href="#example">Example Script</a></li>
@@ -237,8 +301,14 @@ variables such as Analysis Day (<code>ADY</code>).</p>
 is trivial, whereas for lesion focality, <code>AVAL</code> is derived
 using a combination of OE character standard results and decoded to 1
 for S(single), and 2 for NS (multifocal). <code>AFEYE</code> is also
-created in this step using the function
-<code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code>.</p>
+created in this step using the function <code><a href="../reference/derive_var_afeye.html">derive_var_afeye()</a></code>.
+This variable identifies the analysis eye based on the
+<code>OELOC</code>, and <code>OELAT</code> information. In this example,
+“RETINA” is included in <code>loc_vals</code> because the GA assessments
+are recorded as retinal observations (<code>OELOC</code> = “RETINA”).
+Including both “EYE” and “RETINA” ensures that <code>OELAT</code>
+information is correctly carried forward for all ophthalmic
+assessments.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adga</span> <span class="op">&lt;-</span> <span class="va">adga</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># Calculate AVAL, AVALC, AVALU and DTYPE</span></span>
@@ -259,16 +329,24 @@ created in this step using the function
 <h3 id="sqrt">Creating Square Root Transformed GA Area measured by FAF derived
 parameter<a class="anchor" aria-label="anchor" href="#sqrt"></a>
 </h3>
-<p>Next, <code>PARAM</code>, <code>PARAMCD</code> and
-<code>PARAMN</code> can be assigned using
-<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html">derive_vars_merged_lookup()</a></code> from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> and
-the lookup table <code>param_lookup</code> generated above. ADGA
-datasets often contain square root transformed GA records for FAF with
-units as millimeters (<code>mm</code>). In GA studies, square-root
-transformed lesion area is commonly used to reduce the dependence of
-lesion growth on baseline lesion size. Therefore, additional derived
-parameters are often included in ADGA representing the square root of
-the measured lesion area.</p>
+<p>Next, <code>PARAM</code>, <code>PARAMCD</code>, and
+<code>PARAMN</code> are assigned using
+<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html">derive_vars_merged_lookup()</a></code> from <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a>
+together with the lookup table <code>param_lookup</code> generated
+above. Using a lookup table separates study-specific parameter metadata
+from the derivation code and provides an additional validation step.
+Since all records included in ADGA are expected to map to a defined
+analysis parameter, any unmapped records may indicate missing parameter
+metadata, unexpected source data, or an issue in an upstream derivation
+such as <code>AFEYE</code>. Therefore,
+<code>check_not_mapped_type</code> = “warning” is specified to issue a
+warning if any records are not mapped.</p>
+<p>ADGA datasets often contain square root transformed GA records for
+FAF with units as millimeters (<code>mm</code>). In GA studies,
+square-root transformed lesion area is commonly used to reduce the
+dependence of lesion growth on baseline lesion size. Therefore,
+additional derived parameters are often included in ADGA representing
+the square root of the measured lesion area.</p>
 <p>These derived parameters can be created using a single call to
 <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html">call_derivation()</a></code> with
 <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_param_computed.html">derive_param_computed()</a></code>. Using a single call is more
@@ -353,7 +431,7 @@ steps.</p>
 <div class="section level3">
 <h3 id="avisit">Assigning <code>AVISIT/AVISITN</code><a class="anchor" aria-label="anchor" href="#avisit"></a>
 </h3>
-<p>Moving forwards, <code>AVISIT</code>, <code>AVISITN</code> and
+<p>Moving forwards, <code>AVISIT</code>, <code>AVISITN</code>, and
 related timepoint variables can be derived soon after, though their
 derivation is generally study-specific. A simple option is included
 below; please consult the <a href="https://pharmaverse.github.io/admiral/" class="external-link">admiral</a> <a href="https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing" class="external-link">BDS
@@ -375,7 +453,52 @@ findings vignette</a> for a more detailed discussion.</p>
 <span>    <span class="co"># and leverage derive_var_extreme_flag()</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:auto;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;01-701-1028&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Baseline&quot;,&quot;Week 4&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;FAREAFAF&quot;,&quot;FGAFOCAL&quot;,&quot;FSQRTFAF&quot;,&quot;SAREAFAF&quot;,&quot;SGAFOCAL&quot;,&quot;SSQRTFAF&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1\" data-max=\"31.029568\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028"],["Baseline","Baseline","Baseline","Baseline","Baseline","Baseline","Week 4","Week 4","Week 4","Week 4","Week 4","Week 4"],["FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF","FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF"],[10.554957,31.029568,1,2,5.570419014760021,3.248839331207377,3.103899,28.483511,1,2,5.336994566232947,1.761788579824492]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>USUBJID<\/th>\n      <th>AVISIT<\/th>\n      <th>PARAMCD<\/th>\n      <th>AVAL<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":[],"visible":false},{"className":"dt-right","targets":3},{"name":"USUBJID","targets":0},{"name":"AVISIT","targets":1},{"name":"PARAMCD","targets":2},{"name":"AVAL","targets":3}],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"<Bfr<\"dt-scroll\"t>ipl>","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>Additionally, it should be noted that <code>SGAFOCAL</code> and
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;01-701-1028&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Baseline&quot;,&quot;Week 4&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;FAREAFAF&quot;,&quot;FGAFOCAL&quot;,&quot;FSQRTFAF&quot;,&quot;SAREAFAF&quot;,&quot;SGAFOCAL&quot;,&quot;SSQRTFAF&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1\" data-max=\"31.029568\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028","01-701-1028"],["Baseline","Baseline","Baseline","Baseline","Baseline","Baseline","Week 4","Week 4","Week 4","Week 4","Week 4","Week 4"],["FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF","FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF"],[10.554957,31.029568,1,2,5.570419014760021,3.248839331207377,3.103899,28.483511,1,2,5.336994566232947,1.761788579824492]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>USUBJID<\/th>\n      <th>AVISIT<\/th>\n      <th>PARAMCD<\/th>\n      <th>AVAL<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":[],"visible":false},{"className":"dt-right","targets":3},{"name":"USUBJID","targets":0},{"name":"AVISIT","targets":1},{"name":"PARAMCD","targets":2},{"name":"AVAL","targets":3}],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"<Bfr<\"dt-scroll\"t>ipl>","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level3">
+<h3 id="wors01fl">Deriving Worst Post-Baseline Assessment Flag<a class="anchor" aria-label="anchor" href="#wors01fl"></a>
+</h3>
+<p>For some analyses, it may be useful to identify the worst observed
+lesion size for each parameter across baseline and post-baseline
+assessments. The ADaM variable <code>WORS01FL</code> can be used for
+this purpose. In the example below,
+<code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> is used to flag the record with
+the highest observed value (<code>AVAL</code>) within each subject,
+parameter, and timepoint combination (<code>PARAMCD</code>,
+<code>ATPT</code>). Since disease progression in geographic atrophy is
+reflected by increasing lesion area, the highest observed FAF area (or
+square-root transformed FAF area) is considered the worst result.</p>
+<p>The derivation is applied only to the quantitative FAF area
+parameters (<code>SAREAFAF</code>, <code>FAREAFAF</code>) and their
+square-root transformed counterparts (<code>SSQRTFAF</code>,
+<code>FSQRTFAF</code>). Categorical focality parameters
+(<code>SGAFOCAL</code>, <code>FGAFOCAL</code>) are excluded, as the
+concept of a worst numeric result is not applicable.</p>
+<p>The order argument specifies that records are ranked first by
+<code>AVAL</code> and then by <code>ADT</code>. With mode = “last”, the
+flag is assigned to the record with the largest value, and if multiple
+records share the same value, the latest assessment date is selected. If
+a parameter is instead interpreted such that lower values represent
+worse outcomes, mode = “first” can be used.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># WORS01FL: Flag worst result within a PARAMCD for baseline &amp; post-baseline records</span></span>
+<span><span class="co"># If worst result is lowest result, change mode to "first"</span></span>
+<span><span class="va">adga</span> <span class="op">&lt;-</span> <span class="va">adga</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html">restrict_derivation</a></span><span class="op">(</span></span>
+<span>    derivation <span class="op">=</span> <span class="va">derive_var_extreme_flag</span>,</span>
+<span>    args <span class="op">=</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/params.html">params</a></span><span class="op">(</span></span>
+<span>      by_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/get_admiral_option.html">get_admiral_option</a></span><span class="op">(</span><span class="st">"subject_keys"</span><span class="op">)</span>, <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">ATPT</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      order <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">AVAL</span>, <span class="va">ADT</span><span class="op">)</span>,</span>
+<span>      new_var <span class="op">=</span> <span class="va">WORS01FL</span>,</span>
+<span>      mode <span class="op">=</span> <span class="st">"last"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    filter <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="op">(</span><span class="va">AVISITN</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">PARAMCD</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SSQRTFAF"</span>, <span class="st">"FSQRTFAF"</span>, <span class="st">"FAREAFAF"</span>, <span class="st">"SAREAFAF"</span><span class="op">)</span></span>
+<span>    <span class="co"># In actual studies, ONTRTFL == "Y" | ABLFL == "Y" will be used to consider baseline and post baseline assessments</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>The resulting output is shown below (limited to the first patient
+only):</p>
+<div id="htmlwidget-e5c8c404fe174e4c81bd" style="width:auto;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;01-701-1015&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;FAREAFAF&quot;,&quot;FGAFOCAL&quot;,&quot;FSQRTFAF&quot;,&quot;SAREAFAF&quot;,&quot;SGAFOCAL&quot;,&quot;SSQRTFAF&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1\" data-max=\"38.970796\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Baseline&quot;,&quot;Screening&quot;,&quot;Week 12&quot;,&quot;Week 16&quot;,&quot;Week 20&quot;,&quot;Week 24&quot;,&quot;Week 4&quot;,&quot;Week 6&quot;,&quot;Week 8&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"date\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1.388016e+12\" data-max=\"1403049600000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;PRE-DOSE&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Y&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015","01-701-1015"],["FAREAFAF","FAREAFAF","FAREAFAF","FAREAFAF","FAREAFAF","FAREAFAF","FAREAFAF","FAREAFAF","FSQRTFAF","FSQRTFAF","FSQRTFAF","FSQRTFAF","FSQRTFAF","FSQRTFAF","FSQRTFAF","FSQRTFAF","SAREAFAF","SAREAFAF","SAREAFAF","SAREAFAF","SAREAFAF","SAREAFAF","SAREAFAF","SAREAFAF","SSQRTFAF","SSQRTFAF","SSQRTFAF","SSQRTFAF","SSQRTFAF","SSQRTFAF","SSQRTFAF","SSQRTFAF","FAREAFAF","SAREAFAF","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","FGAFOCAL","SGAFOCAL","SSQRTFAF","FSQRTFAF"],[1.297096,2.243265,6.912957,18.797677,22.587202,25.18886,25.661052,26.618651,1.13890122486544,1.49775331747254,2.629250273366916,4.335628789460648,4.752599499221453,5.018850465993184,5.065673893965146,5.159326603346603,1.468605,15.187653,17.938365,22.65531,34.118062,35.190188,36.492146,38.970796,1.211860140445258,3.897133946889688,4.235370703964413,4.759759447703214,5.841066854607983,5.932131825912165,6.040872950162087,6.24265936921117,17.867315,3.343734,1,2,2,2,2,2,1,1,2,1,2,2,2,2,2,2,2,2,1.828587979835808,4.226974686463121],["Week 4","Week 24","Week 8","Week 6","Week 16","Baseline","Week 12","Week 20","Week 4","Week 24","Week 8","Week 6","Week 16","Baseline","Week 12","Week 20","Baseline","Week 6","Week 12","Week 8","Week 24","Week 4","Week 20","Week 16","Baseline","Week 6","Week 12","Week 8","Week 24","Week 4","Week 20","Week 16","Screening","Screening","Screening","Screening","Baseline","Baseline","Week 4","Week 4","Week 6","Week 6","Week 8","Week 8","Week 12","Week 12","Week 16","Week 16","Week 20","Week 20","Week 24","Week 24","Screening","Screening"],["2014-01-30","2014-06-18","2014-03-05","2014-02-12","2014-05-07","2014-01-02","2014-03-26","2014-05-21","2014-01-30","2014-06-18","2014-03-05","2014-02-12","2014-05-07","2014-01-02","2014-03-26","2014-05-21","2014-01-02","2014-02-12","2014-03-26","2014-03-05","2014-06-18","2014-01-30","2014-05-21","2014-05-07","2014-01-02","2014-02-12","2014-03-26","2014-03-05","2014-06-18","2014-01-30","2014-05-21","2014-05-07","2013-12-26","2013-12-26","2013-12-26","2013-12-26","2014-01-02","2014-01-02","2014-01-30","2014-01-30","2014-02-12","2014-02-12","2014-03-05","2014-03-05","2014-03-26","2014-03-26","2014-05-07","2014-05-07","2014-05-21","2014-05-21","2014-06-18","2014-06-18","2013-12-26","2013-12-26"],["PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE",null,null,null,null,null,null,null,null,"PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE",null,null,null,null,null,null,null,null,"PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE","PRE-DOSE",null,null],[null,null,null,null,null,null,null,"Y",null,null,null,null,null,null,null,"Y",null,null,null,null,null,null,null,"Y",null,null,null,null,null,null,null,"Y",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>USUBJID<\/th>\n      <th>PARAMCD<\/th>\n      <th>AVAL<\/th>\n      <th>AVISIT<\/th>\n      <th>ADT<\/th>\n      <th>ATPT<\/th>\n      <th>WORS01FL<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"name":"USUBJID","targets":0},{"name":"PARAMCD","targets":1},{"name":"AVAL","targets":2},{"name":"AVISIT","targets":3},{"name":"ADT","targets":4},{"name":"ATPT","targets":5},{"name":"WORS01FL","targets":6}],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"<Bfr<\"dt-scroll\"t>ipl>","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>Additionally, it should be noted that <code>SGAFOCAL</code> and
 <code>FGAFOCAL</code> represent categorical assessments of lesion
 focality. Although these parameters are mapped to numeric values in
 <code>AVAL</code> for consistency with ADaM conventions, deriving
@@ -395,7 +518,7 @@ change-from-baseline analyses are appropriate, while
 <code>FGAFOCAL</code>, subsequent calls to <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_chg.html">derive_var_chg()</a></code>
 <code><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_pchg.html">derive_var_pchg()</a></code> will automatically leave <code>CHG</code>
 and <code>PCHG</code> missing for these parameters.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adga</span> <span class="op">&lt;-</span> <span class="va">adga</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># Calculate BASE (do not derive for GA Lesion Focality params)</span></span>
 <span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/restrict_derivation.html">restrict_derivation</a></span><span class="op">(</span></span>

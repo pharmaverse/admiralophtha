@@ -22,6 +22,31 @@ As the name ADGA implies,
 [admiralophtha](https://pharmaverse.github.io/admiralophtha/) suggests
 to populate ADGA solely with GA records from the OE SDTM.
 
+### Acronyms
+
+This vignette uses several ophthalmology-specific abbreviations related
+to Geographic Atrophy (GA) imaging. The table below summarizes the most
+commonly used terms.
+
+| Acronym  | Definition                                                 |
+|----------|------------------------------------------------------------|
+| ADGA     | Geographic Atrophy Analysis Dataset                        |
+| FAF      | Fundus Autofluorescence                                    |
+| GA       | Geographic Atrophy                                         |
+| GAFLOC   | GA Foveal Location                                         |
+| SGAFOCAL | Study Eye GA Lesion Focality                               |
+| FGAFOCAL | Fellow Eye GA Lesion Focality                              |
+| SAREAFAF | Study Eye GA Area Measured by FAF                          |
+| FAREAFAF | Fellow Eye GA Area Measured by FAF                         |
+| SSQRTFAF | Square Root Transformed Study Eye GA Area Measured by FAF  |
+| FSQRTFAF | Square Root Transformed Fellow Eye GA Area Measured by FAF |
+
+The parameter names used throughout this vignette follow the
+nomenclature adopted by
+[admiralophtha](https://pharmaverse.github.io/admiralophtha/) examples,
+where the prefixes S and F denote the study eye and fellow eye,
+respectively.
+
 ### Required Packages
 
 The examples of this vignette require the following packages.
@@ -41,6 +66,7 @@ library(stringr)
 - [Creating Square Root Transformed GA Area measured by FAF derived
   parameter](#sqrt)
 - [Assigning `AVISIT/AVISITN`](#avisit)
+- [Deriving Worst Post-Baseline Assessment Flag](#wors01fl)
 - [Further Derivations of Standard BDS Variables](#further)
 - [Example Script](#example)
 
@@ -119,6 +145,11 @@ lesion focality, `AVAL` is derived using a combination of OE character
 standard results and decoded to 1 for S(single), and 2 for NS
 (multifocal). `AFEYE` is also created in this step using the function
 [`derive_var_afeye()`](https:/pharmaverse.github.io/admiralophtha/313-documentation-add-adga-geographic-atrophy-vignette/dev/reference/derive_var_afeye.md).
+This variable identifies the analysis eye based on the `OELOC`, and
+`OELAT` information. In this example, “RETINA” is included in `loc_vals`
+because the GA assessments are recorded as retinal observations (`OELOC`
+= “RETINA”). Including both “EYE” and “RETINA” ensures that `OELAT`
+information is correctly carried forward for all ophthalmic assessments.
 
 ``` r
 adga <- adga %>%
@@ -139,15 +170,24 @@ adga <- adga %>%
 
 ### Creating Square Root Transformed GA Area measured by FAF derived parameter
 
-Next, `PARAM`, `PARAMCD` and `PARAMN` can be assigned using
+Next, `PARAM`, `PARAMCD`, and `PARAMN` are assigned using
 [`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html)
-from [admiral](https://pharmaverse.github.io/admiral/) and the lookup
-table `param_lookup` generated above. ADGA datasets often contain square
-root transformed GA records for FAF with units as millimeters (`mm`). In
-GA studies, square-root transformed lesion area is commonly used to
-reduce the dependence of lesion growth on baseline lesion size.
-Therefore, additional derived parameters are often included in ADGA
-representing the square root of the measured lesion area.
+from [admiral](https://pharmaverse.github.io/admiral/) together with the
+lookup table `param_lookup` generated above. Using a lookup table
+separates study-specific parameter metadata from the derivation code and
+provides an additional validation step. Since all records included in
+ADGA are expected to map to a defined analysis parameter, any unmapped
+records may indicate missing parameter metadata, unexpected source data,
+or an issue in an upstream derivation such as `AFEYE`. Therefore,
+`check_not_mapped_type` = “warning” is specified to issue a warning if
+any records are not mapped.
+
+ADGA datasets often contain square root transformed GA records for FAF
+with units as millimeters (`mm`). In GA studies, square-root transformed
+lesion area is commonly used to reduce the dependence of lesion growth
+on baseline lesion size. Therefore, additional derived parameters are
+often included in ADGA representing the square root of the measured
+lesion area.
 
 These derived parameters can be created using a single call to
 [`call_derivation()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/call_derivation.html)
@@ -234,8 +274,8 @@ derive ADaM variables such as `AVISIT` and `ADY` in successive steps.
 
 ### Assigning `AVISIT/AVISITN`
 
-Moving forwards, `AVISIT`, `AVISITN` and related timepoint variables can
-be derived soon after, though their derivation is generally
+Moving forwards, `AVISIT`, `AVISITN`, and related timepoint variables
+can be derived soon after, though their derivation is generally
 study-specific. A simple option is included below; please consult the
 [admiral](https://pharmaverse.github.io/admiral/) [BDS findings
 vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing)
@@ -258,6 +298,51 @@ adga <- adga %>%
     # and leverage derive_var_extreme_flag()
   )
 ```
+
+### Deriving Worst Post-Baseline Assessment Flag
+
+For some analyses, it may be useful to identify the worst observed
+lesion size for each parameter across baseline and post-baseline
+assessments. The ADaM variable `WORS01FL` can be used for this purpose.
+In the example below,
+[`derive_var_extreme_flag()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_var_extreme_flag.html)
+is used to flag the record with the highest observed value (`AVAL`)
+within each subject, parameter, and timepoint combination (`PARAMCD`,
+`ATPT`). Since disease progression in geographic atrophy is reflected by
+increasing lesion area, the highest observed FAF area (or square-root
+transformed FAF area) is considered the worst result.
+
+The derivation is applied only to the quantitative FAF area parameters
+(`SAREAFAF`, `FAREAFAF`) and their square-root transformed counterparts
+(`SSQRTFAF`, `FSQRTFAF`). Categorical focality parameters (`SGAFOCAL`,
+`FGAFOCAL`) are excluded, as the concept of a worst numeric result is
+not applicable.
+
+The order argument specifies that records are ranked first by `AVAL` and
+then by `ADT`. With mode = “last”, the flag is assigned to the record
+with the largest value, and if multiple records share the same value,
+the latest assessment date is selected. If a parameter is instead
+interpreted such that lower values represent worse outcomes, mode =
+“first” can be used.
+
+``` r
+# WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records
+# If worst result is lowest result, change mode to "first"
+adga <- adga %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = c(get_admiral_option("subject_keys"), exprs(PARAMCD, ATPT)),
+      order = exprs(AVAL, ADT),
+      new_var = WORS01FL,
+      mode = "last"
+    ),
+    filter = !is.na(AVISITN) & !(AVISITN) == 1 & PARAMCD %in% c("SSQRTFAF", "FSQRTFAF", "FAREAFAF", "SAREAFAF")
+    # In actual studies, ONTRTFL == "Y" | ABLFL == "Y" will be used to consider baseline and post baseline assessments
+  )
+```
+
+The resulting output is shown below (limited to the first patient only):
 
 Additionally, it should be noted that `SGAFOCAL` and `FGAFOCAL`
 represent categorical assessments of lesion focality. Although these
