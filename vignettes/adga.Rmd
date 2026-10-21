@@ -141,7 +141,7 @@ adga <- adga %>%
 
 ## Creating Square Root Transformed GA Area measured by FAF derived parameter {#sqrt}
 
-Next, `PARAM`, `PARAMCD`, and `PARAMN` are assigned using `derive_vars_merged_lookup()` from `{admiral}` together with the lookup table `param_lookup` generated above. Using a lookup table separates study-specific parameter metadata from the derivation code and provides an additional validation step. Since all records included in ADGA are expected to map to a defined analysis parameter, any unmapped records may indicate missing parameter metadata, unexpected source data, or an issue in an upstream derivation such as `AFEYE`. Therefore, `check_not_mapped_type` = "warning" is specified to issue a warning if any records are not mapped.
+Next, `PARAM`, `PARAMCD`, and `PARAMN` are assigned using `derive_vars_merged_lookup()` from `{admiral}` together with the lookup table `param_lookup` generated above. Using a lookup table separates study-specific parameter metadata from the derivation code and provides an additional validation step. Since all records included in ADGA are expected to map to a defined analysis parameter, any not mapped records may indicate missing parameter metadata, unexpected source data, or an issue in an upstream derivation such as `AFEYE`. Therefore, `check_not_mapped_type` = "warning" is specified to issue a warning if any records are not mapped.
 
 ADGA datasets often contain square root transformed GA records for FAF with units as millimeters (`mm`). In GA studies, square-root transformed lesion area is commonly used to reduce the dependence of lesion growth on baseline lesion size. Therefore, additional derived parameters are often included in ADGA representing the square root of the measured lesion area.
 
