@@ -176,7 +176,7 @@ from [admiral](https://pharmaverse.github.io/admiral/) together with the
 lookup table `param_lookup` generated above. Using a lookup table
 separates study-specific parameter metadata from the derivation code and
 provides an additional validation step. Since all records included in
-ADGA are expected to map to a defined analysis parameter, any unmapped
+ADGA are expected to map to a defined analysis parameter, any not mapped
 records may indicate missing parameter metadata, unexpected source data,
 or an issue in an upstream derivation such as `AFEYE`. Therefore,
 `check_not_mapped_type` = “warning” is specified to issue a warning if

@@ -336,9 +336,9 @@ together with the lookup table <code>param_lookup</code> generated
 above. Using a lookup table separates study-specific parameter metadata
 from the derivation code and provides an additional validation step.
 Since all records included in ADGA are expected to map to a defined
-analysis parameter, any unmapped records may indicate missing parameter
-metadata, unexpected source data, or an issue in an upstream derivation
-such as <code>AFEYE</code>. Therefore,
+analysis parameter, any not mapped records may indicate missing
+parameter metadata, unexpected source data, or an issue in an upstream
+derivation such as <code>AFEYE</code>. Therefore,
 <code>check_not_mapped_type</code> = “warning” is specified to issue a
 warning if any records are not mapped.</p>
 <p>ADGA datasets often contain square root transformed GA records for
