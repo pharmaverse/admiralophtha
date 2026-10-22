@@ -120,7 +120,7 @@ adga <- oe %>%
   )
 ```
 
-The next item of business is to derive `AVAL`,`AVALC`, `AVALU`, and `DTYPE`. In this example, derivation for `AVALC` is trivial, whereas for lesion focality, `AVAL` is derived using a combination of OE character standard results and decoded to 1 for S(single), and 2 for NS (multifocal). `AFEYE` is also created in this step using the function `derive_var_afeye()`. This variable identifies the analysis eye based on the `OELOC`, and `OELAT` information. In this example, "RETINA" is included in `loc_vals` because the GA assessments are recorded as retinal observations (`OELOC` = "RETINA"). Including both "EYE" and "RETINA" ensures that `OELAT` information is correctly carried forward for all ophthalmic assessments.
+The next item of business is to derive `AVAL`,`AVALC`, `AVALU`, and `DTYPE`. In this example, derivation for `AVALC` is trivial, whereas for lesion focality, `AVAL` is derived using a combination of OE character standard results and decoded to 1 for S (single), and 2 for NS (multifocal). `AFEYE` is also created in this step using the function `derive_var_afeye()`. This variable identifies the analysis eye based on the `OELOC`, and `OELAT` information. In this example, `"RETINA"` is included in `loc_vals` because the GA assessments are recorded as retinal observations. Including both `"EYE"` and `"RETINA"` ensures that `OELAT` information is correctly carried forward for all ophthalmic assessments.
 
 ```{r}
 adga <- adga %>%
@@ -139,6 +139,14 @@ adga <- adga %>%
   derive_var_afeye(loc_var = OELOC, lat_var = OELAT, loc_vals = c("EYE", "RETINA"))
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adga %>% select(USUBJID, OETESTCD, VISIT, OELOC, OELAT, AVAL, AVALC, AVALU, AFEYE),
+  display_vars = exprs(USUBJID, OETESTCD, AVAL, AVALC, AVALU, AFEYE),
+  filter = USUBJID == "01-701-1028" & VISIT %in% c("BASELINE", "WEEK4")
+)
+```
+
 ## Creating Square Root Transformed GA Area measured by FAF derived parameter {#sqrt}
 
 Next, `PARAM`, `PARAMCD`, and `PARAMN` are assigned using `derive_vars_merged_lookup()` from `{admiral}` together with the lookup table `param_lookup` generated above. Using a lookup table separates study-specific parameter metadata from the derivation code and provides an additional validation step. Since all records included in ADGA are expected to map to a defined analysis parameter, any not mapped records may indicate missing parameter metadata, unexpected source data, or an issue in an upstream derivation such as `AFEYE`. Therefore, `check_not_mapped_type` = "warning" is specified to issue a warning if any records are not mapped.
@@ -147,7 +155,7 @@ ADGA datasets often contain square root transformed GA records for FAF with unit
 
 These derived parameters can be created using a single call to `call_derivation()` with `derive_param_computed()`. Using a single call is more efficient because the same grouping variables and source data are used for both study-eye and fellow-eye derivations. The parameter specifications differ only in the source parameter (`SAREAFAF` versus `FAREAFAF`), assigned parameter metadata (`PARAM`, `PARAMCD`, and `PARAMN`) and derived results (`AVAL`, and `AVALC`).
 
-Note that the original lesion area measurements are recorded in square millimeters (`mm²`). Applying the square-root transformation changes the units from square millimeters (`mm²`) to millimeters (`mm`), since sqrt(`mm²`) = `mm`. Therefore, the derived parameters use `mm` as the analysis unit (`AVALU`).
+Note that the original lesion area measurements are recorded in square millimeters (`mm²`). Applying the square-root transformation changes the units from square millimeters (`mm²`) to millimeters (`mm`), since `sqrt(mm²) = mm`. Therefore, the derived parameters use `mm` as the analysis unit (`AVALU`).
 
 Once these extra parameters are added, all the records that will be in the end dataset are now present, so day/date variables such as `ADY` and `ADT` can be derived.
 
@@ -206,6 +214,14 @@ adga <- adga %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = exprs(ADT))
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adga %>% select(USUBJID, PARAMCD, PARAMN, VISIT, AVAL, AVALC, DTYPE, ADT, ADY),
+  display_vars = exprs(USUBJID, PARAMCD, AVAL, AVALC, DTYPE, ADT, ADY),
+  filter = USUBJID == "01-701-1028" & VISIT %in% c("BASELINE", "WEEK4")
+)
+```
+
 Importantly, the above calls to `derive_param_computed()` list the SDTM variables `VISIT`, `VISITNUM`, `OEDY` and `OEDTC` as `by_vars` for the function. This is because they will be necessary to derive ADaM variables such as `AVISIT` and `ADY` in successive steps.
 
 ## Assigning `AVISIT/AVISITN` {#avisit}
@@ -232,10 +248,11 @@ adga <- adga %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  adga %>% arrange(USUBJID, AVISIT) %>% select(USUBJID, AVISIT, PARAMCD, AVAL),
+  adga %>%
+    arrange(USUBJID, AVISIT) %>%
+    select(USUBJID, AVISIT, PARAMCD, AVAL),
   display_vars = exprs(USUBJID, PARAMCD, AVISIT, AVAL),
-  filter = USUBJID == "01-701-1028" &
-    AVISIT %in% c("Baseline", "Week 4")
+  filter = USUBJID == "01-701-1028" & AVISIT %in% c("Baseline", "Week 4")
 )
 ```
 
@@ -245,7 +262,7 @@ For some analyses, it may be useful to identify the worst observed lesion size f
 
 The derivation is applied only to the quantitative FAF area parameters (`SAREAFAF`, `FAREAFAF`) and their square-root transformed counterparts (`SSQRTFAF`, `FSQRTFAF`). Categorical focality parameters (`SGAFOCAL`, `FGAFOCAL`) are excluded, as the concept of a worst numeric result is not applicable.
 
-The order argument specifies that records are ranked first by `AVAL` and then by `ADT`. With mode = "last", the flag is assigned to the record with the largest value, and if multiple records share the same value, the latest assessment date is selected. If a parameter is instead interpreted such that lower values represent worse outcomes, mode = "first" can be used.
+The order argument specifies that records are ranked first by `AVAL` and then by `ADT`. With `mode = "last"`, the flag is assigned to the record with the largest value, and if multiple records share the same value, the latest assessment date is selected. If a parameter is instead interpreted such that lower values represent worse outcomes, `mode = "first"` can be used.
 
 ```{r include=TRUE}
 # WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records
@@ -264,12 +281,13 @@ adga <- adga %>%
   )
 ```
 
-The resulting output is shown below (limited to the first patient only):
+The resulting output is shown below (limited to the one patient and one parameter only):
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adga %>%
-    filter(USUBJID == "01-701-1015") %>%
+    arrange(USUBJID, PARAMCD, ADT) %>%
+    filter(USUBJID == "01-701-1028" & PARAMCD == "FSQRTFAF") %>%
     select(USUBJID, PARAMCD, AVAL, AVISIT, ADT, ATPT, starts_with("WORS01FL"))
 )
 ```
@@ -300,6 +318,15 @@ adga <- adga %>%
     ),
     filter = PARAMCD %in% c("SGAFOCAL", "FGAFOCAL", "SSQRTFAF", "FSQRTFAF", "FAREAFAF", "SAREAFAF")
   )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  adga %>%
+    arrange(USUBJID, PARAMCD, ADT) %>%
+    filter(USUBJID == "01-701-1015" & AVISIT %in% c("Screening", "Baseline", "Week 4")) %>%
+    select(USUBJID, PARAMCD, AVISIT, BASE, BASEC)
+)
 ```
 
 ## Further Derivations of Standard BDS Variables {#further}
