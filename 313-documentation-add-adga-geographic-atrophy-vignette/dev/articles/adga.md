@@ -142,13 +142,13 @@ adga <- oe %>%
 The next item of business is to derive `AVAL`,`AVALC`, `AVALU`, and
 `DTYPE`. In this example, derivation for `AVALC` is trivial, whereas for
 lesion focality, `AVAL` is derived using a combination of OE character
-standard results and decoded to 1 for S(single), and 2 for NS
+standard results and decoded to 1 for S (single), and 2 for NS
 (multifocal). `AFEYE` is also created in this step using the function
 [`derive_var_afeye()`](https:/pharmaverse.github.io/admiralophtha/313-documentation-add-adga-geographic-atrophy-vignette/dev/reference/derive_var_afeye.md).
 This variable identifies the analysis eye based on the `OELOC`, and
-`OELAT` information. In this example, “RETINA” is included in `loc_vals`
-because the GA assessments are recorded as retinal observations (`OELOC`
-= “RETINA”). Including both “EYE” and “RETINA” ensures that `OELAT`
+`OELAT` information. In this example, `"RETINA"` is included in
+`loc_vals` because the GA assessments are recorded as retinal
+observations. Including both `"EYE"` and `"RETINA"` ensures that `OELAT`
 information is correctly carried forward for all ophthalmic assessments.
 
 ``` r
@@ -203,7 +203,7 @@ parameter (`SAREAFAF` versus `FAREAFAF`), assigned parameter metadata
 Note that the original lesion area measurements are recorded in square
 millimeters (`mm²`). Applying the square-root transformation changes the
 units from square millimeters (`mm²`) to millimeters (`mm`), since
-sqrt(`mm²`) = `mm`. Therefore, the derived parameters use `mm` as the
+`sqrt(mm²) = mm`. Therefore, the derived parameters use `mm` as the
 analysis unit (`AVALU`).
 
 Once these extra parameters are added, all the records that will be in
@@ -319,11 +319,11 @@ The derivation is applied only to the quantitative FAF area parameters
 not applicable.
 
 The order argument specifies that records are ranked first by `AVAL` and
-then by `ADT`. With mode = “last”, the flag is assigned to the record
+then by `ADT`. With `mode = "last"`, the flag is assigned to the record
 with the largest value, and if multiple records share the same value,
 the latest assessment date is selected. If a parameter is instead
-interpreted such that lower values represent worse outcomes, mode =
-“first” can be used.
+interpreted such that lower values represent worse outcomes,
+`mode = "first"` can be used.
 
 ``` r
 # WORS01FL: Flag worst result within a PARAMCD for baseline & post-baseline records
@@ -342,7 +342,8 @@ adga <- adga %>%
   )
 ```
 
-The resulting output is shown below (limited to the first patient only):
+The resulting output is shown below (limited to the one patient and one
+parameter only):
 
 Additionally, it should be noted that `SGAFOCAL` and `FGAFOCAL`
 represent categorical assessments of lesion focality. Although these
