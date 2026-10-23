@@ -20,13 +20,12 @@ process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.
   
 ## Updates to Templates
 
-- Added new template `ADGA` to enhance `{admiralophtha}` to include geographic atrophy indication (#298)
-- Updated typo in the `ADVFQ` template (#298)
-
+- Added new template `ADGA` to enhance `{admiralophtha}` to include geographic atrophy indication. (#298)
+- Updated typo in the `ADVFQ` template. (#298)
   
 ## Updates to Documentation
 
-- A new vignette "ADGA" was added to enhance `{admiralophtha}` to include geographic atrophy indication. (#313)
+- A new vignette "ADGA" was added to enhance `{admiralophtha}` to include the geographic atrophy indication. (#313)
 
 - Improved examples for `ETDRS`/`LogMAR` conversion functions. (#307)
 
