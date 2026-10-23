@@ -65,8 +65,7 @@ adsl <- admiral_adsl %>%
   mutate(STUDYEYE = sample(c("LEFT", "RIGHT"), n(), replace = TRUE)) %>%
   convert_blanks_to_na()
 
-oe <- convert_blanks_to_na(oe_ophtha) %>%
-  ungroup()
+oe <- convert_blanks_to_na(oe_ophtha)
 
 # Lookup table
 param_lookup <- tibble::tribble(
