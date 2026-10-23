@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     <a class="navbar-brand me-2" href="../index.html">admiralophtha</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.5.0.9003</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.5.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <li><a class="dropdown-item" href="../articles/adoe.html">Creating ADOE</a></li>
     <li><a class="dropdown-item" href="../articles/adbcva.html">Creating ADBCVA</a></li>
     <li><a class="dropdown-item" href="../articles/advfq.html">Creating ADVFQ</a></li>
+    <li><a class="dropdown-item" href="../articles/adga.html">Creating ADGA</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -190,8 +191,7 @@ practice <code>STUDYEYE</code> will already have been derived using
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>STUDYEYE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LEFT"</span>, <span class="st">"RIGHT"</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">oe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">oe_ophtha</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">oe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span><span class="op">(</span><span class="va">oe_ophtha</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Lookup table</span></span>
 <span><span class="va">param_lookup</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
@@ -529,7 +529,7 @@ be used to create criterion flag relative to other variables
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by F. Hoffmann-La Roche AG, Novartis AG, <a href="https://manciniedoardo.github.io/" class="external-link">Edoardo Mancini</a>, <a href="https://github.com/ukey1025" class="external-link">Yuki Matsunaga</a>.</p>
+  <p>Developed by F. Hoffmann-La Roche AG, Novartis AG, <a href="https://manciniedoardo.github.io/" class="external-link">Edoardo Mancini</a>, <a href="https://github.com/ukey1025" class="external-link">Yuki Matsunaga</a>, <a href="https://github.com/pavan-bhagat" class="external-link">Pavankumar Bhagat</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

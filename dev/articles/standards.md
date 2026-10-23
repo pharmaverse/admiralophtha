@@ -34,6 +34,7 @@ suggests the following partition:
   required should have their own ADaM dataset (e.g. for intraocular
   pressure data, ADIOP).
 - ADVFQ for Visual Functioning Questionnaire data.
+- ADGA for geographic atrophy data.
 
 Subdividing the ADaM datasets in a study as above will ensure that
 wherever custom efficacy programming is required, this will

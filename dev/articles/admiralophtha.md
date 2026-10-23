@@ -47,6 +47,8 @@ vignettes:
   ADOE](https://pharmaverse.github.io/admiralophtha/dev/articles/adoe.md)
 - [Creating
   ADVFQ](https://pharmaverse.github.io/admiralophtha/dev/articles/advfq.md)
+- [Creating
+  ADGA](https://pharmaverse.github.io/admiralophtha/dev/articles/adga.md)
 
 ## Support
 

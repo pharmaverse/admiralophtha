@@ -31,6 +31,8 @@ Authors:
 
 - Yuki Matsunaga <yuki.matsunaga@novartis.com>
 
+- Pavankumar Bhagat <Pavankumar.Bhagat@boehringer-ingelheim.com>
+
 Other contributors:
 
 - F. Hoffmann-La Roche AG \[copyright holder, funder\]

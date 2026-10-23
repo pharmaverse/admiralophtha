@@ -31,12 +31,17 @@
 
 - Added new template `ADGA` to enhance
   [admiralophtha](https://pharmaverse.github.io/admiralophtha/) to
-  include geographic atrophy indication
+  include geographic atrophy indication.
   ([\#298](https://github.com/pharmaverse/admiralophtha/issues/298))
-- Updated typo in the `ADVFQ` template
+- Updated typo in the `ADVFQ` template.
   ([\#298](https://github.com/pharmaverse/admiralophtha/issues/298))
 
 ### Updates to Documentation
+
+- A new vignette “ADGA” was added to enhance
+  [admiralophtha](https://pharmaverse.github.io/admiralophtha/) to
+  include the geographic atrophy indication.
+  ([\#313](https://github.com/pharmaverse/admiralophtha/issues/313))
 
 - Improved examples for `ETDRS`/`LogMAR` conversion functions.
   ([\#307](https://github.com/pharmaverse/admiralophtha/issues/307))

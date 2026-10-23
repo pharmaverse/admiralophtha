@@ -4,6 +4,8 @@
 
 - [Creating
   ADBCVA](https://pharmaverse.github.io/admiralophtha/dev/articles/adbcva.md):
+- [Creating
+  ADGA](https://pharmaverse.github.io/admiralophtha/dev/articles/adga.md):
 - [Get
   Started](https://pharmaverse.github.io/admiralophtha/dev/articles/admiralophtha.md):
 - [Creating
