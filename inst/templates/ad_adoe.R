@@ -74,7 +74,7 @@ adoe_aval <- adoe_adslvar %>%
 
 adoe_param <- adoe_aval %>%
   # Add PARAM, PARAMCD
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
     by_vars = exprs(OETESTCD, AFEYE)
