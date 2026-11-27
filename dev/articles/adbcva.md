@@ -160,18 +160,19 @@ adbcva <- adbcva %>%
 ```
 
 Moving forwards, `PARAM` and `PARAMCD` can be assigned using
-[`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged.html)
+[`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html)
 from [admiral](https://pharmaverse.github.io/admiral/) and the lookup
 table `param_lookup` generated above.
 
 ``` r
 adbcva <- adbcva %>%
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
     by_vars = exprs(OETESTCD, AFEYE),
     filter_add = PARAMCD %in% c("SBCVA", "FBCVA")
   )
+#> All `OETESTCD` and `AFEYE` are mapped.
 ```
 
 ### Deriving LogMAR Score Parameters

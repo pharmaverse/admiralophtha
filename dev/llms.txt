@@ -62,10 +62,10 @@ developer community:
 
 ## Release Schedule
 
-| Month / Year  | Package Version                                                        |
-|---------------|------------------------------------------------------------------------|
+| Month / Year | Package Version |
+|----|----|
 | ~January 2027 | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.6.0 |
-| ~June 2027    | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.7.0 |
+| ~June 2027 | [admiralophtha](https://pharmaverse.github.io/admiralophtha/) v. 1.7.0 |
 
 # Acknowledgments
 
