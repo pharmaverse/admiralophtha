@@ -58,3 +58,28 @@ test_that("derive_var_afeye Test 2: AFEYE is derived correctly when parsing loc_
     keys = c("STUDYID", "USUBJID", "AELOC", "AELAT")
   )
 })
+
+## Test 3: AFEYE is derived case-insensitively for lat_var and STUDYEYE ----
+test_that("derive_var_afeye Test 3: AFEYE is derived case-insensitively for lat_var and STUDYEYE", { # nolint
+  expected_output3 <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~STUDYEYE, ~OELOC, ~OELAT, ~AFEYE,
+    "XXX001", "P01", "right", "EYE", "Right", "Study Eye",
+    "XXX001", "P01", "right", "EYE", "left", "Fellow Eye",
+    "XXX001", "P02", "LEFT", "EYE", "bilateral", "Both Eyes",
+    "XXX001", "P03", "Bilateral", "EYE", "Right", "Study Eye",
+    "XXX001", "P04", "bilateral", "EYE", "Bilateral", "Both Eyes"
+  )
+
+  actual_output3 <- expected_output3 %>%
+    select(-AFEYE) %>%
+    derive_var_afeye(
+      loc_var = OELOC,
+      lat_var = OELAT
+    )
+
+  expect_dfs_equal(
+    actual_output3,
+    expected_output3,
+    keys = c("STUDYID", "USUBJID", "OELOC", "OELAT")
+  )
+})
