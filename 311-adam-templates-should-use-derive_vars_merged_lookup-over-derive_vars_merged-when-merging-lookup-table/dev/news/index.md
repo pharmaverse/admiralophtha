@@ -31,15 +31,15 @@
 
 - Added new template `ADGA` to enhance
   [admiralophtha](https://pharmaverse.github.io/admiralophtha/) to
-  include geographic atrophy indication
+  include geographic atrophy indication.
   ([\#298](https://github.com/pharmaverse/admiralophtha/issues/298))
-- Updated typo in the `ADVFQ` template
+- Updated typo in the `ADVFQ` template.
   ([\#298](https://github.com/pharmaverse/admiralophtha/issues/298))
 - Replaced
   [`derive_vars_merged()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged.html)
   with
   [`derive_vars_merged_lookup()`](https:/pharmaverse.github.io/admiral/v1.5.0/cran-release/reference/derive_vars_merged_lookup.html)
-  when merging the parameter lookup table onto the ADaM dataset
+  when merging the parameter lookup table onto the ADaM dataset.
   ([\#311](https://github.com/pharmaverse/admiralophtha/issues/311))
 
 ### Updates to Documentation
