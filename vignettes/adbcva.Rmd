@@ -150,11 +150,11 @@ adbcva <- adbcva %>%
   derive_var_afeye(loc_var = OELOC, lat_var = OELAT)
 ```
 
-Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above.
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged_lookup()` from `{admiral}` and the lookup table `param_lookup` generated above.
 
 ```{r}
 adbcva <- adbcva %>%
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
     by_vars = exprs(OETESTCD, AFEYE),

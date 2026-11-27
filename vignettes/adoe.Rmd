@@ -114,12 +114,12 @@ adoe <- adoe %>%
 
 ## Assigning `PARAM`/`PARAMCD` and `AVISIT/AVISITN` {#param_avisit}
 
-Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged()` from `{admiral}` and the lookup table `param_lookup` generated above. `AVISIT`, `AVISITN` and related timepoint variables can also be derived soon after, though their derivation is generally study-specific. A simple option is included below; please consult the `{admiral}` [BDS findings vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing) for a more detailed discussion.
+Moving forwards, `PARAM` and `PARAMCD` can be assigned using `derive_vars_merged_lookup()` from `{admiral}` and the lookup table `param_lookup` generated above. `AVISIT`, `AVISITN` and related timepoint variables can also be derived soon after, though their derivation is generally study-specific. A simple option is included below; please consult the `{admiral}` [BDS findings vignette](https://pharmaverse.github.io/admiral/cran-release/articles/bds_finding.html#timing) for a more detailed discussion.
 
 ```{r}
 adoe <- adoe %>%
   # Add PARAM, PARAMCD from lookup table
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
     by_vars = exprs(OETESTCD, AFEYE)

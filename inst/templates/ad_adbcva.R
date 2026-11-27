@@ -114,7 +114,7 @@ adbcva_aval <- adbcva_adslvar %>%
 
 adbcva_nlogparam <- adbcva_aval %>%
   # Add PARAM, PARAMCD for non log parameters
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = exprs(PARAM, PARAMCD),
     by_vars = exprs(OETESTCD, AFEYE),
