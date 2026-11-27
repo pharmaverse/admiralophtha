@@ -20,9 +20,9 @@ process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.
   
 ## Updates to Templates
 
-- Added new template `ADGA` to enhance `{admiralophtha}` to include geographic atrophy indication (#298)
-- Updated typo in the `ADVFQ` template (#298)
-- Replaced `derive_vars_merged()` with `derive_vars_merged_lookup()` when merging the parameter lookup table onto the ADaM dataset (#311)
+- Added new template `ADGA` to enhance `{admiralophtha}` to include geographic atrophy indication. (#298)
+- Updated typo in the `ADVFQ` template. (#298)
+- Replaced `derive_vars_merged()` with `derive_vars_merged_lookup()` when merging the parameter lookup table onto the ADaM dataset. (#311)
 
   
 ## Updates to Documentation
